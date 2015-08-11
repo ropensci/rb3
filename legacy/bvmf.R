@@ -1,6 +1,6 @@
-library(httr)
-library(XML)
-library(functional)
+# library(httr)
+# library(XML)
+# library(functional)
 
 get_curve_url <- function(refDate, item='PRE') {
     url <- 'http://www2.bmf.com.br/pages/portal/bmfbovespa/boletim1/TxRef1.asp?Data=%s&Data1=%s&slcTaxa=%s'

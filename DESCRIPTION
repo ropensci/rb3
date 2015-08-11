@@ -1,0 +1,17 @@
+Package: marketdataBR
+Title: Read files from Brazilian Financial Market
+Description: Read files used in Brazilian Financial Market from disk (or a connection)
+Version: 0.0.1.9000
+Authors@R: person("Wilson", "Freitas", ,"wilson.freitas@gmail.com", c("aut", "cre"))
+Depends:
+  R (>= 3.2.0)
+License: MIT
+LazyData: true
+Imports:
+  stringr
+Suggests:
+  testthat
+Encoding: UTF-8
+BugReports: https://github.com/wilsonfreitas/R-marketdataBR/issues
+URL: https://github.com/wilsonfreitas/R-marketdataBR
+VignetteBuilder: knitr
