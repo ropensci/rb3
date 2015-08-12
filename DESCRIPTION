@@ -8,7 +8,8 @@ Depends:
 License: MIT
 LazyData: true
 Imports:
-  stringr
+  stringr,
+  proto
 Suggests:
   testthat
 Encoding: UTF-8
