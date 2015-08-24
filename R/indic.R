@@ -1,29 +1,28 @@
 
+Indic <- MarketDataFWF$proto(expr={
+  name <- 'indic'
+  filename <- 'Indic.txt'
+  widths <- c(6, 3, 2, 8, 2, 25, 25, 2, 36)
+  colnames <- c('Identificação da transação', 'Complemento da transação',
+    'Tipo de registro', 'Data de geração do arquivo', 'Grupo do indicador',
+    'Código do indicador', 'Valor do indicador na data',
+    'Número de decimais do valor', 'Filler'
+  )
 
+  format_data <- function(., df) {
+    within(df, {
+      `Número de decimais do valor` <- as.numeric(`Número de decimais do valor`)
+      `Valor do indicador na data` <- as.numeric(`Valor do indicador na data`)/(10^`Número de decimais do valor`)
+      `Data de geração do arquivo` <- as.Date(`Data de geração do arquivo`, format='%Y%m%d')
+      `Código do indicador` <- stringr::str_trim(`Código do indicador`)
+    })
+  }
+  
+  print <- function(.) {
+    .$name
+  }
+})
 
-# indic <- function() {
-#     that <- list(
-#         filename='Indic.txt',
-#         format='fwf',
-#         widths=c(6, 3, 2, 8, 2, 25, 25, 2, 36),
-#         colnames=c('id_trans', 'comp_trans', 'tp_reg', 'dt_ger', 'grupo_ind',
-#             'cd_ind', 'dc_ind', 'nm_dec', 'filler')
-#     )
-#     structure(that, class=c('indic', 'template'))
-# }
-#
-# read_file.indic <- function(template, filename) {
-#     read_fwf(filename, template$widths, colnames=template$colnames)
-# }
-#
-# format_data.indic <- function(df) {
-#     within(df, {
-#         nm_dec <- as.numeric(nm_dec)
-#         dc_ind <- as.numeric(dc_ind)/(10^nm_dec)
-#         dt_ger <- as.Date(dt_ger, format='%Y%m%d')
-#         cd_ind <- str_trim(cd_ind)
-#     })
-# }
-#
-# # ----
-#
+MarketData$register(Indic)
+
+# TODO: implement summary for templates
