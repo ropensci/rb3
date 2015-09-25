@@ -1,0 +1,15 @@
+context('BD_Arbit')
+
+test_that('it should load BD_Arbit with the correct field types', {
+	df <- read_marketdata('../../inst/extdata/BD_Final.txt')
+	expect_is(df$`Data de geração do arquivo`, 'Date')
+	# print(df$`Tipo da série`)
+	expect_is(df$`Tipo da série`, 'factor')
+	expect_is(df$`Hora de criação deste registro`, 'POSIXct')
+	expect_is(df$`Data de vencimento (fut/opç)`, 'Date')
+	expect_is(df$`Hora do último negócio do dia`, 'POSIXct')
+	expect_is(df$`Data do último negócio`, 'Date')
+	expect_is(df$`Data de início do período de entrega (agrícolas)`, 'Date')
+	expect_is(df$`Data-limite para negociação`, 'Date')
+	expect_is(df$`Data de liquidação financeira`, 'Date')
+})
