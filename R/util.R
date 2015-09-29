@@ -75,6 +75,14 @@ fwf_field <- function(field, ...) {
 	field
 }
 
+field <- function(name, ...) {
+	parms <- list(...)
+	attr(name, 'width')   <- if (!is.null(parms[['width']]))   parms[['width']]   else 0
+	attr(name, 'handler') <- if (!is.null(parms[['handler']])) parms[['handler']] else identity
+	class(name) <- 'field'
+	name
+}
+
 print.field <- function(x, ...) {
 	cat(as.character(x), '\n')
 }
@@ -95,9 +103,12 @@ to_time <- function(format=NULL) {
 	}
 }
 
-to_factor <- function(levels, labels=levels) {
+to_factor <- function(levels=NULL, labels=levels) {
 	function(x) {
-		factor(x, levels=levels, labels=labels)
+		if (is.null(levels))
+			factor(x)
+		else
+			factor(x, levels=levels, labels=labels)
 	}
 }
 

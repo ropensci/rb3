@@ -1,6 +1,5 @@
 
 Indic <- MarketDataFWF$proto(expr={
-	name <- 'indic'
 	filename <- 'Indic.txt'
 	
 	parser <- textparser::textparser(
@@ -14,7 +13,10 @@ Indic <- MarketDataFWF$proto(expr={
 		fwf_field('Complemento da transação', width=3, handler=to_numeric()),
 		fwf_field('Tipo de registro', width=2, handler=to_numeric()),
 		fwf_field('Data de geração do arquivo', width=8, handler=to_date(format='%Y%m%d')),
-		fwf_field('Grupo do indicador', width=2, handler=to_factor(levels=c('IA', 'DE', 'RT', 'BV', 'ME', 'ID'), labels=c('Indicadores agropecuários', 'Títulos da dívida externa',
+		fwf_field('Grupo do indicador', width=2, 
+			handler=to_factor(
+				levels=c('IA', 'DE', 'RT', 'BV', 'ME', 'ID'),
+				labels=c('Indicadores agropecuários', 'Títulos da dívida externa',
 					'Indicadores gerais', 'Ibovespa', 'Moeda estrangeira',
 					'Índice IDI'
 				))),
@@ -23,12 +25,11 @@ Indic <- MarketDataFWF$proto(expr={
 		fwf_field('Número de decimais do valor', width=2, handler=to_numeric()),
 		fwf_field('Filler', width=36)
 	)
-	
-	colnames <- fields_names(fields)
-	widths <- fields_widths(fields)
-	handlers <- fields_handlers(fields)
 })
 
+Indica <- Indic$proto(filename='Indica.txt')
+
 MarketData$register(Indic)
+MarketData$register(Indica)
 
 # TODO: implement summary for templates

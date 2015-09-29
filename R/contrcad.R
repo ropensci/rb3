@@ -1,69 +1,70 @@
 
 ContrCad <- MarketDataFWF$proto(expr={
-	name <- 'contrcad'
 	filename <- 'CONTRCAD.TXT'
-	widths <- c(6, 3, 2, 8, 3, 1, 4, 1, 1, 8, 8, 8, 8, 8, 15, 1, 20, 20, 12, 4, 1,
-		1, 15, 1, 1, 2, 1, 5, 5, 5, 15
-	)
-	colnames <- c('Identificação da Transação', 'Complemento da Transação',
-		'Tipo de Registro', 'Data de Referência', 'Código da Mercadoria',
-		'Tipo de Mercado', 'Série (Opções) / Vencimento (Futuro)',
-		'Indicador de Tipo de Opção', 'Tipo de Opção',
-		'Data de Vencimento do Contrato', 'Data de Inicio de Negociação',
-		'Data de Inicio de Exercício', 'Data Limite de Negociação',
-		'Data Limite de Abertura de Posições', 'Preço de Exercício (Opções)',
-		'Número de Casas Decimais', 'Código de Negociação Viva-Voz',
-		'Código de Negociação GTS', 'Código ISIN',
-		'Contrato Objeto (no Vencimento)', 'Tipo de Cotação', 'Tipo de Mercadoria',
-		'Variação Mínima de Apregoação', 'Indicador de Opção com Ajuste',
-		'Indicador de Mercadoria Internacional', 'Código da Moeda',
-		'Indicador de Operação Estruturada', 'Quantidade de dias Saques',
-		'Quantidade de dias Corridos', 'Quantidade de dias Úteis',
-		'Descrição da mercadoria'
-	)
 	
 	parser <- textparser::textparser(
 		parse_SN=textparser::parser('^(S|N)$', function(text, match) {
 			text == 'S'
 		}),
-		.PARSER
+		parse_numeric=textparser::parser('^\\d+$', function(text, match) {
+			as.numeric(text)
+		})
 	)
 	
-	transform <- function(., df) {
-		base::within(df, {
-			`Código da Mercadoria` <- factor(`Código da Mercadoria`)
-			`Preço de Exercício (Opções)` <- `Preço de Exercício (Opções)`/(10^`Número de Casas Decimais`)
-			`Tipo de Mercado` <- factor(`Tipo de Mercado`,
-				levels=1:5,
-				labels=c('Disponível', 'Futuro', 'Opções sobre Disponível', 'Opções sobre Futuro', 'Termo')
-			)
-			`Indicador de Tipo de Opção` <- factor(`Indicador de Tipo de Opção`,
-				levels=c('C', 'V'),
-				labels=c('Compra', 'Venda')
-			)
-			`Tipo de Opção` <- factor(`Tipo de Opção`,
-				levels=c('A', 'E'),
-				labels=c('Americana', 'Europeia')
-			)
-			`Tipo de Cotação` <- factor(`Tipo de Cotação`,
-				levels=1:2,
-				labels=c('Preço', 'Taxa')
-			)
-			`Tipo de Mercadoria` <- factor(`Tipo de Mercadoria`,
-				levels=1:3,
-				labels=c('Financeiro', 'Agropecuário', 'Energia')
-			)
-			`Código da Moeda` <- factor(`Código da Moeda`,
-				levels=1:2,
-				labels=c('Dólar', 'Reais')
-			)
-		})
-	}
+	fields <- fields(
+		fwf_field('Identificação da Transação', width=6),
+		fwf_field('Complemento da Transação', width=3),
+		fwf_field('Tipo de Registro', width=2),
+		fwf_field('Data de Referência', width=8, handler=to_date(format='%Y%m%d')),
+		fwf_field('Código da Mercadoria', width=3, handler=to_factor()),
+		fwf_field('Tipo de Mercado', width=1, handler=to_factor(
+			levels=1:5,
+			labels=c('Disponível', 'Futuro', 'Opções sobre Disponível', 'Opções sobre Futuro', 'Termo')
+		)),
+		fwf_field('Série (Opções) / Vencimento (Futuro)', width=4),
+		fwf_field('Indicador de Tipo de Opção', width=1, handler=to_factor(
+			levels=c('C', 'V'),
+			labels=c('Compra', 'Venda')
+		)),
+		fwf_field('Tipo de Opção', width=1, handler=to_factor(
+			levels=c('A', 'E'),
+			labels=c('Americana', 'Europeia')
+		)),
+		fwf_field('Data de Vencimento do Contrato', width=8, handler=to_date(format='%Y%m%d')),
+		fwf_field('Data de Inicio de Negociação', width=8, handler=to_date(format='%Y%m%d')),
+		fwf_field('Data de Inicio de Exercício', width=8, handler=to_date(format='%Y%m%d')),
+		fwf_field('Data Limite de Negociação', width=8, handler=to_date(format='%Y%m%d')),
+		fwf_field('Data Limite de Abertura de Posições', width=8, handler=to_date(format='%Y%m%d')),
+		fwf_field('Preço de Exercício (Opções)', width=15, handler=to_numeric(dec='Número de Casas Decimais')),
+		fwf_field('Número de Casas Decimais', width=1),
+		fwf_field('Código de Negociação Viva-Voz', width=20),
+		fwf_field('Código de Negociação GTS', width=20),
+		fwf_field('Código ISIN', width=12),
+		fwf_field('Contrato Objeto (no Vencimento)', width=4),
+		fwf_field('Tipo de Cotação', width=1, handler=to_factor(
+			levels=1:2,
+			labels=c('Preço', 'Taxa')
+		)),
+		fwf_field('Tipo de Mercadoria', width=1, handler=to_factor(
+			levels=1:3,
+			labels=c('Financeiro', 'Agropecuário', 'Energia')
+		)),
+		fwf_field('Variação Mínima de Apregoação', width=15, handler=to_numeric(dec='Número de Casas Decimais')),
+		fwf_field('Indicador de Opção com Ajuste', width=1),
+		fwf_field('Indicador de Mercadoria Internacional', width=1),
+		fwf_field('Código da Moeda', width=2, handler=to_factor(
+			levels=1:2,
+			labels=c('Dólar', 'Reais')
+		)),
+		fwf_field('Indicador de Operação Estruturada', width=1),
+		fwf_field('Quantidade de dias Saques', width=5),
+		fwf_field('Quantidade de dias Corridos', width=5),
+		fwf_field('Quantidade de dias Úteis', width=5),
+		fwf_field('Descrição da mercadoria', width=15)
+	)
 })
 
-ContrCadIPN <- ContrCad$proto(expr={
-	filename <- 'CONTRCAD-IPN.TXT'
-})
+ContrCadIPN <- ContrCad$proto(filename='CONTRCAD-IPN.TXT')
 
 MarketData$register(ContrCad)
 MarketData$register(ContrCadIPN)

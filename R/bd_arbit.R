@@ -1,8 +1,7 @@
 
 
 BD_Arbit <- MarketDataFWF$proto(expr={
-	name <- 'bd_arbit'
-	filename <- 'BD_Final.txt'
+	filename <- 'BD_Arbit.txt'
 	
 	parser <- textparser::textparser(
 		parse_sign=textparser::parser('^(\\+|-)$', function(text, match) {
@@ -10,13 +9,16 @@ BD_Arbit <- MarketDataFWF$proto(expr={
 			x <- rep(1, length(text))
 			x[idx] <- -1
 			x
+		}),
+		parse_numeric=textparser::parser('^\\d+$', function(text, match) {
+			as.numeric(text)
 		})
 	)
 	
 	fields <- fields(
-		fwf_field('Identificação da transação', width=6),
-		fwf_field('Complemento da transação', width=3),
-		fwf_field('Tipo de registro', width=2),
+		fwf_field('Identificação da transação', width=6, handler=to_numeric()),
+		fwf_field('Complemento da transação', width=3, handler=to_numeric()),
+		fwf_field('Tipo de registro', width=2, handler=to_numeric()),
 		fwf_field('Data de geração do arquivo', width=8, handler=to_date(format='%Y%m%d')),
 		fwf_field('Tipo de negociação', width=2, handler=to_factor(levels='PR', labels='Pregão')),
 		fwf_field('Código da mercadoria', width=3),
@@ -112,10 +114,17 @@ BD_Arbit <- MarketDataFWF$proto(expr={
 		fwf_field('Sinal do limite máximo para negociação', width=1),
 		fwf_field('Limite máximo para negociação (fut)', width=13)
 	)
-	
-	colnames <- fields_names(fields)
-	widths <- fields_widths(fields)
-	handlers <- fields_handlers(fields)
 })
 
+BDPrevia <- BD_Arbit$proto(filename='BDPrevia.txt')
+BDAtual <- BD_Arbit$proto(filename='BDAtual.txt')
+BDAjuste <- BD_Arbit$proto(filename='BDAjuste.txt')
+BDAfterHour <- BD_Arbit$proto(filename='BDAfterHour.txt')
+BD_Final <- BD_Arbit$proto(filename='BD_Final.txt')
+
 MarketData$register(BD_Arbit)
+MarketData$register(BDPrevia)
+MarketData$register(BDAtual)
+MarketData$register(BDAjuste)
+MarketData$register(BDAfterHour)
+MarketData$register(BD_Final)

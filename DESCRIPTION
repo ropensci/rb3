@@ -20,6 +20,8 @@ Collate:
   'indic.R'
   'contrcad.R'
   'bd_arbit.R'
+  'taxa_swap.R'
+  'puweb.R'
   'file.R'
   'convert_to.R'
   'read_marketdata.R'
