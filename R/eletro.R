@@ -1,16 +1,17 @@
 
 Eletro <- MarketDataFWF$proto(expr={
 	filename <- 'Eletro.txt'
-	
-	parser <- textparser::textparser(
-		parse_sign=textparser::parser('^(\\+|-)$', function(text, match) {
+
+	parser <- transmute::transmuter(
+		transmute::match_regex('\\+|-', function(text, match) {
 			idx <- text == '-'
 			x <- rep(1, length(text))
 			x[idx] <- -1
 			x
-		})
+		}),
+		NUMERIC.TRANSMUTER
 	)
-	
+
 	fields <- fields(
 		field("Identificação da transação", width=6),
 		field("Complemento da transação", width=3),

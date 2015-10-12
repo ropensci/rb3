@@ -1,19 +1,18 @@
 
 Indic <- MarketDataFWF$proto(expr={
 	filename <- 'Indic.txt'
-	
-	parser <- textparser::textparser(
-		parse_indic_numeric=textparser::parser('^\\+\\d+$', function(text, match) {
-			as.numeric(text)
-		}, textparser::priority(1))
+
+	parser <- transmute::transmuter(
+		transmute::match_regex('^\\+\\d+$', as.numeric, priority=1),
+		NUMERIC.TRANSMUTER
 	)
-	
+
 	fields <- fields(
 		fwf_field('Identificação da transação', width=6, handler=to_numeric()),
 		fwf_field('Complemento da transação', width=3, handler=to_numeric()),
 		fwf_field('Tipo de registro', width=2, handler=to_numeric()),
 		fwf_field('Data de geração do arquivo', width=8, handler=to_date(format='%Y%m%d')),
-		fwf_field('Grupo do indicador', width=2, 
+		fwf_field('Grupo do indicador', width=2,
 			handler=to_factor(
 				levels=c('IA', 'DE', 'RT', 'BV', 'ME', 'ID'),
 				labels=c('Indicadores agropecuários', 'Títulos da dívida externa',

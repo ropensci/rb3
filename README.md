@@ -29,7 +29,7 @@ Leitura e tratamento dos arquivos de dados de mercado distribuídos no Mercado F
 	- SupVol
 - [ ] Mercado de Títulos Públicos - Cotações
 	- Cotacao
-- [ ] Mercado de Derivativos - Negócios Realizados no Mercado de Balcão
+- [X] Mercado de Derivativos - Negócios Realizados no Mercado de Balcão
 	- Eletro.txt
 - [ ] Mercado de Derivativos - Posições Travadas
 	- PosTrav

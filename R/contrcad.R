@@ -1,16 +1,14 @@
 
 ContrCad <- MarketDataFWF$proto(expr={
 	filename <- 'CONTRCAD.TXT'
-	
-	parser <- textparser::textparser(
-		parse_SN=textparser::parser('^(S|N)$', function(text, match) {
+
+	parser <- transmute::transmuter(
+		transmute::match_regex('^(S|N)$', function(text, match) {
 			text == 'S'
 		}),
-		parse_numeric=textparser::parser('^\\d+$', function(text, match) {
-			as.numeric(text)
-		})
+		NUMERIC.TRANSMUTER
 	)
-	
+
 	fields <- fields(
 		field('Identificação da Transação', width=6),
 		field('Complemento da Transação', width=3),
@@ -74,4 +72,3 @@ MarketData$register(ContrCadIPN)
 # configurar o tratamento de casas decimais
 # fazer trim nos campos texto
 # debug de campos texto: substituir espaços por .
-# implementar textparser para R

@@ -1,16 +1,16 @@
 #' @title Read files from Brazilian Financial Market
-#' 
-#' @description 
-#' Read the many files used in Brazilian Financial Market and 
+#'
+#' @description
+#' Read the many files used in Brazilian Financial Market and
 #' convert them into useful formats and data structures.
-#' 
+#'
 #' @name marketdataBR
-#' 
+#'
 #' @docType package
-#' 
+#'
 #' @import proto
 #' @import stringr
-#' @import textparser
+#' @import transmute
 NULL
 
 .retrieve_template <- function(filename, template) {
@@ -36,38 +36,36 @@ registry <- proto::proto(expr={
 	}
 })
 
-.PARSER <- textparser::textparser(
-	parse_numeric=textparser::parser('^\\d+$', function(text, match) {
-		as.integer(text)
-	}),
-	parse_decimal=textparser::parser('^\\d+\\.\\d+$', function(text, match) {
-		as.numeric(text)
-	})
+NUMERIC.TRANSMUTER <- transmute::transmuter(
+	match_regex('^\\d+$', as.integer),
+	match_regex('^\\d+\\.\\d+$', as.numeric)
 )
 
+#' @export
 MarketData <- proto::proto(expr={
-	
+
 	..registry <- registry
-	
+
 	register <- function(., .class) {
 		name <- deparse(substitute(.class))
 		.class$init()
 		.$..registry$put(tolower(name), .class)
-		
+
 		filename <- try(.class$filename)
 		if (! is(filename, 'try-error'))
 			.$..registry$put(tolower(filename), .class)
 	}
-	
-	parser <- .PARSER
-	
+
+	parser <- NUMERIC.TRANSMUTER
+
 	retrieve_template <- function(., key) {
 		.$..registry$get(key)
 	}
-	
+
 	transform <- function(., df) identity(df)
 })
 
+#' @export
 MarketDataFWF <- MarketData$proto(expr={
 	read_file <- function(., filename, parse_fields=TRUE) {
 		df <- read_fwf(filename, .$widths, colnames=.$colnames)
@@ -81,11 +79,11 @@ MarketDataFWF <- MarketData$proto(expr={
 			})
 			names(df) <- .$colnames
 			df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
-			df <- .$parser$parse(df)
+			df <- .$parser$transmute(df)
 		}
 		df
 	}
-	
+
 	init <- function(.) {
 		.$colnames <- fields_names(.$fields)
 		.$widths <- fields_widths(.$fields)
@@ -93,6 +91,7 @@ MarketDataFWF <- MarketData$proto(expr={
 	}
 })
 
+#' @export
 MarketDataCSV <- MarketData$proto(expr={
 	read_file <- function(., filename, parse_fields=TRUE) {
 		df <- read.table(filename, col.names=.$colnames, sep=.$separator,
@@ -107,12 +106,13 @@ MarketDataCSV <- MarketData$proto(expr={
 			})
 			names(df) <- .$colnames
 			df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
-			df <- .$parser$parse(df)
+			df <- .$parser$transmute(df)
 		}
 		df
 	}
 })
 
+#' @export
 MarketDataMultiPartCSV <- MarketData$proto(expr={
 	.separator <- function(., .part=NULL) {
 		if (is.null(.part))
@@ -125,14 +125,14 @@ MarketDataMultiPartCSV <- MarketData$proto(expr={
 				sep
 		}
 	}
-	
+
 	.detect_lines <- function(., .part, lines) {
 		if (is.null(.part$pattern))
 			.part$lines
 		else
 			stringr::str_detect(lines, part$pattern)
 	}
-	
+
 	read_file <- function(., filename, parse_fields=TRUE) {
 		lines <- readLines(filename)
 		l <- list()
@@ -151,13 +151,13 @@ MarketDataMultiPartCSV <- MarketData$proto(expr={
 				})
 				names(df) <- part$colnames
 				df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
-				df <- .$parser$parse(df)
+				df <- .$parser$transmute(df)
 			}
 			l[[part_name]] <- df
 		}
 		l
 	}
-	
+
 	init <- function(.) {
 		for (idx in seq_along(.$parts)) {
 			.$parts[[idx]]$colnames <- fields_names(.$parts[[idx]]$fields)

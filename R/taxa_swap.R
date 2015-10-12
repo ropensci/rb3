@@ -2,19 +2,17 @@
 
 TaxaSwap <- MarketDataFWF$proto(expr={
 	filename <- 'TaxaSwap.txt'
-	
-	parser <- textparser::textparser(
-		parse_sign=textparser::parser('^(\\+|-)$', function(text, match) {
+
+	parser <- transmute::transmuter(
+		transmute::match_regex('\\+|-', function(text, match) {
 			idx <- text == '-'
 			x <- rep(1, length(text))
 			x[idx] <- -1
 			x
 		}),
-		parse_numeric=textparser::parser('^\\d+$', function(text, match) {
-			as.numeric(text)
-		}),
+		NUMERIC.TRANSMUTER
 	)
-	
+
 	fields <- fields(
 		fwf_field('Identificação da transação', width=6),
 		fwf_field('Complemento da transação', width=3),

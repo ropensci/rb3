@@ -2,19 +2,17 @@
 
 BD_Arbit <- MarketDataFWF$proto(expr={
 	filename <- 'BD_Arbit.txt'
-	
-	parser <- textparser::textparser(
-		parse_sign=textparser::parser('^(\\+|-)$', function(text, match) {
+
+	parser <- transmute::transmuter(
+		transmute::match_regex('\\+|-', function(text, match) {
 			idx <- text == '-'
 			x <- rep(1, length(text))
 			x[idx] <- -1
 			x
 		}),
-		parse_numeric=textparser::parser('^\\d+$', function(text, match) {
-			as.numeric(text)
-		})
+		NUMERIC.TRANSMUTER
 	)
-	
+
 	fields <- fields(
 		fwf_field('Identificação da transação', width=6, handler=to_numeric()),
 		fwf_field('Complemento da transação', width=3, handler=to_numeric()),
@@ -23,9 +21,11 @@ BD_Arbit <- MarketDataFWF$proto(expr={
 		fwf_field('Tipo de negociação', width=2, handler=to_factor(levels='PR', labels='Pregão')),
 		fwf_field('Código da mercadoria', width=3),
 		fwf_field('Código do mercado', width=1),
-		fwf_field('Tipo da série', width=1,
-			handler=to_factor(levels=c('C', 'V', '*'), labels=c('Opção de Compra', 'Opção de Venda', 'Futuro'))),
-		fwf_field('Série (opç)/vencimento (fut)', width=4),
+		fwf_field('Tipo da série', width=1, handler=to_factor(
+			levels=c('C', 'V', '*'),
+			labels=c('Opção de Compra', 'Opção de Venda', 'Futuro')
+		)),
+		fwf_field('Série (opç)/vencimento (fut)', width=4, handler=to_factor()),
 		fwf_field('Hora de criação deste registro', width=6, handler=to_time(format='%H%M%S')),
 		fwf_field('Data de vencimento (fut/opç)', width=8, handler=to_date(format='%Y%m%d')),
 		fwf_field('Preço de exercício (opç)', width=13, handler=to_numeric(dec='Número de casas decimais dos campos com *')),
@@ -97,7 +97,7 @@ BD_Arbit <- MarketDataFWF$proto(expr={
 		fwf_field('Qtd. saques até data de vencimento', width=5, handler=to_numeric()),
 		fwf_field('Qtd. dias corridos até data de vencimento', width=5, handler=to_numeric()),
 		fwf_field('Qtd. dias úteis até data de vencimento', width=5, handler=to_numeric()),
-		fwf_field('Vencimento do contrato-objeto', width=4),
+		fwf_field('Vencimento do contrato-objeto', width=4, handler=to_factor()),
 		fwf_field('Margem para clientes normais', width=13, handler=to_numeric(dec=2)),
 		fwf_field('Margem para clientes hedgers', width=13, handler=to_numeric(dec=2)),
 		fwf_field('Data de início do período de entrega (agrícolas)', width=8, handler=to_date(format='%Y%m%d')),
