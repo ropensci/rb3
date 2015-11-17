@@ -67,14 +67,6 @@ fields_handlers.fields <- function(fields) {
 	handlers
 }
 
-fwf_field <- function(field, ...) {
-	parms <- list(...)
-	attr(field, 'width')   <- if (!is.null(parms[['width']]))   parms[['width']]   else 0
-	attr(field, 'handler') <- if (!is.null(parms[['handler']])) parms[['handler']] else identity
-	class(field) <- 'field'
-	field
-}
-
 field <- function(name, ...) {
 	parms <- list(...)
 	attr(name, 'width')   <- if (!is.null(parms[['width']]))   parms[['width']]   else 0

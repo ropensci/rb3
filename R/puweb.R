@@ -7,9 +7,9 @@ PUWEB <- MarketDataMultiPartCSV$proto(expr={
 		'Cabeçalho'=list(
 			pattern='^01',
 			fields=fields(
-				fwf_field('Tipo de registro'),
-				fwf_field('Data de geração do arquivo', handler=to_date('%Y%m%d')),
-				fwf_field('Nome do arquivo')
+				field('Tipo de registro'),
+				field('Data de geração do arquivo', handler=to_date('%Y%m%d')),
+				field('Nome do arquivo')
 			)
 		),
 		'Corpo'=list(
