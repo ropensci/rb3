@@ -1,34 +1,35 @@
 Package: marketdataBR
 Title: Read files from Brazilian Financial Market
 Description: Read the many files used in Brazilian Financial Market and
-  convert them into useful formats and data structures.
+    convert them into useful formats and data structures.
 Version: 0.0.1.9000
 Authors@R: person("Wilson", "Freitas", ,"wilson.freitas@gmail.com", c("aut", "cre"))
 Depends:
-  R (>= 3.2.0)
+    R (>= 3.2.0)
 License: MIT
 LazyData: true
 Imports:
-  stringr,
-  proto,
-  textparser
+    stringr,
+    proto,
+    transmute
 Suggests:
-  testthat
+    testthat
 Collate:
-  'util.R'
-  'marketdata.R'
-  'indic.R'
-  'contrcad.R'
-  'bd_arbit.R'
-  'taxa_swap.R'
-  'puweb.R'
-  'file.R'
-  'convert_to.R'
-  'read_marketdata.R'
-  'eletro.R'
-  'premio.R'
-  'supvol.R'
+    'util.R'
+    'marketdata.R'
+    'indic.R'
+    'contrcad.R'
+    'bd_arbit.R'
+    'taxa_swap.R'
+    'puweb.R'
+    'file.R'
+    'convert_to.R'
+    'read_marketdata.R'
+    'eletro.R'
+    'premio.R'
+    'supvol.R'
 Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/R-marketdataBR/issues
 URL: https://github.com/wilsonfreitas/R-marketdataBR
 VignetteBuilder: knitr
+RoxygenNote: 5.0.0
