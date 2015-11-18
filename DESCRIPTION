@@ -16,6 +16,8 @@ Suggests:
     testthat
 Collate:
     'util.R'
+    'fields.R'
+    'handlers.R'
     'marketdata.R'
     'indic.R'
     'contrcad.R'
