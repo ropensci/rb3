@@ -130,7 +130,7 @@ MarketDataMultiPartCSV <- MarketData$proto(expr={
 		if (is.null(.part$pattern))
 			.part$lines
 		else
-			stringr::str_detect(lines, part$pattern)
+			stringr::str_detect(lines, .part$pattern)
 	}
 
 	read_file <- function(., filename, parse_fields=TRUE) {
