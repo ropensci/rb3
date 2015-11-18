@@ -36,7 +36,6 @@ field <- function(name, ...) {
 			NULL
 	})
 
-	print(unname(unlist(classes)))
 	if (any(classes == 'width'))
 		attr(name, 'width')   <- parms[[ which(classes == 'width')[1] ]]
 	else

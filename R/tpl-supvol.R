@@ -7,7 +7,7 @@ SupVol <- MarketDataMultiPartCSV$proto(expr={
 		'Cabeçalho'=list(
 			lines=1,
 			fields=fields(
-				field('Data de geração do arquivo', handler=to_date('%Y%m%d')),
+				field('Data de geração do arquivo', to_date('%Y%m%d')),
 				field('Identificação do arquivo')
 			)
 		),
@@ -18,7 +18,7 @@ SupVol <- MarketDataMultiPartCSV$proto(expr={
 				field('Descrição da Curva de Volatilidade'),
 				field('Prazo (dias de Saque)'),
 				field('Prazo (dias Corridos)'),
-				field('Valor', handler=to_numeric(dec=7))
+				field('Valor', to_numeric(dec=7))
 			)
 		)
 	)
