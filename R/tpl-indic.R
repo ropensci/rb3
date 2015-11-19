@@ -31,4 +31,3 @@ Indica <- Indic$proto(filename='Indica.txt')
 MarketData$register(Indic)
 MarketData$register(Indica)
 
-# TODO: implement summary for templates

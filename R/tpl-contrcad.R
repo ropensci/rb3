@@ -67,8 +67,3 @@ ContrCadIPN <- ContrCad$proto(filename='CONTRCAD-IPN.TXT')
 MarketData$register(ContrCad)
 MarketData$register(ContrCadIPN)
 
-# TODO: implement summary for templates
-# tratar os campos de lookup como factor
-# configurar o tratamento de casas decimais
-# fazer trim nos campos texto
-# debug de campos texto: substituir espaços por .
