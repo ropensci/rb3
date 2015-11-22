@@ -2,35 +2,74 @@
 
 Leitura e tratamento dos arquivos de dados de mercado distribuídos no Mercado Financeiro Brasileiro.
 
+## Como usar
+
+A função `read_marketdata` deve ser usada para ler os arquivos.
+Os arquivos com nomes fixos como `Indic.txt` e `PUWEB.TXT`, por exemplo, são _interpretados_ pela função `read_marketdata`.
+
+`read_marketdata` retorna um `data.frame` com o conteúdo do arquivo, como observa-se no código abaixo para o arquivo de indicadores financeiros.
+
+```r
+indic <- read_marketdata('Indic.txt')
+str(indic)
+# 'data.frame':	480 obs. of  9 variables:
+#  $ Identificação da transação : num  1 2 3 4 5 6 7 8 9 10 ...
+#  $ Complemento da transação   : num  1 1 1 1 1 1 1 1 1 1 ...
+#  $ Tipo de registro           : num  1 1 1 1 1 1 1 1 1 1 ...
+#  $ Data de geração do arquivo : Date, format: "2014-12-11" "2014-12-12" ...
+#  $ Grupo do indicador         : Factor w/ 6 levels "Indicadores agropecuários",..: 2 2 2 2 2 2 2 2 2 2 ...
+#  $ Código do indicador        : chr  "DE11-B40" "DE11-B40" "DE13-A18" "DE13-A18" ...
+#  $ Valor do indicador na data : num  107 107 110 110 102 ...
+#  $ Número de decimais do valor: num  4 4 4 4 4 4 4 4 4 4 ...
+#  $ Filler                     : chr  "" "" "" "" ...
+```
+
+Alguns arquivos são dividos em partes como __cabeçalho__ e __corpo__, e nestes casos `read_marketdata` retorna um `list` contendo um `data.frame` em cada elemento.
+O arquivo `PUWEB.TXT`, no código abaixo, é um exemplo.
+
+```r
+puweb <- read_marketdata('PUWEB.TXT')
+str(puweb)
+# List of 2
+#  $ Cabeçalho:'data.frame':	1 obs. of  3 variables:
+#   ..$ Tipo de registro          : int 1
+#   ..$ Data de geração do arquivo: Date[1:1], format: "2015-09-25"
+#   ..$ Nome do arquivo           : chr "PUWEB.TXT"
+#  $ Corpo    :'data.frame':	170 obs. of  8 variables:
+#   ..$ Tipo de registro                  : int [1:170] 2 2 2 2 2 2 2 2 2 2 ...
+#   ..$ Código do título                  : int [1:170] 100000 100000 100000 100000 100000 100000 100000 100000 100000 100000 ...
+#   ..$ Descrição do título               : Factor w/ 6 levels "LTN","NTNF","LFT",..: 1 1 1 1 1 1 1 1 1 1 ...
+#   ..$ Data de emissão do título         : Date[1:170], format: "2014-07-04" "2012-01-06" ...
+#   ..$ Data de vencimento do título      : Date[1:170], format: "2015-10-01" "2016-01-01" ...
+#   ..$ Valor de mercado em PU            : num [1:170] 998 965 931 898 864 ...
+#   ..$ Valor do PU em cenário de estresse: num [1:170] 998 962 924 886 849 ...
+#   ..$ Valor de mercado em PU para D+1   : num [1:170] 998 965 932 898 864 ...
+```
+
 ## Arquivos Tratados
 
-### BM&F Bovespa
+| Arquivo | Fonte | Mercado | Descrição |
+| ------- | ----- | ------- | --------- |
+| BD_Arbit.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Parcial |
+| BDPrevia.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Preliminar |
+| BD_Final.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Final |
+| BDAfterHour.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - After-Hours (D+1) |
+| BDAtual.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Atualização de Contratos em Aberto |
+| BDAjuste.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Ajustes |
+| Indica.txt | BM&FBovespa | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Parcial |
+| Indic.txt | BM&FBovespa | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Final |
+| CONTRCAD.txt | BM&FBovespa | Mercado de Derivativos | Contratos Cadastrados |
+| CONTRCAD-IPN.txt | BM&FBovespa | Mercado de Derivativos | Contratos Cadastrados Nova Clearing |
+| TaxaSwap.txt | BM&FBovespa | Mercado de Derivativos | Taxas de Mercado para Swaps |
+| PUWEB.TXT | BM&FBovespa | Mercado de Títulos Públicos | Preços Referenciais para Títulos Públicos |
+| Premio.txt | BM&FBovespa | Mercado de Derivativos | Prêmio de Referência para Opções |
+| SupVol.txt | BM&FBovespa | Mercado de Derivativos | Superfície de Volatilidade por Delta |
+| Eletro.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados no Mercado de Balcão |
 
-- [X] Mercado de Derivativos - Negócios Realizados em Pregão
-	- Parcial: BD_Arbit.txt
-	- Preliminar: BDPrevia.txt
-	- Final: BD_Final.txt
-	- After-Hours (D+1): BDAfterHour.txt
-	- Atualização de Contratos em Aberto: BDAtual.txt
-	- Ajustes: BDAjuste.txt
-- [X] Mercado de Derivativos - Indicadores Econômicos e Agropecuários
-	- Parcial: Indica.txt
-	- Final: Indic.txt
-- [X] Mercado de Derivativos - Contratos Cadastrados
-	- CONTRCAD.TXT
-	- Nova Clearing: CONTRCAD-IPN.TXT
-- [X] Mercado de Derivativos - Taxas de Mercado para Swaps
-	- TaxaSwap.txt
-- [X] Mercado de Títulos Públicos - Preços Referenciais para Títulos Públicos
-	- PUWEB
-- [X] Mercado de Derivativos - Prêmio de Referência para Opções
-	- Premio
-- [X] Mercado de Balcão - Superfície de Volatilidade por Delta
-	- SupVol
+<!--
+
 - [ ] Mercado de Títulos Públicos - Cotações
 	- Cotacao
-- [X] Mercado de Derivativos - Negócios Realizados no Mercado de Balcão
-	- Eletro.txt
 - [ ] Mercado de Derivativos - Posições Travadas
 	- PosTrav
 - [ ] Mercado de Derivativos - Swap Cambial - Mark to Market
@@ -147,3 +186,4 @@ Leitura e tratamento dos arquivos de dados de mercado distribuídos no Mercado F
 	- VNA_ddmmaa.txt
 	- VNA_ddmmaa.csv
 	- VNA_ddmmaa.txml
+ -->
