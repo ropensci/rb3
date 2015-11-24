@@ -30,6 +30,7 @@ Collate:
     'tpl-eletro.R'
     'tpl-premio.R'
     'tpl-supvol.R'
+    'tpl-bdin.R'
 Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/R-marketdataBR/issues
 URL: https://github.com/wilsonfreitas/R-marketdataBR
