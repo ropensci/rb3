@@ -113,7 +113,26 @@ MarketDataCSV <- MarketData$proto(expr={
 })
 
 #' @export
-MarketDataMultiPartCSV <- MarketData$proto(expr={
+MarketDataMultiPart <- MarketData$proto(expr={
+
+	.detect_lines <- function(., .part, lines) {
+		if (is.null(.part$pattern))
+			.part$lines
+		else
+			stringr::str_detect(lines, .part$pattern)
+	}
+
+	init <- function(.) {
+		for (idx in seq_along(.$parts)) {
+			.$parts[[idx]]$colnames <- fields_names(.$parts[[idx]]$fields)
+			.$parts[[idx]]$handlers <- fields_handlers(.$parts[[idx]]$fields)
+			.$parts[[idx]]$widths <- fields_widths(.$parts[[idx]]$fields)
+		}
+	}
+})
+
+#' @export
+MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr={
 	.separator <- function(., .part=NULL) {
 		if (is.null(.part))
 			.$separator
@@ -124,13 +143,6 @@ MarketDataMultiPartCSV <- MarketData$proto(expr={
 			else
 				sep
 		}
-	}
-
-	.detect_lines <- function(., .part, lines) {
-		if (is.null(.part$pattern))
-			.part$lines
-		else
-			stringr::str_detect(lines, .part$pattern)
 	}
 
 	read_file <- function(., filename, parse_fields=TRUE) {
@@ -157,11 +169,32 @@ MarketDataMultiPartCSV <- MarketData$proto(expr={
 		}
 		l
 	}
+})
 
-	init <- function(.) {
-		for (idx in seq_along(.$parts)) {
-			.$parts[[idx]]$colnames <- fields_names(.$parts[[idx]]$fields)
-			.$parts[[idx]]$handlers <- fields_handlers(.$parts[[idx]]$fields)
+#' @export
+MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr={
+	read_file <- function(., filename, parse_fields=TRUE) {
+		lines <- readLines(filename)
+		l <- list()
+		for (part_name in names(.$parts)) {
+			part <- .$parts[[part_name]]
+			idx <- .$.detect_lines(part, lines)
+			# print(part)
+			df <- read_fwf(text=lines[idx], widths=part$widths, colnames=part$colnames)
+			if (parse_fields) {
+				df <- trim_fields(df)
+				e <- evalq(environment(), df, NULL)
+				df <- lapply(part$colnames, function(x) {
+					fun <- part$handlers[[x]]
+					x <- df[[x]]
+					do.call(fun, list(x), envir=e)
+				})
+				names(df) <- part$colnames
+				df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
+				df <- .$parser$transmute(df)
+			}
+			l[[part_name]] <- df
 		}
+		l
 	}
 })
