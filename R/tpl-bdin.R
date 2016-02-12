@@ -99,6 +99,124 @@ BDIN <- MarketDataMultiPartFWF$proto(expr={
 				field('Oscilação do preço do preço do papel em relação ao pregão anterior 2', width(7), to_numeric(dec=2)),
 				field('Reserva', width(44))
 			)
+		),
+		'Resumo Diário de Negociações por Código BDI'=list(
+			pattern='^03',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Código BDI',  width(2)),
+				field('Descrição do código de BDI', width(30)),
+				field('Número de negócios efetuados no pregão corrente', width(5)),
+				field('Quantidade total de títulos negociados', width(15)),
+				field('Volume geral transacionado no pregão corrente', width(15), to_numeric(dec=2)),
+				field('Número de negócios efetuados no pregão corrente 2', width(9)),
+				field('Reserva', width(270))
+			)
+		),
+		'Maiores Oscilações do Mercado a Vista'=list(
+			pattern='^04',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Indica se é oscilação positiva ou negativa', width(1), to_factor(levels=c('A', 'B'), labels=c('ALTA (POSITIVA)', 'BAIXA (NEGATIVA)'))),
+				field('Nome resumido da empresa emissora do papel', width(12)),
+				field('Especificação do papel', width(10)),
+				field('Preço último negócio efetuado com o papel-mercado durante o pregão corrente', width(11), to_numeric(dec=2)),
+				field('Número negócios efetuados com o papel-mercado durante o pregão corrente', width(5)),
+				field('Oscilação do preço do papel-mercado em relação ao pregão anterior', width(5), to_numeric(dec=2)),
+				field('Código de negociação', width(12)),
+				field('Oscilação do preço do papel-mercado em relação ao pregão anterior 2', width(7), to_numeric(dec=2)),
+				field('Reserva', width(285))
+			)
+		),
+		'Maiores Oscilação das Ações do IBOVESPA'=list(
+			pattern='^05',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Indica se é oscilação positiva ou negativa', width(1), to_factor(levels=c('A', 'B'), labels=c('ALTA (POSITIVA)', 'BAIXA (NEGATIVA)'))),
+				field('Nome resumido da empresa emissora do papel', width(12)),
+				field('Especificação do papel', width(10)),
+				field('Preço último negócio efetuado com o papel-mercado durante o pregão corrente', width(11), to_numeric(dec=2)),
+				field('Número negócios efetuados com o papel-mercado durante o pregão corrente', width(5)),
+				field('Oscilação do preço do papel-mercado em relação ao pregão anterior', width(5), to_numeric(dec=2)),
+				field('Código de negociação', width(12)),
+				field('Oscilação do preço do papel-mercado em relação ao pregão anterior 2', width(7), to_numeric(dec=2)),
+				field('Reserva', width(285))
+			)
+		),
+		'As Mais Negociadas no Mercado a Vista'=list(
+			pattern='^06',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Nome resumido da empresa emissora do papel', width(12)),
+				field('Especificação do papel', width(10)),
+				field('Quantidade de títulos negociados no pregão', width(15)),
+				field('Volume geral no pregão deste papel-mercado', width(17), to_numeric(dec=2)),
+				field('Código de negociação', width(12)),
+				field('Reserva', width(282))
+			)
+		),
+		'As Mais Negociadas'=list(
+			pattern='^07',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Tipo de mercado', width(3)),
+				field('Descrição do tipo de mercado', width(20)),
+				field('Nome resumido da empresa emissora do papel', width(12)),
+				field('Especificação do papel', width(10)),
+				field('Indicador de correção de preços de exercícios ou valores de contrato para os mercados de opções, termo secundário ou futuro, respectivamente', width(2)),
+				field('Descrição do indicador de correção de preços de exercícios ou valores de contrato para os mercados de opções, termo secundário ou futuro, respectivamente', width(15)),
+				field('Preço de exercício para o mercado de opções ou valor de contrato para os mercados de termo secundário', width(11), to_numeric(dec=2)),
+				field('Data do vencimento para os mercados de opções, termo secundário ou futuro', width(8), to_date('%Y%m%d')),
+				field('Prazo em dias do mercado a termo', width(3)),
+				field('Quantidade de títulos negociados no pregão', width(15)),
+				field('Volume geral no pregão deste papel mercado', width(17), to_numeric(dec=2)),
+				field('Participação do volume do papel no volume total do mercado', width(5), to_numeric(dec=2)),
+				field('Código de negociação', width(12)),
+				field('Indicador de correção de preços de ativos', width(3)),
+				field('Reserva', width(212))
+			)
+		),
+		"Resumo Diário dos IOPV's"=list(
+			pattern='^08',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Identificação do IOPV', width(2)),
+				field('Sigla do IOPV', width(4)),
+				field('Nome resumido do IOPV', width(12)),
+				field('Nome do IOPV', width(30)),
+				field('IOPV de abertura do pregão', width(7), to_numeric(dec=2)),
+				field('IOPV mínimo do pregão', width(7), to_numeric(dec=2)),
+				field('IOPV máximo do pregão', width(7), to_numeric(dec=2)),
+				field("IOPV da média aritmética dos IOPV's do pregão", width(7), to_numeric(dec=2)),
+				field('IOPV de fechamento', width(7), to_numeric(dec=2)),
+				field('Sinal da evolução percentual do IOPV de fechamento', width(1)),
+				field('Evolução percentual do iopv de fechamento', width(5), to_numeric(dec=2)),
+				field('Reserva', width(259))
+			)
+		),
+		"BDR's Não Patrocinadas - Valor de Referência"=list(
+			pattern='^09',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Código de negociação', width(15)),
+				field('Nome resumido da empresa emissora do papel', width(12)),
+				field('Especificação do papel', width(10)),
+				field('Valor de referência', width(11), to_numeric(dec=2)),
+				field('Reserva', width(303))
+			)
+		),
+		"Trailer"=list(
+			pattern='^99',
+			fields=fields(
+				field('Tipo de registro', width(2)),
+				field('Código do arquivo', width(4)),
+				field('Código do usuário', width(4)),
+				field('Código da origem', width(8)),
+				field('Código do destino', width(4)),
+				field('Data da geração do arquivo', width(8), to_date('%Y%m%d')),
+				field('Total de registros', width(9)),
+				field('Reserva', width(311))
+			)
 		)
 	)
 })
