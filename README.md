@@ -1,13 +1,20 @@
-# marketdataBR
+# rbmfbovespa
 
-Leitura e tratamento dos arquivos de dados de mercado distribuídos no Mercado Financeiro Brasileiro.
+Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [BM&FBovespa](http://www.bmfbovespa.com.br).
+Os estes arquivos podem ser baixados da página de Dados Históricos da BM&FBovespa através do [link](http://www.bmfbovespa.com.br/shared/iframe.aspx?altura=2500&idioma=pt-br&url=www.bmf.com.br/arquivos1/arquivos_ipn.asp?idioma=pt-BR&status=ativo).
+
+A BM&FBovespa disponibiliza publicamente diversos arquivos com informações sobre os contratos negociados diariamente.
+A maioria destes arquivos é referente ao **fechamento do mercado** e são utilizados pelos participantes do mercado para realizar a **marcação a mercado** dos contratos.
+
+Os arquivos estão em diversos formatos de forma que esta biblioteca tenta tornar transparente o esforço de tratamento do arquivo provendo uma estrutura de dados melhor adaptada aos dados dos arquivos.
+
+Cada arquivo possui um template associado que contém as regras para a leitura do arquivo, assim como as descrição dos dados providas pela BM&FBovespa.
 
 ## Como usar
 
 A função `read_marketdata` deve ser usada para ler os arquivos.
-Os arquivos com nomes fixos como `Indic.txt` e `PUWEB.TXT`, por exemplo, são _interpretados_ pela função `read_marketdata`.
-
-`read_marketdata` retorna um `data.frame` com o conteúdo do arquivo, como observa-se no código abaixo para o arquivo de indicadores financeiros.
+Os arquivos são identificados pelos seus nomes, pois a maior parte do arquivos tem um nome fixo como `Indic.txt` e `PUWEB.TXT`, por exemplo.
+Estes arquivos são _interpretados_ pela função `read_marketdata` que retorna um `data.frame` com o conteúdo do arquivo, como observa-se no código abaixo para o arquivo de indicadores financeiros.
 
 ```r
 indic <- read_marketdata('Indic.txt')
@@ -24,8 +31,8 @@ str(indic)
 #  $ Filler                     : chr  "" "" "" "" ...
 ```
 
-Alguns arquivos são dividos em partes como __cabeçalho__ e __corpo__, e nestes casos `read_marketdata` retorna um `list` contendo um `data.frame` em cada elemento.
-O arquivo `PUWEB.TXT`, no código abaixo, é um exemplo.
+Em outros casos os arquivos são dividos em partes como __cabeçalho__ e __corpo__, e nestes casos `read_marketdata` retorna um `list` contendo um `data.frame` em cada elemento.
+O arquivo `PUWEB.TXT` (de preços referenciais para títulos públicos), no código abaixo, é um exemplo.
 
 ```r
 puweb <- read_marketdata('PUWEB.TXT')
@@ -46,26 +53,54 @@ str(puweb)
 #   ..$ Valor de mercado em PU para D+1   : num [1:170] 998 965 932 898 864 ...
 ```
 
+Caso os arquivos sejam renomeados, o `template` associado deve ser definido para que o arquivo seja lido corretamente, como é o caso do arquivo BDIN com informações do mercados de ações da BM&FBovespa.
+
+```{r}
+> bdin <- read_marketdata('inst/extdata/BDIN.txt', template='BDIN')
+> str(bdin)
+# List of 11
+#  $ Header                                      :'data.frame':	1 obs. of  9 variables:
+#   ..$ Tipo de registro          : int 0
+#   ..$ Código do arquivo         : chr "BDIN"
+#   ..$ Código do usuário         : int 9999
+#   ..$ Código da origem          : chr "BOVESPA"
+#   ..$ Código do destino         : int 9999
+#   ..$ Data de geração do arquivo: Date[1:1], format: "2015-11-19"
+#   ..$ Data do pregão            : Date[1:1], format: "2015-11-19"
+#   ..$ Hora de geração           : POSIXct[1:1], format: "2016-02-12 17:24:00"
+#   ..$ Reserva                   : chr ""
+#  $ Resumo Diário dos Índices                   :'data.frame':	23 obs. of  38 variables:
+#   ..$ Tipo de registro                                                 : int [1:23] 1 1 1 1 1 1 1 1 1 1 ...
+#   ..$ Identificação do índice                                          : int [1:23] 1 2 3 4 6 8 9 10 11 12 ...
+#   ..$ Nome do índice                                                   : chr [1:23] "IBOVESPA" "IEELETRICA" "IVBX2" "IBRX BRASIL" ...
+#   ..$ Índice de abertura do pregão                                     : int [1:23] 47437 26829 7726 19749 8048 7601 2247 10695 130 68 952 ...
+# ...
+```
+
 ## Arquivos Tratados
 
-| Arquivo | Fonte | Mercado | Descrição |
-| ------- | ----- | ------- | --------- |
-| BDIN | BM&FBovespa | Mercado de Ações | Cotações do Horário Regular |
-| BD_Arbit.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Parcial |
-| BDPrevia.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Preliminar |
-| BD_Final.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Final |
-| BDAfterHour.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - After-Hours (D+1) |
-| BDAtual.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Atualização de Contratos em Aberto |
-| BDAjuste.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Ajustes |
-| Indica.txt | BM&FBovespa | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Parcial |
-| Indic.txt | BM&FBovespa | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Final |
-| CONTRCAD.txt | BM&FBovespa | Mercado de Derivativos | Contratos Cadastrados |
-| CONTRCAD-IPN.txt | BM&FBovespa | Mercado de Derivativos | Contratos Cadastrados Nova Clearing |
-| TaxaSwap.txt | BM&FBovespa | Mercado de Derivativos | Taxas de Mercado para Swaps |
-| PUWEB.TXT | BM&FBovespa | Mercado de Títulos Públicos | Preços Referenciais para Títulos Públicos |
-| Premio.txt | BM&FBovespa | Mercado de Derivativos | Prêmio de Referência para Opções |
-| SupVol.txt | BM&FBovespa | Mercado de Derivativos | Superfície de Volatilidade por Delta |
-| Eletro.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados no Mercado de Balcão |
+| Arquivo | Template | Mercado | Descrição |
+| ------- | -------- | ------- | --------- |
+| BDIN | `BDIN` | Mercado de Ações | Cotações do Horário Regular |
+| BD_Arbit.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Parcial |
+| BDPrevia.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Preliminar |
+| BD_Final.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Final |
+| BDAfterHour.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - After-Hours (D+1) |
+| BDAtual.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Atualização de Contratos em Aberto |
+| BDAjuste.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Ajustes |
+| Indica.txt | `Indic` | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Parcial |
+| Indic.txt | `Indic` | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Final |
+| CONTRCAD.txt | `ContrCad` | Mercado de Derivativos | Contratos Cadastrados |
+| CONTRCAD-IPN.txt | `ContrCad` | Mercado de Derivativos | Contratos Cadastrados Nova Clearing |
+| TaxaSwap.txt | `TaxaSwap` | Mercado de Derivativos | Taxas de Mercado para Swaps |
+| PUWEB.TXT | `PUWEB` | Mercado de Títulos Públicos | Preços Referenciais para Títulos Públicos |
+| Premio.txt | `Premio` | Mercado de Derivativos | Prêmio de Referência para Opções |
+| SupVol.txt | `SupVol` | Mercado de Derivativos | Superfície de Volatilidade por Delta |
+| Eletro.txt | `Eletro` | Mercado de Derivativos | Negócios Realizados no Mercado de Balcão |
+
+## Ajuda
+
+Divesos arquivos ainda não são tratados, caso você tenha interesse em algum arquivo específico entre em contato para que possamos priorizar a criação do `template` ou se quiser pode enviar o template pronto que será incluído no pacote.
 
 <!--
 
