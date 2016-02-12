@@ -50,6 +50,7 @@ str(puweb)
 
 | Arquivo | Fonte | Mercado | Descrição |
 | ------- | ----- | ------- | --------- |
+| BDIN | BM&FBovespa | Mercado de Ações | Cotações do Horário Regular |
 | BD_Arbit.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Parcial |
 | BDPrevia.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Preliminar |
 | BD_Final.txt | BM&FBovespa | Mercado de Derivativos | Negócios Realizados em Pregão - Final |
