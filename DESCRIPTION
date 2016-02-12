@@ -1,7 +1,7 @@
-Package: marketdataBR
-Title: Read files from Brazilian Financial Market
-Description: Read the many files used in Brazilian Financial Market and
-    convert them into useful formats and data structures.
+Package: rbmvbovespa
+Title: Read public files released by BM&FBovespa Exchange.
+Description: Read public files released by BM&FBovespa and convert them into
+useful formats and data structures commom to data analysis practitioners.
 Version: 0.0.1.9000
 Authors@R: person("Wilson", "Freitas", ,"wilson.freitas@gmail.com", c("aut", "cre"))
 Depends:
@@ -32,7 +32,7 @@ Collate:
     'tpl-supvol.R'
     'tpl-bdin.R'
 Encoding: UTF-8
-BugReports: https://github.com/wilsonfreitas/R-marketdataBR/issues
-URL: https://github.com/wilsonfreitas/R-marketdataBR
+BugReports: https://github.com/wilsonfreitas/rbmvbovespa/issues
+URL: https://github.com/wilsonfreitas/rbmvbovespa
 VignetteBuilder: knitr
 RoxygenNote: 5.0.0
