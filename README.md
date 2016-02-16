@@ -10,6 +10,13 @@ Os arquivos estão em diversos formatos de forma que esta biblioteca tenta torna
 
 Cada arquivo possui um template associado que contém as regras para a leitura do arquivo, assim como as descrição dos dados providas pela BM&FBovespa.
 
+## Como instalar
+
+```{r}
+devtools::install_github('wilsonfreitas/transmute')
+devtools::install_github('wilsonfreitas/rbmfbovespa')
+```
+
 ## Como usar
 
 A função `read_marketdata` deve ser usada para ler os arquivos.
