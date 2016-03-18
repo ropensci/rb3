@@ -21,7 +21,7 @@ read_fwf <- function(fname, widths, colnames=NULL, skip=0, text) {
 	t <- list()
 	for (i in seq_along(colnames)) {
 		dx <- colpositions[[i]]
-		t[[colnames[i]]] <- substr(lines, dx[1], dx[2])
+		t[[colnames[i]]] <- stringr::str_sub(lines, dx[1], dx[2])
 	}
 
 	as.data.frame(t, stringsAsFactors=FALSE, optional=TRUE, check.names=FALSE)
