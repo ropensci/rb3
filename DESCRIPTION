@@ -31,6 +31,7 @@ Collate:
     'tpl-premio.R'
     'tpl-supvol.R'
     'tpl-bdin.R'
+    'tpl-cotahist.R'
 Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/rbmfbovespa/issues
 URL: https://github.com/wilsonfreitas/rbmfbovespa
