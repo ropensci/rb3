@@ -1,5 +1,6 @@
 
 ContrCad <- MarketDataFWF$proto(expr={
+  id <- 'CONTRCAD'
   filename <- 'CONTRCAD.TXT'
 
   parser <- transmute::transmuter(

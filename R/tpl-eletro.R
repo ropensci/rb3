@@ -1,5 +1,6 @@
 
 Eletro <- MarketDataFWF$proto(expr={
+  id <- 'Eletro'
   filename <- 'Eletro.txt'
 
   parser <- transmute::transmuter(

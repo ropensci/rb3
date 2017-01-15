@@ -1,5 +1,6 @@
 
 BDIN <- MarketDataMultiPartFWF$proto(expr={
+  id <- 'BDIN'
   filename <- 'BDIN'
 
   parts <- list(

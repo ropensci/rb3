@@ -1,5 +1,6 @@
 
 SupVol <- MarketDataMultiPartCSV$proto(expr={
+  id <- 'SupVol'
   filename <- 'SupVol.txt'
   separator <- ';'
 

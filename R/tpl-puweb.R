@@ -1,5 +1,6 @@
 
 PUWEB <- MarketDataMultiPartCSV$proto(expr={
+  id <- 'PUWEB'
   filename <- 'PUWEB.TXT'
   separator <- ';'
 

@@ -1,6 +1,7 @@
 
 
 TaxaSwap <- MarketDataFWF$proto(expr={
+  id <- 'TaxaSwap'
   filename <- 'TaxaSwap.txt'
 
   parser <- transmute::transmuter(

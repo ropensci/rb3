@@ -1,5 +1,6 @@
 
 Premio <- MarketDataFWF$proto(expr={
+  id <- 'Premio'
   filename <- 'Premio.txt'
 
   fields <- fields(

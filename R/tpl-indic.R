@@ -1,5 +1,6 @@
 
 Indic <- MarketDataFWF$proto(expr={
+  id <- 'Indic'
   filename <- 'Indic.txt'
 
   parser <- transmute::transmuter(

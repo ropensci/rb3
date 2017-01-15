@@ -1,6 +1,7 @@
 
 
 BD_Arbit <- MarketDataFWF$proto(expr={
+  id <- 'BD_Arbit'
   filename <- 'BD_Arbit.txt'
 
   parser <- transmute::transmuter(

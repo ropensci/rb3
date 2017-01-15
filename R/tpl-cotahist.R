@@ -1,6 +1,7 @@
 
 
 COTAHIST <- MarketDataMultiPartFWF$proto(expr = {
+  id <- 'COTAHIST'
   filename <- 'COTAHIST'
 
   parts <- list(
