@@ -1,6 +1,7 @@
 
 DeltaOpcoes <- MarketDataFWF$proto(expr={
   filename <- 'DeltaOpcoes.txt'
+  id <- 'DeltaOpcoes'
 
   parser <- transmute::transmuter(
     transmute::match_regex('\\+|-', function(text, match) {

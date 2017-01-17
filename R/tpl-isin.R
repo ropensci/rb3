@@ -1,6 +1,7 @@
 
 ISIND <- MarketDataFWF$proto(expr={
   filename <- 'CodISIND.txt'
+  id <- 'ISIND'
 
   fields <- fields(
     field('data_cadastro', 'Data de cadastro', width(8), to_date('%Y%m%d')),
@@ -15,6 +16,7 @@ MarketData$register(ISIND)
 
 ISINS <- MarketDataFWF$proto(expr={
   filename <- 'CodISINS.txt'
+  id <- 'ISINS'
 
   fields <- fields(
     field('data_cadastro', 'Data de cadastro', width(8), to_date('%Y%m%d')),
