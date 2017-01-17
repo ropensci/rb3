@@ -1,7 +1,7 @@
 Package: rbmfbovespa
 Title: Read public files released by BM&FBovespa Exchange.
 Description: Read public files released by BM&FBovespa and convert them into
-  useful formats and data structures commom to data analysis practitioners.
+    useful formats and data structures commom to data analysis practitioners.
 Version: 0.0.1.9000
 Authors@R: person("Wilson", "Freitas", ,"wilson.freitas@gmail.com", c("aut", "cre"))
 Depends:
@@ -32,8 +32,12 @@ Collate:
     'tpl-supvol.R'
     'tpl-bdin.R'
     'tpl-cotahist.R'
+    'tpl-deltaopcoes.R'
+    'tpl-isin.R'
+    'show_templates_Addin.R'
+    'display_template_Addin.R'
 Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/rbmfbovespa/issues
 URL: https://github.com/wilsonfreitas/rbmfbovespa
 VignetteBuilder: knitr
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
