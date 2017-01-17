@@ -15,24 +15,28 @@ NULL
 
 .retrieve_template <- function(filename, template) {
   template <- if (is.null(template))
-    MarketData$retrieve_template( tolower(basename(filename)) )
+    MarketData$retrieve_template( basename(filename) )
   else
-    MarketData$retrieve_template( tolower(template) )
+    MarketData$retrieve_template( template )
   if (is.null(template))
     stop('Unknown template.')
   template
 }
 
 registry <- proto::proto(expr={
-  ..container <- list()
+  .container <- list()
   put <- function(., key, value) {
-    .$..container[[key]] <- value
+    .$.container[[key]] <- value
     invisible(NULL)
   }
 
   get <- function(., key) {
-    val <- try(base::get(key, .$..container), TRUE)
+    val <- try(base::get(key, .$.container), TRUE)
     if (is(val, 'try-error')) NULL else val
+  }
+
+  keys <- function(.) {
+    names(.$.container)
   }
 })
 
@@ -44,27 +48,58 @@ NUMERIC.TRANSMUTER <- transmute::transmuter(
 #' @export
 MarketData <- proto::proto(expr={
 
-  ..registry <- registry
+  ..registry.id <- registry$proto()
+  ..registry.class <- registry$proto()
+  ..registry.filename <- registry$proto()
 
   register <- function(., .class) {
-    name <- deparse(substitute(.class))
     .class$init()
-    .$..registry$put(tolower(name), .class)
+
+    # if the class is super (i.e has "name") then add to index
+    if (any(.class$ls() == "id"))
+      .$..registry.id$put(.class$id, .class)
+
+    name <- deparse(substitute(.class))
+    .$..registry.class$put(name, .class)
 
     filename <- try(.class$filename)
     if (! is(filename, 'try-error'))
-      .$..registry$put(tolower(filename), .class)
+      .$..registry.filename$put(filename, .class)
   }
 
   parser <- NUMERIC.TRANSMUTER
 
   retrieve_template <- function(., key) {
-    .$..registry$get(key)
+    # key <- tolower(key)
+    tpl_ <- .$..registry.id$get(key)
+    if (! is.null(tpl_))
+      return(tpl_)
+    else {
+      tpl_ <- .$..registry.class$get(key)
+      tpl_ <- if (is.null(tpl_)) .$..registry.filename$get(key) else tpl_
+      return(tpl_)
+    }
+  }
+
+  show_templates <- function(.) {
+    dx <- lapply(.$..registry.class$keys(), function(cls) {
+      tpl_ <- .$..registry.class$get(cls)
+      data.frame(
+        'Template ID' = tpl_$id,
+        'Class Name' = cls,
+        'Filename' = tpl_$filename,
+        'File Type' = tpl_$file_type,
+        stringsAsFactors = FALSE,
+        check.names = FALSE
+      )
+    })
+    do.call(rbind, dx)
   }
 
   transform <- function(., df) identity(df)
 
   print <- function(.) {
+    cat('Template ID:', .$id, '\n')
     cat('Expected filename:', .$filename, '\n')
     cat('File type:', .$file_type, '\n')
     if (is(.$fields, 'fields')) {
@@ -85,6 +120,7 @@ MarketData <- proto::proto(expr={
         print.fields(.$parts[[nx]]$fields)
       }
     }
+    invisible(NULL)
   }
 })
 
@@ -226,7 +262,3 @@ MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr={
   }
 })
 
-#' @export
-describe_template <- function(template) {
-  MarketData$retrieve_template(template)$print()
-}
