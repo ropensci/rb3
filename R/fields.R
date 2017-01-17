@@ -5,8 +5,8 @@ fields <- function(...) {
   that
 }
 
-print.fields <- function(x, ...) {
-  df <- data.frame(
+as.data.frame.fields <- function(x, ...) {
+  data.frame(
     `Field name` = fields_names(x),
     `Description` = fields_description(x),
     `Width` = fields_widths(x),
@@ -14,6 +14,10 @@ print.fields <- function(x, ...) {
     stringsAsFactors = FALSE,
     check.names = FALSE
   )
+}
+
+print.fields <- function(x, ...) {
+  df <- as.data.frame(x)
   suppressWarnings(
     print(ascii::ascii(df, include.rownames = TRUE), type = 'org')
   )
