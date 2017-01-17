@@ -1,0 +1,9 @@
+Name: rbmfbovespa View Templates
+Description: Lists all registered templates.
+Binding: show_templates_Addin
+Interactive: true
+
+Name: rbmfbovespa Select Template
+Description: Displays template's attributes and fields.
+Binding: display_template_Addin
+Interactive: true
