@@ -9,8 +9,7 @@ display_template_Addin <- function() {
                   choices = classes_,
                   selected = 1),
       shiny::hr(),
-      shiny::uiOutput('templateOutput'),
-      DT::dataTableOutput("tableOutput")
+      shiny::uiOutput('templateOutput')
     )
   )
 
@@ -19,20 +18,38 @@ display_template_Addin <- function() {
 
     output$templateOutput <- shiny::renderUI({
       tpl_ <- MarketData$retrieve_template(input$templateClass)
-      shiny::tags$div(
+
+      elm <- list(
         shiny::tags$p('Template ID: ', tpl_$id),
         shiny::tags$p('Filename: ', tpl_$filename),
         shiny::tags$p('File type: ', tpl_$file_type)
       )
-    })
 
-    output$tableOutput <- DT::renderDataTable({
-      tpl_ <- MarketData$retrieve_template(input$templateClass)
-      DT::datatable(as.data.frame(tpl_$fields),
-                    selection = 'none',
-                    options = list(paging = FALSE))
+      if (is(tpl_$fields, 'fields')) {
+        elm[[ length(elm) + 1 ]] <- shiny::HTML(
+          print(xtable::xtable(as.data.frame(tpl_$fields)),
+                type = 'html', print.results = FALSE,
+                html.table.attributes='class="data table table-bordered table-condensed"')
+        )
+      } else {
+        parts_names <- names(tpl_$parts)
+        ix <- 0
+        for (nx in parts_names) {
+          ix <- ix + 1
+          elm[[ length(elm) + 1 ]] <- shiny::tags$p(sprintf('Part %d: %s\n', ix, nx))
+          # if (! is.null(.$parts[[nx]]$lines))
+          #   cat('Lines:', .$parts[[nx]]$lines, '\n')
+          # else
+          #   cat('Pattern:', .$parts[[nx]]$pattern, '\n')
+          elm[[ length(elm) + 1 ]] <- shiny::HTML(
+            print(xtable::xtable(as.data.frame(tpl_$parts[[nx]]$fields)),
+                  type = 'html', print.results = FALSE,
+                  html.table.attributes='class="data table table-bordered table-condensed"')
+          )
+        }
+      }
+      do.call(shiny::tags$div, elm)
     })
-
 
   }
 
