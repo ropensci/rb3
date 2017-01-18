@@ -104,6 +104,9 @@ Caso os arquivos sejam renomeados, o `template` associado deve ser definido para
 | Premio.txt | `Premio` | Mercado de Derivativos | Prêmio de Referência para Opções |
 | SupVol.txt | `SupVol` | Mercado de Derivativos | Superfície de Volatilidade por Delta |
 | Eletro.txt | `Eletro` | Mercado de Derivativos | Negócios Realizados no Mercado de Balcão |
+| CodISIND.txt | `ISIND` | Mercado de Derivativos | Relação de Códigos ISIN para Contratos Derivativos
+| CodISINS.txt | `ISINS` | Mercado de Derivativos | Relação de Códigos ISIN para Contratos de Swap
+| DeltaOpcoes.txt | `DeltaOpcoes` | Mercado de Derivativos | Volatilidades implícitas das opções sobre derivativos financeiros em Deltas padronizados
 
 ## Ajuda
 
@@ -111,42 +114,40 @@ Divesos arquivos ainda não são tratados, caso você tenha interesse em algum a
 
 <!--
 
+- [ ] Mercado de Títulos Públicos - Volume Bruto Contratado
+	- VolumeBrutoContratado
+- [ ] Mercado de Derivativos - GTSLiNe - Fatores de Ponderação
+	- Este arquivo contém os fatores de ponderação (fatores K) de risco dos instrumentos utilizado no GTSLine.
 - [ ] Mercado de Títulos Públicos - Cotações
 	- Cotacao
 - [ ] Mercado de Derivativos - Posições Travadas
 	- PosTrav
 - [ ] Mercado de Derivativos - Swap Cambial - Mark to Market
 	- Market
+- [ ] Mercado de Derivativos - Deltas Opções Padronizadas
+	- Deltas
+- [ ] Mercado de Derivativos - Operações Estruturadas de Volatilidade
+	- Ref_Vol
+- [ ] Mercado de Derivativos - Tarifação para Swaps
+	- TarSwap
+- [ ] Mercado de Derivativos - Relação de Códigos ISIN para CPRs
+	- CodISINS
+
 - [ ] Mercado de Títulos Públicos - Preços Referenciais BM&F para LTN
 	- Ltaammdd
 - [ ] Mercado de Câmbio - Taxas Praticadas, Parâmetros de Abertura e Operações Contratadas
 	- Ctaammdd
 - [ ] Mercado de Câmbio - Volume Líquido Compensado
 	- Cvaammdd
-- [ ] Mercado de Derivativos - Operações Estruturadas de Volatilidade
-	- Ref_Vol
-- [ ] Mercado de Derivativos - Tarifação para Swaps
-	- TarSwap
-- [ ] Mercado de Derivativos - Relação de Códigos ISIN para Contratos Derivativos
-	- CodISIND
-- [ ] Mercado de Derivativos - Relação de Códigos ISIN para Contratos de Swap
-	- CodISINS
-- [ ] Mercado de Derivativos - Relação de Códigos ISIN para CPRs
-	- CodISINS
 - [ ] Mercado de Títulos Públicos - Túnel de Negociação para Operações Definitivas a Vista e a Termo (pontos-base)
 	- Tdaammdd
 - [ ] Mercado de Títulos Públicos - Túnel de Negociação para Operações Compromissadas (pontos-base)
 	- Tcaammdd
 - [ ] Mercado de Derivativos - Opções Flexíveis - Parâmetros para Determinação de Limites de Preço e Taxa
 	- lpaammdd
-- [ ] Mercado de Títulos Públicos - Volume Bruto Contratado
-	- VolumeBrutoContratado
-- [ ] Mercado de Derivativos - GTSLiNe - Fatores de Ponderação
-	- Este arquivo contém os fatores de ponderação (fatores K) de risco dos instrumentos utilizado no GTSLine.
-- [ ] Mercado de Derivativos - Deltas Opções Padronizadas
-	- Deltas
 - [ ] Mercado de Derivativos - Swaps Parâmetros para Determinação de Limites de Preço
 	- SWaammdd
+
 - [ ] Cadastro de instrumentos - BVBG.028.01 Instruments File
 	- Este arquivo contém as características dos instrumentos negociáveis e dos instrumentos aceitos em garantia que são de conhecimento público.
 - [ ] Cadastro de instrumentos indicadores - BVBG.029.01 Instruments File
