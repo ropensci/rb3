@@ -5,7 +5,7 @@ display_template_Addin <- function() {
   ui <- miniUI::miniPage(
     miniUI::miniTitleBar("rbmfbovespa View Template"),
     miniUI::miniContentPanel(
-      shiny::selectInput("templateClass", label = h3("Template Classes"),
+      shiny::selectInput("templateClass", label = shiny::h3("Template Classes"),
                   choices = classes_,
                   selected = 1),
       shiny::hr(),
@@ -53,8 +53,8 @@ display_template_Addin <- function() {
 
   }
 
-  app <- shinyApp(ui = ui, server = server)
-  viewer <- dialogViewer("rbmfbovespa Show Templates", width = 1200, height = 900)
-  runGadget(app, viewer = viewer, stopOnCancel = TRUE)
+  app <- shiny::shinyApp(ui = ui, server = server)
+  viewer <- shiny::dialogViewer("rbmfbovespa Show Templates", width = 1200, height = 900)
+  shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
 
 }
