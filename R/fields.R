@@ -1,4 +1,5 @@
 
+#' @export
 fields <- function(...) {
   that <- list(...)
   class(that) <- 'fields'
@@ -49,6 +50,7 @@ fields_handlers.fields <- function(fields) {
   handlers
 }
 
+#' @export
 field <- function(name, description, ...) {
 
   if (missing(description)) {
