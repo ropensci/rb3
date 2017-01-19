@@ -34,6 +34,7 @@ Collate:
     'tpl-cotahist.R'
     'tpl-deltaopcoes.R'
     'tpl-isin.R'
+    'tpl-premioopcaoacao.R'
     'show_templates_Addin.R'
     'display_template_Addin.R'
 Encoding: UTF-8
