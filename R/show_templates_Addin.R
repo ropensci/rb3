@@ -11,7 +11,11 @@ show_templates_Addin <- function() {
   server <- function(input, output, session) {
 
     output$tableOutput <- DT::renderDataTable({
-      DT::datatable(MarketData$show_templates(),
+      df <- MarketData$show_templates()
+      df['Template ID'] <- NULL
+      df['Template Name'] <- df['Class Name']
+      df['Class Name'] <- NULL
+      DT::datatable(df[,c(4, 1, 3, 2)],
                     selection = 'none',
                     options = list(paging = FALSE))
     })

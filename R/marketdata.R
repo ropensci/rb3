@@ -48,6 +48,8 @@ NUMERIC.TRANSMUTER <- transmute::transmuter(
 #' @export
 MarketData <- proto::proto(expr={
 
+  description <- ''
+
   ..registry.id <- registry$proto()
   ..registry.class <- registry$proto()
   ..registry.filename <- registry$proto()
@@ -89,6 +91,7 @@ MarketData <- proto::proto(expr={
         'Class Name' = cls,
         'Filename' = tpl_$filename,
         'File Type' = tpl_$file_type,
+        'Description' = tpl_$description,
         stringsAsFactors = FALSE,
         check.names = FALSE
       )
