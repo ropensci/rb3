@@ -2,6 +2,7 @@
 ISIND <- MarketDataFWF$proto(expr={
   filename <- 'CodISIND.txt'
   id <- 'ISIND'
+  description <- 'Relação de Códigos ISIN para Contratos Derivativos'
 
   fields <- fields(
     field('data_cadastro', 'Data de cadastro', width(8), to_date('%Y%m%d')),
@@ -17,6 +18,7 @@ MarketData$register(ISIND)
 ISINS <- MarketDataFWF$proto(expr={
   filename <- 'CodISINS.txt'
   id <- 'ISINS'
+  description <- 'Relação de Códigos ISIN para Contratos de Swap'
 
   fields <- fields(
     field('data_cadastro', 'Data de cadastro', width(8), to_date('%Y%m%d')),

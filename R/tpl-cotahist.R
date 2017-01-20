@@ -3,6 +3,7 @@
 COTAHIST <- MarketDataMultiPartFWF$proto(expr = {
   id <- 'COTAHIST'
   filename <- 'COTAHIST'
+  description <- 'Cotações Históricas do Pregão de Ações'
 
   parts <- list(
     'Header' = list(

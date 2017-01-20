@@ -2,6 +2,7 @@
 Eletro <- MarketDataFWF$proto(expr={
   id <- 'Eletro'
   filename <- 'Eletro.txt'
+  description <- 'Negócios Realizados no Mercado de Balcão'
 
   parser <- transmute::transmuter(
     transmute::match_regex('\\+|-', function(text, match) {

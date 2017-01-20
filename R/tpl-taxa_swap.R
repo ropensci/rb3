@@ -3,6 +3,7 @@
 TaxaSwap <- MarketDataFWF$proto(expr={
   id <- 'TaxaSwap'
   filename <- 'TaxaSwap.txt'
+  description <- 'Taxas de Mercado para Swaps'
 
   parser <- transmute::transmuter(
     transmute::match_regex('\\+|-', function(text, match) {

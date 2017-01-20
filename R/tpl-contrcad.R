@@ -2,6 +2,7 @@
 ContrCad <- MarketDataFWF$proto(expr={
   id <- 'CONTRCAD'
   filename <- 'CONTRCAD.TXT'
+  description <- 'Contratos Cadastrados'
 
   parser <- transmute::transmuter(
     transmute::match_regex('^(S|N)$', function(text, match) {
@@ -45,7 +46,7 @@ ContrCad <- MarketDataFWF$proto(expr={
   )
 })
 
-ContrCadIPN <- ContrCad$proto(filename='CONTRCAD-IPN.TXT')
+ContrCadIPN <- ContrCad$proto(filename='CONTRCAD-IPN.TXT', description = 'Contratos Cadastrados Nova Clearing')
 
 MarketData$register(ContrCad)
 MarketData$register(ContrCadIPN)

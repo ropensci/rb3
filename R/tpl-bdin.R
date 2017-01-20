@@ -2,6 +2,7 @@
 BDIN <- MarketDataMultiPartFWF$proto(expr={
   id <- 'BDIN'
   filename <- 'BDIN'
+  description <- 'Cotações do Horário Regular do Pregão de Ações'
 
   parts <- list(
     'Header'=list(

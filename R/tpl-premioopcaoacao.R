@@ -3,6 +3,7 @@ PremioOpcaoAcao <- MarketDataMultiPartCSV$proto(expr={
   filename <- 'PExxxxxx.txt'
   id <- 'PremioOpcaoAcao'
   separator <- ';'
+  description <- 'Prêmio de Referência para Opções sobre Ações'
 
   parts <- list(
     'Cabeçalho'=list(

@@ -2,6 +2,7 @@
 DeltaOpcoes <- MarketDataFWF$proto(expr={
   filename <- 'DeltaOpcoes.txt'
   id <- 'DeltaOpcoes'
+  description <- 'Volatilidades implícitas das opções sobre derivativos financeiros em Deltas padronizados'
 
   parser <- transmute::transmuter(
     transmute::match_regex('\\+|-', function(text, match) {

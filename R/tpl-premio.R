@@ -2,6 +2,7 @@
 Premio <- MarketDataFWF$proto(expr={
   id <- 'Premio'
   filename <- 'Premio.txt'
+  description <- 'Prêmio de Referência para Opções sobre Derivativos'
 
   fields <- fields(
     field('id_transacao','Identificação da transação', width(6)),

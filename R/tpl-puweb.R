@@ -3,6 +3,7 @@ PUWEB <- MarketDataMultiPartCSV$proto(expr={
   id <- 'PUWEB'
   filename <- 'PUWEB.TXT'
   separator <- ';'
+  description <- 'Preços Referenciais para Títulos Públicos'
 
   parts <- list(
     'Cabeçalho'=list(

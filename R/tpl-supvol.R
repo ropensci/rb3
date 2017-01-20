@@ -3,6 +3,7 @@ SupVol <- MarketDataMultiPartCSV$proto(expr={
   id <- 'SupVol'
   filename <- 'SupVol.txt'
   separator <- ';'
+  description <- 'Superfície de Volatilidade por Delta de Opções sobre Derivativos'
 
   parts <- list(
     'Cabeçalho'=list(

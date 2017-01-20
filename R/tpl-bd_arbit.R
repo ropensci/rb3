@@ -3,6 +3,7 @@
 BD_Arbit <- MarketDataFWF$proto(expr={
   id <- 'BD_Arbit'
   filename <- 'BD_Arbit.txt'
+  description <- 'Negócios Realizados em Pregão - Parcial'
 
   parser <- transmute::transmuter(
     transmute::match_regex('\\+|-', function(text, match) {
@@ -98,11 +99,11 @@ BD_Arbit <- MarketDataFWF$proto(expr={
   )
 })
 
-BDPrevia <- BD_Arbit$proto(filename='BDPrevia.txt')
-BDAtual <- BD_Arbit$proto(filename='BDAtual.txt')
-BDAjuste <- BD_Arbit$proto(filename='BDAjuste.txt')
-BDAfterHour <- BD_Arbit$proto(filename='BDAfterHour.txt')
-BD_Final <- BD_Arbit$proto(filename='BD_Final.txt')
+BDPrevia <- BD_Arbit$proto(filename='BDPrevia.txt', description = 'Negócios Realizados em Pregão - Preliminar')
+BDAtual <- BD_Arbit$proto(filename='BDAtual.txt', description = 'Negócios Realizados em Pregão - Atualização de Contratos em Aberto')
+BDAjuste <- BD_Arbit$proto(filename='BDAjuste.txt', description = 'Negócios Realizados em Pregão - Ajustes')
+BDAfterHour <- BD_Arbit$proto(filename='BDAfterHour.txt', description = 'Negócios Realizados em Pregão - After-Hours (D+1)')
+BD_Final <- BD_Arbit$proto(filename='BD_Final.txt', description = 'Negócios Realizados em Pregão - Final')
 
 MarketData$register(BD_Arbit)
 MarketData$register(BDPrevia)
