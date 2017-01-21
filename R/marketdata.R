@@ -232,6 +232,7 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr={
       }
       l[[part_name]] <- df
     }
+    class(l) <- "parts"
     l
   }
 })
@@ -261,6 +262,7 @@ MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr={
       }
       l[[part_name]] <- df
     }
+    class(l) <- "parts"
     l
   }
 })
