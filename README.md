@@ -1,7 +1,7 @@
 # rbmfbovespa
 
 Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [BM&FBovespa](http://www.bmfbovespa.com.br).
-Os estes arquivos podem ser baixados da página de Dados Históricos da BM&FBovespa através do [link](http://www.bmfbovespa.com.br/shared/iframe.aspx?altura=2500&idioma=pt-br&url=www.bmf.com.br/arquivos1/arquivos_ipn.asp?idioma=pt-BR&status=ativo).
+Os estes arquivos podem ser baixados da página de Dados Históricos da BM&FBovespa através do [link](http://www.bmfbovespa.com.br/pt_br/servicos/market-data/historico/mercado-de-derivativos/pesquisa-por-pregao/).
 
 A BM&FBovespa disponibiliza publicamente diversos arquivos com informações sobre os contratos negociados diariamente.
 A maioria destes arquivos é referente ao **fechamento do mercado** e são utilizados pelos participantes do mercado para realizar a **marcação a mercado** dos contratos.
