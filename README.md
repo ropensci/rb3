@@ -1,4 +1,4 @@
-# rbmfbovespa
+# B3SAr
 
 Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [BM&FBovespa](http://www.bmfbovespa.com.br).
 Os estes arquivos podem ser baixados da página de Dados Históricos da BM&FBovespa através do [link](http://www.bmfbovespa.com.br/pt_br/servicos/market-data/historico/mercado-de-derivativos/pesquisa-por-pregao/).
