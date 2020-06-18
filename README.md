@@ -1,7 +1,7 @@
 # B3SAr
 
-Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [BM&FBovespa](http://www.bmfbovespa.com.br).
-Os estes arquivos podem ser baixados da página de Dados Históricos da BM&FBovespa através do [link](http://www.bmfbovespa.com.br/pt_br/servicos/market-data/historico/mercado-de-derivativos/pesquisa-por-pregao/).
+Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [B3](http://www.b3.com.br).
+Os estes arquivos podem ser baixados da página de Dados Históricos da B3 através do [link](http://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/).
 
 A BM&FBovespa disponibiliza publicamente diversos arquivos com informações sobre os contratos negociados diariamente.
 A maioria destes arquivos é referente ao **fechamento do mercado** e são utilizados pelos participantes do mercado para realizar a **marcação a mercado** dos contratos.
