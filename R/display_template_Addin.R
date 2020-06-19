@@ -3,7 +3,7 @@ display_template_Addin <- function() {
 
   classes_ <- MarketData$show_templates()[['Class Name']]
   ui <- miniUI::miniPage(
-    miniUI::miniTitleBar("rbmfbovespa View Template"),
+    miniUI::miniTitleBar("rb3 View Template"),
     miniUI::miniContentPanel(
       shiny::selectInput("templateClass", label = shiny::h3("Template Classes"),
                   choices = classes_,
@@ -54,7 +54,7 @@ display_template_Addin <- function() {
   }
 
   app <- shiny::shinyApp(ui = ui, server = server)
-  viewer <- shiny::dialogViewer("rbmfbovespa Show Templates", width = 1200, height = 900)
+  viewer <- shiny::dialogViewer("rb3 Show Templates", width = 1200, height = 900)
   shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
 
 }

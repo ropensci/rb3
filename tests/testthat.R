@@ -1,4 +1,4 @@
 library(testthat)
-library(marketdataBR)
+library(rb3)
 
-test_check("marketdataBR")
+test_check("rb3")

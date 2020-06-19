@@ -4,7 +4,7 @@
 #' Read the many files used in Brazilian Financial Market and
 #' convert them into useful formats and data structures.
 #'
-#' @name rbmfbovespa
+#' @name rb3
 #'
 #' @docType package
 #'

@@ -1,9 +1,9 @@
-Name: rbmfbovespa List Templates
+Name: rb3 List Templates
 Description: Lists all registered templates.
 Binding: show_templates_Addin
 Interactive: true
 
-Name: rbmfbovespa View Template
+Name: rb3 View Template
 Description: Displays template's attributes and fields.
 Binding: display_template_Addin
 Interactive: true
