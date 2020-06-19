@@ -1,4 +1,4 @@
-# B3SAr
+# rb3
 
 Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [B3](http://www.b3.com.br).
 Os estes arquivos podem ser baixados da página de Dados Históricos da B3 através do [link](http://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/).
@@ -14,7 +14,7 @@ Cada arquivo possui um template associado que contém as regras para a leitura d
 
 ```{r}
 devtools::install_github('wilsonfreitas/transmute')
-devtools::install_github('wilsonfreitas/rbmfbovespa')
+devtools::install_github('wilsonfreitas/rb3')
 ```
 
 ## Como usar
