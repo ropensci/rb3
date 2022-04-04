@@ -14,16 +14,18 @@
 NULL
 
 .retrieve_template <- function(filename, template) {
-  template <- if (is.null(template))
-    MarketData$retrieve_template( basename(filename) )
-  else
-    MarketData$retrieve_template( template )
-  if (is.null(template))
-    stop('Unknown template.')
+  template <- if (is.null(template)) {
+    MarketData$retrieve_template(basename(filename))
+  } else {
+    MarketData$retrieve_template(template)
+  }
+  if (is.null(template)) {
+    stop("Unknown template.")
+  }
   template
 }
 
-registry <- proto::proto(expr={
+registry <- proto::proto(expr = {
   .container <- list()
   put <- function(., key, value) {
     .$.container[[key]] <- value
@@ -32,7 +34,7 @@ registry <- proto::proto(expr={
 
   get <- function(., key) {
     val <- try(base::get(key, .$.container), TRUE)
-    if (is(val, 'try-error')) NULL else val
+    if (is(val, "try-error")) NULL else val
   }
 
   keys <- function(.) {
@@ -41,14 +43,13 @@ registry <- proto::proto(expr={
 })
 
 NUMERIC.TRANSMUTER <- transmute::transmuter(
-  match_regex('^\\d+$', as.integer),
-  match_regex('^\\d+\\.\\d+$', as.numeric)
+  match_regex("^\\d+$", as.integer),
+  match_regex("^\\d+\\.\\d+$", as.numeric)
 )
 
 #' @export
-MarketData <- proto::proto(expr={
-
-  description <- ''
+MarketData <- proto::proto(expr = {
+  description <- ""
 
   ..registry.id <- registry$proto()
   ..registry.class <- registry$proto()
@@ -58,15 +59,17 @@ MarketData <- proto::proto(expr={
     .class$init()
 
     # if the class is super (i.e has "name") then add to index
-    if (any(.class$ls() == "id"))
+    if (any(.class$ls() == "id")) {
       .$..registry.id$put(.class$id, .class)
+    }
 
     name <- deparse(substitute(.class))
     .$..registry.class$put(name, .class)
 
     filename <- try(.class$filename)
-    if (! is(filename, 'try-error'))
+    if (!is(filename, "try-error")) {
       .$..registry.filename$put(filename, .class)
+    }
   }
 
   parser <- NUMERIC.TRANSMUTER
@@ -74,9 +77,9 @@ MarketData <- proto::proto(expr={
   retrieve_template <- function(., key) {
     # key <- tolower(key)
     tpl_ <- .$..registry.id$get(key)
-    if (! is.null(tpl_))
+    if (!is.null(tpl_)) {
       return(tpl_)
-    else {
+    } else {
       tpl_ <- .$..registry.class$get(key)
       tpl_ <- if (is.null(tpl_)) .$..registry.filename$get(key) else tpl_
       return(tpl_)
@@ -87,11 +90,11 @@ MarketData <- proto::proto(expr={
     dx <- lapply(.$..registry.class$keys(), function(cls) {
       tpl_ <- .$..registry.class$get(cls)
       data.frame(
-        'Template ID' = tpl_$id,
-        'Class Name' = cls,
-        'Filename' = tpl_$filename,
-        'File Type' = tpl_$file_type,
-        'Description' = tpl_$description,
+        "Template ID" = tpl_$id,
+        "Class Name" = cls,
+        "Filename" = tpl_$filename,
+        "File Type" = tpl_$file_type,
+        "Description" = tpl_$description,
         stringsAsFactors = FALSE,
         check.names = FALSE
       )
@@ -102,24 +105,24 @@ MarketData <- proto::proto(expr={
   transform <- function(., df) identity(df)
 
   print <- function(.) {
-    cat('Template ID:', .$id, '\n')
-    cat('Expected filename:', .$filename, '\n')
-    cat('File type:', .$file_type, '\n')
-    if (is(.$fields, 'fields')) {
-      cat('\n')
+    cat("Template ID:", .$id, "\n")
+    cat("Expected filename:", .$filename, "\n")
+    cat("File type:", .$file_type, "\n")
+    if (is(.$fields, "fields")) {
+      cat("\n")
       print.fields(.$fields)
     } else {
       parts_names <- names(.$parts)
       ix <- 0
       for (nx in parts_names) {
         ix <- ix + 1
-        cat('\n')
-        cat(sprintf('Part %d: %s\n', ix, nx))
+        cat("\n")
+        cat(sprintf("Part %d: %s\n", ix, nx))
         # if (! is.null(.$parts[[nx]]$lines))
         #   cat('Lines:', .$parts[[nx]]$lines, '\n')
         # else
         #   cat('Pattern:', .$parts[[nx]]$pattern, '\n')
-        cat('\n')
+        cat("\n")
         print.fields(.$parts[[nx]]$fields)
       }
     }
@@ -128,20 +131,20 @@ MarketData <- proto::proto(expr={
 })
 
 #' @export
-MarketDataFWF <- MarketData$proto(expr={
-  file_type <- 'Fixed Width'
-  read_file <- function(., filename, parse_fields=TRUE) {
-    df <- read_fwf(filename, .$widths, colnames=.$colnames)
+MarketDataFWF <- MarketData$proto(expr = {
+  file_type <- "Fixed Width"
+  read_file <- function(., filename, parse_fields = TRUE) {
+    df <- read_fwf(filename, .$widths, colnames = .$colnames)
     if (parse_fields) {
       df <- trim_fields(df)
       e <- evalq(environment(), df, NULL)
       df <- lapply(.$colnames, function(x) {
         fun <- .$handlers[[x]]
         x <- df[[x]]
-        do.call(fun, list(x), envir=e)
+        do.call(fun, list(x), envir = e)
       })
       names(df) <- .$colnames
-      df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
+      df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
       df <- transmute(.$parser, df)
     }
     df
@@ -155,21 +158,23 @@ MarketDataFWF <- MarketData$proto(expr={
 })
 
 #' @export
-MarketDataCSV <- MarketData$proto(expr={
-  file_type <- 'Comma-separated Values'
-  read_file <- function(., filename, parse_fields=TRUE) {
-    df <- read.table(filename, col.names=.$colnames, sep=.$separator,
-                     as.is=TRUE, stringsAsFactors=FALSE)
+MarketDataCSV <- MarketData$proto(expr = {
+  file_type <- "Comma-separated Values"
+  read_file <- function(., filename, parse_fields = TRUE) {
+    df <- read.table(filename,
+      col.names = .$colnames, sep = .$separator,
+      as.is = TRUE, stringsAsFactors = FALSE
+    )
     if (parse_fields) {
       df <- trim_fields(df)
       e <- evalq(environment(), df, NULL)
       df <- lapply(.$colnames, function(x) {
         fun <- .$handlers[[x]]
         x <- df[[x]]
-        do.call(fun, list(x), envir=e)
+        do.call(fun, list(x), envir = e)
       })
       names(df) <- .$colnames
-      df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
+      df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
       df <- transmute(.$parser, df)
     }
     df
@@ -177,13 +182,13 @@ MarketDataCSV <- MarketData$proto(expr={
 })
 
 #' @export
-MarketDataMultiPart <- MarketData$proto(expr={
-
+MarketDataMultiPart <- MarketData$proto(expr = {
   .detect_lines <- function(., .part, lines) {
-    if (is.null(.part$pattern))
+    if (is.null(.part$pattern)) {
       .part$lines
-    else
+    } else {
       stringr::str_detect(lines, .part$pattern)
+    }
   }
 
   init <- function(.) {
@@ -196,38 +201,41 @@ MarketDataMultiPart <- MarketData$proto(expr={
 })
 
 #' @export
-MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr={
-  file_type <- 'Comma-separated Values (with Multiple Parts)'
-  .separator <- function(., .part=NULL) {
-    if (is.null(.part))
+MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
+  file_type <- "Comma-separated Values (with Multiple Parts)"
+  .separator <- function(., .part = NULL) {
+    if (is.null(.part)) {
       .$separator
-    else {
+    } else {
       sep <- try(.part$separator)
-      if (is(sep, 'try-error') || is.null(sep))
+      if (is(sep, "try-error") || is.null(sep)) {
         .$separator
-      else
+      } else {
         sep
+      }
     }
   }
 
-  read_file <- function(., filename, parse_fields=TRUE) {
+  read_file <- function(., filename, parse_fields = TRUE) {
     lines <- readLines(filename)
     l <- list()
     for (part_name in names(.$parts)) {
       part <- .$parts[[part_name]]
       idx <- .$.detect_lines(part, lines) # stringr::str_detect(lines, part$pattern)
-      df <- read.table(text=lines[idx], col.names=part$colnames, sep=.$.separator(part),
-                       as.is=TRUE, stringsAsFactors=FALSE, check.names=FALSE, colClasses='character')
+      df <- read.table(
+        text = lines[idx], col.names = part$colnames, sep = .$.separator(part),
+        as.is = TRUE, stringsAsFactors = FALSE, check.names = FALSE, colClasses = "character"
+      )
       if (parse_fields) {
         df <- trim_fields(df)
         e <- evalq(environment(), df, NULL)
         df <- lapply(part$colnames, function(x) {
           fun <- part$handlers[[x]]
           x <- df[[x]]
-          do.call(fun, list(x), envir=e)
+          do.call(fun, list(x), envir = e)
         })
         names(df) <- part$colnames
-        df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
+        df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
         df <- transmute(.$parser, df)
       }
       l[[part_name]] <- df
@@ -238,26 +246,26 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr={
 })
 
 #' @export
-MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr={
-  file_type <- 'Fixed Width (with Multiple Parts)'
-  read_file <- function(., filename, parse_fields=TRUE) {
+MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr = {
+  file_type <- "Fixed Width (with Multiple Parts)"
+  read_file <- function(., filename, parse_fields = TRUE) {
     lines <- readLines(filename)
     l <- list()
     for (part_name in names(.$parts)) {
       part <- .$parts[[part_name]]
       idx <- .$.detect_lines(part, lines)
       # print(part)
-      df <- read_fwf(text=lines[idx], widths=part$widths, colnames=part$colnames)
+      df <- read_fwf(text = lines[idx], widths = part$widths, colnames = part$colnames)
       if (parse_fields) {
         df <- trim_fields(df)
         e <- evalq(environment(), df, NULL)
         df <- lapply(part$colnames, function(x) {
           fun <- part$handlers[[x]]
           x <- df[[x]]
-          do.call(fun, list(x), envir=e)
+          do.call(fun, list(x), envir = e)
         })
         names(df) <- part$colnames
-        df <- do.call('data.frame', c(df, stringsAsFactors=FALSE, check.names=FALSE))
+        df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
         df <- transmute(.$parser, df)
       }
       l[[part_name]] <- df
@@ -266,4 +274,3 @@ MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr={
     l
   }
 })
-
