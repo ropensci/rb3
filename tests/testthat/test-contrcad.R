@@ -1,6 +1,7 @@
 context('CONTRCAD')
 
 test_that('it should load CONTRCAD with the correct field types', {
-  df <- read_marketdata('../../inst/extdata/CONTRCAD.TXT')
+  f <- system.file("extdata/CONTRCAD.TXT", package = "rb3")
+  df <- read_marketdata(f)
   expect_is(df$tipo_opcao, 'factor')
 })

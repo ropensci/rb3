@@ -1,12 +1,17 @@
 context('Handle file: Indic.txt')
 
 test_that('read file using filename to find template', {
-  res <- read_marketdata('../../inst/extdata/Indic.txt')
+  
+  f <- system.file('extdata/Indic.txt', package = 'rb3')
+  res <- read_marketdata(f)
   expect_is(res, 'data.frame')
 })
 
 test_that('read file by template name', {
-  res <- read_marketdata('../../inst/extdata/Indic-copy.txt', template='Indic')
+  
+  f <- system.file('extdata/Indic-copy.txt', package = 'rb3')
+  res <- read_marketdata(f, template='Indic')
+  
   classes <- c("character", "character", "character", "Date", "character",
   "character", "numeric", "numeric", "character")
   expect_is(res, 'data.frame')
