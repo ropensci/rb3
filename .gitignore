@@ -6,3 +6,4 @@
 *.DS_Store
 *.json
 aux.R
+legacy/
