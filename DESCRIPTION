@@ -3,9 +3,14 @@ Title: Read public files released by B3 Exchange.
 Description: Read public files released by B3 and convert them into
     useful formats and data structures commom to data analysis practitioners.
 Version: 0.0.1.9000
-Authors@R: person("Wilson", "Freitas", ,"wilson.freitas@gmail.com", c("aut", "cre"))
+Authors@R: c(person("Wilson", "Freitas",
+                    email = "wilson.freitas@gmail.com",
+                    role = c("aut", "cre")),
+             person("Marcelo", "Perlin",
+                    email = "marceloperlin@gmail.com",
+                    role = "aut"))
 Depends:
-    R (>= 3.2.0)
+    R (>= 4.0.0)
 License: MIT
 LazyData: true
 Imports:
