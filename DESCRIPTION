@@ -15,6 +15,7 @@ Suggests:
     testthat,
     knitr
 Collate:
+    'rb3-package.R'
     'util.R'
     'transmute.R'
     'fields.R'
