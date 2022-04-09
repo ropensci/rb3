@@ -10,4 +10,11 @@
 #'
 #' @import proto
 #' @import stringr
+#' @import httr
+#' @import jsonlite
+#' @import readr
+#' @import dplyr
+#' @import bizdays
+#' @import cli
+#' @importFrom dplyr tibble
 NULL
