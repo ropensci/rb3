@@ -10,7 +10,6 @@
 #'
 #' @import proto
 #' @import stringr
-#' @import transmute
 NULL
 
 .retrieve_template <- function(filename, template) {
@@ -42,7 +41,7 @@ registry <- proto::proto(expr = {
   }
 })
 
-NUMERIC.TRANSMUTER <- transmute::transmuter(
+NUMERIC.TRANSMUTER <- transmuter(
   match_regex("^\\d+$", as.integer),
   match_regex("^\\d+\\.\\d+$", as.numeric)
 )

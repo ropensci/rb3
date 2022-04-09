@@ -4,8 +4,8 @@ Indic <- MarketDataFWF$proto(expr = {
   filename <- "Indic.txt"
   description <- "Indicadores Econômicos e Agropecuários - Final"
 
-  parser <- transmute::transmuter(
-    transmute::match_regex("^\\+\\d+$", as.numeric, priority = 1),
+  parser <- transmuter(
+    match_regex("^\\+\\d+$", as.numeric, priority = 1),
     NUMERIC.TRANSMUTER
   )
 

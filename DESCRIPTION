@@ -10,13 +10,13 @@ License: MIT
 LazyData: true
 Imports:
     stringr,
-    proto,
-    transmute
+    proto
 Suggests:
     testthat,
     knitr
 Collate:
     'util.R'
+    'transmute.R'
     'fields.R'
     'handlers.R'
     'marketdata.R'
@@ -42,4 +42,4 @@ Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 7.1.2

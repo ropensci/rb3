@@ -13,7 +13,6 @@ Cada arquivo possui um template associado que contém as regras para a leitura d
 ## Como instalar
 
 ```{r}
-devtools::install_github('wilsonfreitas/transmute')
 devtools::install_github('wilsonfreitas/rb3')
 ```
 

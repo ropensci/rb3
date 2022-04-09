@@ -5,8 +5,8 @@ BD_Arbit <- MarketDataFWF$proto(expr = {
   filename <- "BD_Arbit.txt"
   description <- "Negócios Realizados em Pregão - Parcial"
 
-  parser <- transmute::transmuter(
-    transmute::match_regex("\\+|-", function(text, match) {
+  parser <- transmuter(
+    match_regex("\\+|-", function(text, match) {
       idx <- text == "-"
       x <- rep(1, length(text))
       x[idx] <- -1

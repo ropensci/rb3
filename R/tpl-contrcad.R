@@ -4,8 +4,8 @@ ContrCad <- MarketDataFWF$proto(expr = {
   filename <- "CONTRCAD.TXT"
   description <- "Contratos Cadastrados"
 
-  parser <- transmute::transmuter(
-    transmute::match_regex("^(S|N)$", function(text, match) {
+  parser <- transmuter(
+    match_regex("^(S|N)$", function(text, match) {
       text == "S"
     }),
     NUMERIC.TRANSMUTER
