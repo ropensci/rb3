@@ -50,8 +50,8 @@ Collate:
     'scraper-cdi.R'
     'scraper-futures.R'
     'scraper-yc.R'
-    'show_templates_Addin.R'
-    'display_template_Addin.R'
+    'addin-show-templates.R'
+    'addin-display-template.R'
     'zzz.R'
 Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/rb3/issues
