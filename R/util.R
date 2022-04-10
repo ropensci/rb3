@@ -1,5 +1,4 @@
 
-
 read_fwf <- function(fname, widths, colnames = NULL, skip = 0, text) {
   colpositions <- list()
   x <- 1
@@ -26,7 +25,10 @@ read_fwf <- function(fname, widths, colnames = NULL, skip = 0, text) {
     t[[colnames[i]]] <- stringr::str_sub(lines, dx[1], dx[2])
   }
 
-  as.data.frame(t, stringsAsFactors = FALSE, optional = TRUE, check.names = FALSE)
+  as.data.frame(t,
+    stringsAsFactors = FALSE, optional = TRUE,
+    check.names = FALSE
+  )
 }
 
 
@@ -38,5 +40,8 @@ trim_fields <- function(x) {
       z
     }
   })
-  do.call("data.frame", c(fields, stringsAsFactors = FALSE, check.names = FALSE))
+  do.call("data.frame", c(fields,
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  ))
 }
