@@ -1,4 +1,10 @@
 
+#' @export
+read_marketdata <- function(filename, template = NULL, parse_fields = TRUE) {
+  template <- .retrieve_template(filename, template)
+  template$read_file(filename, parse_fields)
+}
+
 .retrieve_template <- function(filename, template) {
   template <- if (is.null(template)) {
     MarketData$retrieve_template(basename(filename))
