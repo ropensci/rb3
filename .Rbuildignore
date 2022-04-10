@@ -6,3 +6,4 @@ aux.R
 legacy
 docs
 .lintr
+inst\extdata\big-files
