@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 aux.R
 ^.*\.json$
+^LICENSE\.md$
