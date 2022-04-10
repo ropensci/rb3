@@ -53,12 +53,7 @@ yc_get <- function(first_date = Sys.Date() - 5,
 #'
 #' @noRd
 get_calendar <- function() {
-  br_cal <- bizdays::create.calendar("Brazil/ANBIMA",
-    bizdays::holidaysANBIMA,
-    weekdays = c("saturday", "sunday")
-  )
-
-  return(br_cal)
+  "Brazil/ANBIMA"
 }
 
 
