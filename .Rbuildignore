@@ -3,3 +3,5 @@
 aux.R
 ^.*\.json$
 ^LICENSE\.md$
+legacy
+docs
