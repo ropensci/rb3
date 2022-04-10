@@ -16,5 +16,7 @@
 #' @import dplyr
 #' @import bizdays
 #' @import cli
+#' @import purrr
+#' @import rvest
 #' @importFrom dplyr tibble
 NULL
