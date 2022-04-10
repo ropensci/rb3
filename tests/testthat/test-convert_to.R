@@ -5,10 +5,9 @@ test_that("convert indic to csv", {
   res <- convert_to(f, output_format = "csv")
   expect_true(file.exists(res))
 
-  f <- system.file("extdata/Indic-copy.txt", package = "rb3")
-
   res <- convert_to(f, template = "Indic", output_format = "csv")
   expect_true(file.exists(res))
+  unlink(res)
 })
 
 test_that("convert indic to json", {
@@ -16,4 +15,5 @@ test_that("convert indic to json", {
 
   res <- convert_to(f, output_format = "json")
   expect_true(file.exists(res))
+  unlink(res)
 })

@@ -6,7 +6,7 @@ test_that("read file using filename to find template", {
 })
 
 test_that("read file by template name", {
-  f <- system.file("extdata/Indic-copy.txt", package = "rb3")
+  f <- system.file("extdata/Indic.txt", package = "rb3")
   res <- read_marketdata(f, template = "Indic")
 
   classes <- c(
