@@ -11,12 +11,14 @@
 #' @import proto
 #' @import stringr
 #' @import httr
-#' @import jsonlite
 #' @import readr
 #' @import dplyr
 #' @import bizdays
 #' @import cli
-#' @import purrr
 #' @import rvest
+#' @import purrr
+#' @importFrom jsonlite toJSON fromJSON
 #' @importFrom dplyr tibble
+#' @importFrom methods is new slot
+#' @importFrom utils write.table
 NULL
