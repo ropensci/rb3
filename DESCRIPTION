@@ -1,7 +1,8 @@
 Package: rb3
-Title: Read public files released by B3 Exchange.
-Description: Read public files released by B3 and convert them into
-    useful formats and data structures commom to data analysis practitioners.
+Title: Download and parse public data released by B3 Exchange
+Description: Download and parse public files released by B3 and convert them
+    into useful formats and data structures commom to data analysis
+    practitioners.
 Version: 0.0.1.9000
 Authors@R: c(person("Wilson", "Freitas",
                     email = "wilson.freitas@gmail.com",
@@ -9,25 +10,32 @@ Authors@R: c(person("Wilson", "Freitas",
              person("Marcelo", "Perlin",
                     email = "marceloperlin@gmail.com",
                     role = "aut"))
-Depends:
-    R (>= 4.0.0)
 License: MIT + file LICENSE
 LazyData: true
+Depends:
+    R (>= 4.1),
+    bizdays
 Imports:
     stringr,
     proto,
     cli,
-    bizdays,
     readr,
     dplyr,
     tibble,
     rvest,
     httr,
     jsonlite,
-    purrr
+    purrr,
+    ascii,
+    xml2,
+    methods
 Suggests:
     testthat,
-    knitr
+    knitr,
+    DT,
+    miniUI,
+    shiny,
+    xtable
 Collate:
     'rb3-package.R'
     'util.R'
@@ -55,10 +63,9 @@ Collate:
     'scraper-yc.R'
     'addin-show-templates.R'
     'addin-display-template.R'
-    'zzz.R'
-Encoding: UTF-8
 BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Config/testthat/edition: 3
