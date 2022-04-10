@@ -135,14 +135,14 @@ setClass(
   prototype(envir = NULL, rules = NULL)
 )
 
-setGeneric("transmute", function(x, data, ...) standardGeneric("transmute"))
+setGeneric("parse_text", function(x, data, ...) standardGeneric("parse_text"))
 
 setGeneric("apply_rules", function(x, data, ...) standardGeneric("apply_rules"))
 
 setMethod(
   "apply_rules",
   signature("Transmuter", "ANY"),
-  function(x, data) {
+  function(x, data, ...) {
     res <- rule_result()
     for (.rule in iter_rules(x@rules)) {
       res <- apply_rule(.rule, data)
@@ -155,9 +155,9 @@ setMethod(
 )
 
 setMethod(
-  "transmute",
+  "parse_text",
   signature("Transmuter", "data.frame"),
-  function(x, data) {
+  function(x, data, ...) {
     rules_res <- lapply(data, function(.data) apply_rules(x, .data))
     do.call("data.frame", c(rules_res,
       stringsAsFactors = FALSE,
@@ -167,9 +167,9 @@ setMethod(
 )
 
 setMethod(
-  "transmute",
+  "parse_text",
   signature("Transmuter", "ANY"),
-  function(x, data) apply_rules(x, data)
+  function(x, data, ...) apply_rules(x, data)
 )
 
 setMethod(
@@ -213,7 +213,7 @@ transmuter <- function(...) {
 
 transmute_regex <- function(.x, .r, .f, apply_to = c("any", "all")) {
   trm <- transmuter(match_regex(.r, .f, apply_to = apply_to))
-  transmute(trm, .x)
+  parse_text(trm, .x)
 }
 
 

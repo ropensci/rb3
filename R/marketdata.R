@@ -137,7 +137,7 @@ MarketDataFWF <- MarketData$proto(expr = {
       })
       names(df) <- .$colnames
       df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
-      df <- transmute(.$parser, df)
+      df <- parse_text(.$parser, df)
     }
     df
   }
@@ -167,7 +167,7 @@ MarketDataCSV <- MarketData$proto(expr = {
       })
       names(df) <- .$colnames
       df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
-      df <- transmute(.$parser, df)
+      df <- parse_text(.$parser, df)
     }
     df
   }
@@ -228,7 +228,7 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
         })
         names(df) <- part$colnames
         df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
-        df <- transmute(.$parser, df)
+        df <- parse_text(.$parser, df)
       }
       l[[part_name]] <- df
     }
@@ -258,7 +258,7 @@ MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr = {
         })
         names(df) <- part$colnames
         df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
-        df <- transmute(.$parser, df)
+        df <- parse_text(.$parser, df)
       }
       l[[part_name]] <- df
     }
