@@ -1,4 +1,3 @@
-context("convert_to")
 
 test_that("convert indic to csv", {
   f <- system.file("extdata/Indic.txt", package = "rb3")

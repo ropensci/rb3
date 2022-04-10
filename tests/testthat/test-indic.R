@@ -1,9 +1,8 @@
-context("Handle file: Indic.txt")
 
 test_that("read file using filename to find template", {
   f <- system.file("extdata/Indic.txt", package = "rb3")
   res <- read_marketdata(f)
-  expect_is(res, "data.frame")
+  expect_s3_class(res, "data.frame")
 })
 
 test_that("read file by template name", {
@@ -14,5 +13,5 @@ test_that("read file by template name", {
     "character", "character", "character", "Date", "character",
     "character", "numeric", "numeric", "character"
   )
-  expect_is(res, "data.frame")
+  expect_s3_class(res, "data.frame")
 })

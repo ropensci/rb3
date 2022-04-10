@@ -1,4 +1,3 @@
-context("file and filename")
 
 test_that("handle filename", {
   fname <- Filename$new(name = "Indic.txt")

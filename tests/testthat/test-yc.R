@@ -1,4 +1,3 @@
-context("Test of yc function")
 
 test_df <- function(df_in) {
   expect_true(nrow(df_in) > 0)
