@@ -1,5 +1,4 @@
 
-#' @export
 fields <- function(...) {
   that <- list(...)
   class(that) <- "fields"
@@ -50,7 +49,6 @@ fields_handlers.fields <- function(fields) {
   handlers
 }
 
-#' @export
 field <- function(name, description, ...) {
   if (missing(description)) {
     attr(name, "description") <- ""
@@ -92,16 +90,17 @@ field <- function(name, description, ...) {
   name
 }
 
-#' @export
 print.field <- function(x, ...) {
   cat(as.character(x), "\n")
 }
 
-#' @export
 print.parts <- function(x, ...) {
   nx <- names(x)
   for (ix in seq_along(nx)) {
     dx <- dim(x[[ix]])
-    cat(sprintf("Part %2d: %s [%d obs. of %d variables]", ix, nx[ix], dx[1], dx[2]), "\n")
+    cat(sprintf(
+      "Part %2d: %s [%d obs. of %d variables]", ix, nx[ix], dx[1],
+      dx[2]
+    ), "\n")
   }
 }

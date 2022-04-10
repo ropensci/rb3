@@ -1,12 +1,10 @@
 
-#' @export
 width <- function(x) {
   x <- as.numeric(x)
   class(x) <- c("numeric", "width")
   x
 }
 
-#' @export
 to_date <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%Y-%m-%d"
@@ -19,7 +17,6 @@ to_date <- function(format = NULL) {
   handler
 }
 
-#' @export
 to_time <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%H:%M:%S"
@@ -32,7 +29,6 @@ to_time <- function(format = NULL) {
   handler
 }
 
-#' @export
 to_factor <- function(levels = NULL, labels = levels) {
   handler <- function(x) {
     if (is.null(levels)) {
@@ -46,7 +42,6 @@ to_factor <- function(levels = NULL, labels = levels) {
   handler
 }
 
-#' @export
 to_numeric <- function(dec = 0, sign = "") {
   handler <- function(x) {
     if (is(dec, "character")) {
@@ -63,7 +58,6 @@ to_numeric <- function(dec = 0, sign = "") {
   handler
 }
 
-#' @export
 pass_thru_handler <- function() {
   handler <- identity
   attr(handler, "type") <- "character"

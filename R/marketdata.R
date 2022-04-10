@@ -39,7 +39,6 @@ NUMERIC.TRANSMUTER <- transmuter(
   match_regex("^\\d+\\.\\d+$", as.numeric)
 )
 
-#' @export
 MarketData <- proto::proto(expr = {
   description <- ""
 
@@ -122,7 +121,6 @@ MarketData <- proto::proto(expr = {
   }
 })
 
-#' @export
 MarketDataFWF <- MarketData$proto(expr = {
   file_type <- "Fixed Width"
   read_file <- function(., filename, parse_fields = TRUE) {
@@ -149,7 +147,6 @@ MarketDataFWF <- MarketData$proto(expr = {
   }
 })
 
-#' @export
 MarketDataCSV <- MarketData$proto(expr = {
   file_type <- "Comma-separated Values"
   read_file <- function(., filename, parse_fields = TRUE) {
@@ -173,7 +170,6 @@ MarketDataCSV <- MarketData$proto(expr = {
   }
 })
 
-#' @export
 MarketDataMultiPart <- MarketData$proto(expr = {
   .detect_lines <- function(., .part, lines) {
     if (is.null(.part$pattern)) {
@@ -192,7 +188,6 @@ MarketDataMultiPart <- MarketData$proto(expr = {
   }
 })
 
-#' @export
 MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
   file_type <- "Comma-separated Values (with Multiple Parts)"
   .separator <- function(., .part = NULL) {
@@ -213,10 +208,11 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
     l <- list()
     for (part_name in names(.$parts)) {
       part <- .$parts[[part_name]]
-      idx <- .$.detect_lines(part, lines) # stringr::str_detect(lines, part$pattern)
+      idx <- .$.detect_lines(part, lines)
       df <- read.table(
         text = lines[idx], col.names = part$colnames, sep = .$.separator(part),
-        as.is = TRUE, stringsAsFactors = FALSE, check.names = FALSE, colClasses = "character"
+        as.is = TRUE, stringsAsFactors = FALSE, check.names = FALSE,
+        colClasses = "character"
       )
       if (parse_fields) {
         df <- trim_fields(df)
@@ -227,7 +223,10 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
           do.call(fun, list(x), envir = e)
         })
         names(df) <- part$colnames
-        df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
+        df <- do.call(
+          "data.frame",
+          c(df, stringsAsFactors = FALSE, check.names = FALSE)
+        )
         df <- parse_text(.$parser, df)
       }
       l[[part_name]] <- df
@@ -237,7 +236,6 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
   }
 })
 
-#' @export
 MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr = {
   file_type <- "Fixed Width (with Multiple Parts)"
   read_file <- function(., filename, parse_fields = TRUE) {
@@ -247,7 +245,10 @@ MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr = {
       part <- .$parts[[part_name]]
       idx <- .$.detect_lines(part, lines)
       # print(part)
-      df <- read_fwf(text = lines[idx], widths = part$widths, colnames = part$colnames)
+      df <- read_fwf(
+        text = lines[idx], widths = part$widths,
+        colnames = part$colnames
+      )
       if (parse_fields) {
         df <- trim_fields(df)
         e <- evalq(environment(), df, NULL)
