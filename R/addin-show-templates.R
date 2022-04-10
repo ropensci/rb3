@@ -1,5 +1,15 @@
 
-show_templates_Addin <- function() {
+#' Show templates.
+#'
+#' @description `display_template` opens an [RStudio
+#'   gadget](https://shiny.rstudio.com/articles/gadgets.html) and
+#'   [addin](http://rstudio.github.io/rstudioaddins/) that allows users
+#'   to view the available templates.
+#'
+#' @return Addin has no return
+#'
+#' @export
+show_templates <- function() {
   ui <- miniUI::miniPage(
     miniUI::miniTitleBar("rb3 Templates"),
     miniUI::miniContentPanel(

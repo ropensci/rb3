@@ -2,9 +2,11 @@
 
 export(cdi_get)
 export(convert_to)
+export(display_template)
 export(futures_get)
 export(idi_get)
 export(read_marketdata)
+export(show_templates)
 export(yc_get)
 import(bizdays)
 import(cli)

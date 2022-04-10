@@ -25,6 +25,20 @@ maturity2date <- function(x, expr = "first day") {
   bizdays::getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA")
 }
 
+#' Get futures prices from trading session settlements page
+#'
+#' Scrape page <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/>
+#' to get futures prices.
+#'
+#' @param refdate reference date used to obtain futures prices.
+#'
+#' If `refdate` is not provided the last available date is returned, otherwise
+#' the provided date is used to fetch data.
+#'
+#' @return `data.frame` with futures prices.
+#'
+#' @examples
+#' df <- futures_get()
 #' @export
 futures_get <- function(refdate = NULL) {
   url <- "https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp"
@@ -49,13 +63,19 @@ futures_get <- function(refdate = NULL) {
   txt <- xml2::xml_text(xml2::xml_find_all(tbl[[1]], "//td"))
   txt <- stringr::str_trim(txt)
 
-  dplyr::tibble(
+  tibble(
     refdate = as.Date(refdate),
     commodity = flatten_names(txt[c(T, F, F, F, F, F)]),
     maturity_code = txt[c(F, T, F, F, F, F)],
-    symbol = paste0(commodity, maturity_code),
-    PU_previous = as_dbl(txt[c(F, F, T, F, F, F)], ",", "."),
-    PU_current = as_dbl(txt[c(F, F, F, T, F, F)], ",", "."),
+    price_previous = as_dbl(txt[c(F, F, T, F, F, F)], ",", "."),
+    price = as_dbl(txt[c(F, F, F, T, F, F)], ",", "."),
     change = as_dbl(txt[c(F, F, F, F, T, F)], ",", ".")
-  )
+  ) |>
+    mutate(
+      symbol = paste0(commodity, maturity_code)
+    ) |>
+    select(
+      refdate, symbol, maturity_code,
+      price_previous, price, change
+    )
 }

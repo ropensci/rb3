@@ -1,4 +1,39 @@
 
+#' Read and parses files delivered by B3
+#'
+#' B3, and previously BMF&Bovespa, used to deliver many files with a diverse
+#' set of valuable data and informations that can be used to study of can
+#' be called of marketdata.
+#' There are files with informations about futures, option, interest
+#' rates, currency rates, bonds and many other subjects.
+#'
+#' @param filename a string containing a path for the file.
+#' @param template a string with the template name.
+#' @param parse_fields a logical indicating if the fields must be parsed.
+#'
+#' Each `template` has a default value for the `filename`, if the given
+#' file name equals one template filename attribute, the matched template
+#' is used to parse the file.
+#' Otherwise the template must be provided.
+#'
+#' The function `show_templates` can be used to view the available templates
+#' and their default filenames.
+#'
+#' @return `data.frame` of a list of `data.frame` containing data parsed from
+#' files.
+#'
+#' @seealso show_templates display_template
+#'
+#' @examples
+#' \dontrun{
+#' # Eletro.txt matches the filename of Eletro template
+#' path <- "Eletro.txt"
+#' df <- read_marketdata(path)
+#' path <- "Indic.txt"
+#' df <- read_marketdata(path, template = "Indic")
+#' path <- "PUWEB.TXT"
+#' df <- read_marketdata(path, template = "PUWEB")
+#' }
 #' @export
 read_marketdata <- function(filename, template = NULL, parse_fields = TRUE) {
   template <- .retrieve_template(filename, template)

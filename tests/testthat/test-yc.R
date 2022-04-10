@@ -8,6 +8,8 @@ test_df <- function(df_in) {
 }
 
 test_that("Test of yc function", {
+  skip_on_cran()
+
   first_date <- Sys.Date() - 50
   last_date <- Sys.Date()
 

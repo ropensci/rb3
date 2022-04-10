@@ -5,6 +5,17 @@ query_cdi <- function() {
   jsonlite::fromJSON(httr::content(res, as = "text"))
 }
 
+#' Get CDI rate and IDI index value from B3 front page
+#'
+#' Scrape page <https://www.b3.com.br/> to get last available CDI rate and
+#' IDI index values.
+#'
+#' @return `data.frame` with CDI rate or IDI index values.
+#'
+#' @name cdi-idi
+#' @examples
+#' df <- cdi_get()
+#' df <- idi_get()
 #' @export
 cdi_get <- function() {
   .json <- query_cdi()
@@ -16,6 +27,7 @@ cdi_get <- function() {
   )
 }
 
+#' @rdname cdi-idi
 #' @export
 idi_get <- function() {
   .json <- query_cdi()

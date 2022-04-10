@@ -1,5 +1,15 @@
 
-display_template_Addin <- function() {
+#' Display templates
+#'
+#' @description `display_template` opens an [RStudio
+#'   gadget](https://shiny.rstudio.com/articles/gadgets.html) and
+#'   [addin](http://rstudio.github.io/rstudioaddins/) that allows users
+#'   to query for specific attributes of templates.
+#'
+#' @return Addin has no return
+#'
+#' @export
+display_template <- function() {
   classes_ <- MarketData$show_templates()[["Class Name"]]
   ui <- miniUI::miniPage(
     miniUI::miniTitleBar("rb3 View Template"),
