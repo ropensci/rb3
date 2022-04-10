@@ -34,7 +34,6 @@ Collate:
     'marketdata.R'
     'file.R'
     'convert_to.R'
-    'read_marketdata.R'
     'tpl-indic.R'
     'tpl-contrcad.R'
     'tpl-bd_arbit.R'
