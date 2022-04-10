@@ -11,7 +11,7 @@ Authors@R: c(person("Wilson", "Freitas",
                     role = "aut"))
 Depends:
     R (>= 4.0.0)
-License: MIT
+License: MIT + file LICENSE
 LazyData: true
 Imports:
     stringr,
@@ -21,7 +21,10 @@ Imports:
     readr,
     dplyr,
     tibble,
-    rvest
+    rvest,
+    httr,
+    jsonlite,
+    purrr
 Suggests:
     testthat,
     knitr
@@ -58,3 +61,4 @@ BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3
 VignetteBuilder: knitr
 RoxygenNote: 7.1.2
+Config/testthat/edition: 3
