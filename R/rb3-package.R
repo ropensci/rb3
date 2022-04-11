@@ -21,4 +21,5 @@
 #' @importFrom dplyr tibble
 #' @importFrom methods is new slot
 #' @importFrom utils write.table
+#' @importFrom rlang .data
 NULL

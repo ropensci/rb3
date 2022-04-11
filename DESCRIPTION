@@ -28,6 +28,7 @@ Imports:
     purrr,
     ascii,
     xml2,
+    rlang,
     methods
 Suggests:
     testthat,

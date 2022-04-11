@@ -63,19 +63,13 @@ futures_get <- function(refdate = NULL) {
   txt <- xml2::xml_text(xml2::xml_find_all(tbl[[1]], "//td"))
   txt <- stringr::str_trim(txt)
 
-  tibble(
+  dplyr::tibble(
     refdate = as.Date(refdate),
     commodity = flatten_names(txt[c(T, F, F, F, F, F)]),
     maturity_code = txt[c(F, T, F, F, F, F)],
+    symbol = paste0(.data$commodity, .data$maturity_code),
     price_previous = as_dbl(txt[c(F, F, T, F, F, F)], ",", "."),
     price = as_dbl(txt[c(F, F, F, T, F, F)], ",", "."),
     change = as_dbl(txt[c(F, F, F, F, T, F)], ",", ".")
-  ) |>
-    mutate(
-      symbol = paste0(commodity, maturity_code)
-    ) |>
-    select(
-      refdate, symbol, maturity_code,
-      price_previous, price, change
-    )
+  )
 }
