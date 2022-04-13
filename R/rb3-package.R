@@ -15,7 +15,6 @@
 #' @import dplyr
 #' @import bizdays
 #' @import cli
-#' @import rvest
 #' @import purrr
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom dplyr tibble

@@ -63,6 +63,7 @@ get_calendar <- function() {
 #' @param date_vec Vector of dates
 #' @inheritParams yc_get
 #'
+#' @importFrom rvest read_html html_nodes html_text
 #' @return A dataframe
 #' @noRd
 get_single_yc <- function(idx_date,
