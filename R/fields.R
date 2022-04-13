@@ -90,10 +90,6 @@ field <- function(name, description, ...) {
   name
 }
 
-print.field <- function(x, ...) {
-  cat(as.character(x), "\n")
-}
-
 print.parts <- function(x, ...) {
   nx <- names(x)
   for (ix in seq_along(nx)) {

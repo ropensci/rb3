@@ -12,6 +12,7 @@ to_date <- function(format = NULL) {
   handler <- function(x) {
     as.Date(x, format = format)
   }
+  attr(handler, "format") <- format
   attr(handler, "type") <- "Date"
   class(handler) <- c("function", "handler")
   handler
@@ -24,6 +25,7 @@ to_time <- function(format = NULL) {
   handler <- function(x) {
     strptime(x, format = format)
   }
+  attr(handler, "format") <- format
   attr(handler, "type") <- "POSIXct"
   class(handler) <- c("function", "handler")
   handler
@@ -37,6 +39,8 @@ to_factor <- function(levels = NULL, labels = levels) {
       factor(x, levels = levels, labels = labels)
     }
   }
+  attr(handler, "levels") <- levels
+  attr(handler, "labels") <- labels
   attr(handler, "type") <- "factor"
   class(handler) <- c("function", "handler")
   handler
@@ -53,6 +57,8 @@ to_numeric <- function(dec = 0, sign = "") {
     x <- paste0(sign, x)
     as.numeric(x) / (10^as.numeric(dec))
   }
+  attr(handler, "dec") <- dec
+  attr(handler, "sign") <- sign
   attr(handler, "type") <- "numeric"
   class(handler) <- c("function", "handler")
   handler
