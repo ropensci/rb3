@@ -33,6 +33,9 @@ See \url{https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/M
 for more details.
 }
 \examples{
+
+\dontrun{
 df_yc <- yc_get()
 head(df_yc)
+}
 }
