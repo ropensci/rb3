@@ -17,7 +17,7 @@ new_field <- function(x) {
 
 new_template <- function(tpl) {
   nx <- names(tpl)
-  ix <- match(nx, c("filetype", "fields", "parts")) |> is.na()
+  ix <- match(nx, c("filetype", "fields", "parts")) %>% is.na()
   nx <- nx[ix]
 
   if (tpl$filetype == "FWF") {

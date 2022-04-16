@@ -100,8 +100,8 @@ get_single_yc <- function(idx_date,
     "Data={format(ref_date, '%d/%m/%Y')}&Data1={format(ref_date,'%Y%m%d')}&slcTaxa=PRE"
   )
 
-  char_vec <- rvest::read_html(base_url) |>
-    rvest::html_nodes("td") |>
+  char_vec <- rvest::read_html(base_url) %>%
+    rvest::html_nodes("td") %>%
     rvest::html_text()
 
   len_char_vec <- length(char_vec)

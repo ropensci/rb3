@@ -31,7 +31,9 @@ Imports:
     rlang,
     methods,
     yaml,
-    scales
+    scales,
+    magrittr,
+    covr
 Suggests:
     testthat,
     knitr,
@@ -56,6 +58,7 @@ Collate:
     'addin-show-templates.R'
     'addin-display-template.R'
     'zzz.R'
+    'utils-pipe.R'
 BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3
 VignetteBuilder: knitr
