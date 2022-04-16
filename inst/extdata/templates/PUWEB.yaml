@@ -1,0 +1,74 @@
+id: PUWEB
+filename: PUWEB.TXT
+filetype: MCSV
+description: Preços Referenciais para Títulos Públicos
+separator: ;
+parts:
+  Cabeçalho:
+    pattern: ^01
+    fields:
+    - name: tipo_registro
+      description: Tipo de registro
+      handler:
+        type: character
+    - name: data_geracao_arquivo
+      description: Data de geração do arquivo
+      handler:
+        type: Date
+        format: '%Y%m%d'
+    - name: nome_arquivo
+      description: Nome do arquivo
+      handler:
+        type: character
+  Corpo:
+    pattern: ^02
+    fields:
+    - name: tipo_registro
+      description: Tipo de registro
+      handler:
+        type: character
+    - name: cod_titulo
+      description: Código do título
+      handler:
+        type: character
+    - name: desc_titulo
+      description: Descrição do título
+      handler:
+        type: factor
+        levels:
+        - LTN
+        - NTN-F
+        - LFT
+        - NTNB
+        - NTNC
+        - NTN-A3
+        labels:
+        - LTN
+        - NTNF
+        - LFT
+        - NTNB
+        - NTNC
+        - NTNA3
+    - name: data_emissao
+      description: Data de emissão do título
+      handler:
+        type: Date
+        format: '%Y%m%d'
+    - name: data_vencimento
+      description: Data de vencimento do título
+      handler:
+        type: Date
+        format: '%Y%m%d'
+    - name: valor_mercado
+      description: Valor de mercado em PU
+      handler:
+        type: character
+    - name: valor_estressado
+      description: Valor do PU em cenário de estresse
+      handler:
+        type: character
+    - name: valor_mercado_d1
+      description: Valor de mercado em PU para D+1
+      handler:
+        type: character
+

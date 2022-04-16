@@ -5,31 +5,33 @@ width <- function(x) {
   x
 }
 
-to_date <- function(format = NULL) {
+to_date_handler <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%Y-%m-%d"
   }
   handler <- function(x) {
     as.Date(x, format = format)
   }
+  attr(handler, "format") <- format
   attr(handler, "type") <- "Date"
   class(handler) <- c("function", "handler")
   handler
 }
 
-to_time <- function(format = NULL) {
+to_time_handler <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%H:%M:%S"
   }
   handler <- function(x) {
     strptime(x, format = format)
   }
+  attr(handler, "format") <- format
   attr(handler, "type") <- "POSIXct"
   class(handler) <- c("function", "handler")
   handler
 }
 
-to_factor <- function(levels = NULL, labels = levels) {
+to_factor_handler <- function(levels = NULL, labels = levels) {
   handler <- function(x) {
     if (is.null(levels)) {
       factor(x)
@@ -37,12 +39,14 @@ to_factor <- function(levels = NULL, labels = levels) {
       factor(x, levels = levels, labels = labels)
     }
   }
+  attr(handler, "levels") <- levels
+  attr(handler, "labels") <- labels
   attr(handler, "type") <- "factor"
   class(handler) <- c("function", "handler")
   handler
 }
 
-to_numeric <- function(dec = 0, sign = "") {
+to_numeric_handler <- function(dec = 0, sign = "") {
   handler <- function(x) {
     if (is(dec, "character")) {
       dec <- get(dec, envir = parent.frame())
@@ -53,6 +57,8 @@ to_numeric <- function(dec = 0, sign = "") {
     x <- paste0(sign, x)
     as.numeric(x) / (10^as.numeric(dec))
   }
+  attr(handler, "dec") <- dec
+  attr(handler, "sign") <- sign
   attr(handler, "type") <- "numeric"
   class(handler) <- c("function", "handler")
   handler

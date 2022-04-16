@@ -29,7 +29,8 @@ Imports:
     ascii,
     xml2,
     rlang,
-    methods
+    methods,
+    yaml
 Suggests:
     testthat,
     knitr,
@@ -46,24 +47,12 @@ Collate:
     'marketdata.R'
     'file.R'
     'convert_to.R'
-    'tpl-indic.R'
-    'tpl-contrcad.R'
-    'tpl-bd_arbit.R'
-    'tpl-taxa_swap.R'
-    'tpl-puweb.R'
-    'tpl-eletro.R'
-    'tpl-premio.R'
-    'tpl-supvol.R'
-    'tpl-bdin.R'
-    'tpl-cotahist.R'
-    'tpl-deltaopcoes.R'
-    'tpl-isin.R'
-    'tpl-premioopcaoacao.R'
     'scraper-cdi.R'
     'scraper-futures.R'
     'scraper-yc.R'
     'addin-show-templates.R'
     'addin-display-template.R'
+    'zzz.R'
 BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3
 VignetteBuilder: knitr

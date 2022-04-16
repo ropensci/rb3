@@ -1,0 +1,101 @@
+id: Premio
+filename: Premio.txt
+filetype: FWF
+description: Prêmio de Referência para Opções sobre Derivativos
+fields:
+- name: id_transacao
+  description: Identificação da transação
+  handler:
+    type: character
+  width: 6
+- name: compl_transacao
+  description: Complemento da transação
+  handler:
+    type: character
+  width: 3
+- name: tipo_registro
+  description: Tipo de registro
+  handler:
+    type: character
+  width: 2
+- name: data_geracao_arquivo
+  description: Data de geração do arquivo
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: cod_mercadoria
+  description: Código da mercadoria
+  handler:
+    type: factor
+  width: 3
+- name: tipo_mercado
+  description: Tipo de mercado
+  handler:
+    type: factor
+    levels:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    labels:
+    - spot
+    - future
+    - option-on-spot
+    - option-on-future
+    - forward
+  width: 1
+- name: serie
+  description: Série
+  handler:
+    type: character
+  width: 4
+- name: tipo_opcao
+  description: Tipo de opção
+  handler:
+    type: factor
+    levels:
+    - C
+    - V
+    labels:
+    - call
+    - put
+  width: 1
+- name: tipo_exercicio
+  description: Tipo de exercício
+  handler:
+    type: factor
+    levels:
+    - A
+    - E
+    labels:
+    - american
+    - european
+  width: 1
+- name: data_vencimento
+  description: Data de vencimento
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: preco_exercicio
+  description: Preço de exercício
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: ''
+  width: 15
+- name: premio_referencia
+  description: Prêmio de referência
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: ''
+  width: 15
+- name: num_casas_decimais
+  description: Número de casas decimais
+  handler:
+    type: character
+  width: 1
+

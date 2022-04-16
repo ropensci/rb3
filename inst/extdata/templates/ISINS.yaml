@@ -1,0 +1,27 @@
+id: ISINS
+filename: CodISINS.txt
+filetype: FWF
+description: Relação de Códigos ISIN para Contratos de Swap
+fields:
+- name: data_cadastro
+  description: Data de cadastro
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: contrato
+  description: Contrato
+  handler:
+    type: character
+  width: 5
+- name: nome_contr
+  description: Nome do contrato
+  handler:
+    type: character
+  width: 50
+- name: cod_isin
+  description: Código ISIN
+  handler:
+    type: character
+  width: 12
+
