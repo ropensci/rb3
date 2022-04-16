@@ -4,7 +4,7 @@ filetype: MCSV
 description: Superfície de Volatilidade por Delta de Opções sobre Derivativos
 separator: ;
 parts:
-  Cabeçalho:
+  Header:
     fields:
     - name: data_geracao_arquivo
       description: Data de geração do arquivo
@@ -15,7 +15,7 @@ parts:
       description: Identificação do arquivo
       handler:
         type: character
-  Corpo:
+  Data:
     fields:
     - name: cod_curva_volatilidade
       description: Código da Curva de Volatilidade

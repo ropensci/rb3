@@ -2,6 +2,10 @@ id: COTAHIST
 filename: COTAHIST
 filetype: MFWF
 description: Cotações Históricas do Pregão de Ações
+download:
+- type: datetime
+  url: http://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A%Y.ZIP
+  format: zip
 parts:
   Header:
     pattern: ^00
@@ -32,7 +36,7 @@ parts:
       handler:
         type: character
       width: 214
-  Cotações históricas por papel-mercado:
+  HistoricalPrices:
     pattern: ^01
     fields:
     - name: tipo_registro

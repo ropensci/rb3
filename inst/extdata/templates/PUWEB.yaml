@@ -4,7 +4,7 @@ filetype: MCSV
 description: Preços Referenciais para Títulos Públicos
 separator: ;
 parts:
-  Cabeçalho:
+  Header:
     pattern: ^01
     fields:
     - name: tipo_registro
@@ -20,7 +20,7 @@ parts:
       description: Nome do arquivo
       handler:
         type: character
-  Corpo:
+  Data:
     pattern: ^02
     fields:
     - name: tipo_registro

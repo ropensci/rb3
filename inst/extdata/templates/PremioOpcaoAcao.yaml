@@ -4,14 +4,14 @@ filetype: MCSV
 description: Prêmio de Referência para Opções sobre Ações
 separator: ;
 parts:
-  Cabeçalho:
+  Header:
     fields:
     - name: data_geracao_arquivo
       description: Data de geração do arquivo
       handler:
         type: Date
         format: '%Y%m%d'
-  Corpo:
+  Data:
     fields:
     - name: cod_opcao
       description: Código da Opção

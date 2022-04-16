@@ -54,7 +54,7 @@ parts:
       handler:
         type: character
       width: 308
-  Resumo Diário dos Índices:
+  IndexesSummary:
     pattern: ^01
     fields:
     - name: tipo_registro
@@ -267,7 +267,7 @@ parts:
       handler:
         type: character
       width: 148
-  Resumo Diário de Negociações por Papel:
+  StocksSummary:
     pattern: ^02
     fields:
     - name: tipo_registro
@@ -476,7 +476,7 @@ parts:
       handler:
         type: character
       width: 44
-  Resumo Diário de Negociações por Código BDI:
+  TradesSummaryWithBDI:
     pattern: ^03
     fields:
     - name: tipo_registro
@@ -521,7 +521,7 @@ parts:
       handler:
         type: character
       width: 270
-  Maiores Oscilações do Mercado a Vista:
+  HighOscilations:
     pattern: ^04
     fields:
     - name: tipo_registro
@@ -589,7 +589,7 @@ parts:
       handler:
         type: character
       width: 285
-  Maiores Oscilação das Ações do IBOVESPA:
+  GreatestIBOVESPAOscilations:
     pattern: ^05
     fields:
     - name: tipo_registro
@@ -657,7 +657,7 @@ parts:
       handler:
         type: character
       width: 285
-  As Mais Negociadas no Mercado a Vista:
+  MoreTradedStocks:
     pattern: ^06
     fields:
     - name: tipo_registro
@@ -697,7 +697,7 @@ parts:
       handler:
         type: character
       width: 282
-  As Mais Negociadas:
+  MoreTradedAssets:
     pattern: ^07
     fields:
     - name: tipo_registro
@@ -791,7 +791,7 @@ parts:
       handler:
         type: character
       width: 212
-  Resumo Diário dos IOPV's:
+  IOPVSummary:
     pattern: ^08
     fields:
     - name: tipo_registro
@@ -871,7 +871,7 @@ parts:
       handler:
         type: character
       width: 259
-  BDR's Não Patrocinadas - Valor de Referência:
+  BDRReferencePrice:
     pattern: ^09
     fields:
     - name: tipo_registro
