@@ -13,7 +13,7 @@ Authors@R: c(person("Wilson", "Freitas",
 License: MIT + file LICENSE
 LazyData: true
 Depends:
-    R (>= 4.1),
+    R (>= 4.0.0),
     bizdays
 Imports:
     stringr,
@@ -30,7 +30,8 @@ Imports:
     xml2,
     rlang,
     methods,
-    yaml
+    yaml,
+    scales
 Suggests:
     testthat,
     knitr,
@@ -38,7 +39,8 @@ Suggests:
     miniUI,
     shiny,
     xtable,
-    rmarkdown
+    rmarkdown,
+    ggplot2
 Collate:
     'rb3-package.R'
     'util.R'

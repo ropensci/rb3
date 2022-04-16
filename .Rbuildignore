@@ -9,3 +9,4 @@ docs
 inst\extdata\big-files
 templates_load.r
 templates_save.r
+.github
