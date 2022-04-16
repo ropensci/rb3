@@ -1,0 +1,215 @@
+id: CONTRCAD
+filename: CONTRCAD.TXT
+filetype: FWF
+description: Contratos Cadastrados
+fields:
+- name: id_transacao
+  description: Identificação da Transação
+  handler:
+    type: character
+  width: 6
+- name: compl_transacao
+  description: Complemento da Transação
+  handler:
+    type: character
+  width: 3
+- name: tipo_registros
+  description: Tipo de Registro
+  handler:
+    type: character
+  width: 2
+- name: data_referencia
+  description: Data de Referência
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: cod_mercadoria
+  description: Código da Mercadoria
+  handler:
+    type: factor
+  width: 3
+- name: tipo_mercado
+  description: Tipo de Mercado
+  handler:
+    type: factor
+    levels:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    labels:
+    - spot
+    - future
+    - option-on-spot
+    - option-on-future
+    - forward
+  width: 1
+- name: serie
+  description: Série (Opções) / Vencimento (Futuro)
+  handler:
+    type: character
+  width: 4
+- name: tipo_opcao
+  description: Tipo de Opção
+  handler:
+    type: factor
+    levels:
+    - C
+    - V
+    labels:
+    - call
+    - put
+  width: 1
+- name: tipo_exercicio
+  description: Tipo de exercício
+  handler:
+    type: factor
+    levels:
+    - A
+    - E
+    labels:
+    - american
+    - european
+  width: 1
+- name: data_vencimento
+  description: Data de Vencimento do Contrato
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: data_inicio_negociacao
+  description: Data de Inicio de Negociação
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: data_inicio_exercicio
+  description: Data de Inicio de Exercício
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: data_limite_negociacao
+  description: Data Limite de Negociação
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: data_limite_abertura_posicoes
+  description: Data Limite de Abertura de Posições
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: preco_exercicio
+  description: Preço de Exercício (Opções)
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: ''
+  width: 15
+- name: num_casas_decimais
+  description: Número de Casas Decimais
+  handler:
+    type: character
+  width: 1
+- name: cod_viva_vaz
+  description: Código de Negociação Viva-Voz
+  handler:
+    type: character
+  width: 20
+- name: cod_gts
+  description: Código de Negociação GTS
+  handler:
+    type: character
+  width: 20
+- name: cod_isin
+  description: Código ISIN
+  handler:
+    type: character
+  width: 12
+- name: contr_objeto_vencimento
+  description: Contrato Objeto (no Vencimento)
+  handler:
+    type: character
+  width: 4
+- name: tipo_cotacao
+  description: Tipo de Cotação
+  handler:
+    type: factor
+    levels:
+    - 1
+    - 2
+    labels:
+    - price
+    - rate
+  width: 1
+- name: tipo_mercadoria
+  description: Tipo de Mercadoria
+  handler:
+    type: factor
+    levels:
+    - 1
+    - 2
+    - 3
+    labels:
+    - money
+    - agro
+    - energy
+  width: 1
+- name: variacao_minima
+  description: Variação Mínima de Apregoação
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: ''
+  width: 15
+- name: indicador_opcao_ajuste
+  description: Indicador de Opção com Ajuste
+  handler:
+    type: character
+  width: 1
+- name: indicador_mercadoria_internacional
+  description: Indicador de Mercadoria Internacional
+  handler:
+    type: character
+  width: 1
+- name: cod_moeda
+  description: Código da Moeda
+  handler:
+    type: factor
+    levels:
+    - 1
+    - 2
+    labels:
+    - USD
+    - BRL
+  width: 2
+- name: indicador_operacao_estruturada
+  description: Indicador de Operação Estruturada
+  handler:
+    type: character
+  width: 1
+- name: num_dias_saques
+  description: Quantidade de dias Saques
+  handler:
+    type: character
+  width: 5
+- name: num_dias_corridos
+  description: Quantidade de dias Corridos
+  handler:
+    type: character
+  width: 5
+- name: num_dias_uteis
+  description: Quantidade de dias Úteis
+  handler:
+    type: character
+  width: 5
+- name: descricao_mercadoria
+  description: Descrição da mercadoria
+  handler:
+    type: character
+  width: 15
+

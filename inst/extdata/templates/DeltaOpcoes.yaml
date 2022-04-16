@@ -1,0 +1,110 @@
+id: DeltaOpcoes
+filename: DeltaOpcoes.txt
+filetype: FWF
+description: Volatilidades implícitas das opções sobre derivativos financeiros em
+  Deltas padronizados
+fields:
+- name: data_pregao
+  description: Data de Pregão
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: cod_mercadoria
+  description: Código da Mercadoria
+  handler:
+    type: character
+  width: 3
+- name: tipo_mercado
+  description: Tipo de Mercado
+  handler:
+    type: factor
+    levels:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    labels:
+    - spot
+    - future
+    - options on spot
+    - options on future
+    - forward
+  width: 1
+- name: serie
+  description: Série do Contrato
+  handler:
+    type: character
+  width: 4
+- name: data_vencimento
+  description: Data de Vencimento do Contrato
+  handler:
+    type: character
+  width: 8
+- name: cod_gts
+  description: Código de Negociação do GTS
+  handler:
+    type: character
+  width: 20
+- name: tipo_opcao
+  description: Tipo de Opção
+  handler:
+    type: factor
+    levels:
+    - C
+    - V
+    labels:
+    - call
+    - put
+  width: 1
+- name: tipo_exercicio
+  description: Tipo de exercício
+  handler:
+    type: factor
+    levels:
+    - A
+    - E
+    labels:
+    - american
+    - european
+  width: 1
+- name: indicador_opcao_ajuste
+  description: Indicador de Opção com Ajuste
+  handler:
+    type: factor
+  width: 1
+- name: cod_moeda
+  description: Código da Moeda
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 2
+- name: preco_exercicio
+  description: Preço de Exercício
+  handler:
+    type: numeric
+    dec: 3.0
+    sign: ''
+  width: 15
+- name: valor_volatilidade
+  description: Valor da Volatilidade
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: ''
+  width: 19
+- name: sinal_delta
+  description: Sinal do Valor do Delta
+  handler:
+    type: character
+  width: 1
+- name: valor_delta
+  description: Valor do Delta
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: sinal_delta
+  width: 19
+

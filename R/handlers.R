@@ -5,7 +5,7 @@ width <- function(x) {
   x
 }
 
-to_date <- function(format = NULL) {
+to_date_handler <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%Y-%m-%d"
   }
@@ -18,7 +18,7 @@ to_date <- function(format = NULL) {
   handler
 }
 
-to_time <- function(format = NULL) {
+to_time_handler <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%H:%M:%S"
   }
@@ -31,7 +31,7 @@ to_time <- function(format = NULL) {
   handler
 }
 
-to_factor <- function(levels = NULL, labels = levels) {
+to_factor_handler <- function(levels = NULL, labels = levels) {
   handler <- function(x) {
     if (is.null(levels)) {
       factor(x)
@@ -46,7 +46,7 @@ to_factor <- function(levels = NULL, labels = levels) {
   handler
 }
 
-to_numeric <- function(dec = 0, sign = "") {
+to_numeric_handler <- function(dec = 0, sign = "") {
   handler <- function(x) {
     if (is(dec, "character")) {
       dec <- get(dec, envir = parent.frame())

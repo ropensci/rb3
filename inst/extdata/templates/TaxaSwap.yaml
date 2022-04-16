@@ -1,0 +1,80 @@
+id: TaxaSwap
+filename: TaxaSwap.txt
+filetype: FWF
+description: Taxas de Mercado para Swaps
+fields:
+- name: id_transacao
+  description: Identificação da transação
+  handler:
+    type: character
+  width: 6
+- name: compl_transacao
+  description: Complemento da transação
+  handler:
+    type: character
+  width: 3
+- name: tipo_registro
+  description: Tipo de registro
+  handler:
+    type: character
+  width: 2
+- name: data_geracao_arquivo
+  description: Data de geração do arquivo
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: cod_curvas
+  description: Código das curvas a termo
+  handler:
+    type: factor
+  width: 2
+- name: cod_taxa
+  description: Código da taxa
+  handler:
+    type: factor
+  width: 5
+- name: desc_taxa
+  description: Descrição da taxa
+  handler:
+    type: factor
+  width: 15
+- name: num_dias_corridos
+  description: Número de dias corridos da taxa de juro
+  handler:
+    type: character
+  width: 5
+- name: num_dias_saques
+  description: Número de saques da taxa de juro
+  handler:
+    type: character
+  width: 5
+- name: sinal_taxa
+  description: Sinal da taxa teórica
+  handler:
+    type: character
+  width: 1
+- name: taxa_teorica
+  description: Taxa teórica
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: sinal_taxa
+  width: 14
+- name: carat_vertice
+  description: Característica do vértice
+  handler:
+    type: factor
+    levels:
+    - F
+    - M
+    labels:
+    - Fixo
+    - Móvel
+  width: 1
+- name: cod_vertice
+  description: Código do vértice
+  handler:
+    type: character
+  width: 5
+

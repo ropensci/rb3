@@ -16,6 +16,7 @@
 #' @import bizdays
 #' @import cli
 #' @import purrr
+#' @import yaml
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom dplyr tibble
 #' @importFrom methods is new slot

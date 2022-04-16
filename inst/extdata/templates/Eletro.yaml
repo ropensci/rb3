@@ -1,0 +1,147 @@
+id: Eletro
+filename: Eletro.txt
+filetype: FWF
+description: Negócios Realizados no Mercado de Balcão
+fields:
+- name: id_transacao
+  description: Identificação da transação
+  handler:
+    type: character
+  width: 6
+- name: compl_transacao
+  description: Complemento da transação
+  handler:
+    type: character
+  width: 3
+- name: tipo_registro
+  description: Tipo de tegistro
+  handler:
+    type: character
+  width: 2
+- name: data_geracao_arquivo
+  description: Data de geração do arquivo
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: tipo_negociacao
+  description: Tipo de negociação
+  handler:
+    type: factor
+    levels:
+    - SW
+    - AG
+    - TO
+    labels:
+    - swaps
+    - teleagro
+    - teleouro
+  width: 2
+- name: cod_mercadoria
+  description: Código da mercadoria
+  handler:
+    type: character
+  width: 3
+- name: cod_mercado
+  description: Código do mercado
+  handler:
+    type: character
+  width: 1
+- name: data_referencia
+  description: Data-base
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: data_vencimento
+  description: Data de vencimento
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: volume_real
+  description: Volume do dia em R$
+  handler:
+    type: character
+  width: 13
+- name: volume_dolar
+  description: Volume do dia em US$
+  handler:
+    type: character
+  width: 13
+- name: qtd_contr_abertos_apos_liquidacao
+  description: Qtd. contratos em aberto após liquidação
+  handler:
+    type: character
+  width: 8
+- name: qtd_negocios
+  description: Qtd. de negócios efetuados
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr_negociados
+  description: Qtd. de contratos negociados
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr_abertos_antes_liquidacao
+  description: Qtd. de contratos aberto antes da liquidação
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr_liquidados
+  description: Qtd. de contratos liquidados
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr_aberto_final
+  description: Qtd. de contratos aberto final
+  handler:
+    type: character
+  width: 8
+- name: valor_medio
+  description: Taxa média (swp)/prêmio médio (opç flex)
+  handler:
+    type: numeric
+    dec: 4.0
+    sign: ''
+  width: 9
+- name: sinal_valor_medio
+  description: Sinal da taxa média/prêmio médio
+  handler:
+    type: character
+  width: 1
+- name: tipo_valor_medio
+  description: Tipo de taxa média
+  handler:
+    type: factor
+    levels:
+    - D
+    - P
+    labels:
+    - daily
+    - period
+  width: 1
+- name: preco_exercicio_medio
+  description: Preço de exercício médio (opç flex)
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: ''
+  width: 22
+- name: sinal_preco_exercicio_medio
+  description: Sinal do preço médio de exercício
+  handler:
+    type: character
+  width: 1
+- name: volume_aberto_real
+  description: Volume aberto em R$
+  handler:
+    type: character
+  width: 13
+- name: volume_aberto_dolar
+  description: Volume aberto em US$
+  handler:
+    type: character
+  width: 13
+

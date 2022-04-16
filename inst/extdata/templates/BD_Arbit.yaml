@@ -1,0 +1,508 @@
+id: BD_Arbit
+filename: BD_Arbit.txt
+filetype: FWF
+description: Negócios Realizados em Pregão
+fields:
+- name: id_transacao
+  description: Identificação da transação
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 6
+- name: compl_transacao
+  description: Complemento da transação
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 3
+- name: tipo_registro
+  description: Tipo de registro
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 2
+- name: data_geracao_arquivo
+  description: Data de geração do arquivo
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: tipo_negociacao
+  description: Tipo de negociação
+  handler:
+    type: factor
+    levels: PR
+    labels: Pregão
+  width: 2
+- name: cod_mercadoria
+  description: Código da mercadoria
+  handler:
+    type: character
+  width: 3
+- name: cod_mercado
+  description: Código do mercado
+  handler:
+    type: character
+  width: 1
+- name: tipo_serie
+  description: Tipo da série
+  handler:
+    type: factor
+    levels:
+    - C
+    - V
+    - '*'
+    labels:
+    - call
+    - put
+    - future
+  width: 1
+- name: serie
+  description: Série (opç)/vencimento (fut)
+  handler:
+    type: factor
+  width: 4
+- name: hora_criacao_registro
+  description: Hora de criação deste registro
+  handler:
+    type: POSIXct
+    format: '%H%M%S'
+  width: 6
+- name: data_vencimento
+  description: Data de vencimento (fut/opç)
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: preco_exercicio
+  description: Preço de exercício (opç)
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: ''
+  width: 13
+- name: tamanho_contr
+  description: Valor do ponto ou tamanho do contrato
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: ''
+  width: 13
+- name: volume_real
+  description: Volume do dia em R$
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 13
+- name: volume_dolar
+  description: Volume do dia em US$
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 13
+- name: qtd_contr_aberto
+  description: Qtd. de contratos em aberto
+  handler:
+    type: character
+  width: 8
+- name: qtd_negocios
+  description: Qtd. de negócios efetuados no dia
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr
+  description: Qtd. de contratos negociados no dia
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr_ult_compra
+  description: Qtd. de contratos da última oferta compra do dia
+  handler:
+    type: character
+  width: 5
+- name: sinal_ult_oferta_compra
+  description: Sinal da cot.da última oferta de compra do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_ult_oferta_compra
+  description: Cotação da última oferta de compra do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_ult_oferta_compra
+  width: 8
+- name: qtd_contr_ult_oferta_compra
+  description: Qtd. de contratos da última oferta de venda do dia
+  handler:
+    type: character
+  width: 5
+- name: sinal_ult_oferta_venda
+  description: Sinal da cot.da última oferta de venda do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_ult_oferta_venda
+  description: Cotação da última oferta de venda do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_ult_oferta_venda
+  width: 8
+- name: sinal_cot_primeiro_negocio
+  description: Sinal da cotação do primeiro negócio do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_primeiro_negocio
+  description: Cotação do primeiro negócio do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_primeiro_negocio
+  width: 8
+- name: sinal_cot_menor_negocio
+  description: Sinal da cotação do menor negócio do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_menor_negocio
+  description: Cotação do menor negócio do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_menor_negocio
+  width: 8
+- name: sinal_cot_maior_negocio
+  description: Sinal da cotação do maior negócio do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_maior_negocio
+  description: Cotação do maior negócio do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_maior_negocio
+  width: 8
+- name: sinal_cot_med_negocios
+  description: Sinal da cotação média dos negócios do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_med_negocios
+  description: Cotação média dos negócios do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_med_negocios
+  width: 8
+- name: qtd_contr_ult_negocio
+  description: Qtd. de contratos do último negócio do dia
+  handler:
+    type: character
+  width: 5
+- name: sinal_cot_ult_negocio
+  description: Sinal da cotação do último negócio do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_ult_negocio
+  description: Cotação do último negócio do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_ult_negocio
+  width: 8
+- name: hora_ult_negocio
+  description: Hora do último negócio do dia
+  handler:
+    type: POSIXct
+    format: '%H%M%S'
+  width: 6
+- name: data_ult_negocio
+  description: Data do último negócio
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: sinal_cot_ult_negocio_anterior
+  description: Sinal da cotação do último negócio anterior
+  handler:
+    type: character
+  width: 1
+- name: cot_ult_negocio_anterior
+  description: Cotação do último negócio anterior
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_ult_negocio_anterior
+  width: 8
+- name: sinal_cot_fechamento
+  description: Sinal da cotação de fechamento do dia
+  handler:
+    type: character
+  width: 1
+- name: cot_fechamento
+  description: Cotação de fechamento do dia
+  handler:
+    type: numeric
+    dec: num_casas_decimais_2
+    sign: sinal_cot_fechamento
+  width: 8
+- name: sinal_cot_ajuste
+  description: Sinal da cotação ajuste (fut)
+  handler:
+    type: character
+  width: 1
+- name: cot_ajuste
+  description: Cotação ajuste (fut)
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: sinal_cot_ajuste
+  width: 13
+- name: situacao_ajuste
+  description: Situação do ajuste do dia
+  handler:
+    type: factor
+    levels:
+    - S
+    - A
+    labels:
+    - Ajuste Final
+    - Ajuste Corrigido
+  width: 1
+- name: sinal_cot_ajuste_anterior
+  description: Sinal da cotação de ajuste do dia anterior (fut)
+  handler:
+    type: character
+  width: 1
+- name: cot_ajuste_anterior
+  description: Cotação de ajuste do dia anterior (fut)
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: sinal_cot_ajuste_anterior
+  width: 13
+- name: situacao_ajuste_anterior
+  description: Situação do ajuste do dia anterior
+  handler:
+    type: factor
+    levels:
+    - S
+    - A
+    labels:
+    - Ajuste Final
+    - Ajuste Corrigido
+  width: 1
+- name: valor_ajuste_contr
+  description: Valor do ajuste por contrato
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: volume_exercido_real
+  description: Volume exercido no dia em R$
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 13
+- name: volume_exercido_dolar
+  description: Volume exercido no dia em US$
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 13
+- name: qtd_negocios_exercidos
+  description: Quantidade de negócios exercidos no dia
+  handler:
+    type: character
+  width: 8
+- name: qtd_contr_exercidos
+  description: Quantidade de contratos exercidos no dia
+  handler:
+    type: character
+  width: 8
+- name: num_casas_decimais_2
+  description: Número de casas decimais dos campos com *
+  handler:
+    type: character
+  width: 1
+- name: num_casas_decimais
+  description: Número de casas decimais dos ajustes
+  handler:
+    type: character
+  width: 1
+- name: perc_oscilacao
+  description: Percentual de oscilação
+  handler:
+    type: numeric
+    dec: 1.0
+    sign: ''
+  width: 8
+- name: sinal_oscilacao
+  description: Sinal da oscilação
+  handler:
+    type: character
+  width: 1
+- name: valor_diferenca
+  description: Valor da diferença (variação em pontos)
+  handler:
+    type: character
+  width: 8
+- name: sinal_diferenca
+  description: Sinal da diferença (variação em pontos)
+  handler:
+    type: character
+  width: 1
+- name: valor_equivalencia
+  description: Valor da equivalência
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 8
+- name: valor_dolar_anterior
+  description: Valor do dólar do dia anterior
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: ''
+  width: 13
+- name: valor_dolar
+  description: Valor do dólar do dia atual
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: ''
+  width: 13
+- name: valor_delta
+  description: Valor do delta da opção (margem)
+  handler:
+    type: numeric
+    dec: 7.0
+    sign: ''
+  width: 9
+- name: num_dias_saques
+  description: Qtd. saques até data de vencimento
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 5
+- name: num_dias_corridos
+  description: Qtd. dias corridos até data de vencimento
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 5
+- name: num_dias_uteis
+  description: Qtd. dias úteis até data de vencimento
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 5
+- name: data_vencimento_objeto
+  description: Vencimento do contrato-objeto
+  handler:
+    type: factor
+  width: 4
+- name: margem_clientes
+  description: Margem para clientes normais
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: margem_hedgers
+  description: Margem para clientes hedgers
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: data_inicio_entrega
+  description: Data de início do período de entrega (agrícolas)
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: sequencia_vencimento
+  description: Seqüência do vencimento futuro
+  handler:
+    type: character
+  width: 3
+- name: cod_viva_voz
+  description: Código de negociação viva voz
+  handler:
+    type: character
+  width: 20
+- name: cod_gts
+  description: Código de negociação GTS
+  handler:
+    type: character
+  width: 20
+- name: canais_negociacao
+  description: Canais de negociação permitidos
+  handler:
+    type: factor
+    levels:
+    - V
+    - E
+    - A
+    labels:
+    - Viva-Voz
+    - Eletrônico
+    - Ambos
+  width: 1
+- name: ref_negocios
+  description: Referência deste resumo de negócios
+  handler:
+    type: factor
+    levels: MERC
+    labels: MERC
+  width: 4
+- name: data_limite_negociacao
+  description: Data-limite para negociação
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: data_liquidacao_financeira
+  description: Data de liquidação financeira
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: sinal_limite_min_negociacao
+  description: Sinal do limite mínimo para negociação
+  handler:
+    type: character
+  width: 1
+- name: limite_min_negociacao
+  description: Limite mínimo para negociação (fut)
+  handler:
+    type: character
+  width: 13
+- name: sinal_limite_max_negociacao
+  description: Sinal do limite máximo para negociação
+  handler:
+    type: character
+  width: 1
+- name: limite_max_negociacao
+  description: Limite máximo para negociação (fut)
+  handler:
+    type: character
+  width: 13
+

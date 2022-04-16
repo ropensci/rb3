@@ -1,0 +1,76 @@
+id: Indic
+filename: Indic.txt
+filetype: FWF
+description: Indicadores Econômicos e Agropecuários - Final
+fields:
+- name: id_transacao
+  description: Identificação da transação
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 6
+- name: compl_transacao
+  description: Complemento da transação
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 3
+- name: tipo_registro
+  description: Tipo de registro
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 2
+- name: data_geracao_arquivo
+  description: Data de geração do arquivo
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: grupo_indicador
+  description: Grupo do indicador
+  handler:
+    type: factor
+    levels:
+    - IA
+    - DE
+    - RT
+    - BV
+    - ME
+    - ID
+    labels:
+    - indicadores-agro
+    - titulos-divida-externa
+    - indicadores-gerais
+    - ibovespa
+    - moeda-estrangeira
+    - indice-idi
+  width: 2
+- name: cod_indicador
+  description: Código do indicador
+  handler:
+    type: character
+  width: 25
+- name: valor_indicador
+  description: Valor do indicador na data
+  handler:
+    type: numeric
+    dec: num_casas_decimais
+    sign: ''
+  width: 25
+- name: num_casas_decimais
+  description: Número de decimais do valor
+  handler:
+    type: numeric
+    dec: 0.0
+    sign: ''
+  width: 2
+- name: reserva
+  description: Filler
+  handler:
+    type: character
+  width: 36
+

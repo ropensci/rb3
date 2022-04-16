@@ -69,16 +69,10 @@ registry <- proto::proto(expr = {
   }
 })
 
-NUMERIC.TRANSMUTER <- transmuter(
-  match_regex("^\\d+$", as.integer),
-  match_regex("^\\d+\\.\\d+$", as.numeric)
-)
-
 MarketData <- proto::proto(expr = {
   description <- ""
 
   ..registry.id <- registry$proto()
-  ..registry.class <- registry$proto()
   ..registry.filename <- registry$proto()
 
   register <- function(., .class) {
@@ -89,35 +83,36 @@ MarketData <- proto::proto(expr = {
       .$..registry.id$put(.class$id, .class)
     }
 
-    name <- deparse(substitute(.class))
-    .$..registry.class$put(name, .class)
-
     filename <- try(.class$filename)
     if (!is(filename, "try-error")) {
       .$..registry.filename$put(filename, .class)
     }
   }
 
-  parser <- NUMERIC.TRANSMUTER
+  parser <- transmuter(
+    match_regex("^\\+\\d+$", as.numeric, priority = 1),
+    match_regex("^\\d+$", as.integer),
+    match_regex("^\\d+\\.\\d+$", as.numeric),
+    match_regex("^\\+|-$", function(text, match) {
+      idx <- text == "-"
+      x <- rep(1, length(text))
+      x[idx] <- -1
+      x
+    }),
+    match_regex("^(S|N)$", function(text, match) {
+      text == "S"
+    })
+  )
 
   retrieve_template <- function(., key) {
-    # key <- tolower(key)
-    tpl_ <- .$..registry.id$get(key)
-    if (!is.null(tpl_)) {
-      return(tpl_)
-    } else {
-      tpl_ <- .$..registry.class$get(key)
-      tpl_ <- if (is.null(tpl_)) .$..registry.filename$get(key) else tpl_
-      return(tpl_)
-    }
+    .$..registry.id$get(key)
   }
 
   show_templates <- function(.) {
-    dx <- lapply(.$..registry.class$keys(), function(cls) {
-      tpl_ <- .$..registry.class$get(cls)
+    dx <- lapply(.$..registry.id$keys(), function(cls) {
+      tpl_ <- .$..registry.id$get(cls)
       data.frame(
         "Template ID" = tpl_$id,
-        "Class Name" = cls,
         "Filename" = tpl_$filename,
         "File Type" = tpl_$file_type,
         "Description" = tpl_$description,
@@ -144,10 +139,6 @@ MarketData <- proto::proto(expr = {
         ix <- ix + 1
         cat("\n")
         cat(sprintf("Part %d: %s\n", ix, nx))
-        # if (! is.null(.$parts[[nx]]$lines))
-        #   cat('Lines:', .$parts[[nx]]$lines, '\n')
-        # else
-        #   cat('Pattern:', .$parts[[nx]]$pattern, '\n')
         cat("\n")
         print.fields(.$parts[[nx]]$fields)
       }
@@ -157,7 +148,7 @@ MarketData <- proto::proto(expr = {
 })
 
 MarketDataFWF <- MarketData$proto(expr = {
-  file_type <- "Fixed Width"
+  file_type <- "FWF"
   read_file <- function(., filename, parse_fields = TRUE) {
     df <- read_fwf(filename, .$widths, colnames = .$colnames)
     if (parse_fields) {
@@ -183,7 +174,7 @@ MarketDataFWF <- MarketData$proto(expr = {
 })
 
 MarketDataCSV <- MarketData$proto(expr = {
-  file_type <- "Comma-separated Values"
+  file_type <- "CSV"
   read_file <- function(., filename, parse_fields = TRUE) {
     df <- read.table(filename,
       col.names = .$colnames, sep = .$separator,
@@ -224,7 +215,7 @@ MarketDataMultiPart <- MarketData$proto(expr = {
 })
 
 MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
-  file_type <- "Comma-separated Values (with Multiple Parts)"
+  file_type <- "MCSV"
   .separator <- function(., .part = NULL) {
     if (is.null(.part)) {
       .$separator
@@ -272,7 +263,7 @@ MarketDataMultiPartCSV <- MarketDataMultiPart$proto(expr = {
 })
 
 MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr = {
-  file_type <- "Fixed Width (with Multiple Parts)"
+  file_type <- "MFWF"
   read_file <- function(., filename, parse_fields = TRUE) {
     lines <- readLines(filename)
     l <- list()

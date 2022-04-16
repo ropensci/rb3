@@ -1,0 +1,32 @@
+id: ISIND
+filename: CodISIND.txt
+filetype: FWF
+description: Relação de Códigos ISIN para Contratos Derivativos
+fields:
+- name: data_cadastro
+  description: Data de cadastro
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: cod_mercadoria
+  description: Código da mercadoria
+  handler:
+    type: character
+  width: 3
+- name: tipo_mercado
+  description: Tipo de mercado
+  handler:
+    type: character
+  width: 3
+- name: serie
+  description: Vencimento/série/prazo
+  handler:
+    type: character
+  width: 4
+- name: cod_isin
+  description: Código ISIN
+  handler:
+    type: character
+  width: 12
+
