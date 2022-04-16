@@ -47,6 +47,12 @@ new_template <- function(tpl) {
       obj[[n]] <- tpl[[n]]
     }
     obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
+  } else if (tpl$filetype == "JSON") {
+    obj <- MarketDataJSON$proto()
+    for (n in nx) {
+      obj[[n]] <- tpl[[n]]
+    }
+    obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
   } else if (tpl$filetype == "MCSV") {
     obj <- MarketDataMultiPartCSV$proto()
     for (n in nx) {

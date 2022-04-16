@@ -86,18 +86,17 @@ iter_rules <- function(rules) {
   rules[idx]
 }
 
-
 composite <- function(...) {
   fs <- list(...)
   function(...) Reduce(function(x, f) f(x), fs, ...)
 }
 
 to_date <- function(format = "%Y-%m-%d") {
-  function(x) as.Date(strptime(x, format))
+  function(x, ...) as.Date(strptime(x, format))
 }
 
 to_datetime <- function(format = "%Y-%m-%d %H:%M:%S") {
-  function(x) as.POSIXct(strptime(x, format))
+  function(x, ...) as.POSIXct(strptime(x, format))
 }
 
 to_dbl <- function(dec = NULL, thousands = NULL, percent = FALSE) {
@@ -113,7 +112,7 @@ to_dbl <- function(dec = NULL, thousands = NULL, percent = FALSE) {
   if (!is.null(thousands)) {
     .func <- composite(function(x) gsub(thousands, "", x, fixed = TRUE), .func)
   }
-  function(x) as.numeric(.func(x)) * .mult
+  function(x, ...) as.numeric(.func(x)) * .mult
 }
 
 to_int <- function() {

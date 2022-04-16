@@ -55,7 +55,9 @@ read_marketdata <- function(filename, template = NULL, parse_fields = TRUE) {
 registry <- proto::proto(expr = {
   .container <- list()
   put <- function(., key, value) {
-    .$.container[[key]] <- value
+    if (!is.null(key)) {
+      .$.container[[key]] <- value
+    }
     invisible(NULL)
   }
 
@@ -93,6 +95,8 @@ MarketData <- proto::proto(expr = {
     match_regex("^\\+\\d+$", as.numeric, priority = 1),
     match_regex("^\\d+$", as.integer),
     match_regex("^\\d+\\.\\d+$", as.numeric),
+    match_regex("^\\d+,\\d+$", to_dbl(dec = ",", percent = TRUE)),
+    match_regex("^(\\d+\\.)+\\d+,\\d+$", to_dbl(dec = ",", thousands = ".")),
     match_regex("^\\+|-$", function(text, match) {
       idx <- text == "-"
       x <- rep(1, length(text))
@@ -113,7 +117,6 @@ MarketData <- proto::proto(expr = {
       tpl_ <- .$..registry.id$get(cls)
       data.frame(
         "Template ID" = tpl_$id,
-        "Filename" = tpl_$filename,
         "File Type" = tpl_$file_type,
         "Description" = tpl_$description,
         stringsAsFactors = FALSE,
@@ -291,5 +294,32 @@ MarketDataMultiPartFWF <- MarketDataMultiPart$proto(expr = {
     }
     class(l) <- "parts"
     l
+  }
+})
+
+MarketDataJSON <- MarketData$proto(expr = {
+  file_type <- "JSON"
+  read_file <- function(., filename, parse_fields = TRUE) {
+    jason <- jsonlite::fromJSON(filename)
+    df <- as.data.frame(jason)
+    if (parse_fields) {
+      df <- trim_fields(df)
+      e <- evalq(environment(), df, NULL)
+      df <- lapply(.$colnames, function(x) {
+        fun <- .$handlers[[x]]
+        x <- df[[x]]
+        do.call(fun, list(x), envir = e)
+      })
+      names(df) <- .$colnames
+      df <- do.call("data.frame", c(df, stringsAsFactors = FALSE, check.names = FALSE))
+      df <- parse_text(.$parser, df)
+    }
+    df
+  }
+
+  init <- function(.) {
+    .$colnames <- fields_names(.$fields)
+    .$widths <- fields_widths(.$fields)
+    .$handlers <- fields_handlers(.$fields)
   }
 })
