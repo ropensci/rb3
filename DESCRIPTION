@@ -37,7 +37,8 @@ Suggests:
     DT,
     miniUI,
     shiny,
-    xtable
+    xtable,
+    rmarkdown
 Collate:
     'rb3-package.R'
     'util.R'

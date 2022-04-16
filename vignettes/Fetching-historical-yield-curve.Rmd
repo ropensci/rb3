@@ -1,0 +1,45 @@
+---
+title: "Fetching Historical Yield Curve from B3"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fetching Historical Yield Curve from B3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Data for the yield curve is available in [B3's website](https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp), section DI X Pre. The data is built using interest rate futures. See this [pdf](https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf) for more details.
+
+```{r setup}
+library(rb3)
+library(ggplot2)
+library(stringr)
+
+df_yc <- yc_get(first_date = Sys.Date()-255*5,
+                last_date = Sys.Date(),
+                by = 255)
+
+p <- ggplot(df_yc, 
+            aes(x = forward_date, 
+                y = r_252,
+                group =  ref_date,
+                color = factor(ref_date)) )+ 
+  geom_line()  + 
+  labs(title = 'Yield Curves for Brazil',
+       subtitle = 'Built using interest rates future contracts',
+       caption = str_glue('Data imported using rb3 at {Sys.Date()}'),
+       x = 'Forward Date',
+       y = 'Annual Interest Rate',
+       color = "Reference Date") +
+  theme_light() + 
+  scale_y_continuous(labels = scales::percent)
+       
+
+print(p)
+```
