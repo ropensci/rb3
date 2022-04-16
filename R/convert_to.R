@@ -1,4 +1,3 @@
-
 #' Converts B3 messy files to structured formats
 #'
 #' Convert B3 files to structured formats based on the template.

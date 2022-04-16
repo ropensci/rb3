@@ -6,7 +6,7 @@ flatten_names <- function(nx) {
     }
     nx[ix] <- last_name
   }
-  x <- nx %>% stringr::str_match("^...")
+  x <- nx |> stringr::str_match("^...")
   as.vector(x)
 }
 

@@ -13,7 +13,7 @@ Authors@R: c(person("Wilson", "Freitas",
 License: MIT + file LICENSE
 LazyData: true
 Depends:
-    R (>= 4.0.5),
+    R (>= 4.1.0),
     bizdays
 Imports:
     stringr,
@@ -58,7 +58,6 @@ Collate:
     'addin-show-templates.R'
     'addin-display-template.R'
     'zzz.R'
-    'utils-pipe.R'
 BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3
 VignetteBuilder: knitr
