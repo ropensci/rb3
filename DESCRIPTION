@@ -1,5 +1,5 @@
 Package: rb3
-Title: Download and parse public data released by B3 Exchange
+Title: Download and Parse Public Data Released by B3 Exchange
 Description: Download and parse public files released by B3 and convert them
     into useful formats and data structures commom to data analysis
     practitioners.
@@ -13,7 +13,7 @@ Authors@R: c(person("Wilson", "Freitas",
 License: MIT + file LICENSE
 LazyData: true
 Depends:
-    R (>= 4.0.0),
+    R (>= 4.0.5),
     bizdays
 Imports:
     stringr,
