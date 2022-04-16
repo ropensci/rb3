@@ -4,7 +4,7 @@ aux.R
 ^.*\.json$
 ^LICENSE\.md$
 legacy
-docs
+b3-docs
 .lintr
 inst\extdata\big-files
 templates_load.r

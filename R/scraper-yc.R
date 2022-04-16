@@ -12,11 +12,15 @@
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' @return A dataframe/tibble with yield curve data
-#'
+#' 
+#' @export
+#' 
 #' @examples
+#' 
+#' \dontrun{
 #' df_yc <- yc_get()
 #' head(df_yc)
-#' @export
+#' }
 yc_get <- function(first_date = Sys.Date() - 5,
                    last_date = Sys.Date(),
                    by = 1,
