@@ -1,5 +1,12 @@
 # rb3
 
+<!-- badges: start -->
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Codecov test coverage](https://codecov.io/gh/msperlin/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/rb3?branch=main)
+[![R build (rcmdcheck)](https://github.com/msperlin/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/msperlin/rb3/actions)
+
+<!-- badges: end -->
+
 Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [B3](http://www.b3.com.br).
 Os estes arquivos podem ser baixados da página de Dados Históricos da B3 através do [link](http://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/).
 

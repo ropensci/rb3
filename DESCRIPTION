@@ -1,9 +1,9 @@
 Package: rb3
-Title: Download and parse public data released by B3 Exchange
+Title: Download and Parse Public Data Released by B3 Exchange
 Description: Download and parse public files released by B3 and convert them
     into useful formats and data structures commom to data analysis
     practitioners.
-Version: 0.0.1.9000
+Version: 0.0.1
 Authors@R: c(person("Wilson", "Freitas",
                     email = "wilson.freitas@gmail.com",
                     role = c("aut", "cre")),
@@ -13,7 +13,7 @@ Authors@R: c(person("Wilson", "Freitas",
 License: MIT + file LICENSE
 LazyData: true
 Depends:
-    R (>= 4.1),
+    R (>= 4.1.0),
     bizdays
 Imports:
     stringr,
@@ -30,14 +30,19 @@ Imports:
     xml2,
     rlang,
     methods,
-    yaml
+    yaml,
+    scales,
+    magrittr,
+    covr
 Suggests:
     testthat,
     knitr,
     DT,
     miniUI,
     shiny,
-    xtable
+    xtable,
+    rmarkdown,
+    ggplot2
 Collate:
     'rb3-package.R'
     'util.R'

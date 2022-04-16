@@ -8,8 +8,12 @@ test_df <- function(df_in) {
 }
 
 test_that("Test of yc function", {
-  skip_on_cran()
-
+  
+  if (!covr::in_covr()) {
+    skip_on_cran()
+    skip_if_offline()
+  }
+  
   first_date <- Sys.Date() - 50
   last_date <- Sys.Date()
 

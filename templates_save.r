@@ -88,7 +88,7 @@ save_yaml <- function(x) {
   close(fcon)
 }
 
-# to_list(BDPrevia) |> as.yaml() |> cat()
+# to_list(BDPrevia) %>% as.yaml() %>% cat()
 
 save_yaml(BD_Arbit)
 save_yaml(BDIN)
