@@ -2,8 +2,8 @@
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Codecov test coverage](https://codecov.io/gh/msperlin/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/rb3?branch=main)
-[![R build (rcmdcheck)](https://github.com/msperlin/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/msperlin/rb3/actions)
+[![Codecov test coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wilsonfreitas/rb3?branch=main)
+[![R build (rcmdcheck)](https://github.com/wilsonfreitas/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/wilsonfreitas/rb3/actions)
 
 <!-- badges: end -->
 
