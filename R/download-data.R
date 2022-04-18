@@ -1,4 +1,26 @@
-
+#' Download datasets
+#'
+#' Download datasets for a given template.
+#'
+#' @param template the template name
+#' @param dest a string which specifies a valid directory or file name to save
+#'        the file. If it is not provided a temporary filename is generated.
+#' @param overwrite a logical indicating if the file must be overwritten once
+#'        `dest` already exists.
+#' @param ... aditional arguments
+#'
+#' @return a string with the file path of downloaded file or `NULL` if download
+#'        fails.
+#'
+#' This function downloads data sets for those templates that specifies a
+#' `downloader` attribute.
+#'
+#' @examples
+#' \dontrun{
+#' fname <- download_data("CDIIDI")
+#' }
+#'
+#' @export
 download_data <- function(template, dest = NULL, overwrite = TRUE, ...) {
   template <- .retrieve_template(NULL, template)
   downloader <- downloaders_factory(template$downloader)

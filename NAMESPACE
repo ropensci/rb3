@@ -2,7 +2,9 @@
 
 export(cdi_get)
 export(convert_to)
+export(cotahist_get)
 export(display_template)
+export(download_data)
 export(futures_get)
 export(idi_get)
 export(read_marketdata)

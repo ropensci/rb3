@@ -18,6 +18,8 @@ Scrape page \url{https://www.b3.com.br/} to get last available CDI rate and
 IDI index values.
 }
 \examples{
+\dontrun{
 df <- cdi_get()
 df <- idi_get()
+}
 }

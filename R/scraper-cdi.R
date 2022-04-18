@@ -19,8 +19,10 @@ query_cdi <- function() {
 #'
 #' @name cdi-idi
 #' @examples
+#' \dontrun{
 #' df <- cdi_get()
 #' df <- idi_get()
+#' }
 #' @export
 cdi_get <- function() {
   dx <- query_cdi()
