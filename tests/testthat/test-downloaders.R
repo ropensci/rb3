@@ -36,4 +36,6 @@ test_that("it should download a file with a datetime downloader", {
   expect_false(file.exists(dest))
   expect_true(download_file(dl, dest, refdate = Sys.Date()))
   expect_true(file.exists(dest))
+  info <- file.info(dest)
+  expect_true(info$size > 1000000)
 })
