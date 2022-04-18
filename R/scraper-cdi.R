@@ -1,8 +1,7 @@
 
 query_cdi <- function() {
-  url <- "https://www2.cetip.com.br/ConsultarTaxaDi/ConsultarTaxaDICetip.aspx"
-  res <- httr::GET(url)
-  jsonlite::fromJSON(httr::content(res, as = "text"))
+  file <- download_data("CDIIDI")
+  jsonlite::fromJSON(file)
 }
 
 #' Get CDI rate and IDI index value from B3 front page

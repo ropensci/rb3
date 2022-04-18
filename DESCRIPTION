@@ -50,6 +50,7 @@ Collate:
     'fields.R'
     'handlers.R'
     'marketdata.R'
+    'download-data.R'
     'file.R'
     'convert_to.R'
     'scraper-cdi.R'
