@@ -17,6 +17,11 @@ Os arquivos estão em diversos formatos de forma que esta biblioteca tenta torna
 
 Cada arquivo possui um template associado que contém as regras para a leitura do arquivo, assim como as descrição dos dados providas pela BM&FBovespa.
 
+# Documentação
+
+A documentação do pacote está disponível como [github page](http://wilsonfreitas.github.io/rb3/).
+
+
 ## Como instalar
 
 ```{r}
