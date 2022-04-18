@@ -1,4 +1,6 @@
 
+skip_on_cran()
+
 test_that("it should create a simple downloader using a template", {
   tpl <- .retrieve_template(NULL, "CDIIDI")
   dl <- downloaders_factory(tpl$downloader)
