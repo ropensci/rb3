@@ -34,6 +34,7 @@ test_that("it should download a file with a datetime downloader", {
   dest <- tempfile()
   expect_false(download_file(dl, dest))
   expect_false(file.exists(dest))
+  skip_on_os("linux")
   expect_true(download_file(dl, dest, refdate = Sys.Date()))
   expect_true(file.exists(dest))
   info <- file.info(dest)
