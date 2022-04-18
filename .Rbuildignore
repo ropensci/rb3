@@ -9,3 +9,7 @@ inst\extdata\big-files
 templates_load.r
 templates_save.r
 .github
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

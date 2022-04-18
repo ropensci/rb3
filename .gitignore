@@ -7,3 +7,4 @@ aux.R
 legacy/
 .lintr
 inst/doc
+docs
