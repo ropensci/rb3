@@ -20,6 +20,6 @@
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom dplyr tibble
 #' @importFrom methods is new slot
-#' @importFrom utils write.table
+#' @importFrom utils write.table unzip
 #' @importFrom rlang .data
 NULL

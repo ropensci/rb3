@@ -1,8 +1,13 @@
 
 query_cdi <- function() {
-  url <- "https://www2.cetip.com.br/ConsultarTaxaDi/ConsultarTaxaDICetip.aspx"
-  res <- httr::GET(url)
-  jsonlite::fromJSON(httr::content(res, as = "text"))
+  fname <- download_data("CDIIDI")
+
+  if (!is.null(fname)) {
+    read_marketdata(fname, "CDIIDI")
+  } else {
+    cli::cli_alert_danger("Failed CDIIDI download")
+    NULL
+  }
 }
 
 #' Get CDI rate and IDI index value from B3 front page
@@ -14,27 +19,25 @@ query_cdi <- function() {
 #'
 #' @name cdi-idi
 #' @examples
+#' \dontrun{
 #' df <- cdi_get()
 #' df <- idi_get()
+#' }
 #' @export
 cdi_get <- function() {
-  .json <- query_cdi()
-  refdate <- as.Date(.json$dataTaxa, "%d/%m/%Y")
-
+  dx <- query_cdi()
   tibble(
-    refdate = refdate,
-    CDI = as_dbl(.json$taxa, ",", ".", TRUE)
+    refdate = dx$dataTaxa,
+    CDI = dx$taxa
   )
 }
 
 #' @rdname cdi-idi
 #' @export
 idi_get <- function() {
-  .json <- query_cdi()
-  refdate <- as.Date(.json$dataIndice, "%d/%m/%Y")
-
+  dx <- query_cdi()
   tibble(
-    refdate = refdate,
-    IDI = as_dbl(.json$indice, ",", ".")
+    refdate = dx$dataIndice,
+    IDI = dx$indice
   )
 }
