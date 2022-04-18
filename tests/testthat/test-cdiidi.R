@@ -13,3 +13,15 @@ test_that("it should read cdi/idi file", {
   expect_s3_class(df$dataTaxa, "Date")
   expect_s3_class(df$dataIndice, "Date")
 })
+
+test_that("it should get cdi rates", {
+  df <- cdi_get()
+  expect_s3_class(df$refdate, "Date")
+  expect_true(is(df$CDI, "numeric"))
+})
+
+test_that("it should get idi index", {
+  df <- idi_get()
+  expect_s3_class(df$refdate, "Date")
+  expect_true(is(df$IDI, "numeric"))
+})
