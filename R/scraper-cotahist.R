@@ -9,5 +9,6 @@ cotahist_get <- function(year) {
     read_marketdata(l, "COTAHIST")
   } else {
     cli::cli_alert_danger("Failed COTAHIST download for year {year}")
+    NULL
   }
 }

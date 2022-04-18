@@ -75,7 +75,7 @@ just_download_data <- function(url, encoding, dest) {
     writeBin(bin, dest)
   } else {
     text <- httr::content(res, as = "text", encoding = encoding)
-    writeChar(text, dest)
+    writeLines(text, dest)
   }
   TRUE
 }
