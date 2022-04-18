@@ -1,4 +1,4 @@
-skip("skip")
+
 test_df <- function(df_in) {
   expect_true(nrow(df_in) > 0)
   expect_true(ncol(df_in) > 0)
@@ -8,12 +8,11 @@ test_df <- function(df_in) {
 }
 
 test_that("Test of yc function", {
-  
   if (!covr::in_covr()) {
     skip_on_cran()
     skip_if_offline()
   }
-  
+
   first_date <- Sys.Date() - 50
   last_date <- Sys.Date()
 
