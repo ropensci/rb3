@@ -69,7 +69,8 @@ just_download_data <- function(url, encoding, dest) {
   if (httr::status_code(res) != 200) {
     return(FALSE)
   }
-  if (httr::headers(res)[["content-type"]] == "application/octet-stream") {
+  if (httr::headers(res)[["content-type"]] == "application/octet-stream" ||
+    httr::headers(res)[["content-type"]] == "application/x-zip-compressed") {
     bin <- httr::content(res, as = "raw")
     writeBin(bin, dest)
   } else {
