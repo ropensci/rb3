@@ -3,7 +3,6 @@
 .Rhistory
 .RData
 *.DS_Store
-*.json
 aux.R
 legacy/
 .lintr
