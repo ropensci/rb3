@@ -3,7 +3,7 @@ pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   Fetching-historical-yield-curve: Fetching-historical-yield-curve.html
-last_built: 2022-04-19T17:55Z
+last_built: 2022-04-19T22:43Z
 urls:
   reference: http://wilsonfreitas.github.io/rb3/reference
   article: http://wilsonfreitas.github.io/rb3/articles

@@ -66,7 +66,13 @@ rates, currency rates, bonds and many other subjects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_marketdata</span><span class="op">(</span><span class="va">filename</span>, template <span class="op">=</span> <span class="cn">NULL</span>, parse_fields <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_marketdata</span><span class="op">(</span>
+  <span class="va">filename</span>,
+  template <span class="op">=</span> <span class="cn">NULL</span>,
+  parse_fields <span class="op">=</span> <span class="cn">TRUE</span>,
+  cache_folder <span class="op">=</span> <span class="fu"><a href="cachedir.html">cachedir</a></span><span class="op">(</span><span class="op">)</span>,
+  do_cache <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,7 +82,11 @@ rates, currency rates, bonds and many other subjects.</p>
 <dt>template</dt>
 <dd><p>a string with the template name.</p></dd>
 <dt>parse_fields</dt>
-<dd><p>a logical indicating if the fields must be parsed.</p>
+<dd><p>a logical indicating if the fields must be parsed.</p></dd>
+<dt>cache_folder</dt>
+<dd><p>Location of cache folder (default = cachedir())</p></dd>
+<dt>do_cache</dt>
+<dd><p>Whether to use cache or not (default = TRUE)</p>
 <p>Each <code>template</code> has a default value for the <code>filename</code>, if the given
 file name equals one template filename attribute, the matched template
 is used to parse the file.

@@ -54,7 +54,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">download_data</span><span class="op">(</span><span class="va">template</span>, dest <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">download_data</span><span class="op">(</span>
+  <span class="va">template</span>,
+  dest <span class="op">=</span> <span class="cn">NULL</span>,
+  cache_folder <span class="op">=</span> <span class="fu"><a href="cachedir.html">cachedir</a></span><span class="op">(</span><span class="op">)</span>,
+  do_cache <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,9 +70,11 @@
 <dt>dest</dt>
 <dd><p>a string which specifies a valid directory or file name to save
 the file. If it is not provided a temporary filename is generated.</p></dd>
-<dt>overwrite</dt>
-<dd><p>a logical indicating if the file must be overwritten once
-<code>dest</code> already exists.</p></dd>
+<dt>cache_folder</dt>
+<dd><p>Location of cache folder (default = cachedir())</p></dd>
+<dt>do_cache</dt>
+<dd><p>a logical indicating if the existing file (previously
+downloaded) should be used or replaced.</p></dd>
 <dt>...</dt>
 <dd><p>aditional arguments</p></dd>
 </dl></div>
@@ -75,7 +83,9 @@ the file. If it is not provided a temporary filename is generated.</p></dd>
     <p>a string with the file path of downloaded file or <code>NULL</code> if download
 fails.
 This function downloads data sets for those templates that specifies a
-<code>downloader</code> attribute.</p>
+<code>downloader</code> attribute.
+If <code>dest</code> is not provided, <code>cache_folder</code> is used and a file with template
+id is saved inside it.</p>
     </div>
 
     <div class="section level2">
