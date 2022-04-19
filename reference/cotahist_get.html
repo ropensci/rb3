@@ -57,16 +57,25 @@ objects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cotahist_get</span><span class="op">(</span><span class="va">year</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cotahist_get</span><span class="op">(</span><span class="va">refdate</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"yearly"</span>, <span class="st">"monthly"</span>, <span class="st">"daily"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>year</dt>
-<dd><p>the year of the COTAHIST file.</p>
+    <dl><dt>refdate</dt>
+<dd><p>the reference date used to download the file. This reference
+date will be formated as year/month/day according to the given type.
+Accepts ISO formated date strings.</p></dd>
+<dt>type</dt>
+<dd><p>a string with <code>yearly</code> for all data of the given year, <code>monthly</code>
+for all data of the given month and <code>daily</code> for the given day.</p>
 <p>All valueable information is in the <code>HistoricalPrices</code> element of the
 returned list.
-<code>Header</code> and <code>Trailer</code> have informations regarding file generation.</p></dd>
+<code>Header</code> and <code>Trailer</code> have informations regarding file generation.
+The <code>HistoricalPrices</code> element has a data.frame with data of many assets
+traded in the stock exchange: stocks, bdrs, funds, ETFs, equity options,
+forward contracts on equities and a few warrants due to some corporate
+events.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -76,7 +85,12 @@ returned list.
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">cotahist_get</span><span class="op">(</span><span class="fl">2001</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># get all data to the year of 2001</span></span>
+<span class="r-in"><span class="va">df_2001</span> <span class="op">&lt;-</span> <span class="fu">cotahist_get</span><span class="op">(</span><span class="st">"2001-01-01"</span>, <span class="st">"yearly"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># get data of January of 2001</span></span>
+<span class="r-in"><span class="va">df_200101</span> <span class="op">&lt;-</span> <span class="fu">cotahist_get</span><span class="op">(</span><span class="st">"2001-01-01"</span>, <span class="st">"monthly"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co"># get data of 2001-01-02</span></span>
+<span class="r-in"><span class="va">df_daily</span> <span class="op">&lt;-</span> <span class="fu">cotahist_get</span><span class="op">(</span><span class="st">"2001-01-02"</span>, <span class="st">"daily"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
 </code></pre></div>
