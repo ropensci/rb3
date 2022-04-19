@@ -21,7 +21,6 @@ Imports:
     cli,
     readr,
     dplyr,
-    tibble,
     rvest,
     httr,
     jsonlite,
@@ -30,10 +29,7 @@ Imports:
     xml2,
     rlang,
     methods,
-    yaml,
-    scales,
-    magrittr,
-    covr
+    yaml
 Suggests:
     testthat,
     knitr,
@@ -42,7 +38,11 @@ Suggests:
     shiny,
     xtable,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    covr,
+    scales,
+    magrittr,
+    tibble
 Collate:
     'rb3-package.R'
     'util.R'
