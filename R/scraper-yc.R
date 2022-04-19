@@ -8,15 +8,14 @@
 #' @param first_date First date ("YYYY-MM-DD")
 #' @param last_date Last date ("YYYY-MM-DD")
 #' @param by Number of days in between fetched dates (default = 1)
-#' @param cache_folder Location of cache folder (default = tempdir())
+#' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' @return A dataframe/tibble with yield curve data
-#' 
+#'
 #' @export
-#' 
+#'
 #' @examples
-#' 
 #' \dontrun{
 #' df_yc <- yc_get()
 #' head(df_yc)

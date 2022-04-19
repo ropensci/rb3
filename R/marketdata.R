@@ -10,6 +10,8 @@
 #' @param filename a string containing a path for the file.
 #' @param template a string with the template name.
 #' @param parse_fields a logical indicating if the fields must be parsed.
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' Each `template` has a default value for the `filename`, if the given
 #' file name equals one template filename attribute, the matched template
@@ -35,9 +37,26 @@
 #' df <- read_marketdata(path, template = "PUWEB")
 #' }
 #' @export
-read_marketdata <- function(filename, template = NULL, parse_fields = TRUE) {
+read_marketdata <- function(filename, template = NULL,
+                            parse_fields = TRUE,
+                            cache_folder = cachedir(),
+                            do_cache = TRUE) {
   template <- .retrieve_template(filename, template)
-  template$read_file(filename, parse_fields)
+  basename_ <- stringr::str_replace(basename(filename), "\\.\\w+$", "")
+  parsed_ <- if (parse_fields) "parsed" else "strict"
+  f_cache <- file.path(
+    cache_folder, stringr::str_glue("{template$id}_{parsed_}_{basename_}.rds")
+  )
+
+  if (file.exists(f_cache) && do_cache) {
+    df_ <- readr::read_rds(f_cache)
+    return(df_)
+  }
+  df <- template$read_file(filename, parse_fields)
+  if (do_cache) {
+    readr::write_rds(df, f_cache)
+  }
+  df
 }
 
 .retrieve_template <- function(filename, template) {

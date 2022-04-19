@@ -4,7 +4,13 @@
 \alias{download_data}
 \title{Download datasets}
 \usage{
-download_data(template, dest = NULL, overwrite = TRUE, ...)
+download_data(
+  template,
+  dest = NULL,
+  cache_folder = cachedir(),
+  do_cache = TRUE,
+  ...
+)
 }
 \arguments{
 \item{template}{the template name}
@@ -12,8 +18,10 @@ download_data(template, dest = NULL, overwrite = TRUE, ...)
 \item{dest}{a string which specifies a valid directory or file name to save
 the file. If it is not provided a temporary filename is generated.}
 
-\item{overwrite}{a logical indicating if the file must be overwritten once
-\code{dest} already exists.}
+\item{cache_folder}{Location of cache folder (default = cachedir())}
+
+\item{do_cache}{a logical indicating if the existing file (previously
+downloaded) should be used or replaced.}
 
 \item{...}{aditional arguments}
 }
@@ -23,6 +31,8 @@ fails.
 
 This function downloads data sets for those templates that specifies a
 \code{downloader} attribute.
+If \code{dest} is not provided, \code{cache_folder} is used and a file with template
+id is saved inside it.
 }
 \description{
 Download datasets for a given template.

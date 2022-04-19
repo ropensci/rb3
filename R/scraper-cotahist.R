@@ -8,6 +8,8 @@
 #'        Accepts ISO formated date strings.
 #' @param type a string with `yearly` for all data of the given year, `monthly`
 #'        for all data of the given month and `daily` for the given day.
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' All valueable information is in the `HistoricalPrices` element of the
 #' returned list.
@@ -30,15 +32,25 @@
 #' }
 #'
 #' @export
-cotahist_get <- function(refdate, type = c("yearly", "monthly", "daily")) {
+cotahist_get <- function(refdate,
+                         type = c("yearly", "monthly", "daily"),
+                         cache_folder = cachedir(),
+                         do_cache = TRUE) {
   type <- match.arg(type)
   tpl <- switch(type,
     yearly = "COTAHIST_YEARLY",
     monthly = "COTAHIST_MONTHLY",
     daily = "COTAHIST_DAILY"
   )
+  template <- .retrieve_template(NULL, tpl)
   refdate <- as.Date(refdate)
-  fname <- download_data(tpl, refdate = refdate)
+  dest <- file.path(
+    cache_folder,
+    str_glue("{template$id}_{format(refdate)}.{template$downloader$format}")
+  )
+  fname <- download_data(template$id,
+    dest = dest, do_cache = do_cache, refdate = refdate
+  )
   if (!is.null(fname)) {
     d <- tempdir()
     l <- unzip(fname, exdir = d)
@@ -200,4 +212,3 @@ cotahist_funds_options_get <- function(x) {
 cotahist_units_options_get <- function(x) {
   filter_equity_data(x, c(70, 80), c("UNT", "CDA")) |> format_options()
 }
-

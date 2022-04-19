@@ -5,8 +5,9 @@
 #' @param template the template name
 #' @param dest a string which specifies a valid directory or file name to save
 #'        the file. If it is not provided a temporary filename is generated.
-#' @param overwrite a logical indicating if the file must be overwritten once
-#'        `dest` already exists.
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache a logical indicating if the existing file (previously
+#'        downloaded) should be used or replaced.
 #' @param ... aditional arguments
 #'
 #' @return a string with the file path of downloaded file or `NULL` if download
@@ -14,6 +15,8 @@
 #'
 #' This function downloads data sets for those templates that specifies a
 #' `downloader` attribute.
+#' If `dest` is not provided, `cache_folder` is used and a file with template
+#' id is saved inside it.
 #'
 #' @examples
 #' \dontrun{
@@ -21,18 +24,22 @@
 #' }
 #'
 #' @export
-download_data <- function(template, dest = NULL, overwrite = TRUE, ...) {
+download_data <- function(template,
+                          dest = NULL,
+                          cache_folder = cachedir(),
+                          do_cache = TRUE, ...) {
   template <- .retrieve_template(NULL, template)
   downloader <- downloaders_factory(template$downloader)
   if (is.null(dest)) {
-    dest <- file.path(tempdir(), str_glue("{template$id}.{downloader$format}"))
-  } else if (dir.exists(dest)) {
-    dest <- file.path(dest, str_glue("{template$id}.{downloader$format}"))
+    dest <- file.path(
+      cache_folder,
+      stringr::str_glue("{template$id}.{downloader$format}")
+    )
   }
 
-  if (file.exists(dest) && !overwrite) {
-    message(str_glue("Skipping download - file {dest} exists"))
-    return(NULL)
+  if (file.exists(dest) && do_cache) {
+    message(stringr::str_glue("Skipping download - using cached version"))
+    return(dest)
   }
   if (download_file(downloader, dest, ...)) {
     dest
