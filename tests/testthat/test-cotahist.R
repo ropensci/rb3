@@ -14,7 +14,7 @@ test_that("it should download cotahist file", {
 })
 
 test_that("it should get cotahist data", {
-  ch <- suppressWarnings(cotahist_get(2000))
+  ch <- suppressWarnings(cotahist_get(ISOdate(2000, 1, 1)))
   expect_s3_class(ch, "parts")
   expect_true(length(ch) == 3)
   expect_true(nrow(ch[["HistoricalPrices"]]) > 1000)
