@@ -1,5 +1,11 @@
-skip_on_cran()
-skip_on_os("linux")
+if (!covr::in_covr()) {
+  skip_on_cran()
+  skip_if_offline()
+}
+
+if (Sys.info()['sysname'] == 'Linux') {
+  httr::set_config(config(ssl_verifypeer = FALSE))
+}
 
 test_that("it should download cotahist file", {
   f <- download_data("COTAHIST", refdate = as.Date(ISOdate(2000, 1, 1)))
