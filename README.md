@@ -7,8 +7,8 @@
 
 <!-- badges: end -->
 
-Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [B3](http://www.b3.com.br).
-Os estes arquivos podem ser baixados da página de Dados Históricos da B3 através do [link](http://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/).
+Leitura e tratamento dos arquivos com dados de mercado distribuídos pela [B3](https://www.b3.com.br).
+Os estes arquivos podem ser baixados da página de Dados Históricos da B3 através do [link](https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/).
 
 A BM&FBovespa disponibiliza publicamente diversos arquivos com informações sobre os contratos negociados diariamente.
 A maioria destes arquivos é referente ao **fechamento do mercado** e são utilizados pelos participantes do mercado para realizar a **marcação a mercado** dos contratos.
@@ -19,7 +19,7 @@ Cada arquivo possui um template associado que contém as regras para a leitura d
 
 # Documentação
 
-A documentação do pacote está disponível como [github page](http://wilsonfreitas.github.io/rb3/).
+A documentação do pacote está disponível como [github page](https://wilsonfreitas.github.io/rb3/).
 
 
 ## Como instalar
