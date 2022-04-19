@@ -3,7 +3,9 @@
 #' Download COTAHIST file and parses it returning structured data into R
 #' objects.
 #'
-#' @param year the year of the COTAHIST file.
+#' @param refdate the reference date used to download the file. This reference
+#'        date will be formated as year/month/day according to the given type.
+#'        Accepts ISO formated date strings.
 #'
 #' All valueable information is in the `HistoricalPrices` element of the
 #' returned list.
@@ -17,15 +19,21 @@
 #' }
 #'
 #' @export
-cotahist_get <- function(year) {
-  refdate <- as.Date(ISOdate(year, 1, 1))
-  fname <- download_data("COTAHIST", refdate = refdate)
+cotahist_get <- function(refdate, type = c("yearly", "monthly", "daily")) {
+  type <- match.arg(type)
+  tpl <- switch(type,
+    yearly = "COTAHIST_YEARLY",
+    monthly = "COTAHIST_MONTHLY",
+    daily = "COTAHIST_DAILY"
+  )
+  refdate <- as.Date(refdate)
+  fname <- download_data(tpl, refdate = refdate)
   if (!is.null(fname)) {
     d <- tempdir()
     l <- unzip(fname, exdir = d)
-    read_marketdata(l, "COTAHIST")
+    read_marketdata(l, tpl)
   } else {
-    cli::cli_alert_danger("Failed COTAHIST download for year {year}")
+    cli::cli_alert_danger("Failed {tpl} download for reference date {refdate}")
     NULL
   }
 }

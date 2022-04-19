@@ -1,10 +1,10 @@
-id: COTAHIST
+id: COTAHIST_MONTHLY
 filename: COTAHIST
 filetype: MFWF
-description: Cotações Históricas do Pregão de Ações
+description: Cotações Históricas do Pregão de Ações - Arquivo Mensal
 downloader:
   type: datetime
-  url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A%Y.ZIP
+  url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_M%m%Y.ZIP
   format: zip
 parts:
   Header:

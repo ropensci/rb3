@@ -20,7 +20,7 @@ test_that("it should download a file with a simple downloader", {
 })
 
 test_that("it should create a datetime downloader using a template", {
-  tpl <- .retrieve_template(NULL, "COTAHIST")
+  tpl <- .retrieve_template(NULL, "COTAHIST_YEARLY")
   dl <- downloaders_factory(tpl$downloader)
   expect_s3_class(dl, "datetime")
   expect_s3_class(dl, "downloader")
@@ -29,7 +29,7 @@ test_that("it should create a datetime downloader using a template", {
 })
 
 test_that("it should download a file with a datetime downloader", {
-  tpl <- .retrieve_template(NULL, "COTAHIST")
+  tpl <- .retrieve_template(NULL, "COTAHIST_YEARLY")
   dl <- downloaders_factory(tpl$downloader)
   dest <- tempfile()
   expect_false(download_file(dl, dest))

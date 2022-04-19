@@ -2,7 +2,7 @@ skip_on_cran()
 skip_on_os("linux")
 
 test_that("it should download cotahist file", {
-  f <- download_data("COTAHIST", refdate = as.Date(ISOdate(2000, 1, 1)))
+  f <- download_data("COTAHIST_YEARLY", refdate = as.Date(ISOdate(2000, 1, 1)))
   expect_true(file.exists(f))
   expect_true(file.size(f) > 1e6)
 })
