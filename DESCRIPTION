@@ -1,7 +1,7 @@
 Package: rb3
 Title: Download and Parse Public Data Released by B3 Exchange
 Description: Download and parse public files released by B3 and convert them
-    into useful formats and data structures commom to data analysis
+    into useful formats and data structures common to data analysis
     practitioners.
 Version: 0.0.1
 Authors@R: c(person("Wilson", "Freitas",
@@ -21,7 +21,6 @@ Imports:
     cli,
     readr,
     dplyr,
-    tibble,
     rvest,
     httr,
     jsonlite,
@@ -30,10 +29,7 @@ Imports:
     xml2,
     rlang,
     methods,
-    yaml,
-    scales,
-    magrittr,
-    covr
+    yaml
 Suggests:
     testthat,
     knitr,
@@ -42,7 +38,11 @@ Suggests:
     shiny,
     xtable,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    covr,
+    scales,
+    magrittr,
+    tibble
 Collate:
     'rb3-package.R'
     'util.R'
