@@ -19,7 +19,7 @@ yc_get(
 
 \item{by}{Number of days in between fetched dates (default = 1)}
 
-\item{cache_folder}{Location of cache folder (default = tempdir())}
+\item{cache_folder}{Location of cache folder (default = cachedir())}
 
 \item{do_cache}{Whether to use cache or not (default = TRUE)}
 }
@@ -33,7 +33,6 @@ See \url{https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/M
 for more details.
 }
 \examples{
-
 \dontrun{
 df_yc <- yc_get()
 head(df_yc)

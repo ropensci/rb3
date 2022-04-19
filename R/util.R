@@ -45,3 +45,20 @@ trim_fields <- function(x) {
     check.names = FALSE
   ))
 }
+
+#' Returns rb3 package cache directory
+#'
+#' Returns rb3 package cache directory
+#'
+#' @return a string with the file path of rb3 cache directory
+#'
+#' @example
+#' cachedir()
+#' @export
+cachedir <- function() {
+  cache_folder <- file.path(tempdir(), "rb3-cache")
+  if (!dir.exists(cache_folder)) {
+    dir.create(cache_folder, recursive = TRUE)
+  }
+  cache_folder
+}

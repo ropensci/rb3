@@ -4,7 +4,12 @@
 \alias{cotahist_get}
 \title{Get COTAHIST data from B3}
 \usage{
-cotahist_get(refdate, type = c("yearly", "monthly", "daily"))
+cotahist_get(
+  refdate,
+  type = c("yearly", "monthly", "daily"),
+  cache_folder = cachedir(),
+  do_cache = TRUE
+)
 }
 \arguments{
 \item{refdate}{the reference date used to download the file. This reference
@@ -12,7 +17,11 @@ date will be formated as year/month/day according to the given type.
 Accepts ISO formated date strings.}
 
 \item{type}{a string with \code{yearly} for all data of the given year, \code{monthly}
-for all data of the given month and \code{daily} for the given day.
+for all data of the given month and \code{daily} for the given day.}
+
+\item{cache_folder}{Location of cache folder (default = cachedir())}
+
+\item{do_cache}{Whether to use cache or not (default = TRUE)
 
 All valueable information is in the \code{HistoricalPrices} element of the
 returned list.

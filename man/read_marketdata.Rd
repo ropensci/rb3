@@ -4,14 +4,24 @@
 \alias{read_marketdata}
 \title{Read and parses files delivered by B3}
 \usage{
-read_marketdata(filename, template = NULL, parse_fields = TRUE)
+read_marketdata(
+  filename,
+  template = NULL,
+  parse_fields = TRUE,
+  cache_folder = cachedir(),
+  do_cache = TRUE
+)
 }
 \arguments{
 \item{filename}{a string containing a path for the file.}
 
 \item{template}{a string with the template name.}
 
-\item{parse_fields}{a logical indicating if the fields must be parsed.
+\item{parse_fields}{a logical indicating if the fields must be parsed.}
+
+\item{cache_folder}{Location of cache folder (default = cachedir())}
+
+\item{do_cache}{Whether to use cache or not (default = TRUE)
 
 Each \code{template} has a default value for the \code{filename}, if the given
 file name equals one template filename attribute, the matched template
