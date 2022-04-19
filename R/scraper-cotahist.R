@@ -6,16 +6,27 @@
 #' @param refdate the reference date used to download the file. This reference
 #'        date will be formated as year/month/day according to the given type.
 #'        Accepts ISO formated date strings.
+#' @param type a string with `yearly` for all data of the given year, `monthly`
+#'        for all data of the given month and `daily` for the given day.
 #'
 #' All valueable information is in the `HistoricalPrices` element of the
 #' returned list.
 #' `Header` and `Trailer` have informations regarding file generation.
+#' The `HistoricalPrices` element has a data.frame with data of many assets
+#' traded in the stock exchange: stocks, bdrs, funds, ETFs, equity options,
+#' forward contracts on equities and a few warrants due to some corporate
+#' events.
 #'
 #' @return a list with 3 data.frames: `Header`, `HistoricalPrices`, `Trailer`.
 #'
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get(2001)
+#' # get all data to the year of 2001
+#' df_2001 <- cotahist_get("2001-01-01", "yearly")
+#' # get data of January of 2001
+#' df_200101 <- cotahist_get("2001-01-01", "monthly")
+#' # get data of 2001-01-02
+#' df_daily <- cotahist_get("2001-01-02", "daily")
 #' }
 #'
 #' @export
@@ -37,3 +48,156 @@ cotahist_get <- function(refdate, type = c("yearly", "monthly", "daily")) {
     NULL
   }
 }
+
+format_equity <- function(df) {
+  df[["refdate"]] <- df[["data_referencia"]]
+  df[["symbol"]] <- df[["cod_negociacao"]]
+  df[["open"]] <- df[["preco_abertura"]]
+  df[["high"]] <- df[["preco_max"]]
+  df[["low"]] <- df[["preco_min"]]
+  df[["close"]] <- df[["preco_ult"]]
+  df[["average"]] <- df[["preco_med"]]
+  df[["best_bid"]] <- df[["preco_melhor_oferta_compra"]]
+  df[["best_ask"]] <- df[["preco_melhor_oferta_venda"]]
+  df[["volume"]] <- df[["volume_titulos_negociados"]]
+  df[["traded_contracts"]] <- df[["qtd_titulos_negociados"]]
+  df[["transactions_quantity"]] <- df[["qtd_negocios"]]
+  df[["distribution_id"]] <- df[["num_dist"]]
+  cols <- c(
+    "refdate", "symbol", "open", "high", "low", "close", "average",
+    "best_bid", "best_ask", "volume", "traded_contracts",
+    "transactions_quantity", "distribution_id"
+  )
+  df[, cols]
+}
+
+format_options <- function(df) {
+  df[["refdate"]] <- df[["data_referencia"]]
+  df[["symbol"]] <- df[["cod_negociacao"]]
+  df[["open"]] <- df[["preco_abertura"]]
+  df[["high"]] <- df[["preco_max"]]
+  df[["low"]] <- df[["preco_min"]]
+  df[["close"]] <- df[["preco_ult"]]
+  df[["average"]] <- df[["preco_med"]]
+  df[["type"]] <- factor(df[["tipo_mercado"]], c(70, 80), c("Call", "Put"))
+  df[["strike"]] <- df[["preco_exercicio"]]
+  df[["maturity_date"]] <- df[["data_vencimento"]]
+  df[["volume"]] <- df[["volume_titulos_negociados"]]
+  df[["traded_contracts"]] <- df[["qtd_titulos_negociados"]]
+  df[["transactions_quantity"]] <- df[["qtd_negocios"]]
+  df[["distribution_id"]] <- df[["num_dist"]]
+  cols <- c(
+    "refdate", "symbol", "type", "strike", "maturity_date",
+    "open", "high", "low", "close", "average", "volume", "traded_contracts",
+    "transactions_quantity", "distribution_id"
+  )
+  df[, cols]
+}
+
+filter_equity_data <- function(x, instrument_market, security_category) {
+  x[["HistoricalPrices"]] |>
+    filter(
+      .data$tipo_mercado %in% instrument_market,
+      str_sub(.data$cod_isin, 7, 9) %in% security_category
+    )
+}
+
+#' Extract data from COTAHIST dataset
+#'
+#' Extracts specific data from COTAHIST dataset: stocks, funds, BDRs, ETFs,
+#' UNITs, options on stocks, options on indexes, ...
+#'
+#' @param x COTAHIST dataset returned from `cotahist_get`.
+#'
+#' @return a data.frame with prices, volume, traded quantities informations
+#'
+#' @name cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_equity_get(x)
+#' }
+#' @export
+cotahist_equity_get <- function(x) {
+  filter_equity_data(x, 10, "ACN") |> format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_brds_get(x)
+#' }
+#' @export
+cotahist_bdrs_get <- function(x) {
+  filter_equity_data(x, 10, "BDR") |> format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_units_get(x)
+#' }
+#' @export
+cotahist_units_get <- function(x) {
+  filter_equity_data(x, 10, c("UNT", "CDA")) |> format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_funds_get(x)
+#' }
+#' @export
+cotahist_funds_get <- function(x) {
+  filter_equity_data(x, 10, "CTF") |> format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_indexes_get(x)
+#' }
+#' @export
+cotahist_indexes_get <- function(x) {
+  filter_equity_data(x, 10, "IND") |> format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_equity_options_get(x)
+#' }
+#' @export
+cotahist_equity_options_get <- function(x) {
+  filter_equity_data(x, c(70, 80), "ACN") |> format_options()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_index_options_get(x)
+#' }
+#' @export
+cotahist_index_options_get <- function(x) {
+  filter_equity_data(x, c(70, 80), "IND") |> format_options()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_funds_options_get(x)
+#' }
+#' @export
+cotahist_funds_options_get <- function(x) {
+  filter_equity_data(x, c(70, 80), "CTF") |> format_options()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_units_options_get(x)
+#' }
+#' @export
+cotahist_units_options_get <- function(x) {
+  filter_equity_data(x, c(70, 80), c("UNT", "CDA")) |> format_options()
+}
+

@@ -4,14 +4,23 @@
 \alias{cotahist_get}
 \title{Get COTAHIST data from B3}
 \usage{
-cotahist_get(year)
+cotahist_get(refdate, type = c("yearly", "monthly", "daily"))
 }
 \arguments{
-\item{year}{the year of the COTAHIST file.
+\item{refdate}{the reference date used to download the file. This reference
+date will be formated as year/month/day according to the given type.
+Accepts ISO formated date strings.}
+
+\item{type}{a string with \code{yearly} for all data of the given year, \code{monthly}
+for all data of the given month and \code{daily} for the given day.
 
 All valueable information is in the \code{HistoricalPrices} element of the
 returned list.
-\code{Header} and \code{Trailer} have informations regarding file generation.}
+\code{Header} and \code{Trailer} have informations regarding file generation.
+The \code{HistoricalPrices} element has a data.frame with data of many assets
+traded in the stock exchange: stocks, bdrs, funds, ETFs, equity options,
+forward contracts on equities and a few warrants due to some corporate
+events.}
 }
 \value{
 a list with 3 data.frames: \code{Header}, \code{HistoricalPrices}, \code{Trailer}.
@@ -22,7 +31,12 @@ objects.
 }
 \examples{
 \dontrun{
-df <- cotahist_get(2001)
+# get all data to the year of 2001
+df_2001 <- cotahist_get("2001-01-01", "yearly")
+# get data of January of 2001
+df_200101 <- cotahist_get("2001-01-01", "monthly")
+# get data of 2001-01-02
+df_daily <- cotahist_get("2001-01-02", "daily")
 }
 
 }
