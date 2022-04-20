@@ -15,17 +15,25 @@ new_field <- function(x) {
   field(x$name, x$description, width_, handler_)
 }
 
+#' @importFrom utils getFromNamespace
 new_template <- function(tpl) {
   nx <- names(tpl)
   ix <- match(nx, c("filetype", "fields", "parts")) |> is.na()
   nx <- nx[ix]
 
+  obj <- NULL
   if (tpl$filetype == "FWF") {
     obj <- MarketDataFWF$proto()
     for (n in nx) {
       obj[[n]] <- tpl[[n]]
     }
     obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
+    if (!is.null(tpl$downloader[["function"]])) {
+      obj[["download_data"]] <- getFromNamespace(
+        tpl$downloader[["function"]],
+        "rb3"
+      )
+    }
   } else if (tpl$filetype == "MFWF") {
     obj <- MarketDataMultiPartFWF$proto()
     for (n in nx) {
@@ -41,6 +49,12 @@ new_template <- function(tpl) {
       )
     }
     obj[["parts"]] <- parts
+    if (!is.null(tpl$downloader[["function"]])) {
+      obj[["download_data"]] <- getFromNamespace(
+        tpl$downloader[["function"]],
+        "rb3"
+      )
+    }
   } else if (tpl$filetype == "CSV") {
     obj <- MarketDataCSV$proto()
     for (n in nx) {
@@ -53,6 +67,10 @@ new_template <- function(tpl) {
       obj[[n]] <- tpl[[n]]
     }
     obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
+    obj[["download_data"]] <- getFromNamespace(
+      tpl$downloader[["function"]],
+      "rb3"
+    )
   } else if (tpl$filetype == "MCSV") {
     obj <- MarketDataMultiPartCSV$proto()
     for (n in nx) {
@@ -68,8 +86,25 @@ new_template <- function(tpl) {
       )
     }
     obj[["parts"]] <- parts
+  } else if (tpl$filetype == "CUSTOM") {
+    obj <- MarketDataCustom$proto()
+    for (n in nx) {
+      obj[[n]] <- tpl[[n]]
+    }
+    obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
+    if (!is.null(tpl$downloader[["function"]])) {
+      obj[["download_data"]] <- getFromNamespace(
+        tpl$downloader[["function"]],
+        "rb3"
+      )
+    }
+    if (!is.null(tpl$reader[["function"]])) {
+      obj[["read_file"]] <- getFromNamespace(tpl$reader[["function"]], "rb3")
+    }
   }
-  MarketData$register(obj)
+  if (!is.null(obj)) {
+    MarketData$register(obj)
+  }
   obj
 }
 
@@ -80,7 +115,7 @@ load_templates <- function() {
   )
   files <- list.files(dir, full.names = TRUE)
   for (file in files) {
-    tpl <- yaml.load_file(file)
+    tpl <- yaml::yaml.load_file(file)
     new_template(tpl)
   }
 }

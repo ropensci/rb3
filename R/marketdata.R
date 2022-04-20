@@ -111,11 +111,26 @@ MarketData <- proto::proto(expr = {
   }
 
   parser <- transmuter(
-    match_regex("^\\+\\d+$", as.numeric, priority = 1),
-    match_regex("^\\d+$", as.integer),
-    match_regex("^\\d+\\.\\d+$", as.numeric),
-    match_regex("^\\d+,\\d+$", to_dbl(dec = ",", percent = TRUE)),
-    match_regex("^(\\d+\\.)+\\d+,\\d+$", to_dbl(dec = ",", thousands = ".")),
+    match_regex("^(-|\\+)?\\d+$", to_int(), priority = 1, apply_to = "all"),
+    match_regex("^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
+      to_dbl(dec = ",", thousands = "."),
+      apply_to = "all", priority = 2
+    ),
+    match_regex("^(-|\\+)?(\\d+,)*\\d+(\\.\\d+)?$",
+      to_dbl(dec = ".", thousands = ","),
+      apply_to = "all", priority = 3
+    ),
+    match_regex("^(-|\\+)?\\d+(\\.\\d+)?$",
+      to_dbl(dec = ".", thousands = ","),
+      apply_to = "all", priority = 4
+    ),
+    match_regex("^(-|\\+)?\\d+$", to_int()),
+    match_regex(
+      "^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
+      to_dbl(dec = ",", thousands = ".")
+    ),
+    match_regex("^(-|\\+)?\\d+\\.\\d+$", to_dbl(dec = "."), apply_to = "all"),
+    match_regex("^(-|\\+)?\\d+,\\d+$", to_dbl(dec = ","), apply_to = "all"),
     match_regex("^\\+|-$", function(text, match) {
       idx <- text == "-"
       x <- rep(1, length(text))
@@ -336,6 +351,15 @@ MarketDataJSON <- MarketData$proto(expr = {
     df
   }
 
+  init <- function(.) {
+    .$colnames <- fields_names(.$fields)
+    .$widths <- fields_widths(.$fields)
+    .$handlers <- fields_handlers(.$fields)
+  }
+})
+
+MarketDataCustom <- MarketData$proto(expr = {
+  file_type <- "CUSTOM"
   init <- function(.) {
     .$colnames <- fields_names(.$fields)
     .$widths <- fields_widths(.$fields)

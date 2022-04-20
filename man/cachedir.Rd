@@ -12,3 +12,6 @@ a string with the file path of rb3 cache directory
 \description{
 Returns rb3 package cache directory
 }
+\examples{
+cachedir()
+}
