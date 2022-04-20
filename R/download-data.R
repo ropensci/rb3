@@ -18,6 +18,8 @@
 #' If `dest` is not provided, `cache_folder` is used and a file with template
 #' id is saved inside it.
 #'
+#' @importFrom digest digest
+#'
 #' @examples
 #' \dontrun{
 #' fname <- download_data("CDIIDI")
@@ -29,11 +31,12 @@ download_data <- function(template,
                           cache_folder = cachedir(),
                           do_cache = TRUE, ...) {
   template <- .retrieve_template(NULL, template)
-  downloader <- downloaders_factory(template$downloader)
   if (is.null(dest)) {
+    x <- list(...)
+    code_ <- digest::digest(x)
     dest <- file.path(
       cache_folder,
-      stringr::str_glue("{template$id}.{downloader$format}")
+      stringr::str_glue("{template$id}-{code_}.{template$downloader$format}")
     )
   }
 
@@ -41,56 +44,12 @@ download_data <- function(template,
     message(stringr::str_glue("Skipping download - using cached version"))
     return(dest)
   }
-  if (download_file(downloader, dest, ...)) {
+
+  if (template$download_data(dest, ...)) {
     dest
   } else {
     NULL
   }
-}
-
-simple_downloader <- function(x) {
-  this <- list(
-    url = x$url,
-    format = x$format,
-    encoding = if (is.null(x$encoding)) "utf8" else x$encoding
-  )
-
-  structure(this, class = c("simple", "downloader"))
-}
-
-datetime_downloader <- function(x) {
-  this <- list(
-    url = x$url,
-    format = x$format,
-    encoding = if (is.null(x$encoding)) "utf8" else x$encoding
-  )
-
-  structure(this, class = c("datetime", "downloader"))
-}
-
-downloaders_factory <- function(x) {
-  if (x$type == "simple") {
-    simple_downloader(x)
-  } else if (x$type == "datetime") {
-    datetime_downloader(x)
-  }
-}
-
-download_file <- function(x, dest, ...) UseMethod("download_file")
-
-download_file.simple <- function(x, dest, ...) {
-  just_download_data(x$url, x$encoding, dest)
-}
-
-download_file.datetime <- function(x, dest, ...) {
-  params <- list(...)
-  if (is.null(params$refdate)) {
-    msg <- "refdate argument not provided - download can't be done"
-    cli::cli_alert_danger(msg)
-    return(FALSE)
-  }
-  url <- strftime(params$refdate, x$url)
-  just_download_data(url, x$encoding, dest)
 }
 
 just_download_data <- function(url, encoding, dest) {
@@ -98,6 +57,11 @@ just_download_data <- function(url, encoding, dest) {
   if (httr::status_code(res) != 200) {
     return(FALSE)
   }
+  save_resource(res, encoding, dest)
+  TRUE
+}
+
+save_resource <- function(res, encoding, dest) {
   if (httr::headers(res)[["content-type"]] == "application/octet-stream" ||
     httr::headers(res)[["content-type"]] == "application/x-zip-compressed") {
     bin <- httr::content(res, as = "raw")
@@ -106,5 +70,4 @@ just_download_data <- function(url, encoding, dest) {
     text <- httr::content(res, as = "text", encoding = encoding)
     writeLines(text, dest)
   }
-  TRUE
 }

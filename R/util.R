@@ -52,7 +52,7 @@ trim_fields <- function(x) {
 #'
 #' @return a string with the file path of rb3 cache directory
 #'
-#' @example
+#' @examples
 #' cachedir()
 #' @export
 cachedir <- function() {
@@ -61,4 +61,18 @@ cachedir <- function() {
     dir.create(cache_folder, recursive = TRUE)
   }
   cache_folder
+}
+
+#' Clear cache directory
+#'
+#' Clear cache directory
+#'
+#' @return Has no return
+#'
+#' @examples
+#' clearcache()
+#' @export
+clearcache <- function() {
+  cache_folder <- cachedir()
+  unlink(cache_folder, recursive = TRUE)
 }

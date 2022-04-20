@@ -4,7 +4,7 @@
 \alias{futures_get}
 \title{Get futures prices from trading session settlements page}
 \usage{
-futures_get(refdate = NULL)
+futures_get(refdate)
 }
 \arguments{
 \item{refdate}{reference date used to obtain futures prices.
@@ -20,5 +20,7 @@ Scrape page \url{https://www.b3.com.br/en_us/market-data-and-indices/data-servic
 to get futures prices.
 }
 \examples{
-df <- futures_get()
+\dontrun{
+df <- futures_get("2022-04-18")
+}
 }

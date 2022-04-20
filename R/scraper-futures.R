@@ -38,38 +38,27 @@ maturity2date <- function(x, expr = "first day") {
 #' @return `data.frame` with futures prices.
 #'
 #' @examples
-#' df <- futures_get()
+#' \dontrun{
+#' df <- futures_get("2022-04-18")
+#' }
 #' @export
-futures_get <- function(refdate = NULL) {
-  url <- "https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp"
-
-  if (is.null(refdate)) {
-    res <- httr::GET(url)
+futures_get <- function(refdate) {
+  tpl <- "AjustesDiarios"
+  fname <- download_data(tpl, refdate = as.Date(refdate))
+  if (!is.null(fname)) {
+    df <- read_marketdata(fname, tpl)
+    dplyr::tibble(
+      refdate = as.Date(refdate),
+      commodity = flatten_names(df$mercadoria),
+      maturity_code = df$vencimento,
+      symbol = paste0(.data$commodity, .data$maturity_code),
+      price_previous = df$pu_anterior,
+      price = df$pu_atual,
+      change = df$variacao,
+      settlement_value = df$ajuste
+    )
   } else {
-    strdate <- format(as.Date(refdate), "%d/%m/%Y")
-    res <- httr::POST(url, body = list(dData1 = strdate), encode = "form")
-  }
-
-  html <- httr::content(res, as = "text", encoding = "latin1")
-  mtx <- stringr::str_match(html, "Atualizado em: (\\d{2}/\\d{2}/\\d{4})")
-  refdate <- as.Date(mtx[1, 2], "%d/%m/%Y")
-  doc <- xml2::read_html(html, encoding = "latin1")
-  tbl <- xml2::xml_find_all(doc, "//table[contains(@id, 'tblDadosAjustes')]")
-
-  if (length(tbl) == 0) {
+    cli::cli_alert_danger("Failed CDIIDI download")
     return(NULL)
   }
-
-  txt <- xml2::xml_text(xml2::xml_find_all(tbl[[1]], "//td"))
-  txt <- stringr::str_trim(txt)
-
-  dplyr::tibble(
-    refdate = as.Date(refdate),
-    commodity = flatten_names(txt[c(T, F, F, F, F, F)]),
-    maturity_code = txt[c(F, T, F, F, F, F)],
-    symbol = paste0(.data$commodity, .data$maturity_code),
-    price_previous = as_dbl(txt[c(F, F, T, F, F, F)], ",", "."),
-    price = as_dbl(txt[c(F, F, F, T, F, F)], ",", "."),
-    change = as_dbl(txt[c(F, F, F, F, T, F)], ",", ".")
-  )
 }

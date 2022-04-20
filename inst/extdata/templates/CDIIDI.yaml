@@ -3,7 +3,7 @@ filename: ~
 filetype: JSON
 description: Taxa DI e Índice IDI divulgados na frontpage da B3
 downloader:
-  type: simple
+  function: simple_download
   url: https://www2.cetip.com.br/ConsultarTaxaDi/ConsultarTaxaDICetip.aspx
   format: json
 fields:
