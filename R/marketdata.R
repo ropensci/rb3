@@ -190,10 +190,11 @@ MarketData <- proto::proto(expr = {
   }
 
   .parser <- function(.) {
-    if (is(try(.$locale, TRUE), "try-error")) {
+    locale <- try(.$locale, TRUE)
+    if (is(locale, "try-error") || !is(locale, "character")) {
       parsers[["generic"]]
     } else {
-      parsers[[.$locale]]
+      parsers[[locale]]
     }
   }
 
@@ -201,7 +202,7 @@ MarketData <- proto::proto(expr = {
     if (is.null(.part)) {
       .$separator
     } else {
-      sep <- try(.part$separator)
+      sep <- try(.part$separator, TRUE)
       if (is(sep, "try-error") || is.null(sep)) {
         .$separator
       } else {
