@@ -151,7 +151,7 @@ MarketData <- proto::proto(expr = {
       tpl_ <- .$..registry.id$get(cls)
       data.frame(
         "Template ID" = tpl_$id,
-        "File Type" = tpl_$file_type,
+        "File Type" = tpl_$filetype,
         "Description" = tpl_$description,
         stringsAsFactors = FALSE,
         check.names = FALSE
@@ -165,7 +165,7 @@ MarketData <- proto::proto(expr = {
   print <- function(.) {
     cat("Template ID:", .$id, "\n")
     cat("Expected filename:", .$filename, "\n")
-    cat("File type:", .$file_type, "\n")
+    cat("File type:", .$filetype, "\n")
     if (is(.$fields, "fields")) {
       cat("\n")
       print.fields(.$fields)

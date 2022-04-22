@@ -25,9 +25,9 @@ as_list_handler <- function(x, ...) {
   } else if (handler$type == "factor") {
     handler[["levels"]] <- if (!is.null(attr(x, "levels"))) {
       lvl <- attr(x, "levels")
-      if (is.numeric(lvl))
+      if (is.numeric(lvl)) {
         lvl
-      else {
+      } else {
         enc2utf8(lvl)
       }
     } else {
@@ -59,7 +59,7 @@ to_list <- function(x) {
   l <- list(
     id = enc2utf8(x$id),
     filename = enc2utf8(x$filename),
-    filetype = x$file_type,
+    filetype = x$filetype,
     description = enc2utf8(x$description)
   )
 

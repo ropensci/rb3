@@ -32,7 +32,7 @@ display_template <- function() {
       elm <- list(
         shiny::tags$p("Template ID: ", tpl_$id),
         shiny::tags$p("Filename: ", tpl_$filename),
-        shiny::tags$p("File type: ", tpl_$file_type)
+        shiny::tags$p("File type: ", tpl_$filetype)
       )
 
       if (is(tpl_$fields, "fields")) {
