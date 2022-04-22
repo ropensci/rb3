@@ -37,23 +37,24 @@ download_data <- function(template,
 
   if (file.exists(dest) && do_cache) {
     message(stringr::str_glue("Skipping download - using cached version"))
-    fname <- unzip_recursive(dest, cache_folder)
+    fname <- unzip_recursive(dest)
     return(fname)
   }
 
   if (template$download_data(dest, ...)) {
-    fname <- unzip_recursive(dest, cache_folder)
+    fname <- unzip_recursive(dest)
     return(fname)
   } else {
     return(NULL)
   }
 }
 
-unzip_recursive <- function(fname, cache_folder) {
+unzip_recursive <- function(fname) {
   if (length(fname) == 1 &&
-    stringr::str_ends(stringr::str_to_lower(fname), "zip")) {
-    l <- utils::unzip(fname, exdir = cache_folder)
-    unzip_recursive(l, cache_folder)
+    stringr::str_ends(stringr::str_to_lower(fname), ".zip")) {
+    exdir <- stringr::str_replace(fname, "\\.zip$", "")
+    l <- utils::unzip(fname, exdir = exdir)
+    unzip_recursive(l)
   } else {
     fname
   }
