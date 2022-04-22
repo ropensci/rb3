@@ -1,0 +1,78 @@
+id: FPR
+filename: FatoresPrimitivosRisco.txt
+filetype: MCSV
+description: Fatores primarios de risco
+separator: ;
+locale: pt
+downloader:
+  function: datetime_download
+  url: https://www.b3.com.br/pesquisapregao/download?filelist=FP%y%m%d.zip
+  format: zip
+parts:
+  Header:
+    index: 1
+    fields:
+    - name: tipo_registro
+      description: Tipo de registro
+      handler:
+        type: character
+    - name: data_geracao_arquivo
+      description: Data de geração do arquivo
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+  Data:
+    index: -1
+    fields:
+    - name: tipo_registro
+      description: Tipo de registro
+      handler:
+        type: character
+    - name: id_fpr
+      description: ID do FPR
+      handler:
+        type: character
+    - name: nome_fpr
+      description: Nome do FPR
+      handler:
+        type: character
+    - name: formato_variacao
+      description: Formato de variação
+      handler:
+        type: factor
+        levels:
+        - 1
+        - 2
+        labels:
+        - Percentual
+        - Basis Points
+    - name: id_grupo_fpr
+      description: ID do Grupo de FPR
+      handler:
+        type: character
+    - name: id_camara_indicador
+      description: Identificação da Câmara do Indicador
+      handler:
+        type: character
+    - name: id_instrumento_indicador
+      description: Identificação do Instrumento do Indicador
+      handler:
+        type: numeric
+        dec: 0
+        sign: ''
+    - name: origem_instrumento
+      description: Origem do Instrumento do Indicado
+      handler:
+        type: character
+    - name: base
+      description: Base
+      handler:
+        type: character
+    - name: base_interpolacao
+      description: Base de Interpolação
+      handler:
+        type: character
+    - name: criterio_capitalizacao
+      description: Critério de Capitalização
+      handler:
+        type: character
