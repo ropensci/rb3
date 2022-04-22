@@ -4,19 +4,10 @@
 \alias{download_data}
 \title{Download datasets}
 \usage{
-download_data(
-  template,
-  dest = NULL,
-  cache_folder = cachedir(),
-  do_cache = TRUE,
-  ...
-)
+download_data(template, cache_folder = cachedir(), do_cache = TRUE, ...)
 }
 \arguments{
 \item{template}{the template name}
-
-\item{dest}{a string which specifies a valid directory or file name to save
-the file. If it is not provided a temporary filename is generated.}
 
 \item{cache_folder}{Location of cache folder (default = cachedir())}
 
