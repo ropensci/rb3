@@ -15,96 +15,57 @@ new_field <- function(x) {
   field(x$name, x$description, width_, handler_)
 }
 
+new_part <- function(x) {
+  part <- list()
+  for (np in names(x)) {
+    if (np == "fields") {
+      part[["fields"]] <- do.call(fields, lapply(x[["fields"]], new_field))
+    } else {
+      part[[np]] <- x[[np]]
+    }
+  }
+  part
+}
+
+.multipart_init <- function(.) {
+  for (idx in seq_along(.$parts)) {
+    .$parts[[idx]]$colnames <- fields_names(.$parts[[idx]]$fields)
+    .$parts[[idx]]$handlers <- fields_handlers(.$parts[[idx]]$fields)
+    .$parts[[idx]]$widths <- fields_widths(.$parts[[idx]]$fields)
+  }
+}
+
 #' @importFrom utils getFromNamespace
 new_template <- function(tpl) {
-  nx <- names(tpl)
-  ix <- match(nx, c("filetype", "fields", "parts")) |> is.na()
-  nx <- nx[ix]
+  obj <- MarketData$proto()
+  for (n in names(tpl)) {
+    if (n == "fields") {
+      obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
+    } else if (n == "parts") {
+      obj[["parts"]] <- lapply(tpl$parts, new_part)
+    } else if (n == "reader") {
+      obj[["reader"]] <- tpl$reader
+      func_name <- tpl$reader[["function"]]
+      obj[["read_file"]] <- getFromNamespace(func_name, "rb3")
+    } else if (n == "downloader") {
+      obj[["downloader"]] <- tpl$downloader
+      func_name <- tpl$downloader[["function"]]
+      obj[["download_data"]] <- getFromNamespace(func_name, "rb3")
+    } else {
+      obj[[n]] <- tpl[[n]]
+    }
+  }
 
-  obj <- NULL
-  if (tpl$filetype == "FWF") {
-    obj <- MarketDataFWF$proto()
-    for (n in nx) {
-      obj[[n]] <- tpl[[n]]
-    }
-    obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
-    if (!is.null(tpl$downloader[["function"]])) {
-      obj[["download_data"]] <- getFromNamespace(
-        tpl$downloader[["function"]],
-        "rb3"
-      )
-    }
-  } else if (tpl$filetype == "MFWF") {
-    obj <- MarketDataMultiPartFWF$proto()
-    for (n in nx) {
-      obj[[n]] <- tpl[[n]]
-    }
-    parts_names <- names(tpl$parts)
-    parts <- list()
-    for (part_name in parts_names) {
-      parts[[part_name]] <- list(pattern = tpl$parts[[part_name]][["pattern"]])
-      parts[[part_name]][["fields"]] <- do.call(
-        fields,
-        lapply(tpl$parts[[part_name]][["fields"]], new_field)
-      )
-    }
-    obj[["parts"]] <- parts
-    if (!is.null(tpl$downloader[["function"]])) {
-      obj[["download_data"]] <- getFromNamespace(
-        tpl$downloader[["function"]],
-        "rb3"
-      )
-    }
-  } else if (tpl$filetype == "CSV") {
-    obj <- MarketDataCSV$proto()
-    for (n in nx) {
-      obj[[n]] <- tpl[[n]]
-    }
-    obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
-  } else if (tpl$filetype == "JSON") {
-    obj <- MarketDataJSON$proto()
-    for (n in nx) {
-      obj[[n]] <- tpl[[n]]
-    }
-    obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
-    obj[["download_data"]] <- getFromNamespace(
-      tpl$downloader[["function"]],
-      "rb3"
-    )
-  } else if (tpl$filetype == "MCSV") {
-    obj <- MarketDataMultiPartCSV$proto()
-    for (n in nx) {
-      obj[[n]] <- tpl[[n]]
-    }
-    parts_names <- names(tpl$parts)
-    parts <- list()
-    for (part_name in parts_names) {
-      parts[[part_name]] <- list(lines = tpl$parts[[part_name]][["lines"]])
-      parts[[part_name]][["fields"]] <- do.call(
-        fields,
-        lapply(tpl$parts[[part_name]][["fields"]], new_field)
-      )
-    }
-    obj[["parts"]] <- parts
-  } else if (tpl$filetype == "CUSTOM") {
-    obj <- MarketDataCustom$proto()
-    for (n in nx) {
-      obj[[n]] <- tpl[[n]]
-    }
-    obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
-    if (!is.null(tpl$downloader[["function"]])) {
-      obj[["download_data"]] <- getFromNamespace(
-        tpl$downloader[["function"]],
-        "rb3"
-      )
-    }
-    if (!is.null(tpl$reader[["function"]])) {
-      obj[["read_file"]] <- getFromNamespace(tpl$reader[["function"]], "rb3")
-    }
+  if (is(try(obj$reader, TRUE), "try-error")) {
+    reader_name <- paste0(stringr::str_to_lower(obj$filetype), "_read_file")
+    obj[["read_file"]] <- getFromNamespace(reader_name, "rb3")
   }
-  if (!is.null(obj)) {
-    MarketData$register(obj)
+
+  if (obj$filetype %in% c("MCSV", "MFWF")) {
+    obj[["init"]] <- .multipart_init
   }
+
+  MarketData$register(obj)
   obj
 }
 

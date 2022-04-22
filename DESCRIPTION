@@ -60,7 +60,8 @@ Collate:
     'scraper-cotahist.R'
     'addin-show-templates.R'
     'addin-display-template.R'
-    'template-functions.R'
+    'readers.R'
+    'downloaders.R'
     'zzz.R'
 BugReports: https://github.com/wilsonfreitas/rb3/issues
 URL: https://github.com/wilsonfreitas/rb3,

@@ -34,16 +34,3 @@ settlement_prices_download <- function(., dest, ...) {
   save_resource(res, enc, dest)
   TRUE
 }
-
-#' @importFrom rvest html_table html_element read_html
-settlement_prices_read <- function(., filename, parse_fields = TRUE) {
-  doc <- rvest::read_html(filename)
-  xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  df <- rvest::html_element(doc, xpath = xpath) |> rvest::html_table()
-  colnames(df) <- .$colnames
-  if (parse_fields) {
-    df <- trim_fields(df)
-    df <- parse_text(.$parser, df)
-  }
-  df
-}
