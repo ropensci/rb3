@@ -2,6 +2,7 @@ id: CDIIDI
 filename: ~
 filetype: JSON
 description: Taxa DI e Índice IDI divulgados na frontpage da B3
+locale: pt
 downloader:
   function: simple_download
   url: https://www2.cetip.com.br/ConsultarTaxaDi/ConsultarTaxaDICetip.aspx

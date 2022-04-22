@@ -63,7 +63,7 @@ parse_columns <- function(df, colnames, handlers, parser) {
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
   df <- read_fwf(filename, .$widths, colnames = .$colnames)
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$parser)
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
   } else {
     df
   }
@@ -76,7 +76,7 @@ csv_read_file <- function(., filename, parse_fields = TRUE) {
     as.is = TRUE, stringsAsFactors = FALSE
   )
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$parser)
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
   } else {
     df
   }
@@ -86,7 +86,7 @@ json_read_file <- function(., filename, parse_fields = TRUE) {
   jason <- jsonlite::fromJSON(filename)
   df <- as.data.frame(jason)
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$parser)
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
   } else {
     df
   }
@@ -104,7 +104,7 @@ mcsv_read_file <- function(., filename, parse_fields = TRUE) {
       colClasses = "character"
     )
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$parser)
+      parse_columns(df, part$colnames, part$handlers, .$.parser())
     } else {
       df
     }
@@ -124,7 +124,7 @@ mfwf_read_file <- function(., filename, parse_fields = TRUE) {
       colnames = part$colnames
     )
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$parser)
+      parse_columns(df, part$colnames, part$handlers, .$.parser())
     } else {
       df
     }
@@ -140,7 +140,7 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
   df <- rvest::html_element(doc, xpath = xpath) |> rvest::html_table()
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$parser)
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
   } else {
     df
   }

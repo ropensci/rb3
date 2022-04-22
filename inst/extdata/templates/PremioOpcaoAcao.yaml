@@ -3,6 +3,7 @@ filename: PExxxxxx.txt
 filetype: MCSV
 description: Prêmio de Referência para Opções sobre Ações
 separator: ;
+locale: pt
 parts:
   Header:
     fields:

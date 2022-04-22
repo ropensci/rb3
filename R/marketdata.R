@@ -90,6 +90,44 @@ registry <- proto::proto(expr = {
   }
 })
 
+parser_generic <- transmuter(
+  match_regex("^(-|\\+)?\\d+$", to_int(), priority = 1, apply_to = "all"),
+  match_regex("^(-|\\+)?\\d+$", to_int()),
+  match_regex("^\\+|-$", function(text, match) {
+    idx <- text == "-"
+    x <- rep(1, length(text))
+    x[idx] <- -1
+    x
+  }, apply_to = "all"),
+  match_regex("^(S|N)$", function(text, match) {
+    text == "S"
+  }, apply_to = "all")
+)
+
+parsers <- list(
+  generic = parser_generic,
+  en = transmuter(
+    match_regex("^(-|\\+)?(\\d+,)*\\d+(\\.\\d+)?$",
+      to_dbl(dec = ".", thousands = ","),
+      apply_to = "all", priority = 2
+    ),
+    match_regex(
+      "^(-|\\+)?(\\d+,)*\\d+(\\.\\d+)?$",
+      to_dbl(dec = ".", thousands = ",")
+    ), parser_generic
+  ),
+  pt = transmuter(
+    match_regex("^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
+      to_dbl(dec = ",", thousands = "."),
+      apply_to = "all", priority = 2
+    ),
+    match_regex(
+      "^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
+      to_dbl(dec = ",", thousands = ".")
+    ), parser_generic
+  )
+)
+
 MarketData <- proto::proto(expr = {
   description <- ""
 
@@ -109,38 +147,6 @@ MarketData <- proto::proto(expr = {
       .$..registry.filename$put(filename, .class)
     }
   }
-
-  parser <- transmuter(
-    match_regex("^(-|\\+)?\\d+$", to_int(), priority = 1, apply_to = "all"),
-    match_regex("^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
-      to_dbl(dec = ",", thousands = "."),
-      apply_to = "all", priority = 2
-    ),
-    match_regex("^(-|\\+)?(\\d+,)*\\d+(\\.\\d+)?$",
-      to_dbl(dec = ".", thousands = ","),
-      apply_to = "all", priority = 3
-    ),
-    match_regex("^(-|\\+)?\\d+(\\.\\d+)?$",
-      to_dbl(dec = ".", thousands = ","),
-      apply_to = "all", priority = 4
-    ),
-    match_regex("^(-|\\+)?\\d+$", to_int()),
-    match_regex(
-      "^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
-      to_dbl(dec = ",", thousands = ".")
-    ),
-    match_regex("^(-|\\+)?\\d+\\.\\d+$", to_dbl(dec = "."), apply_to = "all"),
-    match_regex("^(-|\\+)?\\d+,\\d+$", to_dbl(dec = ","), apply_to = "all"),
-    match_regex("^\\+|-$", function(text, match) {
-      idx <- text == "-"
-      x <- rep(1, length(text))
-      x[idx] <- -1
-      x
-    }),
-    match_regex("^(S|N)$", function(text, match) {
-      text == "S"
-    })
-  )
 
   retrieve_template <- function(., key) {
     .$..registry.id$get(key)
@@ -183,6 +189,14 @@ MarketData <- proto::proto(expr = {
     invisible(NULL)
   }
 
+  .parser <- function(.) {
+    if (is(try(.$locale, TRUE), "try-error")) {
+      parsers[["generic"]]
+    } else {
+      parsers[[.$locale]]
+    }
+  }
+
   .separator <- function(., .part = NULL) {
     if (is.null(.part)) {
       .$separator
@@ -197,10 +211,12 @@ MarketData <- proto::proto(expr = {
   }
 
   .detect_lines <- function(., .part, lines) {
-    if (is.null(.part$pattern)) {
-      .part$lines
-    } else {
+    if (!is.null(.part$pattern)) {
       stringr::str_detect(lines, .part$pattern)
+    } else if (!is.null(.part$index)) {
+      .part$index
+    } else {
+      stop("MultiPart file with no index defined")
     }
   }
 

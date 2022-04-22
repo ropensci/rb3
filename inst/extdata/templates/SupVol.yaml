@@ -3,8 +3,10 @@ filename: SupVol.txt
 filetype: MCSV
 description: Superfície de Volatilidade por Delta de Opções sobre Derivativos
 separator: ;
+locale: pt
 parts:
   Header:
+    index: 1
     fields:
     - name: data_geracao_arquivo
       description: Data de geração do arquivo
@@ -16,6 +18,7 @@ parts:
       handler:
         type: character
   Data:
+    index: -1
     fields:
     - name: cod_curva_volatilidade
       description: Código da Curva de Volatilidade

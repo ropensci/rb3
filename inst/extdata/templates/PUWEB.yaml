@@ -3,6 +3,7 @@ filename: PUWEB.TXT
 filetype: MCSV
 description: Preços Referenciais para Títulos Públicos
 separator: ;
+locale: en
 parts:
   Header:
     pattern: ^01
