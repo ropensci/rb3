@@ -3,8 +3,6 @@
 #' Download datasets for a given template.
 #'
 #' @param template the template name
-#' @param dest a string which specifies a valid directory or file name to save
-#'        the file. If it is not provided a temporary filename is generated.
 #' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache a logical indicating if the existing file (previously
 #'        downloaded) should be used or replaced.
@@ -27,28 +25,37 @@
 #'
 #' @export
 download_data <- function(template,
-                          dest = NULL,
                           cache_folder = cachedir(),
                           do_cache = TRUE, ...) {
   template <- .retrieve_template(NULL, template)
-  if (is.null(dest)) {
-    x <- list(...)
-    code_ <- digest::digest(x)
-    dest <- file.path(
-      cache_folder,
-      stringr::str_glue("{template$id}-{code_}.{template$downloader$format}")
-    )
-  }
+  x <- list(...)
+  code_ <- digest::digest(x)
+  dest <- file.path(
+    cache_folder,
+    stringr::str_glue("{template$id}-{code_}.{template$downloader$format}")
+  )
 
   if (file.exists(dest) && do_cache) {
     message(stringr::str_glue("Skipping download - using cached version"))
-    return(dest)
+    fname <- unzip_recursive(dest, cache_folder)
+    return(fname)
   }
 
   if (template$download_data(dest, ...)) {
-    dest
+    fname <- unzip_recursive(dest, cache_folder)
+    return(fname)
   } else {
-    NULL
+    return(NULL)
+  }
+}
+
+unzip_recursive <- function(fname, cache_folder) {
+  if (length(fname) == 1 &&
+    stringr::str_ends(stringr::str_to_lower(fname), "zip")) {
+    l <- utils::unzip(fname, exdir = cache_folder)
+    unzip_recursive(l, cache_folder)
+  } else {
+    fname
   }
 }
 

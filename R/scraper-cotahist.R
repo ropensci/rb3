@@ -42,19 +42,10 @@ cotahist_get <- function(refdate,
     monthly = "COTAHIST_MONTHLY",
     daily = "COTAHIST_DAILY"
   )
-  template <- .retrieve_template(NULL, tpl)
   refdate <- as.Date(refdate)
-  dest <- file.path(
-    cache_folder,
-    str_glue("{template$id}_{format(refdate)}.{template$downloader$format}")
-  )
-  fname <- download_data(template$id,
-    dest = dest, do_cache = do_cache, refdate = refdate
-  )
+  fname <- download_data(tpl, cache_folder, do_cache, refdate = refdate)
   if (!is.null(fname)) {
-    d <- tempdir()
-    l <- unzip(fname, exdir = d)
-    read_marketdata(l, tpl)
+    read_marketdata(fname, tpl)
   } else {
     cli::cli_alert_danger("Failed {tpl} download for reference date {refdate}")
     NULL
