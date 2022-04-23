@@ -23,7 +23,7 @@
 yc_get <- function(first_date = Sys.Date() - 5,
                    last_date = Sys.Date(),
                    by = 1,
-                   cache_folder = file.path(tempdir(), "yc-cache"),
+                   cache_folder = cachedir(),
                    do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)

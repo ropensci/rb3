@@ -8,7 +8,7 @@ yc_get(
   first_date = Sys.Date() - 5,
   last_date = Sys.Date(),
   by = 1,
-  cache_folder = file.path(tempdir(), "yc-cache"),
+  cache_folder = cachedir(),
   do_cache = TRUE
 )
 }

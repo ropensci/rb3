@@ -19,7 +19,8 @@ test_that("Test of yc function", {
   # first call (no cache)
   df_yc_1 <- yc_get(first_date,
     last_date,
-    by = 5
+    by = 5,
+    do_cache = FALSE
   )
 
   test_df(df_yc_1)
