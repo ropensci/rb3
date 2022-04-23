@@ -4,13 +4,24 @@
 \alias{futures_get}
 \title{Get futures prices from trading session settlements page}
 \usage{
-futures_get(refdate)
+futures_get(
+  first_date = Sys.Date() - 5,
+  last_date = Sys.Date(),
+  by = 1,
+  cache_folder = cachedir(),
+  do_cache = TRUE
+)
 }
 \arguments{
-\item{refdate}{reference date used to obtain futures prices.
+\item{first_date}{First date ("YYYY-MM-DD")}
 
-If \code{refdate} is not provided the last available date is returned, otherwise
-the provided date is used to fetch data.}
+\item{last_date}{Last date ("YYYY-MM-DD")}
+
+\item{by}{Number of days in between fetched dates (default = 1)}
+
+\item{cache_folder}{Location of cache folder (default = cachedir())}
+
+\item{do_cache}{Whether to use cache or not (default = TRUE)}
 }
 \value{
 \code{data.frame} with futures prices.
@@ -21,6 +32,6 @@ to get futures prices.
 }
 \examples{
 \dontrun{
-df <- futures_get("2022-04-18")
+df <- futures_get("2022-04-18", "2022-04-22")
 }
 }

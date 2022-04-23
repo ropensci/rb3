@@ -30,23 +30,51 @@ maturity2date <- function(x, expr = "first day") {
 #' Scrape page <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/>
 #' to get futures prices.
 #'
-#' @param refdate reference date used to obtain futures prices.
-#'
-#' If `refdate` is not provided the last available date is returned, otherwise
-#' the provided date is used to fetch data.
+#' @param first_date First date ("YYYY-MM-DD")
+#' @param last_date Last date ("YYYY-MM-DD")
+#' @param by Number of days in between fetched dates (default = 1)
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' @return `data.frame` with futures prices.
 #'
 #' @examples
 #' \dontrun{
-#' df <- futures_get("2022-04-18")
+#' df <- futures_get("2022-04-18", "2022-04-22")
 #' }
 #' @export
-futures_get <- function(refdate) {
+futures_get <- function(first_date = Sys.Date() - 5,
+                        last_date = Sys.Date(),
+                        by = 1,
+                        cache_folder = cachedir(),
+                        do_cache = TRUE) {
+  first_date <- as.Date(first_date)
+  last_date <- as.Date(last_date)
+  date_vec <- bizdays::bizseq(first_date, last_date, "Brazil/ANBIMA")
+  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
+  df <- dplyr::bind_rows(
+    purrr::map(cli::cli_progress_along(
+      date_vec,
+      format = "{pb_spin} Fetching data points {cli::pb_current}/{cli::pb_total} | {pb_bar} {pb_percent} | {pb_eta_str}"
+    ),
+    single_futures_get,
+    date_vec,
+    cache_folder = cache_folder,
+    do_cache = do_cache
+    )
+  )
+  return(df)
+}
+
+single_futures_get <- function(idx_date,
+                               date_vec,
+                               cache_folder = cachedir(),
+                               do_cache = TRUE) {
   tpl <- "AjustesDiarios"
-  fname <- download_data(tpl, refdate = as.Date(refdate))
+  refdate <- date_vec[idx_date]
+  fname <- download_data(tpl, cache_folder, do_cache, refdate = refdate)
   if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl)
+    df <- read_marketdata(fname, tpl, TRUE, cache_folder, do_cache)
     dplyr::tibble(
       refdate = as.Date(refdate),
       commodity = flatten_names(df$mercadoria),
@@ -58,7 +86,7 @@ futures_get <- function(refdate) {
       settlement_value = df$ajuste
     )
   } else {
-    cli::cli_alert_danger("Failed CDIIDI download")
+    cli::cli_alert_danger("Failed download")
     return(NULL)
   }
 }
