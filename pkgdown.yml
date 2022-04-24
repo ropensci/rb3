@@ -1,9 +1,10 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
+  Fetching-historical-future-rates: Fetching-historical-future-rates.html
   Fetching-historical-yield-curve: Fetching-historical-yield-curve.html
-last_built: 2022-04-23T00:19Z
+last_built: 2022-04-24T21:33Z
 urls:
   reference: http://wilsonfreitas.github.io/rb3/reference
   article: http://wilsonfreitas.github.io/rb3/articles

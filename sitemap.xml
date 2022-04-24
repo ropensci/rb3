@@ -10,6 +10,9 @@
     <loc>http://wilsonfreitas.github.io/rb3/LICENSE.html</loc>
   </url>
   <url>
+    <loc>http://wilsonfreitas.github.io/rb3/articles/Fetching-historical-future-rates.html</loc>
+  </url>
+  <url>
     <loc>http://wilsonfreitas.github.io/rb3/articles/Fetching-historical-yield-curve.html</loc>
   </url>
   <url>
@@ -31,6 +34,9 @@
     <loc>http://wilsonfreitas.github.io/rb3/reference/clearcache.html</loc>
   </url>
   <url>
+    <loc>http://wilsonfreitas.github.io/rb3/reference/code2month.html</loc>
+  </url>
+  <url>
     <loc>http://wilsonfreitas.github.io/rb3/reference/convert_to.html</loc>
   </url>
   <url>
@@ -50,6 +56,9 @@
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/rb3/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://wilsonfreitas.github.io/rb3/reference/maturity2date.html</loc>
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/rb3/reference/rb3.html</loc>
