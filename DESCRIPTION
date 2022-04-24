@@ -43,7 +43,8 @@ Suggests:
     covr,
     scales,
     magrittr,
-    tibble
+    tibble,
+    fixedincome
 Collate:
     'rb3-package.R'
     'util.R'
