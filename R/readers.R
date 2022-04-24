@@ -137,7 +137,12 @@ mfwf_read_file <- function(., filename, parse_fields = TRUE) {
 settlement_prices_read <- function(., filename, parse_fields = TRUE) {
   doc <- rvest::read_html(filename)
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  df <- rvest::html_element(doc, xpath = xpath) |> rvest::html_table()
+  table <- rvest::html_element(doc, xpath = xpath)
+  if (is(table, "xml_node")) {
+    df <- rvest::html_table(table)
+  } else {
+    return(NULL)
+  }
   colnames(df) <- .$colnames
   if (parse_fields) {
     parse_columns(df, .$colnames, .$handlers, .$.parser())

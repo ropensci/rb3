@@ -75,16 +75,20 @@ single_futures_get <- function(idx_date,
   fname <- download_data(tpl, cache_folder, do_cache, refdate = refdate)
   if (!is.null(fname)) {
     df <- read_marketdata(fname, tpl, TRUE, cache_folder, do_cache)
-    dplyr::tibble(
-      refdate = as.Date(refdate),
-      commodity = flatten_names(df$mercadoria),
-      maturity_code = df$vencimento,
-      symbol = paste0(.data$commodity, .data$maturity_code),
-      price_previous = df$pu_anterior,
-      price = df$pu_atual,
-      change = df$variacao,
-      settlement_value = df$ajuste
-    )
+    if (!is.null(df)) {
+      dplyr::tibble(
+        refdate = as.Date(refdate),
+        commodity = flatten_names(df$mercadoria),
+        maturity_code = df$vencimento,
+        symbol = paste0(.data$commodity, .data$maturity_code),
+        price_previous = df$pu_anterior,
+        price = df$pu_atual,
+        change = df$variacao,
+        settlement_value = df$ajuste
+      )
+    } else {
+      NULL
+    }
   } else {
     cli::cli_alert_danger("Failed download")
     return(NULL)
