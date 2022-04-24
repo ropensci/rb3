@@ -10,14 +10,43 @@ flatten_names <- function(nx) {
   as.vector(x)
 }
 
+#' Get month from maturity code
+#'
+#' Get the corresponding month for the letters that represent maturities of
+#' futures contracts.
+#'
+#' @param x a character with letters that represent the month of maturity of
+#'        futures contracts.
+#'
+#' @return a vector of integers
+#'
+#' @examples
+#' code2month(c("F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"))
+#' @export
 code2month <- function(x) {
   m <- c(
     F = 1, G = 2, H = 3, J = 4, K = 5, M = 6,
     N = 7, Q = 8, U = 9, V = 10, X = 11, Z = 12
   )
-  m[x]
+  m[x] |> unname()
 }
 
+#' Get maturity date from maturity code
+#'
+#' Get the corresponding maturity date for the three characters string
+#' that represent maturity of futures contracts.
+#'
+#' @param x a character vector with three letters string that represent
+#'        maturity of futures contracts.
+#' @param expr a string which indicates the day to use in maturity date.
+#'        See `bizdays::getdate` for more details on this argument.
+#'
+#' @return a Date vector with maturity dates
+#'
+#' @examples
+#' maturity2date(c("F22", "F23", "G23", "H23", "F45"), "first day")
+#' maturity2date(c("F23", "K35"), "15th day")
+#' @export
 maturity2date <- function(x, expr = "first day") {
   year <- as.integer(stringr::str_sub(x, 2)) + 2000
   month <- code2month(stringr::str_sub(x, 1, 1))

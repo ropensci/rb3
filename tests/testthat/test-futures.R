@@ -22,3 +22,15 @@ test_that("it should get futures data", {
 
   expect_identical(df_yc_1, df_yc_2)
 })
+
+test_that("it should test code2month", {
+  codes <- c("F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z")
+  months <- code2month(codes)
+  expect_equal(months, 1:12)
+  expect_true(is.na(code2month("A")))
+})
+
+test_that("it should test maturity2date", {
+  expect_equal(maturity2date("F22"), as.Date("2022-01-01"))
+  expect_equal(maturity2date("F22", "15th day"), as.Date("2022-01-15"))
+})
