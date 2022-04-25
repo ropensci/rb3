@@ -77,45 +77,24 @@
 
     
     
+<p>The historical prices of all futures contracts traded at B3 can be obtained with the <code>futures_get</code> function. These are the settlement prices delivered daily by B3 at the <a href="https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/" title="Trading session settlements" class="external-link">Trading session settlements</a> page.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: bizdays</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'bizdays'</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     offset</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-fixedincome" class="external-link">fixedincome</a></span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'fixedincome'</span>
-<span class="co">#&gt; The following objects are masked from 'package:dplyr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     first, last</span>
 
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/futures_get.html">futures_get</a></span><span class="op">(</span>
     first_date <span class="op">=</span> <span class="st">"2021-01-01"</span>,
     last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
     by <span class="op">=</span> <span class="fl">5</span>
-<span class="op">)</span>
-<span class="co">#&gt; ⠙ Fetching data points 8/66 | <span style="color: #00BB00;">■■■■■                           </span>  12% | ETA: 32s</span>
-<span class="co">#&gt; ⠸ Fetching data points 21/66 | <span style="color: #00BB00;">■■■■■■■■■■■                     </span>  32% | ETA: 22s</span>
-<span class="co">#&gt; ⠼ Fetching data points 28/66 | <span style="color: #00BB00;">■■■■■■■■■■■■■■                  </span>  42% | ETA: 18s</span>
-<span class="co">#&gt; ⠴ Fetching data points 34/66 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  52% | ETA: 15s</span>
-<span class="co">#&gt; ⠦ Fetching data points 41/66 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■            </span>  62% | ETA: 12s</span>
-<span class="co">#&gt; ⠧ Fetching data points 47/66 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■          </span>  71% | ETA:  9s</span>
-<span class="co">#&gt; ⠇ Fetching data points 55/66 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■      </span>  83% | ETA:  5s</span>
-<span class="co">#&gt; ⠏ Fetching data points 62/66 | <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span>  94% | ETA:  2s</span></code></pre></div>
+<span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="historical-nominal-interest-rates">Historical nominal interest rates<a class="anchor" aria-label="anchor" href="#historical-nominal-interest-rates"></a>
+</h2>
+<p>The interest rates can be extracted from the futures prices. The DI1 futures matures at the first day of the month. The code below generates the maturities from the three characters maturity codes. After the business days and implied rates are calculated with the <code><a href="https://rdrr.io/pkg/fixedincome/man/rates.html" class="external-link">fixedincome::rates</a></code> function, once we know that the notional amount of these contracts is 100000.</p>
+<p>In the graphic we can see the dynamics of the nominal interest rates of the contracts DI1F23 and DI1F33. These contracts are exactly 10 years distant from each other.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">di1_futures</span> <span class="op">&lt;-</span> <span class="va">df</span> |&gt;
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DI1"</span><span class="op">)</span> |&gt;
@@ -141,6 +120,11 @@
     <span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></code></pre></div>
 <p><img src="Fetching-historical-future-rates_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="historical-real-interest-rates">Historical real interest rates<a class="anchor" aria-label="anchor" href="#historical-real-interest-rates"></a>
+</h2>
+<p>Differently from DI1 contracts, that trade nominal interest rates, the DAP contracts trade real interest rates.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dap_futures</span> <span class="op">&lt;-</span> <span class="va">df</span> |&gt;
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DAP"</span><span class="op">)</span> |&gt;
@@ -166,7 +150,39 @@
     <span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></code></pre></div>
 <p><img src="Fetching-historical-future-rates_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-  </main>
+</div>
+<div class="section level2">
+<h2 id="implied-inflation">Implied inflation<a class="anchor" aria-label="anchor" href="#implied-inflation"></a>
+</h2>
+<p>With the difference between real and nominal interest rates we can obtain the forward inflation implied in these contracts.</p>
+<p>Using the contracts DI1F23 and DAPF23, which matures in the same month, with a difference of a few days. The implied inflation can be computed by the division of the prices of these contracts.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">infl_futures</span> <span class="op">&lt;-</span> <span class="va">df</span> |&gt;
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">symbol</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DI1F23"</span>, <span class="st">"DAPF23"</span><span class="op">)</span><span class="op">)</span> |&gt;
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+        maturity_date <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DI1"</span>,
+            <span class="fu"><a href="../reference/maturity2date.html">maturity2date</a></span><span class="op">(</span><span class="va">maturity_code</span><span class="op">)</span>,
+            <span class="fu"><a href="../reference/maturity2date.html">maturity2date</a></span><span class="op">(</span><span class="va">maturity_code</span>, <span class="st">"15th day"</span><span class="op">)</span>
+        <span class="op">)</span>,
+        fixing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/adjust.date.html" class="external-link">following</a></span><span class="op">(</span><span class="va">maturity_date</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span>,
+        business_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/bizdays.html" class="external-link">bizdays</a></span><span class="op">(</span><span class="va">refdate</span>, <span class="va">maturity_date</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span>,
+        adjusted_tax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/fixedincome/man/rates.html" class="external-link">rates</a></span><span class="op">(</span><span class="st">"discrete"</span>, <span class="va">business_days</span> <span class="op">/</span> <span class="fl">252</span>, <span class="fl">100000</span> <span class="op">/</span> <span class="va">price</span><span class="op">)</span>
+    <span class="op">)</span> |&gt;
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span>
+
+<span class="va">infl_expec</span> <span class="op">&lt;-</span> <span class="va">infl_futures</span> |&gt;
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">symbol</span>, <span class="va">price</span>, <span class="va">refdate</span><span class="op">)</span> |&gt;
+    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">symbol</span>, <span class="va">price</span><span class="op">)</span> |&gt;
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>inflation <span class="op">=</span> <span class="va">DAPF23</span> <span class="op">/</span> <span class="va">DI1F23</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
+
+<span class="va">infl_expec</span> |&gt;
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">refdate</span>, y <span class="op">=</span> <span class="va">inflation</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="Fetching-historical-future-rates_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
