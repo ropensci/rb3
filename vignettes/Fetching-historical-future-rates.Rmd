@@ -14,7 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+[ajustes]: <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/> "Trading session settlements"
+
+The historical prices of all futures contracts traded at B3 can be obtained with
+the `futures_get` function.
+These are the settlement prices delivered daily by B3 at the
+[Trading session settlements][ajustes] page.
+
+```{r setup, message=FALSE}
 library(rb3)
 library(ggplot2)
 library(stringr)
@@ -27,6 +34,20 @@ df <- futures_get(
     by = 5
 )
 ```
+
+## Historical nominal interest rates
+
+The interest rates can be extracted from the futures prices.
+The DI1 futures matures at the first day of the month.
+The code below generates the maturities from the three characters maturity
+codes.
+After the business days and implied rates are calculated with the
+`fixedincome::rates` function, once we know that the notional amount of
+these contracts is 100000.
+
+In the graphic we can see the dynamics of the nominal interest rates 
+of the contracts DI1F23 and DI1F33.
+These contracts are exactly 10 years distant from each other.
 
 ```{r}
 di1_futures <- df |>
@@ -54,6 +75,11 @@ di1_futures |>
     scale_y_continuous(labels = scales::percent)
 ```
 
+## Historical real interest rates
+
+Differently from DI1 contracts, that trade nominal interest rates, the DAP
+contracts trade real interest rates.
+
 ```{r}
 dap_futures <- df |>
     filter(commodity == "DAP") |>
@@ -78,4 +104,39 @@ dap_futures |>
         color = "Symbol"
     ) +
     scale_y_continuous(labels = scales::percent)
+```
+
+## Implied inflation
+
+With the difference between real and nominal interest rates we can obtain the
+forward inflation implied in these contracts.
+
+Using the contracts DI1F23 and DAPF23, which matures in the same month, with a
+difference of a few days.
+The implied inflation can be computed by the division of the prices of these
+contracts.
+
+```{r, warning=FALSE}
+infl_futures <- df |>
+    filter(symbol %in% c("DI1F23", "DAPF23")) |>
+    mutate(
+        maturity_date = if_else(commodity == "DI1",
+            maturity2date(maturity_code),
+            maturity2date(maturity_code, "15th day")
+        ),
+        fixing = following(maturity_date, "Brazil/ANBIMA"),
+        business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
+        adjusted_tax = rates("discrete", business_days / 252, 100000 / price)
+    ) |>
+    arrange(refdate)
+
+infl_expec <- infl_futures |>
+    select(symbol, price, refdate) |>
+    tidyr::spread(symbol, price) |>
+    mutate(inflation = DAPF23 / DI1F23 - 1)
+
+infl_expec |>
+    ggplot(aes(x = refdate, y = inflation)) +
+    geom_line() +
+    geom_point()
 ```

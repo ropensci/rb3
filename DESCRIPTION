@@ -44,6 +44,7 @@ Suggests:
     scales,
     magrittr,
     tibble,
+    tidyr,
     fixedincome
 Collate:
     'rb3-package.R'
