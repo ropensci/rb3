@@ -132,7 +132,7 @@ infl_futures <- df |>
 
 infl_expec <- infl_futures |>
     select(symbol, price, refdate) |>
-    tidyr::spread(symbol, price) |>
+    tidyr::pivot_wider(names_from = symbol, values_from = price) |>
     mutate(inflation = DAPF23 / DI1F23 - 1)
 
 infl_expec |>
@@ -157,7 +157,7 @@ df_fut <- df |>
 
 df_du <- df_fut |>
     select(refdate, symbol, business_days) |>
-    pivot_wider(names_from = symbol, values_from = business_days) |>
+    tidyr::pivot_wider(names_from = symbol, values_from = business_days) |>
     mutate(
         du = DI1F33 - DI1F23
     ) |>
@@ -165,7 +165,7 @@ df_du <- df_fut |>
 
 df_fwd <- df_fut |>
     select(refdate, symbol, price) |>
-    pivot_wider(names_from = symbol, values_from = price) |>
+    tidyr::pivot_wider(names_from = symbol, values_from = price) |>
     inner_join(df_du, by = "refdate") |>
     mutate(
         fwd = (DI1F23 / DI1F33)^(252 / du) - 1
