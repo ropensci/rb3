@@ -30,7 +30,7 @@ library(fixedincome)
 
 df <- futures_get(
     first_date = "2021-01-01",
-    last_date = Sys.Date(),
+    last_date = "2022-04-27",
     by = 5
 )
 ```
@@ -139,4 +139,48 @@ infl_expec |>
     ggplot(aes(x = refdate, y = inflation)) +
     geom_line() +
     geom_point()
+```
+
+## Forward rates
+
+10Y Forward rates implied in DI1 Futures prices.
+The contracts DI1F23 and DI1F33 are used to compute the 10Y forward rates that
+ranges from Jan. 2023 to Jan. 2033.
+
+```{r, warning=FALSE}
+df_fut <- df |>
+    filter(symbol %in% c("DI1F23", "DI1F33")) |>
+    mutate(
+        maturity_date = maturity2date(maturity_code) |> following("Brazil/ANBIMA"),
+        business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA")
+    )
+
+df_du <- df_fut |>
+    select(refdate, symbol, business_days) |>
+    pivot_wider(names_from = symbol, values_from = business_days) |>
+    mutate(
+        du = DI1F33 - DI1F23
+    ) |>
+    select(refdate, du)
+
+df_fwd <- df_fut |>
+    select(refdate, symbol, price) |>
+    pivot_wider(names_from = symbol, values_from = price) |>
+    inner_join(df_du, by = "refdate") |>
+    mutate(
+        fwd = (DI1F23 / DI1F33)^(252 / du) - 1
+    ) |>
+    select(refdate, fwd) |>
+    na.omit()
+```
+
+```{r}
+df_fwd |>
+    ggplot(aes(x = refdate, y = fwd)) +
+    geom_line() +
+    labs(
+        x = "Date", y = "Forward Rates",
+        title = "Historical 10Y Forward Rates - F23:F33",
+        caption = "Source B3 - package rb3"
+    )
 ```
