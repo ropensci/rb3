@@ -76,6 +76,6 @@ save_resource <- function(res, encoding, dest) {
     writeBin(bin, dest)
   } else {
     text <- httr::content(res, as = "text", encoding = encoding)
-    writeLines(text, dest)
+    writeLines(text, dest, useBytes = TRUE)
   }
 }
