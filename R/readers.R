@@ -150,3 +150,17 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
     df
   }
 }
+
+options_open_interest_read <- function(., filename, parse_fields = TRUE) {
+  jason <- jsonlite::fromJSON(filename)
+  if (is.null(jason$Empresa)) {
+    return(NULL)
+  }
+  df <- do.call(rbind, jason$Empresa)
+  names(df) <- .$colnames
+  if (parse_fields) {
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
+  } else {
+    df
+  }
+}
