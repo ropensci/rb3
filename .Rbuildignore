@@ -13,3 +13,4 @@ templates_save.r
 ^docs$
 ^pkgdown$
 ^\.github$
+^README\.Rmd$
