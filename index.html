@@ -72,333 +72,172 @@
 <div class="page-header"><h1 id="rb3">rb3<a class="anchor" aria-label="anchor" href="#rb3"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end --><p>Leitura e tratamento dos arquivos com dados de mercado distribuídos pela <a href="https://www.b3.com.br" class="external-link">B3</a>. Os estes arquivos podem ser baixados da página de Dados Históricos da B3 através do <a href="https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/" class="external-link">link</a>.</p>
-<p>A BM&amp;FBovespa disponibiliza publicamente diversos arquivos com informações sobre os contratos negociados diariamente. A maioria destes arquivos é referente ao <strong>fechamento do mercado</strong> e são utilizados pelos participantes do mercado para realizar a <strong>marcação a mercado</strong> dos contratos.</p>
-<p>Os arquivos estão em diversos formatos de forma que esta biblioteca tenta tornar transparente o esforço de tratamento do arquivo provendo uma estrutura de dados melhor adaptada aos dados dos arquivos.</p>
-<p>Cada arquivo possui um template associado que contém as regras para a leitura do arquivo, assim como as descrição dos dados providas pela BM&amp;FBovespa.</p>
+<!-- badges: end --><p>Download and read a bunch o data from <a href="https://www.b3.com.br" class="external-link">B3</a> making it easy to store, process and consume it in a structure way.</p>
 </div>
 <div class="section level1">
-<h1 id="documentação">Documentação<a class="anchor" aria-label="anchor" href="#documenta%C3%A7%C3%A3o"></a>
+<h1 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h1>
-<p>A documentação do pacote está disponível como <a href="https://wilsonfreitas.github.io/rb3/" class="external-link">github page</a>.</p>
+<p>The documentation is available <a href="https://wilsonfreitas.github.io/rb3/" class="external-link">here</a>, the reference and articles with real applications can be found.</p>
 <div class="section level2">
-<h2 id="como-instalar">Como instalar<a class="anchor" aria-label="anchor" href="#como-instalar"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<pre class="{r}"><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'wilsonfreitas/rb3'</span><span class="op">)</span></code></pre>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"wilsonfreitas/rb3"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="como-usar">Como usar<a class="anchor" aria-label="anchor" href="#como-usar"></a>
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<p>A função <code>read_marketdata</code> deve ser usada para ler os arquivos. Os arquivos são identificados pelos seus nomes, pois a maior parte do arquivos tem um nome fixo como <code>Indic.txt</code> e <code>PUWEB.TXT</code>, por exemplo. Estes arquivos são <em>interpretados</em> pela função <code>read_marketdata</code> que retorna um <code>data.frame</code> com o conteúdo do arquivo, como observa-se no código abaixo para o arquivo de indicadores financeiros.</p>
+<div class="section level3">
+<h3 id="yield-curve">Yield curve<a class="anchor" aria-label="anchor" href="#yield-curve"></a>
+</h3>
+<p>Download and use historical yield curve data with <code>yc_get</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">indic</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_marketdata.html">read_marketdata</a></span><span class="op">(</span><span class="st">'Indic.txt'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">indic</span><span class="op">)</span>
-<span class="co"># 'data.frame': 480 obs. of  9 variables:</span>
-<span class="co">#  $ Identificação da transação : num  1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="co">#  $ Complemento da transação   : num  1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#  $ Tipo de registro           : num  1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#  $ Data de geração do arquivo : Date, format: "2014-12-11" "2014-12-12" ...</span>
-<span class="co">#  $ Grupo do indicador         : Factor w/ 6 levels "Indicadores agropecuários",..: 2 2 2 2 2 2 2 2 2 2 ...</span>
-<span class="co">#  $ Código do indicador        : chr  "DE11-B40" "DE11-B40" "DE13-A18" "DE13-A18" ...</span>
-<span class="co">#  $ Valor do indicador na data : num  107 107 110 110 102 ...</span>
-<span class="co">#  $ Número de decimais do valor: num  4 4 4 4 4 4 4 4 4 4 ...</span>
-<span class="co">#  $ Filler                     : chr  "" "" "" "" ...</span></code></pre></div>
-<p>Em outros casos os arquivos são dividos em partes como <strong>cabeçalho</strong> e <strong>corpo</strong>, e nestes casos <code>read_marketdata</code> retorna um <code>list</code> contendo um <code>data.frame</code> em cada elemento. O arquivo <code>PUWEB.TXT</code> (de preços referenciais para títulos públicos), no código abaixo, é um exemplo.</p>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span>
+
+<span class="va">df_yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yc_get.html">yc_get</a></span><span class="op">(</span>
+    first_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">255</span> <span class="op">*</span> <span class="fl">5</span>,
+    last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
+    by <span class="op">=</span> <span class="fl">255</span>
+<span class="op">)</span>
+<span class="co">#&gt; Skipping download - using cached version</span>
+<span class="co">#&gt; Skipping download - using cached version</span>
+<span class="co">#&gt; Skipping download - using cached version</span>
+<span class="co">#&gt; Skipping download - using cached version</span>
+
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>
+    <span class="va">df_yc</span>,
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+        x <span class="op">=</span> <span class="va">forward_date</span>,
+        y <span class="op">=</span> <span class="va">r_252</span>,
+        group <span class="op">=</span> <span class="va">refdate</span>,
+        color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span>
+    <span class="op">)</span>
+<span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>
+        title <span class="op">=</span> <span class="st">"Yield Curves for Brazil"</span>,
+        subtitle <span class="op">=</span> <span class="st">"Built using interest rates future contracts"</span>,
+        caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3 at {Sys.Date()}"</span><span class="op">)</span>,
+        x <span class="op">=</span> <span class="st">"Forward Date"</span>,
+        y <span class="op">=</span> <span class="st">"Annual Interest Rate"</span>,
+        color <span class="op">=</span> <span class="st">"Reference Date"</span>
+    <span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-setup-1.png" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="futures-prices">Futures prices<a class="anchor" aria-label="anchor" href="#futures-prices"></a>
+</h3>
+<p>Get settlement future prices with <code>futures_get</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">puweb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_marketdata.html">read_marketdata</a></span><span class="op">(</span><span class="st">'PUWEB.TXT'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">puweb</span><span class="op">)</span>
-<span class="co"># List of 2</span>
-<span class="co">#  $ Cabeçalho:'data.frame':    1 obs. of  3 variables:</span>
-<span class="co">#   ..$ Tipo de registro          : int 1</span>
-<span class="co">#   ..$ Data de geração do arquivo: Date[1:1], format: "2015-09-25"</span>
-<span class="co">#   ..$ Nome do arquivo           : chr "PUWEB.TXT"</span>
-<span class="co">#  $ Corpo    :'data.frame':    170 obs. of  8 variables:</span>
-<span class="co">#   ..$ Tipo de registro                  : int [1:170] 2 2 2 2 2 2 2 2 2 2 ...</span>
-<span class="co">#   ..$ Código do título                  : int [1:170] 100000 100000 100000 100000 100000 100000 100000 100000 100000 100000 ...</span>
-<span class="co">#   ..$ Descrição do título               : Factor w/ 6 levels "LTN","NTNF","LFT",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="co">#   ..$ Data de emissão do título         : Date[1:170], format: "2014-07-04" "2012-01-06" ...</span>
-<span class="co">#   ..$ Data de vencimento do título      : Date[1:170], format: "2015-10-01" "2016-01-01" ...</span>
-<span class="co">#   ..$ Valor de mercado em PU            : num [1:170] 998 965 931 898 864 ...</span>
-<span class="co">#   ..$ Valor do PU em cenário de estresse: num [1:170] 998 962 924 886 849 ...</span>
-<span class="co">#   ..$ Valor de mercado em PU para D+1   : num [1:170] 998 965 932 898 864 ...</span></code></pre></div>
-<p>Caso os arquivos sejam renomeados, o <code>template</code> associado deve ser definido para que o arquivo seja lido corretamente, como é o caso do arquivo BDIN com informações do mercados de ações da BM&amp;FBovespa.</p>
-<pre class="{r}"><code>&gt; bdin &lt;- read_marketdata('inst/extdata/BDIN.txt', template='BDIN')
-&gt; str(bdin)
-# List of 11
-#  $ Header                                      :'data.frame': 1 obs. of  9 variables:
-#   ..$ Tipo de registro          : int 0
-#   ..$ Código do arquivo         : chr "BDIN"
-#   ..$ Código do usuário         : int 9999
-#   ..$ Código da origem          : chr "BOVESPA"
-#   ..$ Código do destino         : int 9999
-#   ..$ Data de geração do arquivo: Date[1:1], format: "2015-11-19"
-#   ..$ Data do pregão            : Date[1:1], format: "2015-11-19"
-#   ..$ Hora de geração           : POSIXct[1:1], format: "2016-02-12 17:24:00"
-#   ..$ Reserva                   : chr ""
-#  $ Resumo Diário dos Índices                   :'data.frame': 23 obs. of  38 variables:
-#   ..$ Tipo de registro                                                 : int [1:23] 1 1 1 1 1 1 1 1 1 1 ...
-#   ..$ Identificação do índice                                          : int [1:23] 1 2 3 4 6 8 9 10 11 12 ...
-#   ..$ Nome do índice                                                   : chr [1:23] "IBOVESPA" "IEELETRICA" "IVBX2" "IBRX BRASIL" ...
-#   ..$ Índice de abertura do pregão                                     : int [1:23] 47437 26829 7726 19749 8048 7601 2247 10695 130 68 952 ...
-# ...</code></pre>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/futures_get.html">futures_get</a></span><span class="op">(</span>
+    first_date <span class="op">=</span> <span class="st">"2022-04-01"</span>,
+    last_date <span class="op">=</span> <span class="st">"2022-04-29"</span>,
+    by <span class="op">=</span> <span class="fl">5</span>
+<span class="op">)</span>
+
+<span class="va">df</span> |&gt; <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DI1"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 153 x 8</span>
+<span class="co">#&gt;    refdate    commodity maturity_code symbol price_previous   price change settlement_value</span>
+<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;            &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 2022-04-01 DI1       J22           DI1J22        100000. 100000    0.01             0.01</span>
+<span class="co">#&gt;  2 2022-04-01 DI1       K22           DI1K22         99172.  99172.  -0.19             0.19</span>
+<span class="co">#&gt;  3 2022-04-01 DI1       M22           DI1M22         98159.  98160.   0.96             0.96</span>
+<span class="co">#&gt;  4 2022-04-01 DI1       N22           DI1N22         97182.  97185.   3.56             3.56</span>
+<span class="co">#&gt;  5 2022-04-01 DI1       Q22           DI1Q22         96199.  96210.  11.3             11.3 </span>
+<span class="co">#&gt;  6 2022-04-01 DI1       U22           DI1U22         95138.  95159.  21.6             21.6 </span>
+<span class="co">#&gt;  7 2022-04-01 DI1       V22           DI1V22         94174.  94209.  34.9             34.9 </span>
+<span class="co">#&gt;  8 2022-04-01 DI1       X22           DI1X22         93265.  93314.  48.8             48.8 </span>
+<span class="co">#&gt;  9 2022-04-01 DI1       Z22           DI1Z22         92365.  92423.  57.3             57.3 </span>
+<span class="co">#&gt; 10 2022-04-01 DI1       F23           DI1F23         91405.  91472.  67.4             67.4 </span>
+<span class="co">#&gt; # ... with 143 more rows</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="arquivos-tratados">Arquivos Tratados<a class="anchor" aria-label="anchor" href="#arquivos-tratados"></a>
-</h2>
-<table class="table">
-<colgroup>
-<col width="22%">
-<col width="25%">
-<col width="22%">
-<col width="29%">
-</colgroup>
-<thead><tr class="header">
-<th>Arquivo</th>
-<th>Template</th>
-<th>Mercado</th>
-<th>Descrição</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>BDIN</td>
-<td><code>BDIN</code></td>
-<td>Mercado de Ações</td>
-<td>Cotações do Horário Regular</td>
-</tr>
-<tr class="even">
-<td>BD_Arbit.txt</td>
-<td><code>BD_Arbit</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados em Pregão - Parcial</td>
-</tr>
-<tr class="odd">
-<td>BDPrevia.txt</td>
-<td><code>BD_Arbit</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados em Pregão - Preliminar</td>
-</tr>
-<tr class="even">
-<td>BD_Final.txt</td>
-<td><code>BD_Arbit</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados em Pregão - Final</td>
-</tr>
-<tr class="odd">
-<td>BDAfterHour.txt</td>
-<td><code>BD_Arbit</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados em Pregão - After-Hours (D+1)</td>
-</tr>
-<tr class="even">
-<td>BDAtual.txt</td>
-<td><code>BD_Arbit</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados em Pregão - Atualização de Contratos em Aberto</td>
-</tr>
-<tr class="odd">
-<td>BDAjuste.txt</td>
-<td><code>BD_Arbit</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados em Pregão - Ajustes</td>
-</tr>
-<tr class="even">
-<td>Indica.txt</td>
-<td><code>Indic</code></td>
-<td>Mercado de Derivativos</td>
-<td>Indicadores Econômicos e Agropecuários - Parcial</td>
-</tr>
-<tr class="odd">
-<td>Indic.txt</td>
-<td><code>Indic</code></td>
-<td>Mercado de Derivativos</td>
-<td>Indicadores Econômicos e Agropecuários - Final</td>
-</tr>
-<tr class="even">
-<td>CONTRCAD.txt</td>
-<td><code>ContrCad</code></td>
-<td>Mercado de Derivativos</td>
-<td>Contratos Cadastrados</td>
-</tr>
-<tr class="odd">
-<td>CONTRCAD-IPN.txt</td>
-<td><code>ContrCad</code></td>
-<td>Mercado de Derivativos</td>
-<td>Contratos Cadastrados Nova Clearing</td>
-</tr>
-<tr class="even">
-<td>TaxaSwap.txt</td>
-<td><code>TaxaSwap</code></td>
-<td>Mercado de Derivativos</td>
-<td>Taxas de Mercado para Swaps</td>
-</tr>
-<tr class="odd">
-<td>PUWEB.TXT</td>
-<td><code>PUWEB</code></td>
-<td>Mercado de Títulos Públicos</td>
-<td>Preços Referenciais para Títulos Públicos</td>
-</tr>
-<tr class="even">
-<td>Premio.txt</td>
-<td><code>Premio</code></td>
-<td>Mercado de Derivativos</td>
-<td>Prêmio de Referência para Opções</td>
-</tr>
-<tr class="odd">
-<td>SupVol.txt</td>
-<td><code>SupVol</code></td>
-<td>Mercado de Derivativos</td>
-<td>Superfície de Volatilidade por Delta</td>
-</tr>
-<tr class="even">
-<td>Eletro.txt</td>
-<td><code>Eletro</code></td>
-<td>Mercado de Derivativos</td>
-<td>Negócios Realizados no Mercado de Balcão</td>
-</tr>
-<tr class="odd">
-<td>CodISIND.txt</td>
-<td><code>ISIND</code></td>
-<td>Mercado de Derivativos</td>
-<td>Relação de Códigos ISIN para Contratos Derivativos</td>
-</tr>
-<tr class="even">
-<td>CodISINS.txt</td>
-<td><code>ISINS</code></td>
-<td>Mercado de Derivativos</td>
-<td>Relação de Códigos ISIN para Contratos de Swap</td>
-</tr>
-<tr class="odd">
-<td>DeltaOpcoes.txt</td>
-<td><code>DeltaOpcoes</code></td>
-<td>Mercado de Derivativos</td>
-<td>Volatilidades implícitas das opções sobre derivativos financeiros em Deltas padronizados</td>
-</tr>
-</tbody>
-</table>
+<div class="section level3">
+<h3 id="equity-data">Equity data<a class="anchor" aria-label="anchor" href="#equity-data"></a>
+</h3>
+<p>Equity closing data (without price adjustments) is available thru <code>cotahist_get</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-bizdays" class="external-link">bizdays</a></span><span class="op">)</span>
+
+<span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/adjust.date.html" class="external-link">preceding</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span> <span class="co"># last business day</span>
+<span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cotahist_get.html">cotahist_get</a></span><span class="op">(</span><span class="va">date</span>, <span class="st">"daily"</span><span class="op">)</span>
+<span class="co">#&gt; Skipping download - using cached version</span>
+<span class="fu"><a href="reference/cotahist-extracts.html">cotahist_equity_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 378 x 13</span>
+<span class="co">#&gt;    refdate    symbol  open  high   low close average best_bid best_ask    volume traded_contracts transactions_quantity distribution_id</span>
+<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;            &lt;int&gt;                 &lt;int&gt;           &lt;int&gt;</span>
+<span class="co">#&gt;  1 2022-04-29 AALR3  19.7  19.8  19.3  19.4    19.5     19.4     19.4   14055007           721500                  2050             102</span>
+<span class="co">#&gt;  2 2022-04-29 ABCB4  16.8  16.8  15.8  15.8    16.1     15.8     16     28379427          1763100                  6273             140</span>
+<span class="co">#&gt;  3 2022-04-29 ABEV3  14.8  15    14.5  14.5    14.7     14.5     14.6  384931858         26145100                 23420             125</span>
+<span class="co">#&gt;  4 2022-04-29 AERI3   5.12  5.18  4.88  4.88    5        4.88     4.89  11565634          2309900                  6249             101</span>
+<span class="co">#&gt;  5 2022-04-29 AESB3  11.2  11.3  11.0  11.0    11.1     11.0     11.0   38200620          3443700                  8291             102</span>
+<span class="co">#&gt;  6 2022-04-29 AGRO3  34.3  34.7  33.8  34.0    34.2     34.0     34     37912461          1107600                  4766             112</span>
+<span class="co">#&gt;  7 2022-04-29 AGXY3   9.2   9.8   9.11  9.8     9.59     9.13     9.8    1504789           156900                   349             100</span>
+<span class="co">#&gt;  8 2022-04-29 ALLD3  14.0  14.2  13.8  14.0    14.0     13.8     14.0     952543            68100                   303             102</span>
+<span class="co">#&gt;  9 2022-04-29 ALPA3  19    19.5  19    19.5    19.2     18.5     19.3       3850              200                     2             231</span>
+<span class="co">#&gt; 10 2022-04-29 ALPA4  20.4  20.6  19.5  19.6    20.0     19.6     19.6   84525397          4236000                 20368             231</span>
+<span class="co">#&gt; # ... with 368 more rows</span></code></pre></div>
+<p>Funds data</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/cotahist-extracts.html">cotahist_funds_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 366 x 13</span>
+<span class="co">#&gt;    refdate    symbol  open  high   low close average best_bid best_ask   volume traded_contracts transactions_quantity distribution_id</span>
+<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;            &lt;int&gt;                 &lt;int&gt;           &lt;int&gt;</span>
+<span class="co">#&gt;  1 2022-04-29 BZLI11  16.9  16.9  16.9  16.9    16.9     16.9     17.7     135.                8                     2             100</span>
+<span class="co">#&gt;  2 2022-04-29 ABCP11  74.4  74.9  73.2  73.6    73.6     73.3     73.6  151215.             2054                   205             313</span>
+<span class="co">#&gt;  3 2022-04-29 AFHI11  99.2  99.2  98.6  99.0    98.9     99.0     99.0 1000056.            10115                   709             113</span>
+<span class="co">#&gt;  4 2022-04-29 AFOF11  93.9  94.4  92.5  93.4    93.2     92.8     93.4  205333.             2202                    87             113</span>
+<span class="co">#&gt;  5 2022-04-29 AIEC11  80.4  81.0  79.5  80.2    80.0     80.2     80.2 1146269.            14330                  3001             119</span>
+<span class="co">#&gt;  6 2022-04-29 ALMI11 930   930   930   930     928.     930      986.     5571.                6                     5             250</span>
+<span class="co">#&gt;  7 2022-04-29 ALZR11 115.  116.  115.  116.    116.     116.     116.   659266.             5691                   737             154</span>
+<span class="co">#&gt;  8 2022-04-29 APTO11  10.4  10.4  10.3  10.4    10.4     10.4     10.4    9442.              908                    54             104</span>
+<span class="co">#&gt;  9 2022-04-29 ARCT11 105   105.  105.  105.    105.     105.     105.  2524851.            24029                  3965             125</span>
+<span class="co">#&gt; 10 2022-04-29 ARRI11  98.8  99.0  96.5  98.8    98.1     98.7     98.8  437927.             4462                   288             130</span>
+<span class="co">#&gt; # ... with 356 more rows</span></code></pre></div>
+<p>BDRs data</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/cotahist-extracts.html">cotahist_bdrs_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 523 x 13</span>
+<span class="co">#&gt;    refdate    symbol  open  high   low close average best_bid best_ask  volume traded_contracts transactions_quantity distribution_id</span>
+<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;            &lt;int&gt;                 &lt;int&gt;           &lt;int&gt;</span>
+<span class="co">#&gt;  1 2022-04-29 A1AP34  61.5  61.5  61.5  61.5    61.5     61.5     70.1  44287.              720                     1             110</span>
+<span class="co">#&gt;  2 2022-04-29 A1BB34  37.4  37.5  36.9  36.9    36.9     36.9     58.5 185763.             5035                     6             102</span>
+<span class="co">#&gt;  3 2022-04-29 A1CR34  59.6  59.6  58.7  58.7    58.7     58.7      0    42918.              731                     2             106</span>
+<span class="co">#&gt;  4 2022-04-29 A1DM34 447.  447.  443.  443.    445.       0        0     1779.                4                     4             109</span>
+<span class="co">#&gt;  5 2022-04-29 A1EG34  25.5  25.6  25.5  25.6    25.6     25.5     25.6   3175.              124                     3             102</span>
+<span class="co">#&gt;  6 2022-04-29 A1ES34 101.  101.  101.  101.    101.     101.       0    66587.              660                     1             110</span>
+<span class="co">#&gt;  7 2022-04-29 A1GI34 302.  302.  302.  302.    302.       0      303.     302.                1                     1             109</span>
+<span class="co">#&gt;  8 2022-04-29 A1IV34  31.2  31.2  31.2  31.2    31.2     31.2     32.9  10618.              340                     1             106</span>
+<span class="co">#&gt;  9 2022-04-29 A1KA34  46.2  46.2  46.2  46.2    46.2     46.2      0    73522.             1590                     1             101</span>
+<span class="co">#&gt; 10 2022-04-29 A1LB34 978   978   950.  950.    951.     950.    1061    58005                61                     2             109</span>
+<span class="co">#&gt; # ... with 513 more rows</span></code></pre></div>
+<p>Equity options</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/cotahist-extracts.html">cotahist_equity_options_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 4,794 x 14</span>
+<span class="co">#&gt;    refdate    symbol   type  strike maturity_date  open  high   low close average volume traded_contracts transactions_quantity distribution_id</span>
+<span class="co">#&gt;    &lt;date&gt;     &lt;chr&gt;    &lt;fct&gt;  &lt;dbl&gt; &lt;date&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;            &lt;int&gt;                 &lt;int&gt;           &lt;int&gt;</span>
+<span class="co">#&gt;  1 2022-04-29 ABEVE135 Call    13.5 2022-05-20     1.46  1.55  1.46  1.48    1.53 323814           210700                    33             125</span>
+<span class="co">#&gt;  2 2022-04-29 ABEVE162 Call    16.3 2022-05-20     0.06  0.07  0.05  0.05    0.05    412             7800                     8             125</span>
+<span class="co">#&gt;  3 2022-04-29 ABEVE140 Call    14.0 2022-05-20     1.07  1.19  0.92  0.92    1.07  12437            11600                    11             125</span>
+<span class="co">#&gt;  4 2022-04-29 ABEVE167 Call    16.8 2022-05-20     0.04  0.04  0.03  0.03    0.03    185             5300                     9             125</span>
+<span class="co">#&gt;  5 2022-04-29 ABEVE150 Call    15.0 2022-05-20     0.37  0.46  0.28  0.3     0.37 796102          2102300                   266             125</span>
+<span class="co">#&gt;  6 2022-04-29 ABEVE130 Call    13.0 2022-05-20     1.98  1.98  1.84  1.84    1.91   3820             2000                     2             125</span>
+<span class="co">#&gt;  7 2022-04-29 ALSOE270 Call    27   2022-05-20     0.1   0.1   0.1   0.1     0.1      30              300                     1             101</span>
+<span class="co">#&gt;  8 2022-04-29 ALSOM205 Put     20.5 2023-01-20     1.8   1.8   1.8   1.8     1.8   10980             6100                     1             101</span>
+<span class="co">#&gt;  9 2022-04-29 AMERE333 Call    33.3 2022-05-20     0.05  0.05  0.05  0.05    0.05    505            10100                     2             101</span>
+<span class="co">#&gt; 10 2022-04-29 AMERE338 Call    33.8 2022-05-20     0.07  0.07  0.07  0.07    0.07      7              100                     1             101</span>
+<span class="co">#&gt; # ... with 4,784 more rows</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="ajuda">Ajuda<a class="anchor" aria-label="anchor" href="#ajuda"></a>
-</h2>
-<p>Divesos arquivos ainda não são tratados, caso você tenha interesse em algum arquivo específico entre em contato para que possamos priorizar a criação do <code>template</code> ou se quiser pode enviar o template pronto que será incluído no pacote.</p>
-<!--
-
-- [ ] Mercado de Títulos Públicos - Volume Bruto Contratado
-    - VolumeBrutoContratado
-- [ ] Mercado de Derivativos - GTSLiNe - Fatores de Ponderação
-    - Este arquivo contém os fatores de ponderação (fatores K) de risco dos instrumentos utilizado no GTSLine.
-- [ ] Mercado de Títulos Públicos - Cotações
-    - Cotacao
-- [ ] Mercado de Derivativos - Posições Travadas
-    - PosTrav
-- [ ] Mercado de Derivativos - Swap Cambial - Mark to Market
-    - Market
-- [ ] Mercado de Derivativos - Deltas Opções Padronizadas
-    - Deltas
-- [ ] Mercado de Derivativos - Operações Estruturadas de Volatilidade
-    - Ref_Vol
-- [ ] Mercado de Derivativos - Tarifação para Swaps
-    - TarSwap
-- [ ] Mercado de Derivativos - Relação de Códigos ISIN para CPRs
-    - CodISINS
-
-- [ ] Mercado de Títulos Públicos - Preços Referenciais BM&F para LTN
-    - Ltaammdd
-- [ ] Mercado de Câmbio - Taxas Praticadas, Parâmetros de Abertura e Operações Contratadas
-    - Ctaammdd
-- [ ] Mercado de Câmbio - Volume Líquido Compensado
-    - Cvaammdd
-- [ ] Mercado de Títulos Públicos - Túnel de Negociação para Operações Definitivas a Vista e a Termo (pontos-base)
-    - Tdaammdd
-- [ ] Mercado de Títulos Públicos - Túnel de Negociação para Operações Compromissadas (pontos-base)
-    - Tcaammdd
-- [ ] Mercado de Derivativos - Opções Flexíveis - Parâmetros para Determinação de Limites de Preço e Taxa
-    - lpaammdd
-- [ ] Mercado de Derivativos - Swaps Parâmetros para Determinação de Limites de Preço
-    - SWaammdd
-
-- [ ] Cadastro de instrumentos - BVBG.028.01 Instruments File
-    - Este arquivo contém as características dos instrumentos negociáveis e dos instrumentos aceitos em garantia que são de conhecimento público.
-- [ ] Cadastro de instrumentos indicadores - BVBG.029.01 Instruments File
-    - Este arquivo contém as características dos instrumentos indicadores de preço utilizados pela BM&FBOVESPA.
-- [ ] Cenários de Margem - CORE
-    - Este arquivo apresenta os cenários de risco utilizados no modelo CORE com estrutura similar à atual. Devido às diferenças na estrutura dos cenários, apenas os cenários do tipo “Envelope” e para o segundo dia do holding period são carregados.
-- [ ] Agrupamento de Instrumentos Padronizados
-    - Este arquivo agrupa os instrumentos padronizados com características em comum e que possuem os mesmos parâmetros e mapeamento em fatores primitivos de risco.
-- [ ] Parâmetros de Grupos de Instrumentos
-    - Este arquivo relaciona os parâmetros de risco aos grupos de instrumentos previamente definidos.
-- [ ] Fórmulas de Risco
-    - Este arquivo apresenta as fórmulas de risco cadastradas no sistema.
-- [ ] Fatores Primitivos de Risco (FPRs)
-    - Este arquivo mostra os fatores primitivos de risco cadastrados no sistema, os instrumentos nos quais os FPRs são baseados e seus parâmetros.
-- [ ] Mapeamento de Grupos de Instrumentos Padronizados
-    - Este arquivo relaciona os grupos de instrumentos padronizados às fórmulas de risco e aos fatores primitivos de risco correspondentes. O qualificador indica a qual parâmetro da fórmula cada FPR corresponde.
-- [ ] Mapeamento de Grupos de Instrumentos OTC
-    - Este arquivo relaciona os grupos de instrumentos de OTC, com a identificação do instrumento que corresponde ao ativo-objeto, às fórmulas de risco e aos fatores primitivos de risco correspondentes. O qualificador indica a qual parâmetro da fórmula cada FPR corresponde. No caso de swaps, são relacionados dois mapeamentos, correspondentes a cada “ponta” do swap.
-- [ ] Margem Teórica Máxima para Posições em Aberto e Valor Mínimo de Ativos Depositados em Garantia
-    - Este arquivo apresenta o valor de margem teórica máxima dos instrumentos negociáveis e o valor mínimo de margem de instrumentos aceitos como garantia.
-- [ ] Informações Variáveis de Tarifação - BVBG.024.01 Fee Variables
-    - Este arquivo contém informações dos valores utilizados como parâmetros nas fórmulas dos cálculos de tarifas.
-- [ ] Custo Unitário de Tarifação - BVBG.043.01 Fee Unit Cost
-    - Este arquivo contém os valores base dos custos unitários dos clientes normais e HFT periódicos, ou seja, os valores utilizados para clientes que não apresentaram histórico de volume (ADTV) no respectivo período de apuração. O arquivo trará informações de contratos com custos que não dependem do cálculo diário do prazo para seu vencimento, ou seja, todos com exceção dos grupos de taxas de juros.
-- [ ] Custo Unitário Diário de Tarifação - BVBG.044.01 Fee Daily Unit Cost
-    - Este arquivo contém os valores base dos custos unitários dos clientes normais e HFT periódicos, ou seja, os valores utilizados para clientes que não apresentaram histórico de volume (ADTV) no respectivo período de apuração. O arquivo trará informações de contratos com custos que não dependem do cálculo diário do prazo para seu vencimento, ou seja, todos com exceção dos grupos de taxas de juros.
-- [ ] Tarifação para Clientes Alta Frequência - BVBG.026.01 Daily High Frequency Trader
-    - Este arquivo contém todas as possibilidades de preços médios e custos unitários aplicáveis a clientes HFT com apuração diária.
-- [ ] Cenários do Tipo Spot
-    - Este arquivo apresenta os cenários dos fatores primitivos de risco do tipo Spot (valores a vista).
-- [ ] Cenários do Tipo Curva
-    - Este arquivo apresenta os cenários dos fatores primitivos de risco do tipo Curva (estruturas a termo).
-- [ ] Cenários do Tipo Superfície
-    - Este arquivo apresenta os cenários dos fatores primitivos de risco do tipo Superfície (estruturas de volatilidade, a termo e por delta ou preço de exercício).
-
-#### Arquivos Descontinuados
-
-- [ ] Mercado de Derivativos - Cenários de Margem para Swaps 
-    - Cenarios
-- [ ] Mercado de Derivativos - cenário de Margem Desejável no Mercado Agropecuário (Foma) 
-    - CAaammdd
-- [ ] Mercado de Derivativos - Tarifação para Produtos de Pregão 
-    - TarPreg
-- [ ] Mercado de Derivativos - Parâmetros de Tarifação - Produtos de Pregão 
-    - TarPar
-- [ ] Mercado de Derivativos - Áreas para Margem de Ativos Líquidos 
-    - RILareas
-- [ ] Mercado de Derivativos - Parâmetros de Margem para Ativos Líquidos 
-    - RILContratos
-- [ ] Mercado de Derivativos - Volatilidade Implícita para Cálculo de Margem de Ativos Líquidos 
-    - RILVolatilidade
-- [ ] Mercado de Derivativos - Margem Teórica Máxima para Ativos Líquidos 
-    - RILMargemMaxima
-- [ ] Mercado de Derivativos - Preços de Opções nos Cenários de Estresse de Margem para Ativos Líquidos 
-    - RILPrecOpcoes
-- [ ] Mercado de Derivativos - Mapeamento de Opções - Cálculo de Margem
-    - MAPEAMEN
-- [ ] Mercado de Derivativos - Preços de Opções com Ajuste em Cenários de Estresse
-    - RILPrecOpcoesAjuste
-- [ ] Mercado de Derivativos - Tarifação para Clientes Alta Frequência
-    - Este arquivo (Mercado de Derivativos - Tarifação para Clientes Alta Frequência) contém os valores unitários das taxas de emolumentos que serão usados para calcular as taxas cobradas pela BM&FBOVESPA aplicadas aos negócios realizados por investidores com status de HFT (investidores de alta frequência) . São divulgados os valores de emolumentos para operações normais e day trade, bem como as faixas definidas para os diferentes grupos de mercadorias. Este arquivo é divulgado mensalmente, até às 11h do primeiro dia útil do mês.
-- [ ] Mercado de Balcão - Cenário para os fatores de risco Preço a Vista
-    - Preco
-- [ ] Mercado de Balcão - Cenário para os fatores de risco Volatilidade Implícita
-    - VolFlex
-- [ ] Mercado de Balcão - Cenário para o fator de risco Taxa de Juros
-    - Juros
-- [ ] Mercado de Balcão - Fatores Delta
-    - FDelta
-- [ ] Mercado de Balcão - Margem Máxima
-    - MM
-- [ ] Mercado de Derivativos - Cenários de Margem para Ativos Líquidos
-    - CENLIQW
-
-## ANBIMA
-
-- [ ] Taxas Títulos Públicos
-    - msaammdd.txt
-- [ ] VNA
-    - VNA_ddmmaa.txt
-    - VNA_ddmmaa.csv
-    - VNA_ddmmaa.txml
- -->
 </div>
 </div>
 
