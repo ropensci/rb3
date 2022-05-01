@@ -1,0 +1,30 @@
+id: TaxasReferenciais
+filename: ~
+filetype: CUSTOM
+description: Taxas referenciais
+locale: pt
+calendar: Brazil/ANBIMA
+downloader:
+  function: curve_download
+  url: https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp
+  format: html
+  encoding: latin1
+reader:
+  function: curve_read
+fields:
+- name: refdate
+  description: Data de referência
+  handler:
+    type: character
+- name: cur_days
+  description: Dias corridos
+  handler:
+    type: character
+- name: r_252
+  description: Taxa na base 252
+  handler:
+    type: character
+- name: r_360
+  description: Taxa na base 360
+  handler:
+    type: character

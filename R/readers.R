@@ -57,7 +57,7 @@ parse_columns <- function(df, colnames, handlers, parser) {
     "data.frame",
     c(df, stringsAsFactors = FALSE, check.names = FALSE)
   )
-  parse_text(parser, df)
+  parse_text(parser, df) |> tibble::as_tibble()
 }
 
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
@@ -158,6 +158,45 @@ options_open_interest_read <- function(., filename, parse_fields = TRUE) {
   }
   df <- do.call(rbind, jason$Empresa)
   names(df) <- .$colnames
+  if (parse_fields) {
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
+  } else {
+    df
+  }
+}
+
+curve_read <- function(., filename, parse_fields = TRUE) {
+  text <- readr::read_file(filename)
+
+  char_vec <- rvest::read_html(text) |>
+    rvest::html_nodes("td") |>
+    rvest::html_text()
+
+  len_char_vec <- length(char_vec)
+
+  if (len_char_vec == 0) {
+    return(NULL)
+  }
+
+  mtx <- str_match(text, "Atualizado em: (\\d{2}/\\d{2}/\\d{4})")
+  refdate <- mtx[1, 2] |> as.Date("%d/%m/%Y")
+
+  idx1 <- seq(1, length(char_vec), by = 3)
+  idx2 <- seq(2, length(char_vec), by = 3)
+  idx3 <- seq(3, length(char_vec), by = 3)
+
+  business_days <- char_vec[idx1]
+  r_252 <- char_vec[idx2]
+  r_360 <- char_vec[idx3]
+
+  df <- dplyr::tibble(
+    refdate,
+    business_days,
+    r_252,
+    r_360
+  )
+
+  colnames(df) <- .$colnames
   if (parse_fields) {
     parse_columns(df, .$colnames, .$handlers, .$.parser())
   } else {

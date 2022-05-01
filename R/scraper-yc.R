@@ -29,9 +29,9 @@ yc_get <- function(first_date = Sys.Date() - 5,
   last_date <- as.Date(last_date)
 
   # find biz days in between
-  br_cal <- get_calendar()
+  tpl <- .retrieve_template(NULL, "TaxasReferenciais")
 
-  date_vec <- bizdays::bizseq(first_date, last_date, br_cal)
+  date_vec <- bizdays::bizseq(first_date, last_date, tpl$calendar)
 
   # use by to separate dates
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
@@ -52,14 +52,6 @@ yc_get <- function(first_date = Sys.Date() - 5,
   return(df_yc)
 }
 
-#' Returns default calendar
-#'
-#' @noRd
-get_calendar <- function() {
-  "Brazil/ANBIMA"
-}
-
-
 #' Fetches a single data
 #'
 #' @param idx_date index of data (1.. n_dates)
@@ -73,69 +65,32 @@ get_single_yc <- function(idx_date,
                           date_vec,
                           cache_folder,
                           do_cache) {
-  ref_date <- date_vec[idx_date]
-  # cli::cli_alert_info('Fetching Yield Curve for {ref_date}'  )
-
-  f_cache <- file.path(
-    cache_folder,
-    paste0(
-      format(ref_date, "%Y%m%d"), "_",
-      "yc-cache.rds"
-    )
+  tpl_name <- "TaxasReferenciais"
+  tpl <- .retrieve_template(NULL, tpl_name)
+  refdate <- date_vec[idx_date]
+  fname <- download_data(tpl_name, cache_folder, do_cache,
+    refdate = refdate,
+    curve_name = "PRE"
   )
-
-
-
-  if (do_cache) {
-    if (!dir.exists(cache_folder)) dir.create(cache_folder, recursive = TRUE)
-
-    if (file.exists(f_cache)) {
-
-      # cli::cli_alert_success("\tfound cache file at {f_cache}")
-      df_yc <- readr::read_rds(f_cache)
-
-      return(df_yc)
+  if (!is.null(fname)) {
+    df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
+    if (!is.null(df)) {
+      dplyr::tibble(
+        refdate = df$refdate,
+        cur_days = df$cur_days,
+        biz_days = bizdays::bizdayse(refdate, .data$cur_days, tpl$calendar),
+        forward_date = bizdays::add.bizdays(
+          refdate,
+          .data$biz_days, tpl$calendar
+        ),
+        r_252 = df$r_252 / 100,
+        r_360 = df$r_360 / 100
+      )
+    } else {
+      NULL
     }
+  } else {
+    cli::cli_alert_danger("Error: no data found for date {refdate}")
+    return(NULL)
   }
-
-  base_url <- stringr::str_glue(
-    "https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp?",
-    "Data={format(ref_date, '%d/%m/%Y')}&Data1={format(ref_date,'%Y%m%d')}&slcTaxa=PRE"
-  )
-
-  char_vec <- rvest::read_html(base_url) |>
-    rvest::html_nodes("td") |>
-    rvest::html_text()
-
-  len_char_vec <- length(char_vec)
-
-  if (len_char_vec == 0) {
-    cli::cli_alert_danger("Error: no data found for date {ref_date}")
-    return(dplyr::tibble())
-  }
-
-  idx1 <- seq(1, length(char_vec), by = 3)
-  idx2 <- seq(2, length(char_vec), by = 3)
-  idx3 <- seq(3, length(char_vec), by = 3)
-
-  biz_days <- char_vec[idx1]
-  r_252 <- char_vec[idx2]
-  r_360 <- char_vec[idx3]
-
-  my_locale <- readr::locale(decimal_mark = ",")
-  br_cal <- get_calendar()
-
-  df_single_yc <- dplyr::tibble(
-    ref_date,
-    biz_days = as.integer(biz_days),
-    forward_date =  bizdays::add.bizdays(ref_date, biz_days, br_cal),
-    r_252 = readr::parse_double(r_252, locale = my_locale) / 100,
-    r_360 = readr::parse_double(r_360, locale = my_locale) / 100
-  )
-
-  if (do_cache) {
-    readr::write_rds(df_single_yc, f_cache)
-  }
-
-  return(df_single_yc)
 }
