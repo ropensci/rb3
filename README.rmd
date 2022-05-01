@@ -1,0 +1,126 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    fig.path = "man/figures/README-",
+    out.width = "100%"
+)
+```
+
+# rb3
+
+<!-- badges: start -->
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Codecov test coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wilsonfreitas/rb3?branch=main)
+[![R build (rcmdcheck)](https://github.com/wilsonfreitas/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/wilsonfreitas/rb3/actions)
+
+<!-- badges: end -->
+
+Download and read a bunch o data from [B3](https://www.b3.com.br) making it easy
+to store, process and consume it in a structure way.
+
+# Documentation
+
+The documentation is available [here](https://wilsonfreitas.github.io/rb3/),
+the reference and articles with real applications can be found.
+
+## Installation
+
+```r
+devtools::install_github("wilsonfreitas/rb3")
+```
+
+## Examples
+
+### Yield curve
+
+Download and use historical yield curve data with `yc_get`.
+
+```{r setup}
+library(rb3)
+library(ggplot2)
+library(stringr)
+
+df_yc <- yc_get(
+    first_date = Sys.Date() - 255 * 5,
+    last_date = Sys.Date(),
+    by = 255
+)
+
+p <- ggplot(
+    df_yc,
+    aes(
+        x = forward_date,
+        y = r_252,
+        group = refdate,
+        color = factor(refdate)
+    )
+) +
+    geom_line() +
+    labs(
+        title = "Yield Curves for Brazil",
+        subtitle = "Built using interest rates future contracts",
+        caption = str_glue("Data imported using rb3 at {Sys.Date()}"),
+        x = "Forward Date",
+        y = "Annual Interest Rate",
+        color = "Reference Date"
+    ) +
+    theme_light() +
+    scale_y_continuous(labels = scales::percent)
+
+print(p)
+```
+
+### Futures prices
+
+Get settlement future prices with `futures_get`.
+
+```{r message=FALSE}
+library(rb3)
+library(dplyr)
+
+df <- futures_get(
+    first_date = "2022-04-01",
+    last_date = "2022-04-29",
+    by = 5
+)
+
+df |> filter(commodity == "DI1")
+```
+
+### Equity data
+
+Equity closing data (without price adjustments) is available thru `cotahist_get`.
+
+```{r}
+library(rb3)
+library(bizdays)
+
+date <- preceding(Sys.Date(), "Brazil/ANBIMA") # last business day
+ch <- cotahist_get(date, "daily")
+cotahist_equity_get(ch)
+```
+
+Funds data
+
+```{r}
+cotahist_funds_get(ch)
+```
+
+BDRs data
+
+```{r}
+cotahist_bdrs_get(ch)
+```
+
+Equity options
+
+```{r}
+cotahist_equity_options_get(ch)
+```
