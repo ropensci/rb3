@@ -6,10 +6,10 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-    collapse = TRUE,
-    comment = "#>",
-    fig.path = "man/figures/README-",
-    out.width = "100%"
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
 
@@ -22,17 +22,28 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-Download and read a bunch o data from [B3](https://www.b3.com.br) making it easy
-to store, process and consume it in a structure way.
+[B3](https://www.b3.com.br)  is the main financial exchange in Brazil, offering 
+support and access to trading systems for equity and fixed income markets. 
+In its website you can find a vast number of datasets regarding prices and transactions 
+for contracts available for trading at these markets. 
+
+Package **rb3** facilitates downloading and reading these datasets from 
+[B3](https://www.b3.com.br), making it easy to consume it in R in a structured way.
+
 
 # Documentation
 
-The documentation is available [here](https://wilsonfreitas.github.io/rb3/),
-the reference and articles with real applications can be found.
+The documentation is available in its [pkgdown page](https://wilsonfreitas.github.io/rb3/),
+where articles (vignettes) with real applications can be found.
 
 ## Installation
 
 ```r
+# in CRAN (Official) -- NOT YET AVAILABLE
+# install.packages("rb3")
+
+# github (Development branch)
+if (!require(devtools)) install.packages("devtools")
 devtools::install_github("wilsonfreitas/rb3")
 ```
 
@@ -48,31 +59,31 @@ library(ggplot2)
 library(stringr)
 
 df_yc <- yc_get(
-    first_date = Sys.Date() - 255 * 5,
-    last_date = Sys.Date(),
-    by = 255
+  first_date = Sys.Date() - 255 * 5,
+  last_date = Sys.Date(),
+  by = 255
 )
 
 p <- ggplot(
-    df_yc,
-    aes(
-        x = forward_date,
-        y = r_252,
-        group = refdate,
-        color = factor(refdate)
-    )
+  df_yc,
+  aes(
+    x = forward_date,
+    y = r_252,
+    group = refdate,
+    color = factor(refdate)
+  )
 ) +
-    geom_line() +
-    labs(
-        title = "Yield Curves for Brazil",
-        subtitle = "Built using interest rates future contracts",
-        caption = str_glue("Data imported using rb3 at {Sys.Date()}"),
-        x = "Forward Date",
-        y = "Annual Interest Rate",
-        color = "Reference Date"
-    ) +
-    theme_light() +
-    scale_y_continuous(labels = scales::percent)
+  geom_line() +
+  labs(
+    title = "Yield Curves for Brazil",
+    subtitle = "Built using interest rates future contracts",
+    caption = str_glue("Data imported using rb3 at {Sys.Date()}"),
+    x = "Forward Date",
+    y = "Annual Interest Rate",
+    color = "Reference Date"
+  ) +
+  theme_light() +
+  scale_y_continuous(labels = scales::percent)
 
 print(p)
 ```
@@ -86,41 +97,60 @@ library(rb3)
 library(dplyr)
 
 df <- futures_get(
-    first_date = "2022-04-01",
-    last_date = "2022-04-29",
-    by = 5
+  first_date = "2022-04-01",
+  last_date = "2022-04-29",
+  by = 5
 )
 
-df |> filter(commodity == "DI1")
+glimpse(
+  df |> 
+    filter(commodity == "DI1")
+)
 ```
 
 ### Equity data
 
-Equity closing data (without price adjustments) is available thru `cotahist_get`.
+Equity closing data (without **ANY** price adjustments) is available thru `cotahist_get`.
 
 ```{r}
 library(rb3)
 library(bizdays)
 
-date <- preceding(Sys.Date(), "Brazil/ANBIMA") # last business day
+# fix for ssl error (only in linux)
+if (Sys.info()["sysname"] == "Linux") {
+  httr::set_config(
+    httr::config(ssl_verifypeer = FALSE)
+  )
+}
+
+date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA") # last business day
 ch <- cotahist_get(date, "daily")
-cotahist_equity_get(ch)
+
+glimpse(
+  cotahist_equity_get(ch)
+)
 ```
 
 Funds data
 
 ```{r}
-cotahist_funds_get(ch)
+glimpse(
+  cotahist_funds_get(ch)
+)
 ```
 
 BDRs data
 
 ```{r}
-cotahist_bdrs_get(ch)
+glimpse(
+  cotahist_bdrs_get(ch)
+)
 ```
 
 Equity options
 
 ```{r}
-cotahist_equity_options_get(ch)
+glimpse(
+  cotahist_equity_options_get(ch)
+)
 ```

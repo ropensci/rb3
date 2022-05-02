@@ -1,0 +1,16 @@
+citHeader("To cite rb3 in publications use:")
+
+citEntry(
+  entry    = "Manual",
+  title    = "Download and Parse Public Data Released by B3 Exchange",
+  author   = c(person("Wilson", "Freitas"), person("Marcelo", "Perlin")),
+  note = "R package version 0.0.1",
+  year     = "2022",
+  url      = "https://github.com/wilsonfreitas/rb3",
+  textVersion = paste0(
+  "Download and parse public files released by B3 and convert them",
+  "into useful formats and data structures common to data analysis",
+  " practitioners."
+
+  )
+)

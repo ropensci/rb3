@@ -60,7 +60,8 @@ field <- function(name, description, ...) {
     } else {
       attr(name, "description") <- ""
       parms <- list(description, ...)
-      warning("description invalid type: ", paste(class(description), collapse = ", "))
+      warning("description invalid type: ", 
+              paste(class(description), collapse = ", "))
     }
   }
 
