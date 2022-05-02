@@ -8,6 +8,7 @@ test_df <- function(df_in) {
 }
 
 test_that("Test of yc function", {
+  
   if (!covr::in_covr()) {
     skip_on_cran()
     skip_if_offline()

@@ -1,6 +1,7 @@
 #' Fetches Yield Curve Data from B3
 #'
-#' Downloads yield curve data from B3 website <https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp>.
+#' Downloads yield curve data from B3 website 
+#' <https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp>.
 #' Particularly, we import data for DI X Pre.
 #' See <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
@@ -40,7 +41,9 @@ yc_get <- function(first_date = Sys.Date() - 5,
   df_yc <- dplyr::bind_rows(
     purrr::map(cli::cli_progress_along(
       date_vec,
-      format = "{pb_spin} Fetching data points {cli::pb_current}/{cli::pb_total} | {pb_bar} {pb_percent} | {pb_eta_str}"
+      format = paste0("{pb_spin} Fetching data points ", 
+                      " {cli::pb_current}/{cli::pb_total} ", 
+                      " | {pb_bar} {pb_percent} | {pb_eta_str}")
     ),
     get_single_yc,
     date_vec = date_vec,

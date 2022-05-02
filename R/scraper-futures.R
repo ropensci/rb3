@@ -84,7 +84,9 @@ futures_get <- function(first_date = Sys.Date() - 5,
   df <- dplyr::bind_rows(
     purrr::map(cli::cli_progress_along(
       date_vec,
-      format = "{pb_spin} Fetching data points {cli::pb_current}/{cli::pb_total} | {pb_bar} {pb_percent} | {pb_eta_str}"
+      format = paste0("{pb_spin} Fetching data points",
+                      "{cli::pb_current}/{cli::pb_total}", 
+                      " | {pb_bar} {pb_percent} | {pb_eta_str}")
     ),
     single_futures_get,
     date_vec,
