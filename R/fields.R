@@ -10,7 +10,7 @@ as.data.frame.fields <- function(x, ...) {
     `Field name` = fields_names(x),
     `Description` = fields_description(x),
     `Width` = fields_widths(x),
-    `Type` = unname(sapply(fields_handlers(x), function(y) attr(y, "type"))),
+    `Type` = purrr::map_chr(fields_handlers(x), function(y) attr(y, "type")),
     stringsAsFactors = FALSE,
     check.names = FALSE
   )
@@ -32,15 +32,15 @@ fields_description <- function(x) UseMethod("fields_description", x)
 fields_handlers <- function(x) UseMethod("fields_handlers", x)
 
 fields_names.fields <- function(fields) {
-  unname(sapply(fields, function(x) as.character(x)))
+  purrr::map_chr(fields, function(x) as.character(x))
 }
 
 fields_widths.fields <- function(fields) {
-  unname(sapply(fields, function(x) as.integer(attr(x, "width"))))
+  purrr::map_int(fields, function(x) as.integer(attr(x, "width")))
 }
 
 fields_description.fields <- function(fields) {
-  unname(sapply(fields, function(x) attr(x, "description")))
+  purrr::map_chr(fields, function(x) attr(x, "description"))
 }
 
 fields_handlers.fields <- function(fields) {
@@ -60,12 +60,14 @@ field <- function(name, description, ...) {
     } else {
       attr(name, "description") <- ""
       parms <- list(description, ...)
-      warning("description invalid type: ", 
-              paste(class(description), collapse = ", "))
+      warning(
+        "description invalid type: ",
+        paste(class(description), collapse = ", ")
+      )
     }
   }
 
-  classes <- sapply(parms, function(x) {
+  classes <- lapply(parms, function(x) {
     if (is(x, "width")) {
       "width"
     } else if (is(x, "handler")) {

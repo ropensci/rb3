@@ -198,10 +198,10 @@ setMethod(
 transmuter <- function(...) {
   objs <- list(...)
 
-  idx <- sapply(objs, function(x) is(x, "match_rule"))
+  idx <- purrr::map_lgl(objs, function(x) is(x, "match_rule"))
   rules <- objs[idx]
 
-  idx <- sapply(objs, function(x) is(x, "Transmuter"))
+  idx <- purrr::map_lgl(objs, function(x) is(x, "Transmuter"))
   parents <- objs[idx]
   for (parent in parents) {
     rules <- append(rules, slot(parent, "rules"))
@@ -238,7 +238,7 @@ take <- function(x, ...) {
 }
 
 take.list <- function(x, k, ...) {
-  sapply(x, function(x) {
+  purrr::map_chr(x, function(x) {
     v <- x[[k]]
     if (is.null(v)) {
       NA
