@@ -22,4 +22,5 @@
 #' @importFrom methods is new slot
 #' @importFrom utils write.table unzip
 #' @importFrom rlang .data
+#' @importFrom base64enc base64encode
 NULL

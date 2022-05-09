@@ -62,7 +62,6 @@ curve_download <- function(., dest, ...) {
   TRUE
 }
 
-#' @importFrom base64enc base64encode
 stock_indexes_composition_download <- function(., dest, ...) {
   params <- jsonlite::toJSON(list(
     pageNumber = 1,
