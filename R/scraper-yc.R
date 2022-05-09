@@ -1,31 +1,36 @@
 #' Fetches Yield Curve Data from B3
 #'
-#' Downloads yield curve data from B3 website 
+#' Downloads yield curve data from B3 website
 #' <https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp>.
 #' Particularly, we import data for DI X Pre.
 #' See <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
 #'
-#' @param first_date First date ("YYYY-MM-DD")
-#' @param last_date Last date ("YYYY-MM-DD")
-#' @param by Number of days in between fetched dates (default = 1)
+#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
+#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
+#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
+#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
 #' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
+#' `yc_get` returns the yield curve for the given date and `yc_mget` returns
+#' multiple yield curves for a given range of dates.
+#'
 #' @return A dataframe/tibble with yield curve data
 #'
-#' @export
+#' @name yc_get
 #'
 #' @examples
 #' \dontrun{
-#' df_yc <- yc_get()
+#' df_yc <- yc_mget(first_date = Sys.Date() - 5, last_date = Sys.Date())
 #' head(df_yc)
 #' }
-yc_get <- function(first_date = Sys.Date() - 5,
-                   last_date = Sys.Date(),
-                   by = 1,
-                   cache_folder = cachedir(),
-                   do_cache = TRUE) {
+#' @export
+yc_mget <- function(first_date = Sys.Date() - 5,
+                    last_date = Sys.Date(),
+                    by = 1,
+                    cache_folder = cachedir(),
+                    do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
 
@@ -41,9 +46,11 @@ yc_get <- function(first_date = Sys.Date() - 5,
   df_yc <- dplyr::bind_rows(
     purrr::map(cli::cli_progress_along(
       date_vec,
-      format = paste0("{pb_spin} Fetching data points ", 
-                      " {cli::pb_current}/{cli::pb_total} ", 
-                      " | {pb_bar} {pb_percent} | {pb_eta_str}")
+      format = paste0(
+        "{pb_spin} Fetching data points ",
+        " {cli::pb_current}/{cli::pb_total} ",
+        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+      )
     ),
     get_single_yc,
     date_vec = date_vec,
@@ -53,6 +60,19 @@ yc_get <- function(first_date = Sys.Date() - 5,
   )
 
   return(df_yc)
+}
+
+#' @rdname yc_get
+#' @examples
+#' \dontrun{
+#' df_yc <- yc_get(Sys.Date())
+#' head(df_yc)
+#' }
+#' @export
+yc_get <- function(refdate = Sys.Date(),
+                   cache_folder = cachedir(),
+                   do_cache = TRUE) {
+  get_single_yc(1, as.Date(refdate), cache_folder, do_cache)
 }
 
 #' Fetches a single data

@@ -21,7 +21,7 @@ library(rb3)
 library(ggplot2)
 library(stringr)
 
-df_yc <- yc_get(
+df_yc <- yc_mget(
   first_date = Sys.Date() - 255 * 5,
   last_date = Sys.Date(),
   by = 255
@@ -29,11 +29,13 @@ df_yc <- yc_get(
 
 p <- ggplot(
   df_yc,
-  aes(x = forward_date,
-      y = r_252,
-      group = refdate,
-      color = factor(refdate))
-  ) +
+  aes(
+    x = forward_date,
+    y = r_252,
+    group = refdate,
+    color = factor(refdate)
+  )
+) +
   geom_line() +
   labs(
     title = "Yield Curves for Brazil",
