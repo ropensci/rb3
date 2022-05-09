@@ -4,7 +4,13 @@
 \alias{convert_to}
 \title{Converts B3 messy files to structured formats}
 \usage{
-convert_to(filename, template = NULL, parse_fields = TRUE, format = "csv")
+convert_to(
+  filename,
+  template = NULL,
+  parse_fields = TRUE,
+  format = "csv",
+  destdir = NULL
+)
 }
 \arguments{
 \item{filename}{a string containing a path for the file.}
@@ -14,6 +20,8 @@ convert_to(filename, template = NULL, parse_fields = TRUE, format = "csv")
 \item{parse_fields}{a logical indicating if the fields must be parsed.}
 
 \item{format}{output format}
+
+\item{destdir}{a string with destination directory to save converted file}
 }
 \value{
 a string with the file path of generated file.
