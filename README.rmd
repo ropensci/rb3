@@ -39,9 +39,10 @@ where articles (vignettes) with real applications can be found.
 ## Installation
 
 ```r
-# in CRAN (Official) -- NOT YET AVAILABLE
-# install.packages("rb3")
+install.packages("rb3")
+```
 
+```r
 # github (Development branch)
 if (!require(devtools)) install.packages("devtools")
 devtools::install_github("wilsonfreitas/rb3")
