@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   Fetching-historical-future-rates: Fetching-historical-future-rates.html
   Fetching-historical-yield-curve: Fetching-historical-yield-curve.html
-last_built: 2022-05-09T21:39Z
+last_built: 2022-05-09T23:45Z
 urls:
   reference: http://wilsonfreitas.github.io/rb3/reference
   article: http://wilsonfreitas.github.io/rb3/articles
