@@ -2,26 +2,34 @@
 % Please edit documentation in R/scraper-futures.R
 \name{futures_get}
 \alias{futures_get}
+\alias{futures_mget}
 \title{Get futures prices from trading session settlements page}
 \usage{
-futures_get(
+futures_mget(
   first_date = Sys.Date() - 5,
   last_date = Sys.Date(),
   by = 1,
   cache_folder = cachedir(),
   do_cache = TRUE
 )
+
+futures_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
 }
 \arguments{
-\item{first_date}{First date ("YYYY-MM-DD")}
+\item{first_date}{First date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
 
-\item{last_date}{Last date ("YYYY-MM-DD")}
+\item{last_date}{Last date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
 
-\item{by}{Number of days in between fetched dates (default = 1)}
+\item{by}{Number of days in between fetched dates (default = 1) in \code{yc_mget}}
 
 \item{cache_folder}{Location of cache folder (default = cachedir())}
 
-\item{do_cache}{Whether to use cache or not (default = TRUE)}
+\item{do_cache}{Whether to use cache or not (default = TRUE)
+
+\code{futures_get} returns the future contracts for the given date and
+\code{futures_mget} returns future contracts for multiple dates in a given range.}
+
+\item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
 }
 \value{
 \code{data.frame} with futures prices.
@@ -33,5 +41,9 @@ to get futures prices.
 \examples{
 \dontrun{
 df <- futures_get("2022-04-18", "2022-04-22")
+}
+\dontrun{
+df_fut <- futures_get(Sys.Date())
+head(df_fut)
 }
 }

@@ -59,24 +59,30 @@ maturity2date <- function(x, expr = "first day") {
 #' Scrape page <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/>
 #' to get futures prices.
 #'
-#' @param first_date First date ("YYYY-MM-DD")
-#' @param last_date Last date ("YYYY-MM-DD")
-#' @param by Number of days in between fetched dates (default = 1)
+#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
+#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
+#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
+#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
 #' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
+#' `futures_get` returns the future contracts for the given date and
+#' `futures_mget` returns future contracts for multiple dates in a given range.
+#'
 #' @return `data.frame` with futures prices.
+#'
+#' @name futures_get
 #'
 #' @examples
 #' \dontrun{
 #' df <- futures_get("2022-04-18", "2022-04-22")
 #' }
 #' @export
-futures_get <- function(first_date = Sys.Date() - 5,
-                        last_date = Sys.Date(),
-                        by = 1,
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
+futures_mget <- function(first_date = Sys.Date() - 5,
+                         last_date = Sys.Date(),
+                         by = 1,
+                         cache_folder = cachedir(),
+                         do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
   date_vec <- bizdays::bizseq(first_date, last_date, "Brazil/ANBIMA")
@@ -84,9 +90,11 @@ futures_get <- function(first_date = Sys.Date() - 5,
   df <- dplyr::bind_rows(
     purrr::map(cli::cli_progress_along(
       date_vec,
-      format = paste0("{pb_spin} Fetching data points",
-                      "{cli::pb_current}/{cli::pb_total}", 
-                      " | {pb_bar} {pb_percent} | {pb_eta_str}")
+      format = paste0(
+        "{pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+      )
     ),
     single_futures_get,
     date_vec,
@@ -95,6 +103,19 @@ futures_get <- function(first_date = Sys.Date() - 5,
     )
   )
   return(df)
+}
+
+#' @rdname futures_get
+#' @examples
+#' \dontrun{
+#' df_fut <- futures_get(Sys.Date())
+#' head(df_fut)
+#' }
+#' @export
+futures_get <- function(refdate = Sys.Date(),
+                        cache_folder = cachedir(),
+                        do_cache = TRUE) {
+  single_futures_get(1, as.Date(refdate), cache_folder, do_cache)
 }
 
 single_futures_get <- function(idx_date,

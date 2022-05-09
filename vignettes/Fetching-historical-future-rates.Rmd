@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 [ajustes]: <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/> "Trading session settlements"
 
 The historical prices of all futures contracts traded at B3 can be obtained with
-the `futures_get` function.
+the `futures_mget` function.
 These are the settlement prices delivered daily by B3 at the
 [Trading session settlements][ajustes] page.
 
@@ -28,7 +28,7 @@ library(stringr)
 library(dplyr)
 library(fixedincome)
 
-df <- futures_get(
+df <- futures_mget(
     first_date = "2021-01-01",
     last_date = "2022-04-27",
     by = 5
