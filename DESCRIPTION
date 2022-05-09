@@ -29,7 +29,8 @@ Imports:
     rlang,
     methods,
     yaml,
-    digest
+    digest,
+    base64enc
 Suggests:
     testthat,
     knitr,
