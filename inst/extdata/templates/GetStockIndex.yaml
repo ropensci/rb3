@@ -1,0 +1,46 @@
+id: GetStockIndex
+filename: ~
+filetype: CUSTOM
+description: Composição dos índices da B3
+locale: pt
+downloader:
+  function: stock_indexes_composition_download
+  url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetStockIndex
+  format: json
+  encoding: latin1
+reader:
+  function: stock_indexes_composition_reader
+fields:
+- name: company
+  description: Nome da companhia
+  handler:
+    type: character
+- name: spotlight
+  description: Código de especificação da ação
+  handler:
+    type: character
+- name: code
+  description: Código da ação
+  handler:
+    type: character
+- name: indexes
+  description: Lista de índexes separados por vírgula
+  handler:
+    type: character
+- name: update
+  description: Data de atualização
+  handler:
+    type: Date
+    format: '%Y-%m-%d'
+- name: start_month
+  description: Mês de início de vigência
+  handler:
+    type: character
+- name: end_month
+  description: Mês de fim de vigência
+  handler:
+    type: character
+- name: year
+  description: Ano de vigência
+  handler:
+    type: character

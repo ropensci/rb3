@@ -61,3 +61,21 @@ curve_download <- function(., dest, ...) {
   save_resource(res, enc, dest)
   TRUE
 }
+
+#' @importFrom base64enc base64encode
+stock_indexes_composition_download <- function(., dest, ...) {
+  params <- jsonlite::toJSON(list(
+    pageNumber = 1,
+    pageSize = 9999
+  ), auto_unbox = TRUE)
+  params_enc <- base64enc::base64encode(charToRaw(params))
+  url <- httr::parse_url(.$downloader$url)
+  url$path <- paste0(url$path, "/", params_enc)
+  res <- httr::GET(url)
+  if (httr::status_code(res) != 200) {
+    return(FALSE)
+  }
+  enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
+  save_resource(res, enc, dest)
+  TRUE
+}

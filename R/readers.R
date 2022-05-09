@@ -203,3 +203,21 @@ curve_read <- function(., filename, parse_fields = TRUE) {
     df
   }
 }
+
+stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {
+  jason <- jsonlite::fromJSON(filename)
+  if (is.null(jason$results)) {
+    return(NULL)
+  }
+  df <- jason$results
+  df[["update"]] <- jason$header$update
+  df[["start_month"]] <- jason$header$startMonth
+  df[["end_month"]] <- jason$header$endMonth
+  df[["year"]] <- jason$header$year
+  colnames(df) <- .$colnames
+  if (parse_fields) {
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
+  } else {
+    df
+  }
+}
