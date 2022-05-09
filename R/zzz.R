@@ -1,7 +1,9 @@
 
 new_field <- function(x) {
   width_ <- if (!is.null(x$width)) width(x$width)
-  if (x$handler$type == "numeric") {
+  if (is.null(x$handler$type)) {
+    handler_ <- pass_thru_handler()
+  } else if (x$handler$type == "numeric") {
     handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
   } else if (x$handler$type == "factor") {
     handler_ <- to_factor_handler(x$handler$levels, x$handler$labels)

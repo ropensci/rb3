@@ -13,25 +13,13 @@ reader:
 fields:
 - name: mercadoria
   description: Nome e código da mercadoria
-  handler:
-    type: character
 - name: vencimento
   description: Código de vencimento do contrato futuro com 3 caractéres
-  handler:
-    type: character
 - name: pu_anterior
   description: Preço de ajuste do dia anterior
-  handler:
-    type: character
 - name: pu_atual
   description: Preço de ajuste atual
-  handler:
-    type: character
 - name: variacao
   description: Variação do preço de ajuste
-  handler:
-    type: character
 - name: ajuste
   description: Valor do ajuste por contrato (R$)
-  handler:
-    type: character

@@ -64,3 +64,6 @@ base64enc::base64decode(k) |> rawToChar()
 
 f <- download_data("GetStockIndex")
 df <- read_marketdata(f, "GetStockIndex", FALSE)
+str(df)
+df <- read_marketdata(f, "GetStockIndex", TRUE)
+str(df)

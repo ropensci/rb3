@@ -13,20 +13,12 @@ reader:
 fields:
 - name: company
   description: Nome da companhia
-  handler:
-    type: character
 - name: spotlight
   description: Código de especificação da ação
-  handler:
-    type: character
 - name: code
   description: Código da ação
-  handler:
-    type: character
 - name: indexes
   description: Lista de índexes separados por vírgula
-  handler:
-    type: character
 - name: update
   description: Data de atualização
   handler:
@@ -34,13 +26,7 @@ fields:
     format: '%Y-%m-%d'
 - name: start_month
   description: Mês de início de vigência
-  handler:
-    type: character
 - name: end_month
   description: Mês de fim de vigência
-  handler:
-    type: character
 - name: year
   description: Ano de vigência
-  handler:
-    type: character
