@@ -1,3 +1,7 @@
+# rb3 0.0.3 
+
+* fixed tests for yc_get()
+
 # rb3 0.0.2
 
 * changes for ropensci process, replaced `sapply` with `purrr::map_xxx`.

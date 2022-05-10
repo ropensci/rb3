@@ -42,7 +42,7 @@ test_that("Test of yc_get function", {
     skip_if_offline()
   }
 
-  refdate <- bizdays::offset(Sys.Date(), -1, "Brazil/ANBIMA")
+  refdate <- bizdays::offset(Sys.Date(), -30, "Brazil/ANBIMA")
 
   # first call (no cache)
   df_yc_1 <- yc_get(refdate, do_cache = FALSE)
@@ -56,3 +56,4 @@ test_that("Test of yc_get function", {
 
   expect_identical(df_yc_1, df_yc_2)
 })
+
