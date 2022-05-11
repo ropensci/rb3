@@ -19,11 +19,8 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wilsonfreitas/rb3?branch=main)
 [![R build (rcmdcheck)](https://github.com/wilsonfreitas/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/wilsonfreitas/rb3/actions)
-
 [![CRAN status](https://www.r-pkg.org/badges/version/rb3)](https://CRAN.R-project.org/package=rb3)
-
 [![](https://cranlogs.r-pkg.org/badges/rb3)](https://cran.r-project.org/package=rb3)
-
 <!-- badges: end -->
 
 [B3](https://www.b3.com.br)  is the main financial exchange in Brazil, offering 
