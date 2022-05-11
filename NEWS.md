@@ -1,6 +1,7 @@
 # rb3 0.0.3 
 
 * fixed tests for yc_get()
+* updated to bizdays version 0.1.10 (use of load_builtin_calendars - Issue #31)
 
 # rb3 0.0.2
 

@@ -14,8 +14,8 @@ License: MIT + file LICENSE
 LazyData: true
 Depends:
     R (>= 4.1.0),
-    bizdays
 Imports:
+    bizdays,
     stringr,
     proto,
     cli,

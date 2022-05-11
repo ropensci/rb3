@@ -85,4 +85,5 @@ load_templates <- function() {
 
 .onAttach <- function(libname, pkgname) {
   load_templates()
+  bizdays::load_builtin_calendars()
 }
