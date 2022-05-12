@@ -14,3 +14,4 @@ templates_save.r
 ^pkgdown$
 ^\.github$
 ^README\.Rmd$
+^codemeta\.json$
