@@ -1,5 +1,12 @@
 test_that("it should read options_open_interest_read", {
-  f <- download_data("OpcoesAcoesEmAberto", refdate = as.Date("2022-05-10"))
+  if (!covr::in_covr()) {
+    skip_on_cran()
+    skip_if_offline()
+  }
+
+  f <- system.file("extdata/big-files/OpcoesAcoesEmAberto.json",
+    package = "rb3"
+  )
   df <- read_marketdata(f, "OpcoesAcoesEmAberto")
   expect_s3_class(df, "data.frame")
   df <- read_marketdata(f, "OpcoesAcoesEmAberto", FALSE)
@@ -7,7 +14,7 @@ test_that("it should read options_open_interest_read", {
 })
 
 test_that("it should read stock_indexes_composition_reader", {
-  f <- download_data("GetStockIndex")
+  f <- system.file("extdata/GetStockIndex.json", package = "rb3")
   df <- read_marketdata(f, "GetStockIndex")
   expect_s3_class(df, "data.frame")
   df <- read_marketdata(f, "GetStockIndex", FALSE)
