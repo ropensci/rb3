@@ -12,7 +12,7 @@ l <- jsonlite::fromJSON(txt)
 
 df <- do.call(rbind, l$Empresa)
 
-f <- download_data("OpcoesAcoesEmAberto",
+f <- download_marketdata("OpcoesAcoesEmAberto",
   do_cache = FALSE, refdate = Sys.Date() - 1
 )
 

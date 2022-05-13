@@ -1,6 +1,6 @@
 
 query_cdi <- function() {
-  fname <- download_data("CDIIDI")
+  fname <- download_marketdata("CDIIDI")
 
   if (!is.null(fname)) {
     read_marketdata(fname, "CDIIDI")

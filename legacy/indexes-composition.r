@@ -62,7 +62,7 @@ k <- "eyJsYW5ndWFnZSI6InB0LWJyIiwicGFnZU51bWJlciI6MSwicGFnZVNpemUiOjIwLCJpbmRleC
 base64enc::base64decode(k) |> rawToChar()
 #> "{\"language\":\"pt-br\",\"pageNumber\":1,\"pageSize\":20,\"index\":\"IBXX\",\"segment\":\"1\"}"
 
-f <- download_data("GetStockIndex")
+f <- download_marketdata("GetStockIndex")
 df <- read_marketdata(f, "GetStockIndex", FALSE)
 str(df)
 df <- read_marketdata(f, "GetStockIndex", TRUE)

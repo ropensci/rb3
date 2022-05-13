@@ -124,7 +124,7 @@ single_futures_get <- function(idx_date,
                                do_cache = TRUE) {
   tpl <- "AjustesDiarios"
   refdate <- date_vec[idx_date]
-  fname <- download_data(tpl, cache_folder, do_cache, refdate = refdate)
+  fname <- download_marketdata(tpl, cache_folder, do_cache, refdate = refdate)
   if (!is.null(fname)) {
     df <- read_marketdata(fname, tpl, TRUE, cache_folder, do_cache)
     if (!is.null(df)) {

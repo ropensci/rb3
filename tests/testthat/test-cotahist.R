@@ -3,12 +3,12 @@ if (!covr::in_covr()) {
   skip_if_offline()
 }
 
-if (Sys.info()['sysname'] == 'Linux') {
+if (Sys.info()["sysname"] == "Linux") {
   httr::set_config(config(ssl_verifypeer = FALSE))
 }
 
 test_that("it should download cotahist file", {
-  f <- download_data("COTAHIST_YEARLY", refdate = as.Date(ISOdate(2000, 1, 1)))
+  f <- download_marketdata("COTAHIST_YEARLY", refdate = as.Date(ISOdate(2000, 1, 1)))
   expect_true(file.exists(f))
   expect_true(file.size(f) > 1e6)
 })

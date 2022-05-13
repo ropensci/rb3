@@ -43,7 +43,7 @@ cotahist_get <- function(refdate,
     daily = "COTAHIST_DAILY"
   )
   refdate <- as.Date(refdate)
-  fname <- download_data(tpl, cache_folder, do_cache, refdate = refdate)
+  fname <- download_marketdata(tpl, cache_folder, do_cache, refdate = refdate)
   if (!is.null(fname)) {
     read_marketdata(fname, tpl)
   } else {

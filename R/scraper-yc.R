@@ -91,7 +91,7 @@ get_single_yc <- function(idx_date,
   tpl_name <- "TaxasReferenciais"
   tpl <- .retrieve_template(NULL, tpl_name)
   refdate <- date_vec[idx_date]
-  fname <- download_data(tpl_name, cache_folder, do_cache,
+  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
     refdate = refdate,
     curve_name = "PRE"
   )

@@ -3,12 +3,12 @@ if (!covr::in_covr()) {
 }
 
 test_that("it should download cdi/idi file", {
-  f <- download_data("CDIIDI")
+  f <- download_marketdata("CDIIDI")
   expect_true(file.exists(f))
 })
 
 test_that("it should read cdi/idi file", {
-  f <- download_data("CDIIDI")
+  f <- download_marketdata("CDIIDI")
   df <- read_marketdata(f, template = "CDIIDI")
   expect_true(is(df$taxa, "numeric"))
   expect_true(is(df$indice, "numeric"))

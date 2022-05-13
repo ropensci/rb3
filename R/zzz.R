@@ -52,7 +52,7 @@ new_template <- function(tpl) {
     } else if (n == "downloader") {
       obj[["downloader"]] <- tpl$downloader
       func_name <- tpl$downloader[["function"]]
-      obj[["download_data"]] <- getFromNamespace(func_name, "rb3")
+      obj[["download_marketdata"]] <- getFromNamespace(func_name, "rb3")
     } else {
       obj[[n]] <- tpl[[n]]
     }
