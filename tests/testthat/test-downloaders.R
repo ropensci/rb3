@@ -34,6 +34,12 @@ test_that("it should fail to settlement_prices_download", {
   expect_false(f)
 })
 
+test_that("it should stock_indexes_composition_download", {
+  tpl <- .retrieve_template(NULL, "GetStockIndex")
+  f <- stock_indexes_composition_download(tpl, tempfile())
+  expect_true(f)
+})
+
 test_that("it should fail to curve_download", {
   tpl <- .retrieve_template(NULL, "TaxasReferenciais")
   f <- curve_download(tpl, tempfile())
