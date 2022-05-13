@@ -14,3 +14,8 @@ Addin has no return
 \href{http://rstudio.github.io/rstudioaddins/}{addin} that allows users
 to query for specific attributes of templates.
 }
+\examples{
+\dontrun{
+display_template()
+}
+}

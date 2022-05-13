@@ -14,3 +14,8 @@ Addin has no return
 \href{http://rstudio.github.io/rstudioaddins/}{addin} that allows users
 to view the available templates.
 }
+\examples{
+\dontrun{
+show_templates()
+}
+}
