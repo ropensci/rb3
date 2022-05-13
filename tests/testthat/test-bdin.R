@@ -4,7 +4,8 @@ test_that("read file using filename to find template", {
     skip_on_cran()
   }
 
-  f <- system.file("extdata/big-files/BDIN", package = "rb3")
+  f <- system.file("extdata/big-files/BDIN.zip", package = "rb3")
+  f <- unzip(f, exdir = tempdir())
 
   res <- read_marketdata(f)
   expect_s3_class(res, "parts")

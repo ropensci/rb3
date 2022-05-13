@@ -4,9 +4,10 @@ test_that("it should read options_open_interest_read", {
     skip_if_offline()
   }
 
-  f <- system.file("extdata/big-files/OpcoesAcoesEmAberto.json",
+  f <- system.file("extdata/big-files/OpcoesAcoesEmAberto.zip",
     package = "rb3"
   )
+  f <- unzip(f, exdir = tempdir())
   df <- read_marketdata(f, "OpcoesAcoesEmAberto")
   expect_s3_class(df, "data.frame")
   df <- read_marketdata(f, "OpcoesAcoesEmAberto", FALSE)
