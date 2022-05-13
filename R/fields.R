@@ -11,7 +11,7 @@ as.data.frame.fields <- function(x, ...) {
     `Description` = fields_description(x),
     `Width` = fields_widths(x),
     `Type` = purrr::map_chr(fields_handlers(x), function(y) attr(y, "type")),
-    stringsAsFactors = FALSE,
+    row.names = seq_along(x),
     check.names = FALSE
   )
 }
@@ -23,27 +23,19 @@ print.fields <- function(x, ...) {
   )
 }
 
-fields_names <- function(x) UseMethod("fields_names", x)
-
-fields_widths <- function(x) UseMethod("fields_widths", x)
-
-fields_description <- function(x) UseMethod("fields_description", x)
-
-fields_handlers <- function(x) UseMethod("fields_handlers", x)
-
-fields_names.fields <- function(fields) {
+fields_names <- function(fields) {
   purrr::map_chr(fields, function(x) as.character(x))
 }
 
-fields_widths.fields <- function(fields) {
+fields_widths <- function(fields) {
   purrr::map_int(fields, function(x) as.integer(attr(x, "width")))
 }
 
-fields_description.fields <- function(fields) {
+fields_description <- function(fields) {
   purrr::map_chr(fields, function(x) attr(x, "description"))
 }
 
-fields_handlers.fields <- function(fields) {
+fields_handlers <- function(fields) {
   handlers <- lapply(fields, function(x) attr(x, "handler"))
   names(handlers) <- fields_names(fields)
   handlers
