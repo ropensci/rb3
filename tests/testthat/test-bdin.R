@@ -1,6 +1,8 @@
 
 test_that("read file using filename to find template", {
-  skip_on_cran()
+  if (!covr::in_covr()) {
+    skip_on_cran()
+  }
 
   f <- system.file("extdata/big-files/BDIN", package = "rb3")
 
