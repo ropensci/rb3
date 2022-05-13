@@ -4,9 +4,12 @@
 #'   gadget](https://shiny.rstudio.com/articles/gadgets.html) and
 #'   [addin](http://rstudio.github.io/rstudioaddins/) that allows users
 #'   to view the available templates.
-#' 
-#' @return Addin has no return
 #'
+#' @return Addin has no return
+#' @examples
+#' \dontrun{
+#' show_templates()
+#' }
 #' @export
 show_templates <- function() {
   ui <- miniUI::miniPage(
@@ -28,10 +31,9 @@ show_templates <- function() {
 
   app <- shiny::shinyApp(ui = ui, server = server)
   viewer <- shiny::dialogViewer("rb3 Templates", width = 1200, height = 900)
-  
+
   # dont call shiny when in covr
   if (!covr::in_covr()) {
     shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
   }
-  
 }
