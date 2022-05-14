@@ -26,7 +26,14 @@ knitr::opts_chunk$set(
 [B3](https://www.b3.com.br)  is the main financial exchange in Brazil, offering 
 support and access to trading systems for equity and fixed income markets. 
 In its website you can find a vast number of datasets regarding prices and transactions 
-for contracts available for trading at these markets. 
+for contracts available for trading at these markets, including:
+
+* equities (unadjusted for corporate events)
+* futures
+* FII (Reits)
+* options
+* BDRs
+* historical yield curves (calculated from futures contracts)
 
 Package **rb3** facilitates downloading and reading these datasets from 
 [B3](https://www.b3.com.br), making it easy to consume it in R in a structured way.
