@@ -32,7 +32,8 @@ these markets, including:
 
 Package **rb3** facilitates downloading and reading these datasets from
 [B3](https://www.b3.com.br), making it easy to consume it in R in a
-structured way.
+structured way. These datasets can be used in industry or academic
+studies.
 
 # Documentation
 
