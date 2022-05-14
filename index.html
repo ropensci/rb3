@@ -75,8 +75,16 @@
 <div class="page-header"><h1 id="rb3">rb3<a class="anchor" aria-label="anchor" href="#rb3"></a>
 </h1></div>
 <!-- badges: start -->
-<p><a href="https://www.b3.com.br" class="external-link">B3</a> is the main financial exchange in Brazil, offering support and access to trading systems for equity and fixed income markets. In its website you can find a vast number of datasets regarding prices and transactions for contracts available for trading at these markets.</p>
-<p>Package <strong>rb3</strong> facilitates downloading and reading these datasets from <a href="https://www.b3.com.br" class="external-link">B3</a>, making it easy to consume it in R in a structured way.</p>
+<p><a href="https://www.b3.com.br" class="external-link">B3</a> is the main financial exchange in Brazil, offering support and access to trading systems for equity and fixed income markets. In its website you can find a vast number of datasets regarding prices and transactions for contracts available for trading at these markets, including:</p>
+<ul>
+<li>equities (unadjusted for corporate events)</li>
+<li>futures</li>
+<li>FII (Reits)</li>
+<li>options</li>
+<li>BDRs</li>
+<li>historical yield curves (calculated from futures contracts)</li>
+</ul>
+<p>Package <strong>rb3</strong> facilitates downloading and reading these datasets from <a href="https://www.b3.com.br" class="external-link">B3</a>, making it easy to consume it in R in a structured way. These datasets can be used in industry or academic studies.</p>
 </div>
 <div class="section level1">
 <h1 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -109,10 +117,6 @@
   last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
   by <span class="op">=</span> <span class="fl">255</span>
 <span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>
   <span class="va">df_yc</span>,
@@ -158,14 +162,14 @@
 <span class="op">)</span>
 <span class="co">#&gt; Rows: 153</span>
 <span class="co">#&gt; Columns: 8</span>
-<span class="co">#&gt; $ refdate          &lt;date&gt; 2022-04-01, 2022-04-01, 2022-04-01, 2022-04-01, 2022-04-~</span>
-<span class="co">#&gt; $ commodity        &lt;chr&gt; "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "~</span>
-<span class="co">#&gt; $ maturity_code    &lt;chr&gt; "J22", "K22", "M22", "N22", "Q22", "U22", "V22", "X22", "~</span>
-<span class="co">#&gt; $ symbol           &lt;chr&gt; "DI1J22", "DI1K22", "DI1M22", "DI1N22", "DI1Q22", "DI1U22~</span>
-<span class="co">#&gt; $ price_previous   &lt;dbl&gt; 99999.99, 99172.50, 98159.27, 97181.87, 96199.14, 95137.6~</span>
-<span class="co">#&gt; $ price            &lt;dbl&gt; 100000.00, 99172.31, 98160.23, 97185.43, 96210.42, 95159.~</span>
-<span class="co">#&gt; $ change           &lt;dbl&gt; 0.01, -0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, 57.3~</span>
-<span class="co">#&gt; $ settlement_value &lt;dbl&gt; 0.01, 0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, 57.32~</span></code></pre></div>
+<span class="co">#&gt; $ refdate          &lt;date&gt; 2022-04-01, 2022-04-01, 2022-04-01, 2022-04-01, 2022…</span>
+<span class="co">#&gt; $ commodity        &lt;chr&gt; "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1…</span>
+<span class="co">#&gt; $ maturity_code    &lt;chr&gt; "J22", "K22", "M22", "N22", "Q22", "U22", "V22", "X22…</span>
+<span class="co">#&gt; $ symbol           &lt;chr&gt; "DI1J22", "DI1K22", "DI1M22", "DI1N22", "DI1Q22", "DI…</span>
+<span class="co">#&gt; $ price_previous   &lt;dbl&gt; 99999.99, 99172.50, 98159.27, 97181.87, 96199.14, 951…</span>
+<span class="co">#&gt; $ price            &lt;dbl&gt; 100000.00, 99172.31, 98160.23, 97185.43, 96210.42, 95…</span>
+<span class="co">#&gt; $ change           &lt;dbl&gt; 0.01, -0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, …</span>
+<span class="co">#&gt; $ settlement_value &lt;dbl&gt; 0.01, 0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, 5…</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="equity-data">Equity data<a class="anchor" aria-label="anchor" href="#equity-data"></a>
@@ -174,6 +178,11 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-bizdays" class="external-link">bizdays</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'bizdays'</span>
+<span class="co">#&gt; The following object is masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     offset</span>
 
 <span class="co"># fix for ssl error (only in linux)</span>
 <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"sysname"</span><span class="op">]</span> <span class="op">==</span> <span class="st">"Linux"</span><span class="op">)</span> <span class="op">{</span>
@@ -184,87 +193,86 @@
 
 <span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/adjust.date.html" class="external-link">preceding</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span> <span class="co"># last business day</span>
 <span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cotahist_get.html">cotahist_get</a></span><span class="op">(</span><span class="va">date</span>, <span class="st">"daily"</span><span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span>
   <span class="fu"><a href="reference/cotahist-extracts.html">cotahist_equity_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Rows: 369</span>
+<span class="co">#&gt; Rows: 382</span>
 <span class="co">#&gt; Columns: 13</span>
-<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-10, 2022-05-10, 2022-05-10, 2022-05-10, 202~</span>
-<span class="co">#&gt; $ symbol                &lt;chr&gt; "AALR3", "ABCB4", "ABEV3", "AERI3", "AESB3", "AFLT3"~</span>
-<span class="co">#&gt; $ open                  &lt;dbl&gt; 19.68, 15.91, 13.81, 4.15, 10.75, 10.14, 33.21, 8.70~</span>
-<span class="co">#&gt; $ high                  &lt;dbl&gt; 19.85, 15.97, 14.03, 4.18, 10.95, 10.18, 33.77, 9.18~</span>
-<span class="co">#&gt; $ low                   &lt;dbl&gt; 19.55, 15.50, 13.72, 3.90, 10.70, 10.14, 32.51, 8.25~</span>
-<span class="co">#&gt; $ close                 &lt;dbl&gt; 19.82, 15.60, 13.73, 4.02, 10.92, 10.18, 32.70, 9.18~</span>
-<span class="co">#&gt; $ average               &lt;dbl&gt; 19.76, 15.63, 13.80, 4.02, 10.81, 10.16, 32.98, 8.56~</span>
-<span class="co">#&gt; $ best_bid              &lt;dbl&gt; 19.81, 15.60, 13.73, 4.00, 10.90, 9.17, 32.67, 8.75,~</span>
-<span class="co">#&gt; $ best_ask              &lt;dbl&gt; 19.82, 15.61, 13.75, 4.03, 10.92, 9.94, 32.71, 9.38,~</span>
-<span class="co">#&gt; $ volume                &lt;dbl&gt; 6205624, 14542334, 225182142, 7398951, 11216988, 203~</span>
-<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 314000, 929900, 16310700, 1840400, 1037000, 200, 586~</span>
-<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 1447, 5767, 19115, 6228, 2764, 2, 3084, 540, 294, 10~</span>
-<span class="co">#&gt; $ distribution_id       &lt;int&gt; 102, 140, 125, 101, 102, 119, 112, 101, 103, 231, 23~</span></code></pre></div>
+<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-13, 2022-05-13, 2022-05-13, 2022-05-13,…</span>
+<span class="co">#&gt; $ symbol                &lt;chr&gt; "AALR3", "ABCB4", "ABEV3", "AERI3", "AESB3", "AF…</span>
+<span class="co">#&gt; $ open                  &lt;dbl&gt; 19.81, 16.16, 14.55, 3.83, 10.79, 9.06, 31.60, 9…</span>
+<span class="co">#&gt; $ high                  &lt;dbl&gt; 19.89, 16.55, 14.67, 3.93, 10.81, 9.50, 32.40, 9…</span>
+<span class="co">#&gt; $ low                   &lt;dbl&gt; 19.43, 16.06, 14.45, 3.72, 10.64, 9.06, 31.54, 9…</span>
+<span class="co">#&gt; $ close                 &lt;dbl&gt; 19.75, 16.54, 14.54, 3.75, 10.64, 9.35, 32.06, 9…</span>
+<span class="co">#&gt; $ average               &lt;dbl&gt; 19.66, 16.38, 14.55, 3.80, 10.69, 9.38, 31.99, 9…</span>
+<span class="co">#&gt; $ best_bid              &lt;dbl&gt; 19.75, 16.45, 14.54, 3.74, 10.64, 9.35, 32.06, 9…</span>
+<span class="co">#&gt; $ best_ask              &lt;dbl&gt; 19.80, 16.54, 14.58, 3.75, 10.65, 9.47, 32.08, 9…</span>
+<span class="co">#&gt; $ volume                &lt;dbl&gt; 13692159, 10155477, 194865062, 13607948, 1187700…</span>
+<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 696300, 619700, 13385100, 3571700, 1110400, 1800…</span>
+<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 2873, 4115, 29016, 7499, 4533, 16, 3363, 492, 63…</span>
+<span class="co">#&gt; $ distribution_id       &lt;int&gt; 102, 140, 125, 101, 102, 119, 112, 101, 103, 231…</span></code></pre></div>
 <p>Funds data</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span>
   <span class="fu"><a href="reference/cotahist-extracts.html">cotahist_funds_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Rows: 360</span>
+<span class="co">#&gt; Rows: 359</span>
 <span class="co">#&gt; Columns: 13</span>
-<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-10, 2022-05-10, 2022-05-10, 2022-05-10, 202~</span>
-<span class="co">#&gt; $ symbol                &lt;chr&gt; "BZLI11", "ABCP11", "AFHI11", "AFOF11", "AIEC11", "A~</span>
-<span class="co">#&gt; $ open                  &lt;dbl&gt; 17.71, 72.05, 98.81, 89.59, 78.00, 930.00, 114.56, 1~</span>
-<span class="co">#&gt; $ high                  &lt;dbl&gt; 17.71, 73.76, 98.85, 89.60, 79.47, 950.09, 115.97, 1~</span>
-<span class="co">#&gt; $ low                   &lt;dbl&gt; 17.71, 72.05, 98.12, 88.40, 77.45, 930.00, 114.56, 1~</span>
-<span class="co">#&gt; $ close                 &lt;dbl&gt; 17.71, 72.95, 98.55, 89.22, 78.99, 950.00, 115.14, 1~</span>
-<span class="co">#&gt; $ average               &lt;dbl&gt; 17.71, 72.67, 98.56, 88.95, 78.05, 941.19, 115.04, 1~</span>
-<span class="co">#&gt; $ best_bid              &lt;dbl&gt; 16.90, 72.95, 98.36, 88.52, 78.34, 935.01, 115.14, 1~</span>
-<span class="co">#&gt; $ best_ask              &lt;dbl&gt; 17.71, 73.00, 98.55, 89.22, 78.99, 958.50, 115.49, 1~</span>
-<span class="co">#&gt; $ volume                &lt;dbl&gt; 35.42, 62425.31, 967917.16, 134407.56, 581553.96, 12~</span>
-<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 2, 859, 9820, 1511, 7451, 133, 8554, 188, 18201, 129~</span>
-<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 1, 165, 679, 89, 921, 93, 959, 55, 3593, 176, 4, 679~</span>
-<span class="co">#&gt; $ distribution_id       &lt;int&gt; 100, 314, 113, 113, 120, 250, 154, 105, 126, 131, 13~</span></code></pre></div>
+<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-13, 2022-05-13, 2022-05-13, 2022-05-13,…</span>
+<span class="co">#&gt; $ symbol                &lt;chr&gt; "ABCP11", "AFHI11", "AFOF11", "AIEC11", "ALMI11"…</span>
+<span class="co">#&gt; $ open                  &lt;dbl&gt; 72.48, 99.52, 89.00, 78.55, 950.00, 115.19, 10.2…</span>
+<span class="co">#&gt; $ high                  &lt;dbl&gt; 72.78, 100.80, 89.49, 78.99, 951.00, 115.98, 10.…</span>
+<span class="co">#&gt; $ low                   &lt;dbl&gt; 72.16, 99.50, 88.52, 78.55, 930.00, 115.19, 10.2…</span>
+<span class="co">#&gt; $ close                 &lt;dbl&gt; 72.24, 100.65, 89.00, 78.93, 950.00, 115.70, 10.…</span>
+<span class="co">#&gt; $ average               &lt;dbl&gt; 72.38, 100.13, 89.02, 78.90, 947.15, 115.63, 10.…</span>
+<span class="co">#&gt; $ best_bid              &lt;dbl&gt; 72.24, 100.60, 88.99, 78.91, 930.50, 115.69, 10.…</span>
+<span class="co">#&gt; $ best_ask              &lt;dbl&gt; 72.53, 100.65, 89.00, 78.99, 951.00, 115.70, 10.…</span>
+<span class="co">#&gt; $ volume                &lt;dbl&gt; 67023.89, 1305373.39, 130064.77, 57283.07, 79561…</span>
+<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 926, 13036, 1461, 726, 84, 8613, 3181, 30794, 24…</span>
+<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 231, 542, 79, 129, 77, 1039, 99, 3989, 221, 3, 7…</span>
+<span class="co">#&gt; $ distribution_id       &lt;int&gt; 314, 113, 113, 120, 250, 154, 105, 126, 131, 136…</span></code></pre></div>
 <p>BDRs data</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span>
   <span class="fu"><a href="reference/cotahist-extracts.html">cotahist_bdrs_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Rows: 525</span>
+<span class="co">#&gt; Rows: 509</span>
 <span class="co">#&gt; Columns: 13</span>
-<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-10, 2022-05-10, 2022-05-10, 2022-05-10, 202~</span>
-<span class="co">#&gt; $ symbol                &lt;chr&gt; "A1AP34", "A1BB34", "A1CR34", "A1DM34", "A1EG34", "A~</span>
-<span class="co">#&gt; $ open                  &lt;dbl&gt; 65.07, 36.45, 64.75, 440.00, 26.46, 261.00, 100.20, ~</span>
-<span class="co">#&gt; $ high                  &lt;dbl&gt; 65.07, 36.66, 64.75, 444.40, 26.61, 261.00, 102.75, ~</span>
-<span class="co">#&gt; $ low                   &lt;dbl&gt; 65.07, 36.45, 64.26, 440.00, 26.01, 261.00, 100.20, ~</span>
-<span class="co">#&gt; $ close                 &lt;dbl&gt; 65.07, 36.66, 64.43, 444.40, 26.27, 261.00, 102.75, ~</span>
-<span class="co">#&gt; $ average               &lt;dbl&gt; 65.07, 36.65, 64.42, 440.73, 26.27, 261.00, 102.73, ~</span>
-<span class="co">#&gt; $ best_bid              &lt;dbl&gt; 0.00, 35.00, 54.00, 0.00, 26.06, 0.00, 0.00, 0.00, 2~</span>
-<span class="co">#&gt; $ best_ask              &lt;dbl&gt; 65.07, 36.66, 64.43, 0.00, 26.27, 0.00, 102.75, 0.00~</span>
-<span class="co">#&gt; $ volume                &lt;dbl&gt; 18870.30, 64044.71, 96902.53, 2644.40, 9930.17, 1800~</span>
-<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 290, 1747, 1504, 6, 378, 69, 251, 3, 16280, 3831, 14~</span>
-<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 1, 5, 3, 2, 6, 1, 2, 2, 9, 2, 1, 4, 4, 1, 7, 129, 4,~</span>
-<span class="co">#&gt; $ distribution_id       &lt;int&gt; 110, 102, 106, 109, 102, 110, 110, 109, 106, 101, 10~</span></code></pre></div>
+<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-13, 2022-05-13, 2022-05-13, 2022-05-13,…</span>
+<span class="co">#&gt; $ symbol                &lt;chr&gt; "A1AP34", "A1BB34", "A1CR34", "A1DM34", "A1EE34"…</span>
+<span class="co">#&gt; $ open                  &lt;dbl&gt; 67.80, 36.71, 65.10, 443.76, 234.24, 26.28, 294.…</span>
+<span class="co">#&gt; $ high                  &lt;dbl&gt; 67.80, 36.71, 65.10, 443.76, 235.20, 26.28, 295.…</span>
+<span class="co">#&gt; $ low                   &lt;dbl&gt; 66.79, 36.23, 64.56, 430.00, 233.77, 26.10, 293.…</span>
+<span class="co">#&gt; $ close                 &lt;dbl&gt; 66.79, 36.25, 64.62, 430.00, 235.00, 26.10, 295.…</span>
+<span class="co">#&gt; $ average               &lt;dbl&gt; 67.43, 36.31, 64.68, 434.09, 234.62, 26.22, 294.…</span>
+<span class="co">#&gt; $ best_bid              &lt;dbl&gt; 0.00, 0.00, 54.00, 0.00, 0.00, 0.00, 0.00, 0.00,…</span>
+<span class="co">#&gt; $ best_ask              &lt;dbl&gt; 0.00, 38.00, 0.00, 0.00, 0.00, 27.43, 0.00, 0.00…</span>
+<span class="co">#&gt; $ volume                &lt;dbl&gt; 3709.04, 435.83, 14619.84, 8247.78, 14781.36, 18…</span>
+<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 55, 12, 226, 19, 63, 7, 49, 64, 2, 3, 1, 6, 7, 1…</span>
+<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 6, 12, 38, 5, 36, 5, 46, 45, 1, 3, 1, 3, 1, 15, …</span>
+<span class="co">#&gt; $ distribution_id       &lt;int&gt; 110, 102, 106, 109, 109, 102, 110, 110, 106, 101…</span></code></pre></div>
 <p>Equity options</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span>
   <span class="fu"><a href="reference/cotahist-extracts.html">cotahist_equity_options_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Rows: 5,286</span>
+<span class="co">#&gt; Rows: 6,059</span>
 <span class="co">#&gt; Columns: 14</span>
-<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-10, 2022-05-10, 2022-05-10, 2022-05-10, 202~</span>
-<span class="co">#&gt; $ symbol                &lt;chr&gt; "ABCBE175", "ABCBR160", "ABEVA150", "ABEVA900", "ABE~</span>
-<span class="co">#&gt; $ type                  &lt;fct&gt; Call, Put, Call, Call, Call, Call, Call, Call, Call,~</span>
-<span class="co">#&gt; $ strike                &lt;dbl&gt; 17.23, 15.73, 15.00, 9.00, 11.54, 13.04, 13.29, 13.5~</span>
-<span class="co">#&gt; $ maturity_date         &lt;date&gt; 2022-05-20, 2022-06-17, 2024-01-19, 2024-01-19, 202~</span>
-<span class="co">#&gt; $ open                  &lt;dbl&gt; 0.10, 0.40, 3.00, 6.60, 2.50, 0.92, 0.85, 0.48, 0.41~</span>
-<span class="co">#&gt; $ high                  &lt;dbl&gt; 0.10, 0.40, 3.00, 6.60, 2.50, 0.92, 0.85, 0.64, 0.55~</span>
-<span class="co">#&gt; $ low                   &lt;dbl&gt; 0.04, 0.40, 3.00, 6.60, 2.50, 0.85, 0.68, 0.43, 0.29~</span>
-<span class="co">#&gt; $ close                 &lt;dbl&gt; 0.04, 0.40, 3.00, 6.60, 2.50, 0.88, 0.68, 0.44, 0.55~</span>
-<span class="co">#&gt; $ average               &lt;dbl&gt; 0.07, 0.40, 3.00, 6.60, 2.50, 0.90, 0.83, 0.50, 0.33~</span>
-<span class="co">#&gt; $ volume                &lt;dbl&gt; 14, 6000, 1200, 9900, 9500, 118168, 8976, 112388, 50~</span>
-<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 200, 15000, 400, 1500, 3800, 130400, 10700, 223400, ~</span>
-<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 2, 1, 1, 1, 1, 6, 5, 77, 21, 199, 63, 257, 115, 153,~</span>
-<span class="co">#&gt; $ distribution_id       &lt;int&gt; 139, 139, 125, 125, 125, 125, 125, 125, 125, 125, 12~</span></code></pre></div>
+<span class="co">#&gt; $ refdate               &lt;date&gt; 2022-05-13, 2022-05-13, 2022-05-13, 2022-05-13,…</span>
+<span class="co">#&gt; $ symbol                &lt;chr&gt; "ABEVR155", "ABEVR180", "ABEVX20", "ABEVR154", "…</span>
+<span class="co">#&gt; $ type                  &lt;fct&gt; Put, Put, Put, Put, Put, Put, Put, Put, Call, Ca…</span>
+<span class="co">#&gt; $ strike                &lt;dbl&gt; 14.97, 17.47, 19.47, 15.47, 12.79, 16.29, 23.00,…</span>
+<span class="co">#&gt; $ maturity_date         &lt;date&gt; 2022-06-17, 2022-06-17, 2023-12-15, 2022-06-17,…</span>
+<span class="co">#&gt; $ open                  &lt;dbl&gt; 0.69, 2.72, 3.30, 0.97, 0.01, 1.62, 1.80, 1.53, …</span>
+<span class="co">#&gt; $ high                  &lt;dbl&gt; 0.71, 2.81, 3.30, 1.03, 0.02, 1.62, 2.20, 1.53, …</span>
+<span class="co">#&gt; $ low                   &lt;dbl&gt; 0.59, 2.72, 3.30, 0.91, 0.01, 1.62, 1.80, 1.53, …</span>
+<span class="co">#&gt; $ close                 &lt;dbl&gt; 0.60, 2.81, 3.30, 0.92, 0.01, 1.62, 2.10, 1.53, …</span>
+<span class="co">#&gt; $ average               &lt;dbl&gt; 0.65, 2.74, 3.30, 0.96, 0.01, 1.62, 2.06, 1.53, …</span>
+<span class="co">#&gt; $ volume                &lt;dbl&gt; 414290, 541506, 66000, 201996, 1057, 81000, 825,…</span>
+<span class="co">#&gt; $ traded_contracts      &lt;int&gt; 637000, 197000, 20000, 209700, 105400, 50000, 40…</span>
+<span class="co">#&gt; $ transactions_quantity &lt;int&gt; 99, 6, 1, 172, 13, 1, 4, 1, 1, 1, 2, 8, 1, 1, 7,…</span>
+<span class="co">#&gt; $ distribution_id       &lt;int&gt; 124, 124, 124, 125, 125, 125, 231, 101, 113, 113…</span></code></pre></div>
 </div>
 </div>
 </div>
