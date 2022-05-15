@@ -10,8 +10,6 @@ parts:
     fields:
     - name: tipo_registro
       description: Tipo de registro
-      handler:
-        type: character
     - name: data_geracao_arquivo
       description: Data de geração do arquivo
       handler:
@@ -19,19 +17,13 @@ parts:
         format: '%Y%m%d'
     - name: nome_arquivo
       description: Nome do arquivo
-      handler:
-        type: character
   Data:
     pattern: ^02
     fields:
     - name: tipo_registro
       description: Tipo de registro
-      handler:
-        type: character
     - name: cod_titulo
       description: Código do título
-      handler:
-        type: character
     - name: desc_titulo
       description: Descrição do título
       handler:
@@ -62,14 +54,7 @@ parts:
         format: '%Y%m%d'
     - name: valor_mercado
       description: Valor de mercado em PU
-      handler:
-        type: character
     - name: valor_estressado
       description: Valor do PU em cenário de estresse
-      handler:
-        type: character
     - name: valor_mercado_d1
       description: Valor de mercado em PU para D+1
-      handler:
-        type: character
-

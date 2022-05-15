@@ -11,53 +11,27 @@ reader:
 fields:
 - name: symbol
   description: Código da opção
-  handler:
-    type: character
 - name: strike
   description: Preço de exercício da opção
-  handler:
-    type: character
 - name: description
   description: Nome da empresa
-  handler:
-    type: character
 - name: covered
   description: Posição coberta
-  handler:
-    type: character
 - name: uncovered
   description: Posição descoberta
-  handler:
-    type: character
 - name: qt_holder
   description: Quantidade de clientes comprados
-  handler:
-    type: character
 - name: lock
   description: Posição travada
-  handler:
-    type: character
 - name: total_positions
   description: Posição total
-  handler:
-    type: character
 - name: qt_issuer
   description: Quantidade de clientes lançadores
-  handler:
-    type: character
 - name: maturity_date
   description: Data de vencimento da opção
-  handler:
-    type: character
 - name: instrument_market
   description: Tipo de mercado (70 CALLS, 80 PUTS)
-  handler:
-    type: character
 - name: asset_name
   description: Código da empresa
-  handler:
-    type: character
 - name: asset_specification
   description: Especificação do ativo
-  handler:
-    type: character

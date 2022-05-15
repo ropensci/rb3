@@ -16,8 +16,6 @@ parts:
     fields:
     - name: cod_opcao
       description: Código da Opção
-      handler:
-        type: character
     - name: tipo_opcao
       description: Tipo de Opção
       handler:
@@ -45,14 +43,7 @@ parts:
         format: '%Y%m%d'
     - name: preco_exercicio
       description: Preço de exercício
-      handler:
-        type: character
     - name: premio_referencia
       description: Prêmio de referência
-      handler:
-        type: character
     - name: valor_volatilidade
       description: Volatilidade da opção
-      handler:
-        type: character
-

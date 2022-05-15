@@ -14,8 +14,6 @@ parts:
     fields:
     - name: tipo_registro
       description: Tipo de registro
-      handler:
-        type: character
     - name: data_geracao_arquivo
       description: Data de geração do arquivo
       handler:
@@ -26,16 +24,10 @@ parts:
     fields:
     - name: tipo_registro
       description: Tipo de registro
-      handler:
-        type: character
     - name: id_fpr
       description: ID do FPR
-      handler:
-        type: character
     - name: id_cenario
       description: ID do Cenário
-      handler:
-        type: character
     - name: tipo_cenario
       description: Tipo do Cenário
       handler:
@@ -50,13 +42,7 @@ parts:
         - ZigZag
     - name: dia_hp
       description: Dia do holding period
-      handler:
-        type: character
     - name: valor_phi1
       description: Valor em Phi1
-      handler:
-        type: character
     - name: valor_phi2
       description: Valor em Phi2
-      handler:
-        type: character

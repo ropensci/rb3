@@ -14,17 +14,9 @@ reader:
 fields:
 - name: refdate
   description: Data de referência
-  handler:
-    type: character
 - name: cur_days
   description: Dias corridos
-  handler:
-    type: character
 - name: r_252
   description: Taxa na base 252
-  handler:
-    type: character
 - name: r_360
   description: Taxa na base 360
-  handler:
-    type: character

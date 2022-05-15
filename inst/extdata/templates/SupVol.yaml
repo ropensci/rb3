@@ -15,31 +15,20 @@ parts:
         format: '%Y%m%d'
     - name: id_arquivo
       description: Identificação do arquivo
-      handler:
-        type: character
   Data:
     index: -1
     fields:
     - name: cod_curva_volatilidade
       description: Código da Curva de Volatilidade
-      handler:
-        type: character
     - name: descricao_curva_volatilidade
       description: Descrição da Curva de Volatilidade
-      handler:
-        type: character
     - name: num_dias_saque
       description: Prazo (dias de Saque)
-      handler:
-        type: character
     - name: num_dias_corridos
       description: Prazo (dias Corridos)
-      handler:
-        type: character
     - name: valor_volatilidade
       description: Valor da volatilidade
       handler:
         type: numeric
         dec: 7.0
         sign: ''
-
