@@ -34,6 +34,7 @@ for contracts available for trading at these markets, including:
 * options
 * BDRs
 * historical yield curves (calculated from futures contracts)
+* B3 indexes composition
 
 Package **rb3** facilitates downloading and reading these datasets from 
 [B3](https://www.b3.com.br), making it easy to consume it in R in a structured way.
