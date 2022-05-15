@@ -197,6 +197,11 @@ fpr
 `read_marketdata` parses the downloaded file according to the metadata
 configured in the template `FPR`.
 
-Here it follows a list of available templates.
+Here it follows a view of the `show_templates` adding that lists the available
+templates.
+
+```r
+show_templates()
+```
 
 <img src="man/figures/rb3-templates.png" width="100%" />
