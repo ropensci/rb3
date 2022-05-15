@@ -1,0 +1,54 @@
+id: CenariosCurva
+filename: ~
+filetype: MCSV
+separator: ;
+locale: pt
+description: Arquivos de cenários do tipo curva
+downloader:
+  function: datetime_download
+  url: https://download.bmfbovespa.com.br/FTP/IPNv2/RISCO/CenariosTipoCurva%y%m%d.zip
+  format: zip
+parts:
+  Header:
+    pattern: ^01
+    fields:
+    - name: tipo_registro
+      description: Tipo de registro
+      handler:
+        type: character
+    - name: data_geracao_arquivo
+      description: Data de geração do arquivo
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+  Data:
+    pattern: ^02
+    fields:
+    - name: tipo_registro
+      description: Tipo de registro
+    - name: id_fpr
+      description: ID do FPR
+    - name: id_cenario
+      description: ID do Cenário
+    - name: tipo_cenario
+      description: Tipo do Cenário
+      handler:
+        type: factor
+        levels:
+        - 1
+        - 2
+        - 3
+        labels:
+        - Envelope
+        - Coerente
+        - ZigZag
+    - name: dia_hp
+      description: Dia do holding period
+    - name: dias_corridos
+      description: Dias corridos do vértice
+    - name: dias_uteis
+      description: Dias úteis do vértice
+    - name: valor_phi1
+      description: Valor em Phi1
+    - name: valor_phi2
+      description: Valor em Phi2
