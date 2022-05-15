@@ -153,17 +153,15 @@ MarketData <- proto::proto(expr = {
   }
 
   show_templates <- function(.) {
-    dx <- lapply(.$..registry.id$keys(), function(cls) {
+    purrr::map_dfr(.$..registry.id$keys(), function(cls) {
       tpl_ <- .$..registry.id$get(cls)
-      data.frame(
-        "Template ID" = tpl_$id,
-        "File Type" = tpl_$filetype,
+      tibble(
         "Description" = tpl_$description,
-        stringsAsFactors = FALSE,
-        check.names = FALSE
+        "Template" = tpl_$id,
+        "Reader" = ifelse(tpl_$has_reader, "\U2705", "\U274C"),
+        "Downloader" = ifelse(tpl_$has_downloader, "\U2705", "\U274C")
       )
     })
-    do.call(rbind, dx)
   }
 
   transform <- function(., df) identity(df)

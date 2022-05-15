@@ -164,3 +164,39 @@ glimpse(
   cotahist_equity_options_get(ch)
 )
 ```
+
+## Template System
+
+One important part of `rb3` infrastructure is its `Template System`.
+
+All datasets handled by the rb3 package are configured in a template, that is
+an YAML file.
+The template brings many information regarding the datasets, like its
+description and its metadata that describes its columns, their types and how
+it has to be parsed.
+The template fully describes its dataset.
+
+Once you have the template implemented you can fetch and read downloaded
+data directly with the functions `download_marketdata` and `read_marketdata`.
+
+For examples, let's use the template `FPR` to download and read data regarding
+primitive risk factor used by B3 in its risk engine.
+
+```{r}
+f <- download_marketdata("FPR", refdate = as.Date("2022-05-10"))
+f
+```
+
+`download_marketdata` returns the path for the downloaded file.
+
+```{r}
+fpr <- read_marketdata(f, "FPR")
+fpr
+```
+
+`read_marketdata` parses the downloaded file according to the metadata
+configured in the template `FPR`.
+
+Here it follows a list of available templates.
+
+<img src="man/figures/rb3-templates.png" width="100%" />
