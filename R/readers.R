@@ -165,6 +165,12 @@ options_open_interest_read <- function(., filename, parse_fields = TRUE) {
   }
 }
 
+cols_number <- c(
+  ACC = 2, BRP = 2, DCO = 2, DIC = 2, DIM = 2, DOC = 2, DOL = 2, EUC = 2,
+  EUR = 2, INP = 2, JPY = 2, LIB = 2, PTX = 2, SDE = 2, SLP = 2, APR = 3,
+  DP = 3, PRE = 3, TFP = 3, TP = 3, TR = 3
+)
+
 curve_read <- function(., filename, parse_fields = TRUE) {
   text <- readr::read_file(filename)
 
@@ -172,28 +178,38 @@ curve_read <- function(., filename, parse_fields = TRUE) {
     rvest::html_nodes("td") |>
     rvest::html_text()
 
-  len_char_vec <- length(char_vec)
-
-  if (len_char_vec == 0) {
+  if (length(char_vec) == 0) {
     return(NULL)
   }
+
+  ctx <- str_match(text, "\"([A-Z]+)\"\\s+selected")
+  curve_name <- ctx[1, 2]
 
   mtx <- str_match(text, "Atualizado em: (\\d{2}/\\d{2}/\\d{4})")
   refdate <- mtx[1, 2] |> as.Date("%d/%m/%Y")
 
-  idx1 <- seq(1, length(char_vec), by = 3)
-  idx2 <- seq(2, length(char_vec), by = 3)
-  idx3 <- seq(3, length(char_vec), by = 3)
+  if (cols_number[curve_name] == 2) {
+    idx1 <- seq(1, length(char_vec), by = 2)
+    idx2 <- seq(2, length(char_vec), by = 2)
 
-  business_days <- char_vec[idx1]
-  r_252 <- char_vec[idx2]
-  r_360 <- char_vec[idx3]
+    cur_days <- char_vec[idx1]
+    col1 <- char_vec[idx2]
+    col2 <- NA
+  } else {
+    idx1 <- seq(1, length(char_vec), by = 3)
+    idx2 <- seq(2, length(char_vec), by = 3)
+    idx3 <- seq(3, length(char_vec), by = 3)
+
+    cur_days <- char_vec[idx1]
+    col1 <- char_vec[idx2]
+    col2 <- char_vec[idx3]
+  }
 
   df <- dplyr::tibble(
     refdate,
-    business_days,
-    r_252,
-    r_360
+    cur_days,
+    col1,
+    col2
   )
 
   colnames(df) <- .$colnames

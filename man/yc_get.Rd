@@ -3,6 +3,10 @@
 \name{yc_get}
 \alias{yc_get}
 \alias{yc_mget}
+\alias{yc_ipca_mget}
+\alias{yc_ipca_get}
+\alias{yc_usd_mget}
+\alias{yc_usd_get}
 \title{Fetches Yield Curve Data from B3}
 \usage{
 yc_mget(
@@ -14,6 +18,26 @@ yc_mget(
 )
 
 yc_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
+
+yc_ipca_mget(
+  first_date = Sys.Date() - 5,
+  last_date = Sys.Date(),
+  by = 1,
+  cache_folder = cachedir(),
+  do_cache = TRUE
+)
+
+yc_ipca_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
+
+yc_usd_mget(
+  first_date = Sys.Date() - 5,
+  last_date = Sys.Date(),
+  by = 1,
+  cache_folder = cachedir(),
+  do_cache = TRUE
+)
+
+yc_usd_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
 }
 \arguments{
 \item{first_date}{First date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
@@ -24,10 +48,7 @@ yc_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
 
 \item{cache_folder}{Location of cache folder (default = cachedir())}
 
-\item{do_cache}{Whether to use cache or not (default = TRUE)
-
-\code{yc_get} returns the yield curve for the given date and \code{yc_mget} returns
-multiple yield curves for a given range of dates.}
+\item{do_cache}{Whether to use cache or not (default = TRUE)}
 
 \item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
 }
@@ -37,9 +58,31 @@ A dataframe/tibble with yield curve data
 \description{
 Downloads yield curve data from B3 website
 \url{https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp}.
-Particularly, we import data for DI X Pre.
+Particularly, we import data for
+\itemize{
+\item DI X Pre (\code{yc_get})
+\item Cupom limpo (\code{yc_usd_get})
+\item DI x IPCA (\code{yc_ipca_get})
+\item 
+}
+
 See \url{https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf}
 for more details.
+}
+\details{
+\code{yc_get} returns the yield curve for the given date and \code{yc_mget} returns
+multiple yield curves for a given range of dates.
+
+\code{yc_ipca_get} returns the yield curve of real interest rates
+for the given date and \code{yc_ipca_mget} returns
+multiple yield curves of real interest rates for a given range of dates.
+These real interest rates consider IPCA as its inflation index.
+
+\code{yc_usd_get} returns the yield curve of nominal interest rates for USD in
+Brazil for the given date and \code{yc_usd_mget} returns
+multiple yield curves of nominal interest rates for USD in Brazil for a
+given range of dates.
+These real interest rates consider IPCA as its inflation index.
 }
 \examples{
 \dontrun{
@@ -49,5 +92,27 @@ head(df_yc)
 \dontrun{
 df_yc <- yc_get(Sys.Date())
 head(df_yc)
+}
+\dontrun{
+df_yc_ipca <- yc_ipca_mget(
+  first_date = Sys.Date() - 5,
+  last_date = Sys.Date()
+)
+head(df_yc_ipca)
+}
+\dontrun{
+df_yc_ipca <- yc_ipca_get(Sys.Date())
+head(df_yc_ipca)
+}
+\dontrun{
+df_yc_usd <- yc_usd_mget(
+  first_date = Sys.Date() - 5,
+  last_date = Sys.Date()
+)
+head(df_yc_usd)
+}
+\dontrun{
+df_yc_usd <- yc_usd_get(Sys.Date())
+head(df_yc_usd)
 }
 }

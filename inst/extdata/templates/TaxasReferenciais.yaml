@@ -16,7 +16,7 @@ fields:
   description: Data de referência
 - name: cur_days
   description: Dias corridos
-- name: r_252
-  description: Taxa na base 252
-- name: r_360
-  description: Taxa na base 360
+- name: col1
+  description: Taxa na base 252 ou taxa na base 360 ou preço futuro
+- name: col2
+  description: Taxa na base 360 ou NA

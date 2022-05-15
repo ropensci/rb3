@@ -1,0 +1,44 @@
+ALD = Alumínio
+AN = DI x Anbid
+ANP = Anbid x pré
+CBD = Cobre
+IAP = IPCA
+IPR = IGP-M
+NID = Níquel
+PBD = Chumbo
+PDN = Prob. não default
+SND = Estanho
+ZND = Zinco
+
+ACC = Ajuste cupom / 2:360
+DCO = Cupom Cambial OC1 / 2:360
+DOC = Cupom limpo / 2:360
+DOL = DI x dólar / 2:360
+EUC = DI x euro / 2:360
+LIB = Libor / 2:360
+BRP = IBrX-50 / 2:Price
+EUR = Real x euro / 2:Price
+INP = Ibovespa / 2:Price
+JPY = Real x iene / 2:Price
+PTX = Real x dólar / 2:Price
+SDE = Spread Libor Euro x Dólar / 2:Rate
+DIC = DI x IPCA / 2:252
+DIM = DI x IGP-M / 2:252
+SLP = Selic x pré / 2:252
+
+APR = Ajuste pré / 3
+DP = Dólar x pré / 3
+PRE = DI x pré / 3
+TFP = TBF x pré / 3
+TP = TR x pré / 3
+TR = DI x TR / 3
+
+---
+
+(1) Taxa efetiva para 360 dias corridos.
+(2) Taxa efetiva para 252 dias úteis.
+(3) Taxa linear para 360 dias corridos.
+(4) Taxa utilizada na apuração do risco de crédito das operações de swap, de que tratam a Resolução 2399/97 e a Circular 2771/97, do Bacen.
+(5) Os valores divulgados são obtidos com base em expectativa, não em arbitragem.
+(6) Ajuste cupom - Curva gerada a partir da interpolação dos preços de ajuste do contrato futuro de cupom cambial.
+(7) Ajuste pré - Curva gerada a partir da interpolação dos preços de ajuste do contrato futuro de DI.
