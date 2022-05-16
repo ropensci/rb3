@@ -166,6 +166,28 @@ glimpse(
 )
 ```
 
+### Indexes composition
+
+The list with available B3 indexes can be obtained with `indexes_get`.
+
+```{r}
+indexes_get()
+```
+
+And the composition of a specific index with `index_comp_get`.
+
+```{r}
+(ibov_comp <- index_comp_get("IBOV"))
+```
+
+With the index composition you can use COTAHIST to select their quotes.
+
+```{r}
+glimpse(
+  cotahist_get_symbols(ch, ibov_comp)
+)
+```
+
 ## Template System
 
 One important part of `rb3` infrastructure is its `Template System`.

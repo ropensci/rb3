@@ -11,6 +11,7 @@
 \alias{cotahist_index_options_get}
 \alias{cotahist_funds_options_get}
 \alias{cotahist_units_options_get}
+\alias{cotahist_get_symbols}
 \title{Extract data from COTAHIST dataset}
 \usage{
 cotahist_equity_get(x)
@@ -30,9 +31,13 @@ cotahist_index_options_get(x)
 cotahist_funds_options_get(x)
 
 cotahist_units_options_get(x)
+
+cotahist_get_symbols(x, symbols)
 }
 \arguments{
 \item{x}{COTAHIST dataset returned from \code{cotahist_get}.}
+
+\item{symbols}{list of symbols to extract market data from cotahist}
 }
 \value{
 a data.frame with prices, volume, traded quantities informations
@@ -68,5 +73,8 @@ df <- cotahist_funds_options_get(x)
 }
 \dontrun{
 df <- cotahist_units_options_get(x)
+}
+\dontrun{
+df <- cotahist_get_by_list(x, c("BBDC4", "ITSA4", "JHSF3"))
 }
 }

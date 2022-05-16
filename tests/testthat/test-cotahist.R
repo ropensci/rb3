@@ -8,12 +8,15 @@ if (Sys.info()["sysname"] == "Linux") {
 }
 
 test_that("it should download cotahist file", {
-  f <- download_marketdata("COTAHIST_YEARLY", refdate = as.Date(ISOdate(2000, 1, 1)))
+  f <- download_marketdata("COTAHIST_YEARLY",
+    refdate = as.Date(ISOdate(2000, 1, 1))
+  )
   expect_true(file.exists(f))
   expect_true(file.size(f) > 1e6)
 })
 
-ch <- suppressWarnings(cotahist_get(ISOdate(2000, 1, 1)))
+date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
+ch <- cotahist_get(date, "daily")
 test_that("it should get cotahist data", {
   expect_s3_class(ch, "parts")
   expect_true(length(ch) == 3)
@@ -33,4 +36,10 @@ test_that("it should extract options data from cotahist dataset", {
   expect_s3_class(df$type, "factor")
   expect_s3_class(df$maturity_date, "Date")
   expect_type(df$strike, "double")
+})
+
+test_that("it should extract specific symbols from cotahist dataset", {
+  symbols <- index_comp_get("IBOV")
+  df <- cotahist_get_symbols(ch, symbols)
+  expect_equal(length(symbols), nrow(df))
 })

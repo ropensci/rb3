@@ -60,6 +60,7 @@ Collate:
     'scraper-futures.R'
     'scraper-yc.R'
     'scraper-cotahist.R'
+    'scraper-indexes.R'
     'addin-show-templates.R'
     'addin-display-template.R'
     'readers.R'

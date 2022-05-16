@@ -203,3 +203,18 @@ cotahist_funds_options_get <- function(x) {
 cotahist_units_options_get <- function(x) {
   filter_equity_data(x, c(70, 80), c("UNT", "CDA")) |> format_options()
 }
+
+#' @rdname cotahist-extracts
+#'
+#' @param symbols list of symbols to extract market data from cotahist
+#'
+#' @examples
+#' \dontrun{
+#' df <- cotahist_get_by_list(x, c("BBDC4", "ITSA4", "JHSF3"))
+#' }
+#' @export
+cotahist_get_symbols <- function(x, symbols) {
+  x[["HistoricalPrices"]] |>
+    filter(.data$cod_negociacao %in% symbols) |>
+    format_equity()
+}
