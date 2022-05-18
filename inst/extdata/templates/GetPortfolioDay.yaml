@@ -7,7 +7,7 @@ downloader:
   function: stock_indexes_current_portfolio_download
   url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay
   format: json
-  encoding: latin1
+  encoding: UTF-8
 reader:
   function: stock_indexes_json_reader
 parts:
