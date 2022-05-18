@@ -68,7 +68,7 @@ new_template <- function(tpl) {
     obj[["has_reader"]] <- TRUE
   }
 
-  if (obj$filetype %in% c("MCSV", "MFWF")) {
+  if (obj$filetype %in% c("MCSV", "MFWF", "MCUSTOM")) {
     obj[["init"]] <- .multipart_init
   }
 

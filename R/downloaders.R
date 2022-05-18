@@ -71,6 +71,30 @@ stock_indexes_composition_download <- function(., dest, ...) {
   url <- httr::parse_url(.$downloader$url)
   url$path <- c(url$path, params_enc)
   res <- httr::GET(url)
+  if (httr::status_code(res) != 200) {
+    return(FALSE)
+  }
+  enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
+  save_resource(res, enc, dest)
+  TRUE
+}
+
+#' @importFrom utils hasName
+stock_indexes_theo_portfolio_download <- function(., dest, ...) {
+  args <- list(...)
+  if (!hasName(args, "index_name")) {
+    cli::cli_alert_danger("index_name argument not provided")
+    return(FALSE)
+  }
+  params <- jsonlite::toJSON(list(
+    pageNumber = 1,
+    pageSize = 9999,
+    language = "pt-br",
+    index = args$index_name
+  ), auto_unbox = TRUE)
+  params_enc <- base64enc::base64encode(charToRaw(params))
+  url <- httr::parse_url(.$downloader$url)
+  url$path <- c(url$path, params_enc)
   res <- httr::GET(url)
   if (httr::status_code(res) != 200) {
     return(FALSE)

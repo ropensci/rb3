@@ -237,3 +237,20 @@ stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {
     df
   }
 }
+
+stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
+  jason <- jsonlite::fromJSON(filename)
+  l <- list()
+  for (part_name in names(.$parts)) {
+    part <- .$parts[[part_name]]
+    df <- as.data.frame(jason[[part$name]])
+    colnames(df) <- part$colnames
+    l[[part_name]] <- if (parse_fields) {
+      parse_columns(df, part$colnames, part$handlers, .$.parser())
+    } else {
+      df
+    }
+  }
+  class(l) <- "parts"
+  l
+}
