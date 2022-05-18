@@ -75,6 +75,6 @@ df <- cotahist_funds_options_get(x)
 df <- cotahist_units_options_get(x)
 }
 \dontrun{
-df <- cotahist_get_by_list(x, c("BBDC4", "ITSA4", "JHSF3"))
+df <- cotahist_get_symbols(x, c("BBDC4", "ITSA4", "JHSF3"))
 }
 }

@@ -18,5 +18,7 @@ the Date when the indexes have been updated
 Gets the date where the indexes have been updated lastly.
 }
 \examples{
+\dontrun{
 indexes_last_update()
+}
 }

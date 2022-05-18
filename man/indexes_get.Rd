@@ -18,5 +18,7 @@ a character vector with symbols of indexes available
 Gets B3 indexes available.
 }
 \examples{
+\dontrun{
 indexes_get()
+}
 }
