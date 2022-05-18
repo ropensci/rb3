@@ -18,7 +18,7 @@ parts:
       description: Data de referência
       handler:
         type: Date
-        format: '%d/%m/%Y'
+        format: '%d/%m/%y'
     - name: text
       description: Descrição
     - name: part
@@ -42,9 +42,9 @@ parts:
       description: Nome da companhia
     - name: spotlight
       description: Código de especificação da ação
-    - name: theoricalQty
-      description: Quantidade teórica no índice
     - name: part
       description: Participação % no índice
     - name: part_acum
       description: Participação % acumulada no segmento no índice
+    - name: theoricalQty
+      description: Quantidade teórica no índice
