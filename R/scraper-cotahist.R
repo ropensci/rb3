@@ -121,7 +121,7 @@ filter_equity_data <- function(x, instrument_market, security_category) {
 #' }
 #' @export
 cotahist_equity_get <- function(x) {
-  filter_equity_data(x, 10, "ACN") |> format_equity()
+  filter_equity_data(x, 10, c("UNT", "CDA", "ACN")) |> format_equity()
 }
 
 #' @rdname cotahist-extracts
@@ -210,7 +210,7 @@ cotahist_units_options_get <- function(x) {
 #'
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get_by_list(x, c("BBDC4", "ITSA4", "JHSF3"))
+#' df <- cotahist_get_symbols(x, c("BBDC4", "ITSA4", "JHSF3"))
 #' }
 #' @export
 cotahist_get_symbols <- function(x, symbols) {
