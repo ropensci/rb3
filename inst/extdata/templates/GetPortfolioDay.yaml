@@ -1,0 +1,50 @@
+id: GetPortfolioDay
+filename: ~
+filetype: MCUSTOM
+description: Carteira Teórica dos índices da B3
+locale: pt
+downloader:
+  function: stock_indexes_current_portfolio_download
+  url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay
+  format: json
+  encoding: latin1
+reader:
+  function: stock_indexes_json_reader
+parts:
+  Header:
+    name: header
+    fields:
+    - name: date
+      description: Data de referência
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: text
+      description: Descrição
+    - name: part
+      description: Participação % no índice
+    - name: part_acum
+      description: Participação % acumulada no segmento no índice
+    - name: text_reductor
+      description: Texto de descrição do redutor
+    - name: reductor
+      description: Redutor
+    - name: theoricalQty
+      description: Quantidade teórica no índice
+  Results:
+    name: results
+    fields:
+    - name: segment
+      description: Segmento da ação
+    - name: code
+      description: Código da ação
+    - name: company
+      description: Nome da companhia
+    - name: spotlight
+      description: Código de especificação da ação
+    - name: theoricalQty
+      description: Quantidade teórica no índice
+    - name: part
+      description: Participação % no índice
+    - name: part_acum
+      description: Participação % acumulada no segmento no índice
