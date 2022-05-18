@@ -103,3 +103,37 @@ indexes_get <- function(cache_folder = cachedir(),
     unique() |>
     sort()
 }
+
+#' Get B3 indexes available
+#'
+#' Gets B3 indexes available.
+#'
+#' @param index_name a string with the index name
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
+#'
+#' @return
+#' A dataframe with the index stocks, their weights, segments and positions.
+#'
+#' @examples
+#' \dontrun{
+#' index_by_segment_get("IBOV")
+#' }
+#' @export
+index_by_segment_get <- function(index_name,
+                                 cache_folder = cachedir(),
+                                 do_cache = TRUE) {
+  f <- download_marketdata("GetPortfolioDay",
+    cache_folder = cache_folder,
+    do_cache = do_cache,
+    index_name = index_name
+  )
+  pp <- read_marketdata(f, "GetPortfolioDay")
+  df <- pp$Results[, c("code", "segment", "part", "part_acum", "theoricalQty")]
+  colnames(df) <- c("symbol", "segment", "weight", "segment_weight", "position")
+  df$weight <- df$weight / 100
+  df$segment_weight <- df$segment_weight / 100
+  df$refdate <- pp$Header$date
+
+  df
+}

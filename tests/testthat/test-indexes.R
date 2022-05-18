@@ -21,3 +21,11 @@ test_that("it should get available indexes", {
   x <- indexes_last_update()
   expect_s3_class(x, "Date")
 })
+
+test_that("it should get index by segments", {
+  x <- index_by_segment_get("IBOV")
+  expect_s3_class(x, "data.frame")
+  expect_true(ncol(x) == 6)
+  expect_equal(as.integer(sum(x$weight)), 1L)
+  expect_true(nrow(x) > 0)
+})
