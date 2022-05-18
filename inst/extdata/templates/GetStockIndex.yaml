@@ -1,6 +1,6 @@
 id: GetStockIndex
 filename: ~
-filetype: CUSTOM
+filetype: MCUSTOM
 description: Composição dos índices da B3
 locale: pt
 downloader:
@@ -9,24 +9,30 @@ downloader:
   format: json
   encoding: latin1
 reader:
-  function: stock_indexes_composition_reader
-fields:
-- name: company
-  description: Nome da companhia
-- name: spotlight
-  description: Código de especificação da ação
-- name: code
-  description: Código da ação
-- name: indexes
-  description: Lista de índexes separados por vírgula
-- name: update
-  description: Data de atualização
-  handler:
-    type: Date
-    format: '%Y-%m-%d'
-- name: start_month
-  description: Mês de início de vigência
-- name: end_month
-  description: Mês de fim de vigência
-- name: year
-  description: Ano de vigência
+  function: stock_indexes_json_reader
+parts:
+  Header:
+    name: header
+    fields:
+    - name: update
+      description: Data de atualização do índice
+      handler:
+        type: Date
+        format: '%Y-%m-%d'
+    - name: start_month
+      description: Mês de início de vigência do índice
+    - name: end_month
+      description: Mês de fim de vigência do índice
+    - name: year
+      description: Ano de criação do índice
+  Results:
+    name: results
+    fields:
+    - name: company
+      description: Nome da companhia
+    - name: spotlight
+      description: Código de especificação da ação
+    - name: code
+      description: Código da ação
+    - name: indexes
+      description: Lista de índexes separados por vírgula

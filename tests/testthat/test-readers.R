@@ -17,7 +17,8 @@ test_that("it should read options_open_interest_read", {
 test_that("it should read stock_indexes_composition_reader", {
   f <- system.file("extdata/GetStockIndex.json", package = "rb3")
   df <- read_marketdata(f, "GetStockIndex")
-  expect_s3_class(df, "data.frame")
+  expect_s3_class(df, "parts")
+  expect_equal(names(df), c("Header", "Results"))
   df <- read_marketdata(f, "GetStockIndex", FALSE)
-  expect_s3_class(df, "data.frame")
+  expect_s3_class(df, "parts")
 })

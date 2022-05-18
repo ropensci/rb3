@@ -16,8 +16,8 @@ index_comp_get <- function(index_name,
                            do_cache = TRUE) {
   f <- download_marketdata("GetStockIndex", cache_folder, do_cache)
   df <- read_marketdata(f, "GetStockIndex", TRUE, cache_folder, do_cache)
-  idx <- str_detect(df$indexes, index_name)
-  df[idx, ]$code
+  idx <- str_detect(df$Results$indexes, index_name)
+  df$Results[idx, ]$code
 }
 
 #' Get the date of indexes composition last update
@@ -36,7 +36,7 @@ indexes_last_update <- function(cache_folder = cachedir(),
                                 do_cache = TRUE) {
   f <- download_marketdata("GetStockIndex")
   df <- read_marketdata(f, "GetStockIndex")
-  df$update[1]
+  df$Header$update
 }
 
 #' Get B3 indexes available
@@ -55,7 +55,7 @@ indexes_get <- function(cache_folder = cachedir(),
                         do_cache = TRUE) {
   f <- download_marketdata("GetStockIndex")
   df <- read_marketdata(f, "GetStockIndex")
-  str_split(df$indexes, ",") |>
+  str_split(df$Results$indexes, ",") |>
     unlist() |>
     unique() |>
     sort()
