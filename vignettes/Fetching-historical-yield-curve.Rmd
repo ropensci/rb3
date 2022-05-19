@@ -1,26 +1,35 @@
 ---
-title: "Fetching Historical Yield Curve from B3"
+title: "Fetching Historical Yield Curves from B3"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Fetching Historical Yield Curve from B3}
+  %\VignetteIndexEntry{Fetching Historical Yield Curves from B3}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-```{r, include = FALSE}
+  
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width = "100%"
 )
 ```
 
-Data for the yield curve is available in [B3's website](https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp), section DI X Pre. The data is built using interest rate futures. See this [pdf](https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf) for more details about the source of the yield curves.
+Data for the yield curve is available in
+[B3's website](https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp).
+The data is built using interest rate futures.
+See this [pdf](https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf) for more details about the source of the yield curves.
 
-```{r setup}
+```{r packages}
 library(rb3)
 library(ggplot2)
 library(stringr)
+library(dplyr)
+```
 
+## DI X Pre Curve
+
+```{r, fig.width=9, fig.height=6}
 df_yc <- yc_mget(
   first_date = Sys.Date() - 255 * 5,
   last_date = Sys.Date(),
@@ -36,9 +45,75 @@ p <- ggplot(
     color = factor(refdate)
   )
 ) +
-  geom_line() +
+  geom_line(size = 1) +
   labs(
     title = "Yield Curves for Brazil",
+    subtitle = "Built using interest rates future contracts",
+    caption = str_glue("Data imported using rb3 at {Sys.Date()}"),
+    x = "Forward Date",
+    y = "Annual Interest Rate",
+    color = "Reference Date"
+  ) +
+  theme_light() +
+  scale_y_continuous(labels = scales::percent)
+
+print(p)
+```
+
+## DI x IPCA Curve
+
+```{r, fig.width=9, fig.height=6}
+df_yc <- yc_ipca_mget(
+  first_date = Sys.Date() - 255 * 5,
+  last_date = Sys.Date(),
+  by = 255
+)
+
+p <- ggplot(
+  df_yc |> filter(biz_days > 21, biz_days < 1008),
+  aes(
+    x = forward_date,
+    y = r_252,
+    group = refdate,
+    color = factor(refdate)
+  )
+) +
+  geom_line(size = 1) +
+  labs(
+    title = "DIxIPCA Yield Curves for Brazil",
+    subtitle = "Built using interest rates future contracts",
+    caption = str_glue("Data imported using rb3 at {Sys.Date()}"),
+    x = "Forward Date",
+    y = "Annual Interest Rate",
+    color = "Reference Date"
+  ) +
+  theme_light() +
+  scale_y_continuous(labels = scales::percent)
+
+print(p)
+```
+
+## Cupom Limpo (USD)
+
+```{r, fig.width=9, fig.height=6}
+df_yc <- yc_usd_mget(
+  first_date = Sys.Date() - 255 * 5,
+  last_date = Sys.Date(),
+  by = 255
+)
+
+p <- ggplot(
+  df_yc |> filter(biz_days > 21, biz_days < 2520),
+  aes(
+    x = forward_date,
+    y = r_360,
+    group = refdate,
+    color = factor(refdate)
+  )
+) +
+  geom_line(size = 1) +
+  labs(
+    title = "Cupom Limpo (USD) Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",
     caption = str_glue("Data imported using rb3 at {Sys.Date()}"),
     x = "Forward Date",
