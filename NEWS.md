@@ -1,7 +1,27 @@
 # rb3 0.0.3 
 
-* fixed tests for yc_get()
-* updated to bizdays version 0.1.10 (use of load_builtin_calendars - Issue #31)
+* fixed tests for yc_get().
+* updated to bizdays version 0.1.10 (use of load_builtin_calendars - Issue #31).
+* changes to ropensci process: added more tests to improve test coverage, functions renamed, codemeta and Contributing.md.
+* new templates
+  * `GetStockIndex` to get the composition of B3 indexes.
+  * `GetTheoricalPortfolio` to get composition and weights of B3 indexes.
+  * `GetPortfolioDay` to get composition, weights and segments of B3 indexes.
+  * `CenariosCurva` for scenarios of term structures of interest rates
+  * `CenariosPrecoReferencia` for reference prices scenarios
+* new functions for yield curves
+  * `yc_ipca_get` and `yc_ipca_mget` for real interest rates
+  * `yc_usd_get` and `yc_usd_mget` for USD interest rates in Brazil
+* new functions for cotahist
+  * `cotahist_get_symbols` to get stocks by a list of symbols
+  * `cotahist_etfs_get`, `cotahist_fiis_get`, `cotahist_fidcs_get`, `cotahist_fiagros_get`
+  * function `cotahist_funds_get` has been replaced by these ones.
+* new functions to get indexes information (composition, weights and positions)
+  * `index_comp_get` returns the index composition
+  * `index_weights_get` returns the index weights
+  * `index_by_segment_get` returns indexes assets grouped by segments
+  * `indexes_get` lists the available indexes
+  * `indexes_last_update` returns the date when the indexes have been updated
 
 # rb3 0.0.2
 
