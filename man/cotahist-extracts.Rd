@@ -5,7 +5,10 @@
 \alias{cotahist_equity_get}
 \alias{cotahist_bdrs_get}
 \alias{cotahist_units_get}
-\alias{cotahist_funds_get}
+\alias{cotahist_etfs_get}
+\alias{cotahist_fiis_get}
+\alias{cotahist_fidcs_get}
+\alias{cotahist_fiagros_get}
 \alias{cotahist_indexes_get}
 \alias{cotahist_equity_options_get}
 \alias{cotahist_index_options_get}
@@ -20,7 +23,13 @@ cotahist_bdrs_get(x)
 
 cotahist_units_get(x)
 
-cotahist_funds_get(x)
+cotahist_etfs_get(x)
+
+cotahist_fiis_get(x)
+
+cotahist_fidcs_get(x)
+
+cotahist_fiagros_get(x)
 
 cotahist_indexes_get(x)
 
@@ -57,7 +66,16 @@ df <- cotahist_brds_get(x)
 df <- cotahist_units_get(x)
 }
 \dontrun{
-df <- cotahist_funds_get(x)
+df <- cotahist_etfs_get(x)
+}
+\dontrun{
+df <- cotahist_fiis_get(x)
+}
+\dontrun{
+df <- cotahist_fidcs_get(x)
+}
+\dontrun{
+df <- cotahist_fiagros_get(x)
 }
 \dontrun{
 df <- cotahist_indexes_get(x)

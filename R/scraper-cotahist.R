@@ -147,11 +147,51 @@ cotahist_units_get <- function(x) {
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_funds_get(x)
+#' df <- cotahist_etfs_get(x)
 #' }
 #' @export
-cotahist_funds_get <- function(x) {
-  filter_equity_data(x, 10, "CTF") |> format_equity()
+cotahist_etfs_get <- function(x) {
+  filter_equity_data(x, 10, "CTF") |>
+    filter(.data$cod_bdi == 14, str_starts(.data$especificacao, "CI")) |>
+    format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_fiis_get(x)
+#' }
+#' @export
+cotahist_fiis_get <- function(x) {
+  filter_equity_data(x, 10, "CTF") |>
+    filter(.data$cod_bdi %in% c(5, 12)) |>
+    format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_fidcs_get(x)
+#' }
+#' @export
+cotahist_fidcs_get <- function(x) {
+  filter_equity_data(x, 10, "CTF") |>
+    filter(
+      .data$cod_bdi == 14, str_starts(especificacao, "FIDC")
+    ) |>
+    format_equity()
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_fiagros_get(x)
+#' }
+#' @export
+cotahist_fiagros_get <- function(x) {
+  filter_equity_data(x, 10, "CTF") |>
+    filter(.data$cod_bdi == 13) |>
+    format_equity()
 }
 
 #' @rdname cotahist-extracts
