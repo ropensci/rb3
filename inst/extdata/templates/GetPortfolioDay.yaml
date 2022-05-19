@@ -1,7 +1,7 @@
 id: GetPortfolioDay
 filename: ~
 filetype: MCUSTOM
-description: Carteira Teórica dos índices da B3
+description: Carteira Teórica dos índices da B3 com pesos e quantidades por segmentos
 locale: pt
 downloader:
   function: stock_indexes_current_portfolio_download

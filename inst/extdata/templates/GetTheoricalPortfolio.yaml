@@ -1,7 +1,7 @@
 id: GetTheoricalPortfolio
 filename: ~
 filetype: MCUSTOM
-description: Carteira Teórica dos índices da B3
+description: Carteira Teórica dos índices da B3 com pesos e posições
 locale: pt
 downloader:
   function: stock_indexes_theo_portfolio_download
