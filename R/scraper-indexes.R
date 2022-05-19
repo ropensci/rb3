@@ -54,8 +54,8 @@ index_weights_get <- function(index_name,
     cache_folder, do_cache
   )
   ds <- df$Results[, c("code", "part", "theoricalQty")]
-  colnames(ds) <- c("symbols", "weights", "position")
-  ds$weights <- ds$weights / 100
+  colnames(ds) <- c("symbol", "weight", "position")
+  ds$weight <- ds$weight / 100
   ds
 }
 
