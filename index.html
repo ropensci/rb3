@@ -46,7 +46,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/Fetching-historical-future-rates.html">How to Compute Historical Rates from B3 Future Prices</a>
-    <a class="dropdown-item" href="articles/Fetching-historical-yield-curve.html">Fetching Historical Yield Curve from B3</a>
+    <a class="dropdown-item" href="articles/Fetching-historical-yield-curve.html">Fetching Historical Yield Curves from B3</a>
   </div>
 </li>
 <li class="nav-item">
@@ -118,10 +118,6 @@
   last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
   by <span class="op">=</span> <span class="fl">255</span>
 <span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>
   <span class="va">df_yc</span>,
@@ -193,7 +189,6 @@
 
 <span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/adjust.date.html" class="external-link">preceding</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span> <span class="co"># last business day</span>
 <span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cotahist_get.html">cotahist_get</a></span><span class="op">(</span><span class="va">date</span>, <span class="st">"daily"</span><span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span>
   <span class="fu"><a href="reference/cotahist-extracts.html">cotahist_equity_get</a></span><span class="op">(</span><span class="va">ch</span><span class="op">)</span>
@@ -301,13 +296,11 @@
 <p>The list with available B3 indexes can be obtained with <code>indexes_get</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 <span class="co">#&gt;  [1] "AGFS" "BDRX" "GPTW" "IBOV" "IBRA" "IBXL" "IBXX" "ICO2" "ICON" "IDIV" "IEEX" "IFIL" "IFIX" "IFNC" "IGCT" "IGCX" "IGNM" "IMAT" "IMOB" "INDX" "ISEE" "ITAG" "IVBX" "MLCX" "SMLL"</span>
 <span class="co">#&gt; [26] "UTIL"</span></code></pre></div>
 <p>And the composition of a specific index with <code>index_comp_get</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">ibov_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/index_comp_get.html">index_comp_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 <span class="co">#&gt;  [1] "ABEV3"  "ALPA4"  "AMER3"  "ASAI3"  "AZUL4"  "B3SA3"  "BBAS3"  "BBDC3"  "BBDC4"  "BBSE3"  "BEEF3"  "BIDI11" "BPAC11" "BPAN4"  "BRAP4"  "BRFS3"  "BRKM5"  "BRML3"  "CASH3" </span>
 <span class="co">#&gt; [20] "CCRO3"  "CIEL3"  "CMIG4"  "CMIN3"  "COGN3"  "CPFE3"  "CPLE6"  "CRFB3"  "CSAN3"  "CSNA3"  "CVCB3"  "CYRE3"  "DXCO3"  "ECOR3"  "EGIE3"  "ELET3"  "ELET6"  "EMBR3"  "ENBR3" </span>
 <span class="co">#&gt; [39] "ENEV3"  "ENGI11" "EQTL3"  "EZTC3"  "FLRY3"  "GGBR4"  "GOAU4"  "GOLL4"  "HAPV3"  "HYPE3"  "IGTI11" "IRBR3"  "ITSA4"  "ITUB4"  "JBSS3"  "JHSF3"  "KLBN11" "LCAM3"  "LREN3" </span>
@@ -344,9 +337,8 @@
 <p>For examples, let’s use the template <code>FPR</code> to download and read data regarding primitive risk factor used by B3 in its risk engine.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/download_marketdata.html">download_marketdata</a></span><span class="op">(</span><span class="st">"FPR"</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2022-05-10"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Skipping download - using cached version</span>
 <span class="va">f</span>
-<span class="co">#&gt; [1] "C:/Users/wilso/AppData/Local/Temp/Rtmp4KutBV/rb3-cache/FPR-7a2422cc97221426a3b2bd4419215481/FP220510/FatoresPrimitivosRisco.txt"</span></code></pre></div>
+<span class="co">#&gt; [1] "C:/Users/wilso/AppData/Local/Temp/RtmpKc4zmX/rb3-cache/FPR-7a2422cc97221426a3b2bd4419215481/FP220510/FatoresPrimitivosRisco.txt"</span></code></pre></div>
 <p><code>download_marketdata</code> returns the path for the downloaded file.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fpr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_marketdata.html">read_marketdata</a></span><span class="op">(</span><span class="va">f</span>, <span class="st">"FPR"</span><span class="op">)</span>
