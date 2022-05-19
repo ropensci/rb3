@@ -70,10 +70,6 @@ df_yc <- yc_mget(
   last_date = Sys.Date(),
   by = 255
 )
-#> Skipping download - using cached version
-#> Skipping download - using cached version
-#> Skipping download - using cached version
-#> Skipping download - using cached version
 
 p <- ggplot(
   df_yc,
@@ -149,7 +145,6 @@ if (Sys.info()["sysname"] == "Linux") {
 
 date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA") # last business day
 ch <- cotahist_get(date, "daily")
-#> Skipping download - using cached version
 
 glimpse(
   cotahist_equity_get(ch)
@@ -270,7 +265,6 @@ The list with available B3 indexes can be obtained with `indexes_get`.
 
 ``` r
 indexes_get()
-#> Skipping download - using cached version
 #>  [1] "AGFS" "BDRX" "GPTW" "IBOV" "IBRA" "IBXL" "IBXX" "ICO2" "ICON" "IDIV" "IEEX" "IFIL" "IFIX" "IFNC" "IGCT" "IGCX" "IGNM" "IMAT" "IMOB" "INDX" "ISEE" "ITAG" "IVBX" "MLCX" "SMLL"
 #> [26] "UTIL"
 ```
@@ -279,7 +273,6 @@ And the composition of a specific index with `index_comp_get`.
 
 ``` r
 (ibov_comp <- index_comp_get("IBOV"))
-#> Skipping download - using cached version
 #>  [1] "ABEV3"  "ALPA4"  "AMER3"  "ASAI3"  "AZUL4"  "B3SA3"  "BBAS3"  "BBDC3"  "BBDC4"  "BBSE3"  "BEEF3"  "BIDI11" "BPAC11" "BPAN4"  "BRAP4"  "BRFS3"  "BRKM5"  "BRML3"  "CASH3" 
 #> [20] "CCRO3"  "CIEL3"  "CMIG4"  "CMIN3"  "COGN3"  "CPFE3"  "CPLE6"  "CRFB3"  "CSAN3"  "CSNA3"  "CVCB3"  "CYRE3"  "DXCO3"  "ECOR3"  "EGIE3"  "ELET3"  "ELET6"  "EMBR3"  "ENBR3" 
 #> [39] "ENEV3"  "ENGI11" "EQTL3"  "EZTC3"  "FLRY3"  "GGBR4"  "GOAU4"  "GOLL4"  "HAPV3"  "HYPE3"  "IGTI11" "IRBR3"  "ITSA4"  "ITUB4"  "JBSS3"  "JHSF3"  "KLBN11" "LCAM3"  "LREN3" 
@@ -329,9 +322,8 @@ regarding primitive risk factor used by B3 in its risk engine.
 
 ``` r
 f <- download_marketdata("FPR", refdate = as.Date("2022-05-10"))
-#> Skipping download - using cached version
 f
-#> [1] "C:/Users/wilso/AppData/Local/Temp/Rtmp4KutBV/rb3-cache/FPR-7a2422cc97221426a3b2bd4419215481/FP220510/FatoresPrimitivosRisco.txt"
+#> [1] "C:/Users/wilso/AppData/Local/Temp/RtmpKc4zmX/rb3-cache/FPR-7a2422cc97221426a3b2bd4419215481/FP220510/FatoresPrimitivosRisco.txt"
 ```
 
 `download_marketdata` returns the path for the downloaded file.
