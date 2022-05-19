@@ -53,8 +53,43 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3" id="rb3-003">rb3 0.0.3<a class="anchor" aria-label="anchor" href="#rb3-003"></a></h2>
-<ul><li>fixed tests for yc_get()</li>
-<li>updated to bizdays version 0.1.10 (use of load_builtin_calendars - Issue <a href="https://github.com/wilsonfreitas/rb3/issues/31" class="external-link">#31</a>)</li>
+<ul><li>fixed tests for yc_get().</li>
+<li>updated to bizdays version 0.1.10 (use of load_builtin_calendars - Issue <a href="https://github.com/wilsonfreitas/rb3/issues/31" class="external-link">#31</a>).</li>
+<li>changes to ropensci process: added more tests to improve test coverage, functions renamed, codemeta and Contributing.md.</li>
+<li>new templates<ul><li>
+<code>GetStockIndex</code> to get the composition of B3 indexes.</li>
+<li>
+<code>GetTheoricalPortfolio</code> to get composition and weights of B3 indexes.</li>
+<li>
+<code>GetPortfolioDay</code> to get composition, weights and segments of B3 indexes.</li>
+<li>
+<code>CenariosCurva</code> for scenarios of term structures of interest rates</li>
+<li>
+<code>CenariosPrecoReferencia</code> for reference prices scenarios</li>
+</ul></li>
+<li>new functions for yield curves<ul><li>
+<code>yc_ipca_get</code> and <code>yc_ipca_mget</code> for real interest rates</li>
+<li>
+<code>yc_usd_get</code> and <code>yc_usd_mget</code> for USD interest rates in Brazil</li>
+</ul></li>
+<li>new functions for cotahist<ul><li>
+<code>cotahist_get_symbols</code> to get stocks by a list of symbols</li>
+<li>
+<code>cotahist_etfs_get</code>, <code>cotahist_fiis_get</code>, <code>cotahist_fidcs_get</code>, <code>cotahist_fiagros_get</code>
+</li>
+<li>function <code>cotahist_funds_get</code> has been replaced by these ones.</li>
+</ul></li>
+<li>new functions to get indexes information (composition, weights and positions)<ul><li>
+<code>index_comp_get</code> returns the index composition</li>
+<li>
+<code>index_weights_get</code> returns the index weights</li>
+<li>
+<code>index_by_segment_get</code> returns indexes assets grouped by segments</li>
+<li>
+<code>indexes_get</code> lists the available indexes</li>
+<li>
+<code>indexes_last_update</code> returns the date when the indexes have been updated</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="rb3-002">rb3 0.0.2<a class="anchor" aria-label="anchor" href="#rb3-002"></a></h2><p class="text-muted">CRAN release: 2022-05-10</p>
