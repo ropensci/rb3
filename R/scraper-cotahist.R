@@ -177,7 +177,7 @@ cotahist_fiis_get <- function(x) {
 cotahist_fidcs_get <- function(x) {
   filter_equity_data(x, 10, "CTF") |>
     filter(
-      .data$cod_bdi == 14, str_starts(especificacao, "FIDC")
+      .data$cod_bdi == 14, str_starts(.data$especificacao, "FIDC")
     ) |>
     format_equity()
 }
