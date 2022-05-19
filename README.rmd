@@ -146,7 +146,15 @@ Funds data
 
 ```{r}
 glimpse(
-  cotahist_funds_get(ch)
+  cotahist_etfs_get(ch)
+)
+```
+
+FIIs data
+
+```{r}
+glimpse(
+  cotahist_fiis_get(ch)
 )
 ```
 
