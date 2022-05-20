@@ -52,7 +52,7 @@ cotahist_get <- function(refdate,
   }
 }
 
-format_equity <- function(df) {
+format_equity <- function(df, with_isin = FALSE) {
   df[["refdate"]] <- df[["data_referencia"]]
   df[["symbol"]] <- df[["cod_negociacao"]]
   df[["open"]] <- df[["preco_abertura"]]
@@ -66,15 +66,16 @@ format_equity <- function(df) {
   df[["traded_contracts"]] <- df[["qtd_titulos_negociados"]]
   df[["transactions_quantity"]] <- df[["qtd_negocios"]]
   df[["distribution_id"]] <- df[["num_dist"]]
+  isin <- if (with_isin) "cod_isin" else NULL
   cols <- c(
     "refdate", "symbol", "open", "high", "low", "close", "average",
     "best_bid", "best_ask", "volume", "traded_contracts",
-    "transactions_quantity", "distribution_id"
+    "transactions_quantity", "distribution_id", isin
   )
   df[, cols]
 }
 
-format_options <- function(df) {
+format_options <- function(df, with_isin = FALSE) {
   df[["refdate"]] <- df[["data_referencia"]]
   df[["symbol"]] <- df[["cod_negociacao"]]
   df[["open"]] <- df[["preco_abertura"]]
@@ -89,10 +90,11 @@ format_options <- function(df) {
   df[["traded_contracts"]] <- df[["qtd_titulos_negociados"]]
   df[["transactions_quantity"]] <- df[["qtd_negocios"]]
   df[["distribution_id"]] <- df[["num_dist"]]
+  isin <- if (with_isin) "cod_isin" else NULL
   cols <- c(
     "refdate", "symbol", "type", "strike", "maturity_date",
     "open", "high", "low", "close", "average", "volume", "traded_contracts",
-    "transactions_quantity", "distribution_id"
+    "transactions_quantity", "distribution_id", isin
   )
   df[, cols]
 }
@@ -247,4 +249,40 @@ cotahist_get_symbols <- function(x, symbols) {
   x[["HistoricalPrices"]] |>
     filter(.data$cod_negociacao %in% symbols) |>
     format_equity()
+}
+
+#' Extracts equity option superset of data
+#'
+#' Equity options superset is a dataframe that brings together all data
+#' regarding equities, equity options and interest rates.
+#' This data forms a complete set (superset) up and ready to run options
+#' models, implied volatility calculations and volatility models.
+#'
+#' @param ch cotahist data structure
+#' @param yc yield curve
+#'
+#' @return
+#' A dataframe with data of equities, equity options, and interest rates.
+#'
+#' @examples
+#' \dontrun{
+#' refdate <- Sys.Date() - 1
+#' ch <- cotahist_get(refdate, "daily")
+#' yc <- yc_get(refdate)
+#' ch_ss <- cotahist_equity_options_superset(ch, yc)
+#' }
+#' @export
+cotahist_equity_options_superset <- function(ch, yc) {
+  eqs <- filter_equity_data(ch, 10, c("UNT", "CDA", "ACN")) |>
+    format_equity(TRUE)
+  eqs_opts <- filter_equity_data(ch, c(70, 80), c("UNT", "CDA", "ACN")) |>
+    format_options(TRUE)
+  inner_join(eqs_opts, eqs, by = "cod_isin", suffix = c("", ".underlying")) |>
+    select(-c(.data$refdate.underlying, .data$cod_isin)) |>
+    mutate(
+      fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
+    ) |>
+    inner_join(yc |> select(.data$refdate, .data$forward_date, .data$r_252),
+      by = c("refdate", "fixing_maturity_date" = "forward_date")
+    )
 }

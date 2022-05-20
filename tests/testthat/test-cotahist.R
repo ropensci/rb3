@@ -82,3 +82,9 @@ test_that("it should extract specific symbols from cotahist dataset", {
   df <- cotahist_get_symbols(ch, symbols)
   expect_equal(length(symbols), nrow(df))
 })
+
+test_that("it should use cotahist_equity_options_superset", {
+  yc <- yc_get(date)
+  df <- cotahist_equity_options_superset(ch, yc)
+  expect_true(!anyNA(df))
+})
