@@ -15,6 +15,10 @@ test_that("it should download cotahist file", {
   expect_true(file.size(f) > 1e6)
 })
 
+test_that("it should fail the download for cotahist file", {
+  expect_true(is.null(cotahist_get("2022-05-15", "daily")))
+})
+
 date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
 ch <- cotahist_get(date, "daily")
 test_that("it should get cotahist data", {
@@ -27,6 +31,37 @@ test_that("it should extract equity data from cotahist dataset", {
   df <- cotahist_equity_get(ch)
   expect_type(df$close, "double")
   expect_type(df$transactions_quantity, "integer")
+  df <- cotahist_bdrs_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+  df <- cotahist_units_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+})
+
+test_that("it should extract indexes data from cotahist dataset", {
+  df <- cotahist_indexes_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+})
+
+test_that("it should extract funds data from cotahist dataset", {
+  df <- cotahist_etfs_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+  expect_true(nrow(df) > 0)
+  df <- cotahist_fiis_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+  expect_true(nrow(df) > 0)
+  df <- cotahist_fidcs_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+  expect_true(nrow(df) > 0)
+  df <- cotahist_fiagros_get(ch)
+  expect_type(df$close, "double")
+  expect_type(df$transactions_quantity, "integer")
+  expect_true(nrow(df) > 0)
 })
 
 test_that("it should extract options data from cotahist dataset", {
@@ -36,6 +71,10 @@ test_that("it should extract options data from cotahist dataset", {
   expect_s3_class(df$type, "factor")
   expect_s3_class(df$maturity_date, "Date")
   expect_type(df$strike, "double")
+  df <- cotahist_funds_options_get(ch)
+  expect_true(nrow(df) > 0)
+  df <- cotahist_index_options_get(ch)
+  expect_true(nrow(df) > 0)
 })
 
 test_that("it should extract specific symbols from cotahist dataset", {
