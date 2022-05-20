@@ -211,7 +211,7 @@ cotahist_indexes_get <- function(x) {
 #' }
 #' @export
 cotahist_equity_options_get <- function(x) {
-  filter_equity_data(x, c(70, 80), "ACN") |> format_options()
+  filter_equity_data(x, c(70, 80), c("ACN", "UNT", "CDA")) |> format_options()
 }
 
 #' @rdname cotahist-extracts
@@ -232,16 +232,6 @@ cotahist_index_options_get <- function(x) {
 #' @export
 cotahist_funds_options_get <- function(x) {
   filter_equity_data(x, c(70, 80), "CTF") |> format_options()
-}
-
-#' @rdname cotahist-extracts
-#' @examples
-#' \dontrun{
-#' df <- cotahist_units_options_get(x)
-#' }
-#' @export
-cotahist_units_options_get <- function(x) {
-  filter_equity_data(x, c(70, 80), c("UNT", "CDA")) |> format_options()
 }
 
 #' @rdname cotahist-extracts

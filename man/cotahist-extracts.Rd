@@ -13,7 +13,6 @@
 \alias{cotahist_equity_options_get}
 \alias{cotahist_index_options_get}
 \alias{cotahist_funds_options_get}
-\alias{cotahist_units_options_get}
 \alias{cotahist_get_symbols}
 \title{Extract data from COTAHIST dataset}
 \usage{
@@ -38,8 +37,6 @@ cotahist_equity_options_get(x)
 cotahist_index_options_get(x)
 
 cotahist_funds_options_get(x)
-
-cotahist_units_options_get(x)
 
 cotahist_get_symbols(x, symbols)
 }
@@ -88,9 +85,6 @@ df <- cotahist_index_options_get(x)
 }
 \dontrun{
 df <- cotahist_funds_options_get(x)
-}
-\dontrun{
-df <- cotahist_units_options_get(x)
 }
 \dontrun{
 df <- cotahist_get_symbols(x, c("BBDC4", "ITSA4", "JHSF3"))
