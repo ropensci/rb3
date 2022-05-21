@@ -254,3 +254,44 @@ stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
   class(l) <- "parts"
   l
 }
+
+#' @importFrom XML xmlInternalTreeParse getNodeSet xmlValue
+indexreport_reader <- function(., filename, parse_fields = TRUE) {
+  doc <- xmlInternalTreeParse(filename)
+
+  indxrpt <- getNodeSet(doc, "//d:IndxRpt", c(d = "urn:bvmf.218.01.xsd"))
+  refdate_ <- xmlValue(indxrpt[[1]][["TradDt"]][["Dt"]])
+
+  indxs <- getNodeSet(doc, "//d:IndxInf", c(d = "urn:bvmf.218.01.xsd"))
+
+  df <- map_dfr(indxs, function(node) {
+    inf_node <- node[["SctyInf"]]
+
+    tibble(
+      refdate = refdate_,
+      symbol = xmlValue(inf_node[["SctyId"]][["TckrSymb"]]),
+      security_id = xmlValue(inf_node[["FinInstrmId"]][["OthrId"]][["Id"]]),
+      security_proprietary = xmlValue(inf_node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]),
+      security_market = xmlValue(inf_node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]),
+      asset_desc = xmlValue(node[["AsstDesc"]]),
+      settlement_price = xmlValue(node[["SttlmVal"]]),
+      open = xmlValue(inf_node[["OpngPric"]]),
+      min = xmlValue(inf_node[["MinPric"]]),
+      max = xmlValue(inf_node[["MaxPric"]]),
+      average = xmlValue(inf_node[["TradAvrgPric"]]),
+      close = xmlValue(inf_node[["ClsgPric"]]),
+      last_price = xmlValue(inf_node[["IndxVal"]]),
+      oscillation_val = xmlValue(inf_node[["OscnVal"]]),
+      rising_shares_number = xmlValue(node[["RsngShrsNb"]]),
+      falling_shares_number = xmlValue(node[["FlngShrsNb"]]),
+      stable_shares_number = xmlValue(node[["StblShrsNb"]])
+    )
+  })
+
+  colnames(df) <- .$colnames
+  if (parse_fields) {
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
+  } else {
+    df
+  }
+}

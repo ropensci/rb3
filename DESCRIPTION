@@ -30,7 +30,8 @@ Imports:
     methods,
     yaml,
     digest,
-    base64enc
+    base64enc,
+    XML
 Suggests:
     testthat,
     knitr,

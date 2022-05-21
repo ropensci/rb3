@@ -1,0 +1,48 @@
+id: IndexReport
+filename: ~
+filetype: CUSTOM
+description: Arquivo de Índices
+downloader:
+  function: datetime_download
+  url: https://www.b3.com.br/pesquisapregao/download?filelist=IR%y%m%d.zip
+  format: zip
+reader:
+  function: indexreport_reader
+fields:
+- name: refdate
+  description: Data de referência
+  handler:
+    type: Date
+    format: '%Y-%m-%d'
+- name: symbol
+  description: Símbolo do índice
+- name: security_id
+  description: ID do índice
+- name: security_proprietary
+  description: Proprietário
+- name: security_market
+  description: Mercado
+- name: asset_desc
+  description: Descrição do índice
+- name: settlement_price
+  description: Preço de liquidação
+- name: open
+  description: Preço de abertura
+- name: low
+  description: Preço mínimo
+- name: high
+  description: Preço máximo
+- name: close
+  description: Preço de fechamento
+- name: average
+  description: Preço médio
+- name: last_price
+  description: Último preço
+- name: oscillation
+  description: Oscilação
+- name: rising_shares_number
+  description: Quantidade de ações que subiram
+- name: falling_shares_number
+  description: Quantidade de ações que cairam
+- name: stable_shares_number
+  description: Quantidade de ações que ficaram estáveis
