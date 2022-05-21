@@ -338,3 +338,67 @@ get_single_yc_usd <- function(idx_date,
     return(NULL)
   }
 }
+
+#' Creates superset with yield curves and futures
+#'
+#' Creates superset with yield curves and future contracts indicating the
+#' terms that match with futures contracts maturities.
+#'
+#' @param yc yield curve dataset
+#' @param fut futures dataset
+#'
+#' @return
+#' A dataframe with yield curve flagged with futures maturities.
+#'
+#' @name yc_superset
+#'
+#' @examples
+#' \dontrun{
+#' fut <- futures_get(Sys.Date() - 1)
+#'
+#' yc <- yc_get(Sys.Date() - 1)
+#' yc_superset(yc, fut)
+#'
+#' yc_usd <- yc_usd_get(Sys.Date() - 1)
+#' yc_usd_superset(yc_usd, fut)
+#'
+#' yc_ipca <- yc_ipca_get(Sys.Date() - 1)
+#' yc_ipca_superset(yc_ipca, fut)
+#' }
+#' @export
+yc_superset <- function(yc, fut) {
+  fut_di1 <- fut |>
+    filter(.data$commodity == "DI1") |>
+    mutate(forward_date = maturity2date(.data$maturity_code) |>
+      following("Brazil/ANBIMA")) |>
+    select(.data$refdate, .data$forward_date, .data$symbol)
+
+  yc |>
+    left_join(fut_di1, by = c("refdate", "forward_date"))
+}
+
+#' @rdname yc_superset
+#' @export
+yc_usd_superset <- function(yc, fut) {
+  fut_di1 <- fut |>
+    filter(.data$commodity == "DDI") |>
+    mutate(forward_date = maturity2date(.data$maturity_code) |>
+      following("Brazil/ANBIMA")) |>
+    select(.data$refdate, .data$forward_date, .data$symbol)
+
+  yc |>
+    left_join(fut_di1, by = c("refdate", "forward_date"))
+}
+
+#' @rdname yc_superset
+#' @export
+yc_ipca_superset <- function(yc, fut) {
+  fut_di1 <- fut |>
+    filter(.data$commodity == "DAP") |>
+    mutate(forward_date = maturity2date(.data$maturity_code, "15th day") |>
+      following("Brazil/ANBIMA")) |>
+    select(.data$refdate, .data$forward_date, .data$symbol)
+
+  yc |>
+    left_join(fut_di1, by = c("refdate", "forward_date"))
+}

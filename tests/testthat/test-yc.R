@@ -156,3 +156,26 @@ test_that("Test of yc_usd_get function", {
 
   expect_identical(df_yc_1, df_yc_2)
 })
+
+test_that("Test of yc_superset function", {
+  if (!covr::in_covr()) {
+    skip_on_cran()
+    skip_if_offline()
+  }
+
+  refdate <- bizdays::offset(Sys.Date(), -30, "Brazil/ANBIMA")
+
+  fut <- futures_get(refdate)
+  yc <- yc_get(refdate)
+  df <- yc_superset(yc, fut)
+  expect_true(exists("symbol", df))
+  expect_true(anyNA(df$symbol))
+  yc <- yc_usd_get(refdate)
+  df <- yc_usd_superset(yc, fut)
+  expect_true(exists("symbol", df))
+  expect_true(anyNA(df$symbol))
+  yc <- yc_ipca_get(refdate)
+  df <- yc_ipca_superset(yc, fut)
+  expect_true(exists("symbol", df))
+  expect_true(anyNA(df$symbol))
+})
