@@ -2,6 +2,8 @@ id: IndexReport
 filename: ~
 filetype: CUSTOM
 description: Arquivo de Índices
+calendar: Brazil/B3
+locale: en
 downloader:
   function: datetime_download
   url: https://www.b3.com.br/pesquisapregao/download?filelist=IR%y%m%d.zip
