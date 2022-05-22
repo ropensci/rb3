@@ -7,8 +7,9 @@
   * `GetStockIndex` to get the composition of B3 indexes.
   * `GetTheoricalPortfolio` to get composition and weights of B3 indexes.
   * `GetPortfolioDay` to get composition, weights and segments of B3 indexes.
-  * `CenariosCurva` for scenarios of term structures of interest rates
-  * `CenariosPrecoReferencia` for reference prices scenarios
+  * `CenariosCurva` for scenarios of term structures of interest rates.
+  * `CenariosPrecoReferencia` for reference prices scenarios.
+  * `IndexReport` indexes daily market data.
 * new functions for yield curves
   * `yc_ipca_get` and `yc_ipca_mget` for real interest rates
   * `yc_usd_get` and `yc_usd_mget` for USD interest rates in Brazil
@@ -22,6 +23,10 @@
   * `index_by_segment_get` returns indexes assets grouped by segments
   * `indexes_get` lists the available indexes
   * `indexes_last_update` returns the date when the indexes have been updated
+  * `indexreport_get` and `indexreport_mget` download index report data
+* Superset datasets
+  * `cotahist_equity_options_superset` joins options data, equity data and interest rates for each option - this is useful to run option and volatility models.
+  * `yc_superset`, `yc_usd_superset`, `yc_ipca_superset` mark futures maturities in yield curve.
 
 # rb3 0.0.2
 
