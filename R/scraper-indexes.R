@@ -137,3 +137,89 @@ index_by_segment_get <- function(index_name,
 
   df
 }
+
+#' Fetches indexes data from B3
+#'
+#' Downloads index data from B3 website
+#' <https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/>.
+#'
+#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
+#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
+#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
+#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
+#'
+#' @details
+#' `indexreport_get` returns index data for the given date and
+#' `indexreport_mget` returns index data for a given range of dates.
+#'
+#' @return
+#' A dataframe with index data (OHLC, average and daily oscilation)
+#'
+#' @name indexreport_get
+#'
+#' @examples
+#' \dontrun{
+#' df_ir <- indexreport_mget(Sys.Date() - 5, Sys.Date())
+#' head(df_ir)
+#' }
+#' @export
+indexreport_mget <- function(first_date = Sys.Date() - 5,
+                             last_date = Sys.Date(),
+                             by = 1,
+                             cache_folder = cachedir(),
+                             do_cache = TRUE) {
+  first_date <- as.Date(first_date)
+  last_date <- as.Date(last_date)
+  tpl <- .retrieve_template(NULL, "IndexReport")
+  date_vec <- bizdays::bizseq(first_date, last_date, tpl$calendar)
+  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
+
+  dplyr::bind_rows(
+    purrr::map(cli::cli_progress_along(
+      date_vec,
+      format = paste0(
+        "{pb_spin} Fetching data points ",
+        " {cli::pb_current}/{cli::pb_total} ",
+        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+      )
+    ),
+    get_single_indexreport,
+    date_vec = date_vec,
+    cache_folder = cache_folder,
+    do_cache = do_cache
+    )
+  )
+}
+
+#' @rdname indexreport_get
+#' @examples
+#' \dontrun{
+#' df_ir <- indexreport_get(Sys.Date())
+#' head(df_ir)
+#' }
+#' @export
+indexreport_get <- function(refdate = Sys.Date(),
+                            cache_folder = cachedir(),
+                            do_cache = TRUE) {
+  get_single_indexreport(1, as.Date(refdate), cache_folder, do_cache)
+}
+
+get_single_indexreport <- function(idx_date,
+                                   date_vec,
+                                   cache_folder,
+                                   do_cache) {
+  df <- get_single_marketdata(
+    "IndexReport", idx_date, date_vec, cache_folder, do_cache
+  )
+  if (!is.null(df)) {
+    cols <- c(
+      "refdate", "symbol", "open", "high", "low", "close", "average",
+      "oscillation"
+    )
+    df[, cols]
+  } else {
+    NULL
+  }
+}
