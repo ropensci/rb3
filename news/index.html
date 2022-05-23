@@ -63,9 +63,11 @@
 <li>
 <code>GetPortfolioDay</code> to get composition, weights and segments of B3 indexes.</li>
 <li>
-<code>CenariosCurva</code> for scenarios of term structures of interest rates</li>
+<code>CenariosCurva</code> for scenarios of term structures of interest rates.</li>
 <li>
-<code>CenariosPrecoReferencia</code> for reference prices scenarios</li>
+<code>CenariosPrecoReferencia</code> for reference prices scenarios.</li>
+<li>
+<code>IndexReport</code> indexes daily market data.</li>
 </ul></li>
 <li>new functions for yield curves<ul><li>
 <code>yc_ipca_get</code> and <code>yc_ipca_mget</code> for real interest rates</li>
@@ -89,6 +91,13 @@
 <code>indexes_get</code> lists the available indexes</li>
 <li>
 <code>indexes_last_update</code> returns the date when the indexes have been updated</li>
+<li>
+<code>indexreport_get</code> and <code>indexreport_mget</code> download index report data</li>
+</ul></li>
+<li>Superset datasets<ul><li>
+<code>cotahist_equity_options_superset</code> joins options data, equity data and interest rates for each option - this is useful to run option and volatility models.</li>
+<li>
+<code>yc_superset</code>, <code>yc_usd_superset</code>, <code>yc_ipca_superset</code> mark futures maturities in yield curve.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">

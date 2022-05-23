@@ -82,6 +82,9 @@
     <loc>http://wilsonfreitas.github.io/rb3/reference/indexes_last_update.html</loc>
   </url>
   <url>
+    <loc>http://wilsonfreitas.github.io/rb3/reference/indexreport_get.html</loc>
+  </url>
+  <url>
     <loc>http://wilsonfreitas.github.io/rb3/reference/maturity2date.html</loc>
   </url>
   <url>
@@ -95,5 +98,8 @@
   </url>
   <url>
     <loc>http://wilsonfreitas.github.io/rb3/reference/yc_get.html</loc>
+  </url>
+  <url>
+    <loc>http://wilsonfreitas.github.io/rb3/reference/yc_superset.html</loc>
   </url>
 </urlset>
