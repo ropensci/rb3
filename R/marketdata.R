@@ -91,8 +91,8 @@ registry <- proto::proto(expr = {
 })
 
 parser_generic <- transmuter(
-  match_regex("^(-|\\+)?\\d+$", to_int(), priority = 1, apply_to = "all"),
-  match_regex("^(-|\\+)?\\d+$", to_int()),
+  match_regex("^(-|\\+)?\\d{1,8}$", to_int(), priority = 1, apply_to = "all"),
+  match_regex("^(-|\\+)?\\d{1,8}$", to_int()),
   match_regex("^\\+|-$", function(text, match) {
     idx <- text == "-"
     x <- rep(1, length(text))
