@@ -1,0 +1,72 @@
+id: PriceReport
+filename: ~
+filetype: CUSTOM
+description: Arquivo de Preços de Mercado
+calendar: Brazil/B3
+locale: en
+downloader:
+  function: datetime_download
+  url: https://www.b3.com.br/pesquisapregao/download?filelist=PR%y%m%d.zip
+  format: zip
+reader:
+  function: pricereport_reader
+fields:
+- name: refdate
+  description: Data de referência
+  handler:
+    type: Date
+    format: '%Y-%m-%d'
+- name: symbol
+  description: Símbolo do ativo
+- name: security_id
+  description: ID do ativo
+- name: security_proprietary
+  description: Proprietário do ativo
+- name: security_market
+  description: Mercado do ativo
+- name: volume
+  description: Volume financeiro
+- name: open_interest
+  description: Posições em aberto
+- name: traded_contracts
+  description: Quantidade de contratos negociada
+- name: best_ask_price
+  description: Melhor preço de venda
+- name: best_bid_price
+  description: Melhor preço de compra
+- name: open
+  description: Preço de abertura
+- name: low
+  description: Preço mínimo
+- name: high
+  description: Preço máximo
+- name: close
+  description: Preço de fechamento
+- name: average
+  description: Preço médio
+- name: regular_transactions_quantity
+  description: Quantidade de negócios no horário regular
+- name: regular_traded_contracts
+  description: Quantidade de contratos negociados no horário regular
+- name: regular_volume
+  description: Volume financeiro no horário regular
+- name: nonregular_transactions_quantity
+  description: Quantidade de negócios fora do horário regular
+- name: nonregular_traded_contracts
+  description: Quantidade de contratos fora do horário regular
+- name: nonregular_volume
+  description: Volume financeiro fora do horário regular
+- name: oscillation
+  description: Oscilação diária
+- name: adjusted_quote
+  description: Preço de ajuste (para futuros)
+- name: adjusted_tax
+  description: Taxa de juros do preço de ajuste (para futuros)
+- name: previous_adjusted_quote
+  description: Preço de ajuste anterior (para futuros)
+- name: previous_adjusted_tax
+  description: Taxa de juros anterior do preço de ajuste (para futuros)
+- name: variation_points
+  description: Variação em pontos
+- name: adjusted_value_contract
+  description: Valor do contrato ajustado

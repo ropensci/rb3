@@ -295,3 +295,52 @@ indexreport_reader <- function(., filename, parse_fields = TRUE) {
     df
   }
 }
+
+pricereport_reader <- function(., filename, parse_fields = TRUE) {
+  doc <- xmlInternalTreeParse(filename)
+  negs <- getNodeSet(doc, "//d:PricRpt", c(d = "urn:bvmf.217.01.xsd"))
+
+  df <- map_dfr(negs, function(node) {
+    refdate <- xmlValue(node[["TradDt"]][["Dt"]])
+    ticker <- xmlValue(node[["SctyId"]][["TckrSymb"]])
+    attrib <- node[["FinInstrmAttrbts"]]
+
+    tibble(
+      refdate = refdate,
+      ticker_symbol = ticker,
+      security_id = xmlValue(node[["FinInstrmId"]][["OthrId"]][["Id"]]),
+      security_proprietary = xmlValue(node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]),
+      security_market = xmlValue(node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]),
+      volume = xmlValue(attrib[["NtlFinVol"]]),
+      open_interest = xmlValue(attrib[["OpnIntrst"]]),
+      traded_contracts = xmlValue(attrib[["FinInstrmQty"]]),
+      best_ask_price = xmlValue(attrib[["BestAskPric"]]),
+      best_bid_price = xmlValue(attrib[["BestBidPric"]]),
+      first_price = xmlValue(attrib[["FrstPric"]]),
+      min_price = xmlValue(attrib[["MinPric"]]),
+      max_price = xmlValue(attrib[["MaxPric"]]),
+      last_price = xmlValue(attrib[["LastPric"]]),
+      average_price = xmlValue(attrib[["TradAvrgPric"]]),
+      regular_transactions_quantity = xmlValue(attrib[["RglrTxsQty"]]),
+      regular_traded_contracts = xmlValue(attrib[["RglrTraddCtrcts"]]),
+      regular_volume = xmlValue(attrib[["NtlRglrVol"]]),
+      nonregular_transactions_quantity = xmlValue(attrib[["NonRglrTxsQty"]]),
+      nonregular_traded_contracts = xmlValue(attrib[["NonRglrTraddCtrcts"]]),
+      nonregular_volume = xmlValue(attrib[["NtlNonRglrVol"]]),
+      oscillation_percentage = xmlValue(attrib[["OscnPctg"]]),
+      adjusted_quote = xmlValue(attrib[["AdjstdQt"]]),
+      adjusted_tax = xmlValue(attrib[["AdjstdQtTax"]]),
+      previous_adjusted_quote = xmlValue(attrib[["PrvsAdjstdQt"]]),
+      previous_adjusted_tax = xmlValue(attrib[["PrvsAdjstdQtTax"]]),
+      variation_points = xmlValue(attrib[["VartnPts"]]),
+      adjusted_value_contract = xmlValue(attrib[["AdjstdValCtrct"]]),
+    )
+  })
+
+  colnames(df) <- .$colnames
+  if (parse_fields) {
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
+  } else {
+    df
+  }
+}
