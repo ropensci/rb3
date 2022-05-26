@@ -74,3 +74,17 @@ x$subscriptions
 # ----
 
 # https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetDetail/eyJjb2RlQ1ZNIjoiMTAyMyIsImxhbmd1YWdlIjoicHQtYnIifQ==
+
+hsh <- "eyJjb2RlQ1ZNIjoiMTAyMyIsImxhbmd1YWdlIjoicHQtYnIifQ=="
+
+base64enc::base64decode(hsh) |>
+  rawToChar() |>
+  jsonlite::fromJSON()
+
+# https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedFinancial/eyJjb2RlQ1ZNIjoiNDE3MCIsImxhbmd1YWdlIjoicHQtYnIifQ==
+
+hsh <- "eyJjb2RlQ1ZNIjoiNDE3MCIsImxhbmd1YWdlIjoicHQtYnIifQ=="
+
+base64enc::base64decode(hsh) |>
+  rawToChar() |>
+  jsonlite::fromJSON()
