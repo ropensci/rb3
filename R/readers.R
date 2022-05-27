@@ -344,3 +344,42 @@ pricereport_reader <- function(., filename, parse_fields = TRUE) {
     df
   }
 }
+
+company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
+  jason <- fromJSON(f)
+  l <- list()
+  for (part_name in names(.$parts)) {
+    part <- .$parts[[part_name]]
+    if (part_name == "Info") {
+      df <- tibble(
+        stockCapital = jason$stockCapital,
+        segment = jason$segment,
+        quotedPerSharSince = jason$quotedPerSharSince,
+        commonSharesForm = jason$commonSharesForm,
+        preferredSharesForm = jason$preferredSharesForm,
+        hasCommom = jason$hasCommom,
+        hasPreferred = jason$hasPreferred,
+        code = jason$code,
+        codeCVM = jason$codeCVM,
+        totalNumberShares = jason$totalNumberShares,
+        numberCommonShares = jason$numberCommonShares,
+        numberPreferredShares = jason$numberPreferredShares,
+        roundLot = jason$roundLot,
+        tradingName = jason$tradingName,
+      )
+    } else {
+      df <- as.data.frame(jason[[part$name]][[1]])
+    }
+    if (length(df) == 0) {
+      next
+    }
+    colnames(df) <- part$colnames
+    l[[part_name]] <- if (parse_fields) {
+      parse_columns(df, part$colnames, part$handlers, .$.parser())
+    } else {
+      df
+    }
+  }
+  class(l) <- "parts"
+  l
+}

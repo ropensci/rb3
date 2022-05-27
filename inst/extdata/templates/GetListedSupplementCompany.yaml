@@ -1,0 +1,131 @@
+id: GetListedSupplementCompany
+filename: ~
+filetype: MCUSTOM
+description: Informação suplementar das companhias listadas na Bolsa
+locale: pt
+downloader:
+  function: company_listed_supplement_download
+  url: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany
+  format: json
+reader:
+  function: company_listed_supplement_reader
+parts:
+  Info:
+    name: info
+    fields:
+    - name: stockCapital
+      description: Capital da companhia em ações
+    - name: segment
+      description: Segmento do mercado de capitais (Novo Mercado, ...)
+    - name: quotedPerSharSince
+      description: Data de início de cotação
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: commonSharesForm
+      description: Forma das ações ordinárias
+    - name: preferredSharesForm
+      description: Forma das ações preferenciais
+    - name: hasCommom
+      description: Forma das ações ordinárias
+    - name: hasPreferred
+      description: Forma das ações preferenciais
+    - name: code
+      description: Código da empresa
+    - name: codeCVM
+      description: Código CVM da empresa
+    - name: totalNumberShares
+      description: Número total de ações
+    - name: numberCommonShares
+      description: Número total de ações ordinárias
+    - name: numberPreferredShares
+      description: Número total de ações preferenciais
+    - name: roundLot
+      description: Lote padrão de negociação
+    - name: tradingName
+      description: Nome da empresa
+  CashDividends:
+    name: cashDividends
+    fields:
+    - name: assetIssued
+      description: Código do ativo emitido
+    - name: paymentDate
+      description: Data de início de pagamento do provento
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: rate
+      description: Valor do provento (R$)
+    - name: relatedTo
+      description: Período de referência do provento
+    - name: approvedOn
+      description: Data em que foi deliberado
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: isinCode
+      description: Código ISIN da companhia
+    - name: label
+      description: Tipo de provento
+    - name: lastDatePrior
+      description: Data COM (última data antes da ação ficar EX do provento)
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: remarks
+      description: Comentários
+  StockDividends:
+    name: stockDividends
+    fields:
+    - name: assetIssued
+      description: Código do ativo emitido
+    - name: factor
+      description: Percentual ou fator de grupamento
+    - name: approvedOn
+      description: Data em que foi deliberado
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: isinCode
+      description: Código ISIN
+    - name: label
+      description: Tipo do provento
+    - name: lastDatePrior
+      description: Data COM (última data antes da ação ficar EX do provento)
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: remarks
+      description: Comentários
+  subscriptions:
+    name: subscriptions
+    fields:
+    - name: assetIssued
+      description: Código do ativo emitido
+    - name: percentage
+      description: Percentual
+    - name: priceUnit
+      description: Preço Emissão (R$)
+    - name: tradingPeriod
+      description: Negociação de Direitos
+    - name: subscriptionDate
+      description: Data limite para subscrição
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: approvedOn
+      description: Data em que foi deliberado
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: isinCode
+      description: Código ISIN
+    - name: label
+      description: Tipo do evento
+    - name: lastDatePrior
+      description: Data COM (última data antes da ação ficar EX do provento)
+      handler:
+        type: Date
+        format: '%d/%m/%Y'
+    - name: remarks
+      description: Comentários
