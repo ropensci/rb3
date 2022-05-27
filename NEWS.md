@@ -10,6 +10,9 @@
   * `CenariosCurva` for scenarios of term structures of interest rates.
   * `CenariosPrecoReferencia` for reference prices scenarios.
   * `IndexReport` indexes daily market data.
+  * `PriceReport` daily prices and market data.
+  * `GetListedSupplementCompany` supplement data for listed companies.
+  * `GetDetailsCompany` to get companies details (name, codeCVM, ...)
 * new functions for yield curves
   * `yc_ipca_get` and `yc_ipca_mget` for real interest rates
   * `yc_usd_get` and `yc_usd_mget` for USD interest rates in Brazil
