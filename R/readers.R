@@ -352,20 +352,20 @@ company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
     part <- .$parts[[part_name]]
     if (part_name == "Info") {
       df <- tibble(
-        stockCapital = jason$stockCapital,
-        segment = jason$segment,
-        quotedPerSharSince = jason$quotedPerSharSince,
-        commonSharesForm = jason$commonSharesForm,
-        preferredSharesForm = jason$preferredSharesForm,
-        hasCommom = jason$hasCommom,
-        hasPreferred = jason$hasPreferred,
-        code = jason$code,
-        codeCVM = jason$codeCVM,
-        totalNumberShares = jason$totalNumberShares,
-        numberCommonShares = jason$numberCommonShares,
-        numberPreferredShares = jason$numberPreferredShares,
-        roundLot = jason$roundLot,
-        tradingName = jason$tradingName,
+        stockCapital = ck_if_null(jason$stockCapital),
+        segment = ck_if_null(jason$segment),
+        quotedPerSharSince = ck_if_null(jason$quotedPerSharSince),
+        commonSharesForm = ck_if_null(jason$commonSharesForm),
+        preferredSharesForm = ck_if_null(jason$preferredSharesForm),
+        hasCommom = ck_if_null(jason$hasCommom),
+        hasPreferred = ck_if_null(jason$hasPreferred),
+        code = ck_if_null(jason$code),
+        codeCVM = ck_if_null(jason$codeCVM),
+        totalNumberShares = ck_if_null(jason$totalNumberShares),
+        numberCommonShares = ck_if_null(jason$numberCommonShares),
+        numberPreferredShares = ck_if_null(jason$numberPreferredShares),
+        roundLot = ck_if_null(jason$roundLot),
+        tradingName = ck_if_null(jason$tradingName),
       )
     } else {
       df <- as.data.frame(jason[[part$name]][[1]])
@@ -382,4 +382,58 @@ company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
   }
   class(l) <- "parts"
   l
+}
+
+company_details_reader <- function(., filename, parse_fields = TRUE) {
+  jason <- fromJSON(f)
+  l <- list()
+  for (part_name in names(.$parts)) {
+    part <- .$parts[[part_name]]
+    if (part_name == "Info") {
+      df <- tibble(
+        issuingCompany = ck_if_null(jason$issuingCompany),
+        companyName = ck_if_null(jason$companyName),
+        tradingName = ck_if_null(jason$tradingName),
+        cnpj = ck_if_null(jason$cnpj),
+        industryClassification = ck_if_null(jason$industryClassification),
+        industryClassificationEng = ck_if_null(jason$industryClassificationEng),
+        activity = ck_if_null(jason$activity),
+        website = ck_if_null(jason$website),
+        hasQuotation = ck_if_null(jason$hasQuotation),
+        status = ck_if_null(jason$status),
+        marketIndicator = ck_if_null(jason$marketIndicator),
+        market = ck_if_null(jason$market),
+        institutionCommon = ck_if_null(jason$institutionCommon),
+        institutionPreferred = ck_if_null(jason$institutionPreferred),
+        code = ck_if_null(jason$code),
+        codeCVM = ck_if_null(jason$codeCVM),
+        lastDate = ck_if_null(jason$lastDate),
+        hasEmissions = ck_if_null(jason$hasEmissions),
+        hasBDR = ck_if_null(jason$hasBDR),
+        typeBDR = ck_if_null(jason$typeBDR),
+        describleCategoryBVMF = ck_if_null(jason$describleCategoryBVMF),
+      )
+    } else {
+      df <- as.data.frame(jason[[part$name]])
+    }
+    if (length(df) == 0) {
+      next
+    }
+    colnames(df) <- part$colnames
+    l[[part_name]] <- if (parse_fields) {
+      parse_columns(df, part$colnames, part$handlers, .$.parser())
+    } else {
+      df
+    }
+  }
+  class(l) <- "parts"
+  l
+}
+
+ck_if_null <- function(x) {
+  if (is.null(x)) {
+    ""
+  } else {
+    x
+  }
 }

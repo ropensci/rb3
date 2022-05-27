@@ -1,0 +1,64 @@
+id: GetDetailsCompany
+filename: ~
+filetype: MCUSTOM
+description: Informação suplementar das companhias listadas na Bolsa
+locale: pt
+downloader:
+  function: company_details_download
+  url: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetDetail
+  format: json
+reader:
+  function: company_details_reader
+parts:
+  Info:
+    name: info
+    fields:
+    - name: issuingCompany
+      description: Código da empresa (sem o número)
+    - name: companyName
+      description: Nome da companhia
+    - name: tradingName
+      description: Nome de negociação
+    - name: cnpj
+      description: CNPJ
+    - name: industryClassification
+      description: Classificação (setor/subsetor/segmento)
+    - name: industryClassificationEng
+      description: Classificação
+    - name: activity
+      description: Ramo de atividade
+    - name: website
+      description: Site
+    - name: hasQuotation
+      description: Tem cotação?
+    - name: status
+      description: Status
+    - name: marketIndicator
+      description: Código indicador do mercado
+    - name: market
+      description: Mercado (Novo mercado, ...)
+    - name: institutionCommon
+      description: Instituição das ações ordinárias
+    - name: institutionPreferred
+      description: Instituição das ações preferenciais
+    - name: code
+      description: Código da empresa
+    - name: codeCVM
+      description: Código CVN
+    - name: lastDate
+      description: Última data de negociação
+    - name: hasEmissions
+      description: Tem emissões
+    - name: hasBDR
+      description: Tem BDRs?
+    - name: typeBDR
+      description: Tipo de BDR
+    - name: describleCategoryBVMF
+      description: Descrição
+  OtherCodes:
+    name: otherCodes
+    fields:
+    - name: code
+      description: Código da ação
+    - name: isin
+      description: Código ISIN
