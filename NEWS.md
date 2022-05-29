@@ -1,3 +1,8 @@
+# rb3 0.0.4
+
+* added locale `en` to templates: `COTAHIST_*`
+
+
 # rb3 0.0.3 
 
 * fixed tests for yc_get().

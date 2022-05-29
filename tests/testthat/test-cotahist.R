@@ -31,6 +31,7 @@ test_that("it should extract equity data from cotahist dataset", {
   df <- cotahist_equity_get(ch)
   expect_type(df$close, "double")
   expect_type(df$transactions_quantity, "integer")
+  expect_type(df$traded_contracts, "double")
   df <- cotahist_bdrs_get(ch)
   expect_type(df$close, "double")
   expect_type(df$transactions_quantity, "integer")
