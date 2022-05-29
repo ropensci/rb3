@@ -41,6 +41,35 @@ x$results |> View()
 
 # ----
 
+res <- paste0(
+  "https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetMaterialFacts/",
+  list(
+    language = "pt-br",
+    codeCVM = "50024",
+    year = 2010L,
+    dateInitial = "2000-01-01",
+    dateFinal = "2022-12-31",
+    # categoty = 6L,
+    pageNumber = 1L,
+    pageSize = 9999L
+  ) |>
+    jsonlite::toJSON(auto_unbox = TRUE) |>
+    charToRaw() |>
+    base64enc::base64encode()
+) |> httr::GET(httr::verbose())
+
+res
+
+(m <- httr::content(res, as = "text") |> jsonlite::fromJSON())
+names(m)
+m$results |> str()
+
+httr::content(res, as = "text") |>
+  jsonlite::fromJSON(simplifyDataFrame = FALSE) |>
+  View()
+
+# ----
+
 hsh <- "eyJpc3N1aW5nQ29tcGFueSI6IkJCQVMiLCJsYW5ndWFnZSI6InB0LWJyIn0="
 
 base64enc::base64decode(hsh) |>
@@ -49,7 +78,7 @@ base64enc::base64decode(hsh) |>
 
 res <- paste0(
   "https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany/",
-  list(issuingCompany = "BBAS", language = "pt-br") |>
+  list(issuingCompany = "LWSA", language = "pt-br") |>
     jsonlite::toJSON(auto_unbox = TRUE) |>
     charToRaw() |>
     base64enc::base64encode()
@@ -76,6 +105,7 @@ x$numberPreferredShares
 x$roundLot
 x$tradingName
 names(x)
+View(x)
 
 (y <- httr::content(res, as = "text") |> jsonlite::fromJSON(simplifyDataFrame = FALSE))
 View(y)
@@ -122,8 +152,9 @@ res <- paste0(
 
 res
 
-(f <- httr::content(res, as = "text") |> jsonlite::fromJSON())
+f <- httr::content(res, as = "text") |> jsonlite::fromJSON(simplifyDataFrame = FALSE)
 names(f)
+View(f)
 f$titleInitial
 f$consolidated |> as_tibble()
 f$unconsolidated |> as_tibble()
@@ -155,11 +186,7 @@ res
 d <- httr::content(res, as = "text") |> jsonlite::fromJSON(simplifyDataFrame = FALSE)
 View(d)
 names(d)
-f$titleInitial
-f$consolidated |> as_tibble()
-f$unconsolidated |> as_tibble()
-f$freeFloatResult
-
+d$results
 
 # https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetDetail/eyJjb2RlQ1ZNIjoiMTAyMyIsImxhbmd1YWdlIjoicHQtYnIifQ==
 # https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedFinancial/eyJjb2RlQ1ZNIjoiNDE3MCIsImxhbmd1YWdlIjoicHQtYnIifQ==
