@@ -12,7 +12,8 @@
   * `IndexReport` indexes daily market data.
   * `PriceReport` daily prices and market data.
   * `GetListedSupplementCompany` supplement data for listed companies.
-  * `GetDetailsCompany` to get companies details (name, codeCVM, ...)
+  * `GetDetailsCompany` to get companies details (name, codeCVM, ...).
+  * `GetListedCashDividends` to get list of cash dividends.
 * new functions for yield curves
   * `yc_ipca_get` and `yc_ipca_mget` for real interest rates
   * `yc_usd_get` and `yc_usd_mget` for USD interest rates in Brazil
