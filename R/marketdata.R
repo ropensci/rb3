@@ -42,19 +42,19 @@ read_marketdata <- function(filename, template = NULL,
                             cache_folder = cachedir(),
                             do_cache = TRUE) {
   template <- .retrieve_template(filename, template)
-  basename_ <- stringr::str_replace(basename(filename), "\\.\\w+$", "")
+  basename_ <- str_replace(basename(filename), "\\.\\w+$", "")
   parsed_ <- if (parse_fields) "parsed" else "strict"
   f_cache <- file.path(
-    cache_folder, stringr::str_glue("{template$id}_{parsed_}_{basename_}.rds")
+    cache_folder, str_glue("{template$id}_{parsed_}_{basename_}.rds")
   )
 
   if (file.exists(f_cache) && do_cache) {
-    df_ <- readr::read_rds(f_cache)
+    df_ <- read_rds(f_cache)
     return(df_)
   }
   df <- template$read_file(filename, parse_fields)
   if (do_cache) {
-    readr::write_rds(df, f_cache)
+    write_rds(df, f_cache)
   }
   df
 }
@@ -71,7 +71,7 @@ read_marketdata <- function(filename, template = NULL,
   template
 }
 
-registry <- proto::proto(expr = {
+registry <- proto(expr = {
   .container <- list()
   put <- function(., key, value) {
     if (!is.null(key)) {
@@ -128,7 +128,7 @@ parsers <- list(
   )
 )
 
-MarketData <- proto::proto(expr = {
+MarketData <- proto(expr = {
   description <- ""
 
   ..registry.id <- registry$proto()
@@ -153,7 +153,7 @@ MarketData <- proto::proto(expr = {
   }
 
   show_templates <- function(.) {
-    purrr::map_dfr(.$..registry.id$keys(), function(cls) {
+    map_dfr(.$..registry.id$keys(), function(cls) {
       tpl_ <- .$..registry.id$get(cls)
       tibble(
         "Description" = tpl_$description,
@@ -211,7 +211,7 @@ MarketData <- proto::proto(expr = {
 
   .detect_lines <- function(., .part, lines) {
     if (!is.null(.part$pattern)) {
-      stringr::str_detect(lines, .part$pattern)
+      str_detect(lines, .part$pattern)
     } else if (!is.null(.part$index)) {
       .part$index
     } else {

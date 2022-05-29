@@ -37,7 +37,6 @@ new_part <- function(x) {
   }
 }
 
-#' @importFrom utils getFromNamespace
 new_template <- function(tpl) {
   obj <- MarketData$proto()
   obj[["has_reader"]] <- FALSE
@@ -63,7 +62,7 @@ new_template <- function(tpl) {
   }
 
   if (is(try(obj$reader, TRUE), "try-error")) {
-    reader_name <- paste0(stringr::str_to_lower(obj$filetype), "_read_file")
+    reader_name <- paste0(str_to_lower(obj$filetype), "_read_file")
     obj[["read_file"]] <- getFromNamespace(reader_name, "rb3")
     obj[["has_reader"]] <- TRUE
   }
@@ -83,12 +82,12 @@ load_templates <- function() {
   )
   files <- list.files(dir, full.names = TRUE)
   for (file in files) {
-    tpl <- yaml::yaml.load_file(file)
+    tpl <- yaml.load_file(file)
     new_template(tpl)
   }
 }
 
 .onAttach <- function(libname, pkgname) {
   load_templates()
-  bizdays::load_builtin_calendars()
+  load_builtin_calendars()
 }

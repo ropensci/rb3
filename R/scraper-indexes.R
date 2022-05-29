@@ -173,11 +173,11 @@ indexreport_mget <- function(first_date = Sys.Date() - 5,
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
   tpl <- .retrieve_template(NULL, "IndexReport")
-  date_vec <- bizdays::bizseq(first_date, last_date, tpl$calendar)
+  date_vec <- bizseq(first_date, last_date, tpl$calendar)
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
 
-  dplyr::bind_rows(
-    purrr::map(cli::cli_progress_along(
+  bind_rows(
+    map(cli::cli_progress_along(
       date_vec,
       format = paste0(
         "{pb_spin} Fetching data points ",
