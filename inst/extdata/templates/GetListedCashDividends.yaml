@@ -1,0 +1,43 @@
+id: GetListedCashDividends
+filename: ~
+filetype: CUSTOM
+description: Listagem de dividendos em dinheiro
+locale: pt
+downloader:
+  function: company_cash_dividends_download
+  url: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedCashDividends
+  format: json
+reader:
+  function: company_cash_dividends_reader
+fields:
+- name: typeStock
+  description: Tipo da ação (ON, PN)
+- name: dateApproval
+  description: Data em que foi deliberado
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
+- name: valueCash
+  description: Valor do dividendo
+- name: ratio
+  description: Razão
+- name: corporateAction
+  description: Descrição do provento
+- name: lastDatePriorEx
+  description: Data COM (última data antes da ação ficar EX do provento)
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
+- name: dateClosingPricePriorExDate
+  description: Data COM (última data antes da ação ficar EX do provento)
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
+- name: closingPricePriorExDate
+  description: Preço de fechamento na data COM
+- name: quotedPerShares
+  description: Provento por ações
+- name: corporateActionPrice
+  description: Preço do provento
+- name: lastDateTimePriorEx
+  description: Data/Hora COM (última data antes da ação ficar EX do provento)

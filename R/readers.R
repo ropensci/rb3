@@ -431,6 +431,17 @@ company_details_reader <- function(., filename, parse_fields = TRUE) {
   l
 }
 
+company_cash_dividends_reader <- function(., filename, parse_fields = TRUE) {
+  jason <- jsonlite::fromJSON(filename)
+  df <- as.data.frame(jason[["results"]])
+  colnames(df) <- .$colnames
+  if (parse_fields) {
+    parse_columns(df, .$colnames, .$handlers, .$.parser())
+  } else {
+    df
+  }
+}
+
 ck_if_null <- function(x) {
   if (is.null(x)) {
     ""

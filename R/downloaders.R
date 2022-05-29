@@ -121,6 +121,17 @@ company_details_download <- function(., dest, ...) {
   )
 }
 
+company_cash_dividends_download <- function(., dest, ...) {
+  if (!check_parameters(..., arg_name = "trading_name")) {
+    return(FALSE)
+  }
+  args <- list(...)
+  url_encoded_download(., dest,
+    tradingName = args$trading_name, language = "pt-br",
+    pageNumber = 1, pageSize = 9999
+  )
+}
+
 #' @importFrom stringr str_glue
 check_parameters <- function(..., arg_name) {
   args <- list(...)
