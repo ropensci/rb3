@@ -347,7 +347,7 @@ pricereport_reader <- function(., filename, parse_fields = TRUE) {
 }
 
 company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(f)
+  jason <- fromJSON(filename)
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
@@ -386,7 +386,7 @@ company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
 }
 
 company_details_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(f)
+  jason <- fromJSON(filename)
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
