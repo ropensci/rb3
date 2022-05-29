@@ -22,7 +22,7 @@ fields:
 - name: ratio
   description: Razão
 - name: corporateAction
-  description: Descrição do provento
+  description: Tipo do provento
 - name: lastDatePriorEx
   description: Data COM (última data antes da ação ficar EX do provento)
   handler:
@@ -34,10 +34,10 @@ fields:
     type: Date
     format: '%d/%m/%Y'
 - name: closingPricePriorExDate
-  description: Preço de fechamento na data COM
+  description: Último preço COM
 - name: quotedPerShares
   description: Provento por ações
 - name: corporateActionPrice
-  description: Preço do provento
+  description: Razão Provento/Preço (%)
 - name: lastDateTimePriorEx
   description: Data/Hora COM (última data antes da ação ficar EX do provento)
