@@ -126,8 +126,9 @@ company_cash_dividends_download <- function(., dest, ...) {
     return(FALSE)
   }
   args <- list(...)
+  trading_name <- str_replace_all(args$trading_name, "[^A-Z0-9 ]+", "")
   url_encoded_download(., dest,
-    tradingName = args$trading_name, language = "pt-br",
+    tradingName = trading_name, language = "pt-br",
     pageNumber = 1, pageSize = 9999
   )
 }
