@@ -192,3 +192,9 @@ d$results
 # https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedFinancial/eyJjb2RlQ1ZNIjoiNDE3MCIsImxhbmd1YWdlIjoicHQtYnIifQ==
 # https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetMaterialFacts/eyJsYW5ndWFnZSI6InB0LWJyIiwiY29kZUNWTSI6IjUwMDI0IiwieWVhciI6MjAxMSwiZGF0ZUluaXRpYWwiOiIyMDExLTAxLTAxIiwiZGF0ZUZpbmFsIjoiMjAxMS0xMi0zMSIsImNhdGVnb3J5Ijo2LCJwYWdlTnVtYmVyIjoxLCJwYWdlU2l6ZSI6NX0="
 # https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany/
+
+# https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedCashDividends/eyJsYW5ndWFnZSI6InB0LWJyIiwicGFnZU51bWJlciI6MSwicGFnZVNpemUiOjIwLCJ0cmFkaW5nTmFtZSI6IkFNQkVWU0EifQ==
+
+base64enc::base64decode("eyJsYW5ndWFnZSI6InB0LWJyIiwicGFnZU51bWJlciI6MSwicGFnZVNpemUiOjIwLCJ0cmFkaW5nTmFtZSI6IkFNQkVWU0EifQ==") |>
+  rawToChar() |>
+  jsonlite::fromJSON()
