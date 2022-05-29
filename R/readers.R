@@ -85,6 +85,7 @@ csv_read_file <- function(., filename, parse_fields = TRUE) {
 json_read_file <- function(., filename, parse_fields = TRUE) {
   jason <- jsonlite::fromJSON(filename)
   df <- as.data.frame(jason)
+  colnames(df) <- .$colnames
   if (parse_fields) {
     parse_columns(df, .$colnames, .$handlers, .$.parser())
   } else {
