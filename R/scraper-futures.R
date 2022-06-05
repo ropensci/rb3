@@ -91,9 +91,9 @@ futures_mget <- function(first_date = Sys.Date() - 5,
     map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points",
+        "{cli::pb_spin} Fetching data points",
         "{cli::pb_current}/{cli::pb_total}",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     single_futures_get,

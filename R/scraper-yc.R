@@ -52,9 +52,9 @@ yc_mget <- function(first_date = Sys.Date() - 5,
     map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points ",
-        " {cli::pb_current}/{cli::pb_total} ",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        "{cli::pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     get_single_yc,
@@ -159,9 +159,9 @@ yc_ipca_mget <- function(first_date = Sys.Date() - 5,
     map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points ",
-        " {cli::pb_current}/{cli::pb_total} ",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        "{cli::pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     get_single_yc_ipca,
@@ -267,9 +267,9 @@ yc_usd_mget <- function(first_date = Sys.Date() - 5,
     map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points ",
-        " {cli::pb_current}/{cli::pb_total} ",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        "{cli::pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     get_single_yc_usd,
