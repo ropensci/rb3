@@ -1,6 +1,11 @@
 # rb3 0.0.4
 
 * added locale `en` to templates: `COTAHIST_*`
+* new templates
+  * `NegociosIntraday` intraday listed market trades
+  * `NegociosBalcao` intraday OTC (Debentures) trades
+  * `NegociosBTB` intraday lending trades
+* imports organized (using importFrom in NAMESPACE)
 
 
 # rb3 0.0.3 
