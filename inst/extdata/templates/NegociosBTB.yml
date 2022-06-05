@@ -1,0 +1,54 @@
+id: NegociosBTB
+filename: ~
+filetype: CSV
+description: Negócios BTB Aluguel de Ações
+separator: ";"
+comment: ""
+skip: 1
+locale: pt
+downloader:
+  function: datetime_download
+  url: https://arquivos.b3.com.br/apinegocios/tickercsvbtb/%Y-%m-%d
+  format: zip
+fields:
+  - name: RptDt
+    description: Data de referência
+    handler:
+      type: Date
+      format: '%Y-%m-%d'
+  - name: TckrSymb
+    description: Símbolo
+  - name: UpdActn
+    description: Informa a ação de atualização que está ocorrendo
+  - name: IntrstRateTermTrad
+    description: Taxa de aluguel
+  - name: TradQty
+    description: Quantidade negociada
+  - name: NtryTm
+    description: Horário de negociação
+    handler:
+      type: strtime
+  - name: TradId
+    description: Número do negócio
+  - name: TradgSsnId
+    description: |
+      Este campo informa se o negócio foi feito no horário regular do pregão
+      ou after market
+      (Período de negociação que funciona fora do horário regular do pregão).
+  - name: TradDt
+    description: Data do pregão
+    handler:
+      type: Date
+      format: '%Y-%m-%d'
+  - name: Mkt
+    description: Mercado
+    handler:
+      type: factor
+      levels:
+      - 91
+      - 92
+      - 93
+      labels:
+      - balcão
+      - eletrônico d0
+      - eletrônico d+1
