@@ -1,0 +1,57 @@
+id: NegociosIntraday
+filename: ~
+filetype: CSV
+description: Negócios Intraday
+separator: ";"
+skip: 1
+locale: en
+downloader:
+  function: datetime_download
+  url: https://arquivos.b3.com.br/apinegocios/tickercsv/%Y-%m-%d
+  format: zip
+fields:
+  - name: RptDt
+    description: Data de referência da informação
+    handler:
+      type: Date
+      format: '%Y-%m-%d'
+  - name: TckrSymb
+    description: Código que identifica um instrumento
+  - name: UpdActn
+    description: Informa a ação de atualização que está ocorrendo
+    handler:
+      type: factor
+      levels:
+      - 0
+      - 2
+      labels:
+      - new
+      - delete
+  - name: GrssTradAmt
+    description: Preço do negócio
+  - name: TradQty
+    description: Quantidade de negócios no dia
+  - name: NtryTm
+    description: Hora (o instante) do negócio fechado
+    handler:
+      type: strtime
+  - name: TradId
+    description: Número do negócio
+  - name: TradgSsnId
+    description: |
+      Este campo informa se o negócio foi feito no horário regular do pregão
+      ou after market
+      (Período de negociação que funciona fora do horário regular do pregão).
+    handler:
+      type: factor
+      levels:
+      - 1
+      - 6
+      labels:
+      - regular
+      - after
+  - name: TradDt
+    description: Data do pregão
+    handler:
+      type: Date
+      format: '%Y-%m-%d'

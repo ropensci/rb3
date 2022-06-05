@@ -1,3 +1,20 @@
+to_strtime_handler <- function(format = NULL, tz = NULL) {
+  if (is.null(format)) {
+    format <- "%H%M%OS"
+  }
+  if (is.null(tz)) {
+    tz <- "GMT"
+  }
+  handler <- function(x) {
+    z <- str_pad(x, 9, pad = "0") |> str_match("(\\d{6})(\\d{3})")
+    t <- str_c(z[, 2], ".", z[, 3])
+    strptime(t, format = format, tz = tz)
+  }
+  attr(handler, "format") <- format
+  attr(handler, "type") <- "strtime"
+  class(handler) <- c("function", "handler")
+  handler
+}
 
 new_field <- function(x) {
   width_ <- if (!is.null(x$width)) width(x$width)
@@ -11,6 +28,8 @@ new_field <- function(x) {
     handler_ <- to_date_handler(x$handler$format)
   } else if (x$handler$type == "POSIXct") {
     handler_ <- to_time_handler(x$handler$format)
+  } else if (x$handler$type == "strtime") {
+    handler_ <- to_strtime_handler(x$handler$format)
   } else {
     handler_ <- pass_thru_handler()
   }

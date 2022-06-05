@@ -70,8 +70,10 @@ fwf_read_file <- function(., filename, parse_fields = TRUE) {
 }
 
 csv_read_file <- function(., filename, parse_fields = TRUE) {
+  skip <- try(.$skip, TRUE)
+  skip <- if (is(skip, "try-error")) 0 else skip
   df <- read.table(filename,
-    col.names = .$colnames, sep = .$separator,
+    col.names = .$colnames, sep = .$separator, skip = skip,
     as.is = TRUE, stringsAsFactors = FALSE
   )
   if (parse_fields) {
