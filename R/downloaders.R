@@ -157,3 +157,13 @@ url_encoded_download <- function(., dest, ...) {
   save_resource(res, enc, dest)
   TRUE
 }
+
+base64_datetime_download <- function(., dest, ...) {
+  if (!datetime_download(., dest, ...)) {
+    return(FALSE)
+  }
+  b64 <- scan(dest, "")
+  txt <- rawToChar(base64enc::base64decode(b64))
+  writeBin(txt, dest)
+  TRUE
+}

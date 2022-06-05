@@ -1,0 +1,41 @@
+id: NegociosBalcao
+filename: ~
+filetype: CSV
+description: Negócios Balcão
+separator: ";"
+skip: 2
+comment: ""
+locale: pt
+downloader:
+  function: base64_datetime_download
+  url: https://bvmf.bmfbovespa.com.br/NegociosRealizados/Registro/DownloadArquivoDiretorio?data=%d-%m-%Y
+  format: csv
+fields:
+  - name: InstrumentoFinanceiro
+    description: Instrumento Financeiro
+  - name: Emissor
+    description: Emissor
+  - name: CodigoIF
+    description: Código IF
+  - name: QuantidadeNegociada
+    description: Quantidade Negociada
+  - name: PrecoNegocio
+    description: Preco Negócio
+  - name: Volume
+    description: Volume Financeiro R$
+  - name: TaxaNegocio
+    description: Taxa Negócio
+  - name: OrigemNegocio
+    description: Origem Negócio
+  - name: HorarioNegocio
+    description: Horario Negócio
+    handler:
+      type: POSIXct
+      format: '%H:%M:%S'
+  - name: DataNegocio
+    description: Data do negócio
+    handler:
+      type: Date
+      format: '%d/%m/%Y'
+  - name: CodNegocio
+    description: Código Identificador do Negócio

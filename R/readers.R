@@ -72,9 +72,11 @@ fwf_read_file <- function(., filename, parse_fields = TRUE) {
 csv_read_file <- function(., filename, parse_fields = TRUE) {
   skip <- try(.$skip, TRUE)
   skip <- if (is(skip, "try-error")) 0 else skip
+  comment <- try(.$comment, TRUE)
+  comment <- if (is(comment, "try-error")) "#" else comment
   df <- read.table(filename,
     col.names = .$colnames, sep = .$separator, skip = skip,
-    as.is = TRUE, stringsAsFactors = FALSE
+    comment.char = comment, as.is = TRUE, stringsAsFactors = FALSE
   )
   if (parse_fields) {
     parse_columns(df, .$colnames, .$handlers, .$.parser())
