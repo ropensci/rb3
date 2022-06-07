@@ -22,7 +22,7 @@
 #' @importFrom rlang .data
 #' @importFrom stringr str_replace_all str_starts str_match str_sub str_split
 #' @importFrom stringr str_to_lower str_detect str_pad str_replace str_trim
-#' @importFrom stringr str_ends str_replace
+#' @importFrom stringr str_ends str_replace str_c
 #' @importFrom stringr str_glue
 #' @importFrom yaml yaml.load_file
 #' @importFrom methods is new slot
