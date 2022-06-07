@@ -3,6 +3,10 @@ if (!covr::in_covr()) {
   skip_on_cran()
 }
 
+if (Sys.info()["sysname"] == "Linux") {
+  httr::set_config(config(ssl_verifypeer = FALSE))
+}
+
 test_that("it should download a file with a simple downloader", {
   tpl <- .retrieve_template(NULL, "CDIIDI")
   dest <- tempfile()
