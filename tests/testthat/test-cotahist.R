@@ -4,7 +4,7 @@ if (!covr::in_covr()) {
 }
 
 if (Sys.info()["sysname"] == "Linux") {
-  httr::set_config(config(ssl_verifypeer = FALSE))
+  httr::set_config(httr::config(ssl_verifypeer = FALSE))
 }
 
 test_that("it should download cotahist file", {
