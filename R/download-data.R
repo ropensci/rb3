@@ -58,9 +58,18 @@ unzip_recursive <- function(fname) {
   }
 }
 
+.safecontent <- function(x) {
+  cl <- headers(x)[["content-length"]]
+  if (is.null(cl)) {
+    TRUE
+  } else {
+    cl != 0
+  }
+}
+
 just_download_data <- function(url, encoding, dest) {
   res <- GET(url)
-  if (status_code(res) != 200) {
+  if (status_code(res) != 200 || !.safecontent(res)) {
     return(FALSE)
   }
   save_resource(res, encoding, dest)
