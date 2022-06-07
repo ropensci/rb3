@@ -3,6 +3,10 @@ if (!covr::in_covr()) {
   skip_on_cran()
 }
 
+if (Sys.info()["sysname"] == "Linux") {
+  httr::set_config(httr::config(ssl_verifypeer = FALSE))
+}
+
 test_that("it should download a file with a simple downloader", {
   tpl <- .retrieve_template(NULL, "CDIIDI")
   dest <- tempfile()
@@ -49,5 +53,43 @@ test_that("it should fail to curve_download", {
 test_that("it should defaults to PRE in curve_download", {
   tpl <- .retrieve_template(NULL, "TaxasReferenciais")
   f <- curve_download(tpl, tempfile(), refdate = as.Date("2022-05-10"))
+  expect_true(f)
+})
+
+test_that("it should base64_datetime_download", {
+  tpl <- .retrieve_template(NULL, "NegociosBalcao")
+  refdate <- preceding(Sys.Date() - 1, "Brazil/B3")
+  f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
+  expect_true(f)
+})
+
+test_that("it should fail base64_datetime_download", {
+  tpl <- .retrieve_template(NULL, "NegociosBalcao")
+  refdate <- as.Date("2022-06-05")
+  f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
+  expect_false(f)
+})
+
+test_that("it should company_listed_supplement_download", {
+  tpl <- .retrieve_template(NULL, "GetListedSupplementCompany")
+  f <- company_listed_supplement_download(tpl, tempfile(),
+    company_name = "ABEV"
+  )
+  expect_true(f)
+})
+
+test_that("it should company_details_download", {
+  tpl <- .retrieve_template(NULL, "GetDetailsCompany")
+  f <- company_details_download(tpl, tempfile(),
+    code_cvm = "23264"
+  )
+  expect_true(f)
+})
+
+test_that("it should company_cash_dividends_download ", {
+  tpl <- .retrieve_template(NULL, "GetListedCashDividends")
+  f <- company_cash_dividends_download(tpl, tempfile(),
+    trading_name = "AMBEVSA"
+  )
   expect_true(f)
 })

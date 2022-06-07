@@ -10,7 +10,7 @@ as.data.frame.fields <- function(x, ...) {
     `Field name` = fields_names(x),
     `Description` = fields_description(x),
     `Width` = fields_widths(x),
-    `Type` = purrr::map_chr(fields_handlers(x), function(y) attr(y, "type")),
+    `Type` = map_chr(fields_handlers(x), function(y) attr(y, "type")),
     row.names = seq_along(x),
     check.names = FALSE
   )
@@ -19,20 +19,20 @@ as.data.frame.fields <- function(x, ...) {
 print.fields <- function(x, ...) {
   df <- as.data.frame(x)
   suppressWarnings(
-    print(ascii::ascii(df, include.rownames = TRUE), type = "org")
+    print(ascii(df, include.rownames = TRUE), type = "org")
   )
 }
 
 fields_names <- function(fields) {
-  purrr::map_chr(fields, function(x) as.character(x))
+  map_chr(fields, function(x) as.character(x))
 }
 
 fields_widths <- function(fields) {
-  purrr::map_int(fields, function(x) as.integer(attr(x, "width")))
+  map_int(fields, function(x) as.integer(attr(x, "width")))
 }
 
 fields_description <- function(fields) {
-  purrr::map_chr(fields, function(x) attr(x, "description"))
+  map_chr(fields, function(x) attr(x, "description"))
 }
 
 fields_handlers <- function(fields) {

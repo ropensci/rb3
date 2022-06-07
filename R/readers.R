@@ -21,7 +21,7 @@ read_fwf <- function(fname, widths, colnames = NULL, skip = 0, text) {
   t <- list()
   for (i in seq_along(colnames)) {
     dx <- colpositions[[i]]
-    t[[colnames[i]]] <- stringr::str_sub(lines, dx[1], dx[2])
+    t[[colnames[i]]] <- str_sub(lines, dx[1], dx[2])
   }
 
   as.data.frame(t,
@@ -33,7 +33,7 @@ read_fwf <- function(fname, widths, colnames = NULL, skip = 0, text) {
 trim_fields <- function(x) {
   fields <- lapply(x, function(z) {
     if (is(z, "character")) {
-      stringr::str_trim(z)
+      str_trim(z)
     } else {
       z
     }
@@ -57,7 +57,7 @@ parse_columns <- function(df, colnames, handlers, parser) {
     "data.frame",
     c(df, stringsAsFactors = FALSE, check.names = FALSE)
   )
-  parse_text(parser, df) |> tibble::as_tibble()
+  parse_text(parser, df) |> as_tibble()
 }
 
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
@@ -69,11 +69,14 @@ fwf_read_file <- function(., filename, parse_fields = TRUE) {
   }
 }
 
-#' @importFrom utils read.table
 csv_read_file <- function(., filename, parse_fields = TRUE) {
+  skip <- try(.$skip, TRUE)
+  skip <- if (is(skip, "try-error")) 0 else skip
+  comment <- try(.$comment, TRUE)
+  comment <- if (is(comment, "try-error")) "#" else comment
   df <- read.table(filename,
-    col.names = .$colnames, sep = .$separator,
-    as.is = TRUE, stringsAsFactors = FALSE
+    col.names = .$colnames, sep = .$separator, skip = skip,
+    comment.char = comment, as.is = TRUE, stringsAsFactors = FALSE
   )
   if (parse_fields) {
     parse_columns(df, .$colnames, .$handlers, .$.parser())
@@ -83,7 +86,7 @@ csv_read_file <- function(., filename, parse_fields = TRUE) {
 }
 
 json_read_file <- function(., filename, parse_fields = TRUE) {
-  jason <- jsonlite::fromJSON(filename)
+  jason <- fromJSON(filename)
   df <- as.data.frame(jason)
   colnames(df) <- .$colnames
   if (parse_fields) {
@@ -134,13 +137,12 @@ mfwf_read_file <- function(., filename, parse_fields = TRUE) {
   l
 }
 
-#' @importFrom rvest html_table html_element read_html
 settlement_prices_read <- function(., filename, parse_fields = TRUE) {
-  doc <- rvest::read_html(filename)
+  doc <- read_html(filename)
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  table <- rvest::html_element(doc, xpath = xpath)
+  table <- html_element(doc, xpath = xpath)
   if (is(table, "xml_node")) {
-    df <- rvest::html_table(table)
+    df <- html_table(table)
   } else {
     return(NULL)
   }
@@ -153,7 +155,7 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
 }
 
 options_open_interest_read <- function(., filename, parse_fields = TRUE) {
-  jason <- jsonlite::fromJSON(filename)
+  jason <- fromJSON(filename)
   if (is.null(jason$Empresa)) {
     return(NULL)
   }
@@ -173,11 +175,11 @@ cols_number <- c(
 )
 
 curve_read <- function(., filename, parse_fields = TRUE) {
-  text <- readr::read_file(filename)
+  text <- read_file(filename)
 
-  char_vec <- rvest::read_html(text) |>
-    rvest::html_nodes("td") |>
-    rvest::html_text()
+  char_vec <- read_html(text) |>
+    html_nodes("td") |>
+    html_text()
 
   if (length(char_vec) == 0) {
     return(NULL)
@@ -206,7 +208,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
     col2 <- char_vec[idx3]
   }
 
-  df <- dplyr::tibble(
+  df <- tibble(
     refdate,
     cur_days,
     col1,
@@ -222,7 +224,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
 }
 
 stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- jsonlite::fromJSON(filename)
+  jason <- fromJSON(filename)
   if (is.null(jason$results)) {
     return(NULL)
   }
@@ -240,7 +242,7 @@ stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {
 }
 
 stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- jsonlite::fromJSON(filename)
+  jason <- fromJSON(filename)
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
@@ -256,7 +258,6 @@ stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
   l
 }
 
-#' @importFrom XML xmlInternalTreeParse getNodeSet xmlValue
 indexreport_reader <- function(., filename, parse_fields = TRUE) {
   doc <- xmlInternalTreeParse(filename)
 
@@ -432,7 +433,7 @@ company_details_reader <- function(., filename, parse_fields = TRUE) {
 }
 
 company_cash_dividends_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- jsonlite::fromJSON(filename)
+  jason <- fromJSON(filename)
   df <- as.data.frame(jason[["results"]])
   colnames(df) <- .$colnames
   if (parse_fields) {

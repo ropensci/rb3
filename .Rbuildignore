@@ -16,3 +16,4 @@ templates_save.r
 ^README\.Rmd$
 ^codemeta\.json$
 Contributing.md
+examples

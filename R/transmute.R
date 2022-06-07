@@ -69,12 +69,12 @@ apply_rule.regex_rule <- function(rule, .data) {
   if (!is(.data, "character")) {
     return(rule_result())
   }
-  detect <- stringr::str_detect(.data, rule$regex)
+  detect <- str_detect(.data, rule$regex)
   apply_to <- rule$apply_to(detect, na.rm = rule$na.rm)
   result <- if (apply_to) {
     rule$handler(
       .data,
-      stringr::str_match(.data, rule$regex)
+      str_match(.data, rule$regex)
     )
   }
   rule_result(apply_to, result)
@@ -198,10 +198,10 @@ setMethod(
 transmuter <- function(...) {
   objs <- list(...)
 
-  idx <- purrr::map_lgl(objs, function(x) is(x, "match_rule"))
+  idx <- map_lgl(objs, function(x) is(x, "match_rule"))
   rules <- objs[idx]
 
-  idx <- purrr::map_lgl(objs, function(x) is(x, "Transmuter"))
+  idx <- map_lgl(objs, function(x) is(x, "Transmuter"))
   parents <- objs[idx]
   for (parent in parents) {
     rules <- append(rules, slot(parent, "rules"))
@@ -238,7 +238,7 @@ take <- function(x, ...) {
 }
 
 take.list <- function(x, k, ...) {
-  purrr::map_chr(x, function(x) {
+  map_chr(x, function(x) {
     v <- x[[k]]
     if (is.null(v)) {
       NA

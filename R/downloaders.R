@@ -23,11 +23,11 @@ settlement_prices_download <- function(., dest, ...) {
     return(FALSE)
   }
   strdate <- format(as.Date(params$refdate), "%d/%m/%Y")
-  res <- httr::POST(.$downloader$url,
+  res <- POST(.$downloader$url,
     body = list(dData1 = strdate),
     encode = "form"
   )
-  if (httr::status_code(res) != 200) {
+  if (status_code(res) != 200) {
     return(FALSE)
   }
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
@@ -47,14 +47,14 @@ curve_download <- function(., dest, ...) {
   } else {
     params$curve_name
   }
-  url <- httr::parse_url(.$downloader$url)
+  url <- parse_url(.$downloader$url)
   url$query <- list(
     Data = format(as.Date(params$refdate), "%d/%m/%Y"),
     Data1 = format(as.Date(params$refdate), "%Y%m%d"),
     slcTaxa = curve_name
   )
-  res <- httr::GET(url)
-  if (httr::status_code(res) != 200) {
+  res <- GET(url)
+  if (status_code(res) != 200) {
     return(FALSE)
   }
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
@@ -69,7 +69,6 @@ stock_indexes_composition_download <- function(., dest, ...) {
   )
 }
 
-#' @importFrom utils hasName
 stock_indexes_theo_portfolio_download <- function(., dest, ...) {
   if (!check_parameters(..., arg_name = "index_name")) {
     return(FALSE)
@@ -133,7 +132,6 @@ company_cash_dividends_download <- function(., dest, ...) {
   )
 }
 
-#' @importFrom stringr str_glue
 check_parameters <- function(..., arg_name) {
   args <- list(...)
   if (!hasName(args, arg_name)) {
@@ -157,5 +155,15 @@ url_encoded_download <- function(., dest, ...) {
   }
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
   save_resource(res, enc, dest)
+  TRUE
+}
+
+base64_datetime_download <- function(., dest, ...) {
+  if (!datetime_download(., dest, ...)) {
+    return(FALSE)
+  }
+  b64 <- scan(dest, "")
+  txt <- rawToChar(base64enc::base64decode(b64))
+  writeBin(txt, dest)
   TRUE
 }

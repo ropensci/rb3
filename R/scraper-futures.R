@@ -6,7 +6,7 @@ flatten_names <- function(nx) {
     }
     nx[ix] <- last_name
   }
-  x <- nx |> stringr::str_match("^...")
+  x <- nx |> str_match("^...")
   as.vector(x)
 }
 
@@ -48,10 +48,10 @@ code2month <- function(x) {
 #' maturity2date(c("F23", "K35"), "15th day")
 #' @export
 maturity2date <- function(x, expr = "first day") {
-  year <- as.integer(stringr::str_sub(x, 2)) + 2000
-  month <- code2month(stringr::str_sub(x, 1, 1))
-  month <- stringr::str_pad(month, 2, pad = "0")
-  bizdays::getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA")
+  year <- as.integer(str_sub(x, 2)) + 2000
+  month <- code2month(str_sub(x, 1, 1))
+  month <- str_pad(month, 2, pad = "0")
+  getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA")
 }
 
 #' Get futures prices from trading session settlements page
@@ -85,15 +85,15 @@ futures_mget <- function(first_date = Sys.Date() - 5,
                          do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
-  date_vec <- bizdays::bizseq(first_date, last_date, "Brazil/ANBIMA")
+  date_vec <- bizseq(first_date, last_date, "Brazil/ANBIMA")
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-  df <- dplyr::bind_rows(
-    purrr::map(cli::cli_progress_along(
+  df <- bind_rows(
+    map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points",
+        "{cli::pb_spin} Fetching data points",
         "{cli::pb_current}/{cli::pb_total}",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     single_futures_get,
@@ -128,7 +128,7 @@ single_futures_get <- function(idx_date,
   if (!is.null(fname)) {
     df <- read_marketdata(fname, tpl, TRUE, cache_folder, do_cache)
     if (!is.null(df)) {
-      dplyr::tibble(
+      tibble(
         refdate = as.Date(refdate),
         commodity = flatten_names(df$mercadoria),
         maturity_code = df$vencimento,

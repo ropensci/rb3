@@ -42,19 +42,19 @@ yc_mget <- function(first_date = Sys.Date() - 5,
   # find biz days in between
   tpl <- .retrieve_template(NULL, "TaxasReferenciais")
 
-  date_vec <- bizdays::bizseq(first_date, last_date, tpl$calendar)
+  date_vec <- bizseq(first_date, last_date, tpl$calendar)
 
   # use by to separate dates
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
 
   # get data!
-  df_yc <- dplyr::bind_rows(
-    purrr::map(cli::cli_progress_along(
+  df_yc <- bind_rows(
+    map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points ",
-        " {cli::pb_current}/{cli::pb_total} ",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        "{cli::pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     get_single_yc,
@@ -86,7 +86,6 @@ yc_get <- function(refdate = Sys.Date(),
 #' @param date_vec Vector of dates
 #' @inheritParams yc_get
 #'
-#' @importFrom rvest read_html html_nodes html_text
 #' @return A dataframe
 #' @noRd
 get_single_yc <- function(idx_date,
@@ -103,11 +102,11 @@ get_single_yc <- function(idx_date,
   if (!is.null(fname)) {
     df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
     if (!is.null(df)) {
-      dplyr::tibble(
+      tibble(
         refdate = df$refdate,
         cur_days = df$cur_days,
-        biz_days = bizdays::bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = bizdays::add.bizdays(
+        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
+        forward_date = add.bizdays(
           refdate,
           .data$biz_days, tpl$calendar
         ),
@@ -150,19 +149,19 @@ yc_ipca_mget <- function(first_date = Sys.Date() - 5,
   # find biz days in between
   tpl <- .retrieve_template(NULL, "TaxasReferenciais")
 
-  date_vec <- bizdays::bizseq(first_date, last_date, tpl$calendar)
+  date_vec <- bizseq(first_date, last_date, tpl$calendar)
 
   # use by to separate dates
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
 
   # get data!
-  df_yc <- dplyr::bind_rows(
-    purrr::map(cli::cli_progress_along(
+  df_yc <- bind_rows(
+    map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points ",
-        " {cli::pb_current}/{cli::pb_total} ",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        "{cli::pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     get_single_yc_ipca,
@@ -194,7 +193,6 @@ yc_ipca_get <- function(refdate = Sys.Date(),
 #' @param date_vec Vector of dates
 #' @inheritParams yc_get
 #'
-#' @importFrom rvest read_html html_nodes html_text
 #' @return A dataframe
 #' @noRd
 get_single_yc_ipca <- function(idx_date,
@@ -211,11 +209,11 @@ get_single_yc_ipca <- function(idx_date,
   if (!is.null(fname)) {
     df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
     if (!is.null(df)) {
-      dplyr::tibble(
+      tibble(
         refdate = df$refdate,
         cur_days = df$cur_days,
-        biz_days = bizdays::bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = bizdays::add.bizdays(
+        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
+        forward_date = add.bizdays(
           refdate,
           .data$biz_days, tpl$calendar
         ),
@@ -259,19 +257,19 @@ yc_usd_mget <- function(first_date = Sys.Date() - 5,
   # find biz days in between
   tpl <- .retrieve_template(NULL, "TaxasReferenciais")
 
-  date_vec <- bizdays::bizseq(first_date, last_date, tpl$calendar)
+  date_vec <- bizseq(first_date, last_date, tpl$calendar)
 
   # use by to separate dates
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
 
   # get data!
-  df_yc <- dplyr::bind_rows(
-    purrr::map(cli::cli_progress_along(
+  df_yc <- bind_rows(
+    map(cli::cli_progress_along(
       date_vec,
       format = paste0(
-        "{pb_spin} Fetching data points ",
-        " {cli::pb_current}/{cli::pb_total} ",
-        " | {pb_bar} {pb_percent} | {pb_eta_str}"
+        "{cli::pb_spin} Fetching data points",
+        "{cli::pb_current}/{cli::pb_total}",
+        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
       )
     ),
     get_single_yc_usd,
@@ -303,7 +301,6 @@ yc_usd_get <- function(refdate = Sys.Date(),
 #' @param date_vec Vector of dates
 #' @inheritParams yc_get
 #'
-#' @importFrom rvest read_html html_nodes html_text
 #' @return A dataframe
 #' @noRd
 get_single_yc_usd <- function(idx_date,
@@ -320,11 +317,11 @@ get_single_yc_usd <- function(idx_date,
   if (!is.null(fname)) {
     df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
     if (!is.null(df)) {
-      dplyr::tibble(
+      tibble(
         refdate = df$refdate,
         cur_days = df$cur_days,
-        biz_days = bizdays::bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = bizdays::add.bizdays(
+        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
+        forward_date = add.bizdays(
           refdate,
           .data$biz_days, tpl$calendar
         ),

@@ -29,3 +29,27 @@ test_that("it should read stock_indexes_json_reader", {
   df <- read_marketdata(f, "GetTheoricalPortfolio", FALSE)
   expect_s3_class(df, "parts")
 })
+
+test_that("it should read csv_read_file", {
+  f <- system.file("extdata/NegociosBalcao.csv", package = "rb3")
+  df <- suppressWarnings(read_marketdata(f, "NegociosBalcao"))
+  expect_s3_class(df, "data.frame")
+})
+
+test_that("it should read company_listed_supplement_reader", {
+  f <- system.file("extdata/GetListedSupplementCompany.json", package = "rb3")
+  df <- suppressWarnings(read_marketdata(f, "GetListedSupplementCompany"))
+  expect_s3_class(df, "parts")
+})
+
+test_that("it should read company_details_reader", {
+  f <- system.file("extdata/GetDetailsCompany.json", package = "rb3")
+  df <- suppressWarnings(read_marketdata(f, "GetDetailsCompany"))
+  expect_s3_class(df, "parts")
+})
+
+test_that("it should read company_cash_dividends_reader", {
+  f <- system.file("extdata/GetListedCashDividends.json", package = "rb3")
+  df <- suppressWarnings(read_marketdata(f, "GetListedCashDividends"))
+  expect_s3_class(df, "data.frame")
+})

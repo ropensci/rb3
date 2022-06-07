@@ -16,8 +16,6 @@
 #' If `dest` is not provided, `cache_folder` is used and a file with template
 #' id is saved inside it.
 #'
-#' @importFrom digest digest
-#'
 #' @examples
 #' \dontrun{
 #' fname <- download_marketdata("CDIIDI")
@@ -29,14 +27,14 @@ download_marketdata <- function(template,
                                 do_cache = TRUE, ...) {
   template <- .retrieve_template(NULL, template)
   x <- list(...)
-  code_ <- digest::digest(x)
+  code_ <- digest(x)
   dest <- file.path(
     cache_folder,
-    stringr::str_glue("{template$id}-{code_}.{template$downloader$format}")
+    str_glue("{template$id}-{code_}.{template$downloader$format}")
   )
 
   if (file.exists(dest) && do_cache) {
-    # message(stringr::str_glue("Skipping download - using cached version"))
+    # message(str_glue("Skipping download - using cached version"))
     fname <- unzip_recursive(dest)
     return(fname)
   }
@@ -51,18 +49,27 @@ download_marketdata <- function(template,
 
 unzip_recursive <- function(fname) {
   if (length(fname) == 1 &&
-    stringr::str_ends(stringr::str_to_lower(fname), ".zip")) {
-    exdir <- stringr::str_replace(fname, "\\.zip$", "")
-    l <- utils::unzip(fname, exdir = exdir)
+    str_ends(str_to_lower(fname), ".zip")) {
+    exdir <- str_replace(fname, "\\.zip$", "")
+    l <- unzip(fname, exdir = exdir)
     unzip_recursive(l)
   } else {
     fname
   }
 }
 
+.safecontent <- function(x) {
+  cl <- headers(x)[["content-length"]]
+  if (is.null(cl)) {
+    TRUE
+  } else {
+    cl != 0
+  }
+}
+
 just_download_data <- function(url, encoding, dest) {
-  res <- httr::GET(url)
-  if (httr::status_code(res) != 200) {
+  res <- GET(url)
+  if (status_code(res) != 200 || !.safecontent(res)) {
     return(FALSE)
   }
   save_resource(res, encoding, dest)
@@ -70,12 +77,12 @@ just_download_data <- function(url, encoding, dest) {
 }
 
 save_resource <- function(res, encoding, dest) {
-  if (httr::headers(res)[["content-type"]] == "application/octet-stream" ||
-    httr::headers(res)[["content-type"]] == "application/x-zip-compressed") {
-    bin <- httr::content(res, as = "raw")
+  if (headers(res)[["content-type"]] == "application/octet-stream" ||
+    headers(res)[["content-type"]] == "application/x-zip-compressed") {
+    bin <- content(res, as = "raw")
     writeBin(bin, dest)
   } else {
-    text <- httr::content(res, as = "text", encoding = encoding)
+    text <- content(res, as = "text", encoding = encoding)
     writeLines(text, dest, useBytes = TRUE)
   }
 }

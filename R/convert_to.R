@@ -31,7 +31,7 @@ convert_to <- function(filename, template = NULL, parse_fields = TRUE,
       row.names = FALSE
     )
   } else if (format == "json") {
-    writeLines(jsonlite::toJSON(df), new_filename)
+    writeLines(toJSON(df), new_filename)
   }
   new_filename
 }

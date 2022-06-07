@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+```{r}
+library(rb3)
+library(tidyverse)
+library(formattable)
+
+dates <- add.bizdays(Sys.Date(), c(-2, -1), "Brazil/B3")
+
+chs <- map(dates, ~ cotahist_get(.x, "daily"))
+
+eqs <- map_dfr(chs, cotahist_equity_get)
+
+x <- c("d_2", "d_1")
+names(x) <- dates
+
+eqs$refdate_label <- x[as.character(eqs$refdate)]
+
+df_close <- eqs |>
+    select(refdate_label, symbol, close) |>
+    tidyr::pivot_wider(
+        names_from = refdate_label,
+        values_from = close
+    ) |>
+    mutate(diff = (d_1 - d_2) / d_2)
+
+df_distr <- eqs |>
+    select(refdate_label, symbol, distribution_id) |>
+    tidyr::pivot_wider(
+        names_from = refdate_label,
+        values_from = distribution_id
+    ) |>
+    mutate(diff = d_1 - d_2)
+```
+
+
+```{r}
+bottom <- df_close |>
+    arrange(diff) |>
+    head(10)
+
+top <- df_close |>
+    arrange(desc(diff)) |>
+    head(10)
+
+bind_rows(top, bottom) |>
+    ggplot(
+        aes(x = reorder(symbol, diff), y = diff, fill = factor(sign(diff)))
+    ) +
+    geom_bar(stat = "identity") +
+    scale_y_continuous(labels = scales::percent) +
+    coord_flip() +
+    theme(legend.position = "none")
+```
+
+```{r}
+df_close |>
+    filter(!is.na(diff)) |>
+    arrange(diff) |>
+    select(symbol, diff) |>
+    formattable(diff = color_tile("green", "red"))
+```
