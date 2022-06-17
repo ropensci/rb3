@@ -8,10 +8,17 @@
 #' cachedir()
 #' @export
 cachedir <- function() {
-  cache_folder <- file.path(tempdir(), "rb3-cache")
+  cache_folder <- getOption("rb3.cachedir")
+  cache_folder <- if (is.null(cache_folder)) {
+    file.path(tempdir(), "rb3-cache")
+  } else {
+    cache_folder
+  }
+
   if (!dir.exists(cache_folder)) {
     dir.create(cache_folder, recursive = TRUE)
   }
+
   cache_folder
 }
 

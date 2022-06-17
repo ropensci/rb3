@@ -110,3 +110,14 @@ load_templates <- function() {
   load_templates()
   load_builtin_calendars()
 }
+
+.onLoad <- function(libname, pkgname) {
+  op <- options()
+  op.rb3 <- list(
+    rb3.cachedir = NULL
+  )
+  toset <- !(names(op.rb3) %in% names(op))
+  if(any(toset)) options(op.rb3[toset])
+
+  invisible()
+}
