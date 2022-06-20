@@ -1,8 +1,9 @@
 
 library(rb3)
 library(tidyverse)
+library(bizdays)
 
-df <- index_by_segment_get("IBOV")
+df <- index_by_segment_get("SMLL")
 df |>
   distinct(segment, segment_weight) |>
   ggplot(aes(x = reorder(segment, segment_weight), y = segment_weight)) +
