@@ -1,3 +1,7 @@
+# rb3 0.0.5
+
+* Updated documentation
+
 # rb3 0.0.4
 
 * added locale `en` to templates: `COTAHIST_*`
