@@ -78,7 +78,7 @@ base64enc::base64decode(hsh) |>
 
 res <- paste0(
   "https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany/",
-  list(issuingCompany = "LWSA", language = "pt-br") |>
+  list(issuingCompany = "BPAC", language = "pt-br") |>
     jsonlite::toJSON(auto_unbox = TRUE) |>
     charToRaw() |>
     base64enc::base64encode()
