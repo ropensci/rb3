@@ -79,7 +79,7 @@ test_that("it should extract options data from cotahist dataset", {
 })
 
 test_that("it should extract specific symbols from cotahist dataset", {
-  symbols <- index_comp_get("IBOV")
+  symbols <- c("PETR3", "PETR4")
   df <- cotahist_get_symbols(ch, symbols)
   expect_equal(length(symbols), nrow(df))
 })
