@@ -223,7 +223,7 @@ subs_df <- company_subscriptions_get(eqs$symbol)
         value_cash = rate,
       ) |>
       select(
-        symbol, description, approved, last_date_prior_ex,
+        symbol, asset_name, spec_type, description, approved, last_date_prior_ex,
         value_cash, ratio, payment_date, closing_date_prior_ex,
         closing_price_prior_ex, quoted_per_shares, corporate_action_price
       )
@@ -239,6 +239,7 @@ subs_df <- company_subscriptions_get(eqs$symbol)
       ) |>
       left_join(codes, c("typeStock" = "spec_type", "asset_name" = "asset_name")) |>
       rename(
+        spec_type = typeStock,
         approved = dateApproval,
         last_date_prior_ex = lastDatePriorEx,
         closing_date_prior_ex = dateClosingPricePriorExDate,
@@ -249,7 +250,7 @@ subs_df <- company_subscriptions_get(eqs$symbol)
         value_cash = valueCash,
       ) |>
       select(
-        symbol, description, approved, last_date_prior_ex,
+        symbol, asset_name, spec_type, description, approved, last_date_prior_ex,
         value_cash, ratio, payment_date, closing_date_prior_ex,
         closing_price_prior_ex, quoted_per_shares, corporate_action_price
       )
@@ -285,7 +286,7 @@ company_cash_dividends_get <- function(symbols) {
   bind_rows(companies_list)
 }
 
-company_cash_dividends_get("ALPK4")
+.company_cash_dividends_get("ABCB")
 cash_divs_df <- company_cash_dividends_get(eqs$symbol)
 
 company_df <- company_info_get(eqs$symbol)
@@ -302,7 +303,7 @@ company_df |>
   arrange(symbol, desc(approved), desc(last_date_prior_ex))
 
 template <- "GetListedSupplementCompany"
-f <- download_marketdata(template, company_name = "ALPK")
+f <- download_marketdata(template, company_name = "ABCB")
 company_info <- read_marketdata(f, template)
 
 template <- "GetDetailsCompany"
