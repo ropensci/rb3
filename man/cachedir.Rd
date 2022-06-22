@@ -12,6 +12,12 @@ a string with the file path of rb3 cache directory
 \description{
 Returns rb3 package cache directory
 }
+\details{
+In order to set a default directory for cache, which is a good idea for those
+who want to increase data historically, the option \code{rb3.cachedir} can be
+set.
+Once it is set, the defined directory will be used as the default cachedir.
+}
 \examples{
 cachedir()
 }
