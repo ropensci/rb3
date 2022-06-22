@@ -97,7 +97,7 @@ parts:
         format: '%d/%m/%Y'
     - name: remarks
       description: Comentários
-  subscriptions:
+  Subscriptions:
     name: subscriptions
     fields:
     - name: assetIssued
