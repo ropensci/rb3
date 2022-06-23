@@ -6,6 +6,34 @@ library(purrr)
 ch <- cotahist_get(preceding(Sys.Date() - 1, "Brazil/ANBIMA"), "daily")
 eqs <- cotahist_equity_get(ch)
 
+df <- ch[["HistoricalPrices"]] |>
+  filter(
+    .data$tipo_mercado %in% 10,
+    str_sub(.data$cod_isin, 7, 9) %in% c("UNT", "CDA", "ACN")
+  )
+
+spec_type <- df[["especificacao"]] |>
+  str_split("\\s+") |>
+  map_chr(\(x) x[1])
+
+market_segment <- df[["especificacao"]] |>
+  str_split("\\s+") |>
+  map_chr(\(x) x[length(x)])
+
+codes <- parse_isin(df[["cod_isin"]])
+codes[["spec_type2"]] <- spec_type
+
+
+
+smartget <- function(key, dict) {
+  x <- try(get(key, dict, inherits = FALSE), TRUE)
+  if (is(x, "try-error")) {
+    NA
+  } else {
+    x
+  }
+}
+
 parse_isin <- function(isin) {
   tibble(
     isin = isin,
@@ -44,7 +72,7 @@ create_codes <- function(codes) {
     asset_name = company_info$Info$code,
     trading_name = company_info$Info$tradingName,
     company_name = company_details$Info$companyName,
-    activity = company_details$Info$activity,
+    activity = as.character(company_details$Info$activity),
     stock_capital = company_info$Info$stockCapital,
     code_cvm = company_info$Info$codeCVM,
     total_shares = company_info$Info$totalNumberShares,
@@ -55,7 +83,7 @@ create_codes <- function(codes) {
     subsector = sectors[2],
     market_segment = sectors[3],
     round_lot = company_info$Info$roundLot,
-    quoted_since = company_info$Info$quotedPerShareSince,
+    quoted_since = company_info$Info$quotedPerSharSince,
     segment = company_info$Info$segment
   )
 }
@@ -86,7 +114,7 @@ company_info_get <- function(symbols) {
 }
 
 .company_stock_dividends_get <- function(code) {
-  company_info <- .company_supplement_get("ABEV3")
+  company_info <- .company_supplement_get(code)
 
   template <- "GetDetailsCompany"
   f <- download_marketdata(template, code_cvm = company_info$Info$codeCVM)
@@ -132,9 +160,6 @@ company_stock_dividends_get <- function(symbols) {
   companies_list <- map(seq_len(nrow(codes)), rxx)
   bind_rows(companies_list)
 }
-
-company_stock_dividends_get(c("TXRX3", "TXRX4"))
-divs_df <- company_stock_dividends_get(eqs$symbol)
 
 .company_subscriptions_get <- function(code) {
   company_info <- .company_supplement_get(code)
@@ -189,8 +214,6 @@ company_subscriptions_get <- function(symbols) {
   companies_list <- map(seq_len(nrow(codes)), rxx)
   bind_rows(companies_list)
 }
-
-subs_df <- company_subscriptions_get(eqs$symbol)
 
 .company_cash_dividends_get <- function(code) {
   company_info <- .company_supplement_get(code)
@@ -286,10 +309,15 @@ company_cash_dividends_get <- function(symbols) {
   bind_rows(companies_list)
 }
 
-.company_cash_dividends_get("ABCB")
+divs_df <- company_stock_dividends_get(eqs$symbol)
+
+subs_df <- company_subscriptions_get(eqs$symbol)
+
 cash_divs_df <- company_cash_dividends_get(eqs$symbol)
 
 company_df <- company_info_get(eqs$symbol)
+
+.company_info_get("BOBR")
 
 company_df |>
   group_by(sector) |>
@@ -299,11 +327,10 @@ company_df |>
   ) |>
   arrange(n)
 
-.company_cash_dividends_get("BBDC") |>
-  arrange(symbol, desc(approved), desc(last_date_prior_ex))
+# ----
 
 template <- "GetListedSupplementCompany"
-f <- download_marketdata(template, company_name = "ABCB")
+f <- download_marketdata(template, company_name = "BOBR")
 company_info <- read_marketdata(f, template)
 
 template <- "GetDetailsCompany"
