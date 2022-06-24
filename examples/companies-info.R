@@ -1,29 +1,22 @@
-library(rb3)
-library(tidyverse)
-library(bizdays)
-library(purrr)
 
-ch <- cotahist_get(preceding(Sys.Date() - 1, "Brazil/ANBIMA"), "daily")
-eqs <- cotahist_equity_get(ch)
+cotahist_equity_symbols_get <- function(ch) {
+  df <- ch[["HistoricalPrices"]] |>
+    filter(
+      .data$tipo_mercado %in% 10,
+      str_sub(.data$cod_isin, 7, 9) %in% c("UNT", "CDA", "ACN")
+    )
 
-df <- ch[["HistoricalPrices"]] |>
-  filter(
-    .data$tipo_mercado %in% 10,
-    str_sub(.data$cod_isin, 7, 9) %in% c("UNT", "CDA", "ACN")
-  )
-
-spec_type <- df[["especificacao"]] |>
-  str_split("\\s+") |>
-  map_chr(\(x) x[1])
-
-market_segment <- df[["especificacao"]] |>
-  str_split("\\s+") |>
-  map_chr(\(x) x[length(x)])
-
-codes <- parse_isin(df[["cod_isin"]])
-codes[["spec_type2"]] <- spec_type
-
-
+  spec_split <- df[["especificacao"]] |> str_split("\\s+")
+  codes <- parse_isin(df[["cod_isin"]])
+  codes[["spec_type"]] <- spec_split |> map_chr(\(x) x[1])
+  codes[["symbol"]] <- df[["cod_negociacao"]]
+  codes |>
+    select(
+      symbol, asset_name, spec_type, isin_spec_type, isin, country
+    ) |>
+    unique() |>
+    arrange(symbol)
+}
 
 smartget <- function(key, dict) {
   x <- try(get(key, dict, inherits = FALSE), TRUE)
@@ -40,11 +33,8 @@ parse_isin <- function(isin) {
     country = str_sub(isin, 1, 2),
     asset_name = str_sub(isin, 3, 6),
     asset_type = str_sub(isin, 7, 9),
-    spec_type = str_sub(isin, 10, 11),
+    isin_spec_type = str_sub(isin, 10, 11),
     control = str_sub(isin, 12)
-  ) |> mutate(
-    spec_type = str_replace(spec_type, "PR", "PN"),
-    spec_type = str_replace(spec_type, "OR", "ON")
   )
 }
 
@@ -125,15 +115,13 @@ company_info_get <- function(symbols) {
   }
 
   company_info$StockDividends |>
-    left_join(company_details$OtherCodes, by = c("isinCode" = "isin")) |>
     rename(
-      symbol = code,
       isin = isinCode,
       approved = approvedOn,
       last_date_prior_ex = lastDatePrior,
       description = label
     ) |>
-    select(symbol, isin, approved, last_date_prior_ex, description, factor)
+    select(isin, approved, last_date_prior_ex, description, factor)
 }
 
 company_stock_dividends_get <- function(symbols) {
@@ -173,9 +161,7 @@ company_stock_dividends_get <- function(symbols) {
   }
 
   company_info$Subscriptions |>
-    left_join(company_details$OtherCodes, by = c("isinCode" = "isin")) |>
     rename(
-      symbol = code,
       isin = isinCode,
       approved = approvedOn,
       last_date_prior_ex = lastDatePrior,
@@ -185,7 +171,7 @@ company_stock_dividends_get <- function(symbols) {
       subscription_date = subscriptionDate,
     ) |>
     select(
-      symbol, isin, approved, last_date_prior_ex, description, percentage,
+      isin, approved, last_date_prior_ex, description, percentage,
       trading_period, price_unit, subscription_date
     )
 }
@@ -218,49 +204,58 @@ company_subscriptions_get <- function(symbols) {
 .company_cash_dividends_get <- function(code) {
   company_info <- .company_supplement_get(code)
 
-  template <- "GetDetailsCompany"
-  f <- download_marketdata(template, code_cvm = company_info$Info$codeCVM)
-  company_details <- read_marketdata(f, template)
+  # template <- "GetDetailsCompany"
+  # f <- download_marketdata(template, code_cvm = company_info$Info$codeCVM)
+  # company_details <- read_marketdata(f, template)
 
   template <- "GetListedCashDividends"
-  f <- download_marketdata(template, trading_name = company_info$Info$tradingName)
+  f <- download_marketdata(template,
+    trading_name = company_info$Info$tradingName
+  )
   company_dividends <- read_marketdata(f, template)
 
-  codes <- create_codes(company_details$OtherCodes)
+  # Proventos distribuídos pelo emissor nos últimos 12 meses ou o último,
+  # se anterior aos 12 últimos meses.
+  # cs1 <- if (!is.null(company_info$CashDividends)) {
+  #   company_info$CashDividends |>
+  #     left_join(symbols_table, c("isinCode" = "isin")) |>
+  #     mutate(
+  #       closing_date_prior_ex = NA,
+  #       closing_price_prior_ex = NA,
+  #       quoted_per_shares = NA,
+  #       corporate_action_price = NA,
+  #       ratio = 1,
+  #     ) |>
+  #     rename(
+  #       approved = approvedOn,
+  #       payment_date = paymentDate,
+  #       last_date_prior_ex = lastDatePrior,
+  #       description = label,
+  #       value_cash = rate,
+  #     ) |>
+  #     select(
+  #       symbol, asset_name, spec_type, description, approved,
+  #       last_date_prior_ex, value_cash, ratio, payment_date,
+  #       closing_date_prior_ex, closing_price_prior_ex, quoted_per_shares,
+  #       corporate_action_price
+  #     )
+  # } else {
+  #   NULL
+  # }
 
-  cs1 <- if (!is.null(company_info$CashDividends)) {
-    company_info$CashDividends |>
-      left_join(codes, c("isinCode" = "isin")) |>
-      mutate(
-        closing_date_prior_ex = NA,
-        closing_price_prior_ex = NA,
-        quoted_per_shares = NA,
-        corporate_action_price = NA,
-        ratio = 1,
-      ) |>
-      rename(
-        approved = approvedOn,
-        payment_date = paymentDate,
-        last_date_prior_ex = lastDatePrior,
-        description = label,
-        value_cash = rate,
-      ) |>
-      select(
-        symbol, asset_name, spec_type, description, approved, last_date_prior_ex,
-        value_cash, ratio, payment_date, closing_date_prior_ex,
-        closing_price_prior_ex, quoted_per_shares, corporate_action_price
-      )
-  } else {
-    NULL
-  }
-
+  # Data do Últ. Preço 'Com' (III) - dateClosingPricePriorExDate
+  # (III) - A informação 'preço teórico' indica que a ação não apresentou
+  # cotação na B3 desde que ficou 'ex' a algum provento anterior.
+  # Se tal data estiver em branco, significa que não houve negócio com o ativo.
   cs2 <- if (!is.null(company_dividends)) {
     company_dividends |>
       mutate(
-        asset_name = company_info$Info$code,
-        payment_date = NA,
+        asset_name = company_info$Info$code
       ) |>
-      left_join(codes, c("typeStock" = "spec_type", "asset_name" = "asset_name")) |>
+      # left_join(
+      #   symbols_table,
+      #   c("typeStock" = "spec_type", "asset_name" = "asset_name")
+      # ) |>
       rename(
         spec_type = typeStock,
         approved = dateApproval,
@@ -273,18 +268,24 @@ company_subscriptions_get <- function(symbols) {
         value_cash = valueCash,
       ) |>
       select(
-        symbol, asset_name, spec_type, description, approved, last_date_prior_ex,
-        value_cash, ratio, payment_date, closing_date_prior_ex,
-        closing_price_prior_ex, quoted_per_shares, corporate_action_price
+        asset_name, spec_type, description, approved,
+        last_date_prior_ex, value_cash, ratio,
+        closing_date_prior_ex, closing_price_prior_ex, quoted_per_shares,
+        corporate_action_price
       )
   } else {
     NULL
   }
 
-  bind_rows(cs1, cs2)
+  if (anyNA(cs2$spec_type)) {
+    warning(str_glue(code, " NA spec_type error"))
+  }
+
+  # bind_rows(cs1, cs2)
+  cs2
 }
 
-company_cash_dividends_get <- function(symbols) {
+company_cash_dividends_get <- function(symbols, symbols_table) {
   codes <- tibble(
     symbol = symbols,
     asset_name = str_sub(symbol, 1, 4)
@@ -295,9 +296,15 @@ company_cash_dividends_get <- function(symbols) {
   rxx <- function(x, idx = 0) {
     codes_ <- codes[x, ]
     res <- if (idx == 0) {
-      try(.company_cash_dividends_get(codes_$asset_name), TRUE)
+      try(
+        .company_cash_dividends_get(codes_$asset_name),
+        TRUE
+      )
     } else {
-      try(.company_cash_dividends_get(codes_$symbols[[1]][idx]), TRUE)
+      try(
+        .company_cash_dividends_get(codes_$symbols[[1]][idx]),
+        TRUE
+      )
     }
     if (is(res, "try-error") && length(codes_$symbols[[1]]) >= idx + 1) {
       rxx(x, idx + 1)
@@ -308,35 +315,3 @@ company_cash_dividends_get <- function(symbols) {
   companies_list <- map(seq_len(nrow(codes)), rxx)
   bind_rows(companies_list)
 }
-
-divs_df <- company_stock_dividends_get(eqs$symbol)
-
-subs_df <- company_subscriptions_get(eqs$symbol)
-
-cash_divs_df <- company_cash_dividends_get(eqs$symbol)
-
-company_df <- company_info_get(eqs$symbol)
-
-.company_info_get("BOBR")
-
-company_df |>
-  group_by(sector) |>
-  summarise(
-    market_cap = sum(stock_capital),
-    n = n()
-  ) |>
-  arrange(n)
-
-# ----
-
-template <- "GetListedSupplementCompany"
-f <- download_marketdata(template, company_name = "BOBR")
-company_info <- read_marketdata(f, template)
-
-template <- "GetDetailsCompany"
-f <- download_marketdata(template, code_cvm = company_info$Info$codeCVM)
-company_details <- read_marketdata(f, template)
-
-template <- "GetListedCashDividends"
-f <- download_marketdata(template, trading_name = company_info$Info$tradingName)
-company_dividends <- read_marketdata(f, template)
