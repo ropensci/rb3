@@ -13,5 +13,7 @@ Has no return
 Clear cache directory
 }
 \examples{
+\dontrun {
 clearcache()
+}
 }
