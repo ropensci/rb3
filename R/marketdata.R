@@ -42,7 +42,8 @@ read_marketdata <- function(filename, template = NULL,
                             cache_folder = cachedir(),
                             do_cache = TRUE) {
   template <- .retrieve_template(filename, template)
-  basename_ <- str_replace(basename(filename), "\\.\\w+$", "")
+  basename_ <- str_replace(basename(filename), "\\.\\[A-Za-z]+$", "") |>
+    str_replace("\\.", "_")
   parsed_ <- if (parse_fields) "parsed" else "strict"
   f_cache <- file.path(
     cache_folder, str_glue("{template$id}_{parsed_}_{basename_}.rds")
