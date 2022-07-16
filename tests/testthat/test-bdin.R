@@ -5,6 +5,7 @@ test_that("read file using filename to find template", {
   }
 
   f <- system.file("extdata/big-files/BDIN.zip", package = "rb3")
+  f <- copy_file_to_temp(f)
   f <- unzip(f, exdir = tempdir())
 
   res <- read_marketdata(f)
