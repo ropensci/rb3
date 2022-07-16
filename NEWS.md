@@ -1,6 +1,11 @@
 # rb3 0.0.5
 
 * Updated documentation
+* The cache creates a folder with the template to organize files inside the cache folder.
+* `read_marketdata` lost the argument `cachedir`, the RDS file with parsed data is saved in the directory of the given file.
+  * Pass `do_cache = FALSE` to not save the RDS file, it defaults to `TRUE`.
+* Corrected BUG in `COTAHIST_YEARLY`, it uses cache wrongly (Issue #44)
+* Corrected BUG due to change in fixedincome - function `rates` was renamed to `implied_rate`
 
 # rb3 0.0.4
 
