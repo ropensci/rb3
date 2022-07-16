@@ -10,7 +10,6 @@
 #' @param filename a string containing a path for the file.
 #' @param template a string with the template name.
 #' @param parse_fields a logical indicating if the fields must be parsed.
-#' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' Each `template` has a default value for the `filename`, if the given
@@ -39,14 +38,14 @@
 #' @export
 read_marketdata <- function(filename, template = NULL,
                             parse_fields = TRUE,
-                            cache_folder = cachedir(),
                             do_cache = TRUE) {
   template <- .retrieve_template(filename, template)
-  basename_ <- str_replace(basename(filename), "\\.\\[A-Za-z]+$", "") |>
+  basename_ <- str_replace(basename(filename), "\\.[^\\.]+$", "") |>
     str_replace("\\.", "_")
   parsed_ <- if (parse_fields) "parsed" else "strict"
+  cache_folder <- dirname(filename)
   f_cache <- file.path(
-    cache_folder, str_glue("{template$id}_{parsed_}_{basename_}.rds")
+    cache_folder, str_glue("{basename_}-{parsed_}.rds")
   )
 
   if (file.exists(f_cache) && do_cache) {

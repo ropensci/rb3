@@ -28,13 +28,19 @@ download_marketdata <- function(template,
   template <- .retrieve_template(NULL, template)
   x <- list(...)
   code_ <- digest(x)
+
+  cache_folder <- file.path(cache_folder, template$id)
+  if (!dir.exists(cache_folder)) {
+    dir.create(cache_folder, recursive = TRUE)
+  }
+
   dest <- file.path(
     cache_folder,
-    str_glue("{template$id}-{code_}.{template$downloader$format}")
+    str_glue("{code_}.{template$downloader$format}")
   )
 
   if (file.exists(dest) && do_cache) {
-    # message(str_glue("Skipping download - using cached version"))
+    # cli::cli_alert_info(str_glue("Skipping download - using cached version"))
     fname <- unzip_recursive(dest)
     return(fname)
   }

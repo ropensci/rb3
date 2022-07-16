@@ -100,7 +100,7 @@ get_single_yc <- function(idx_date,
     curve_name = "PRE"
   )
   if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
+    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
     if (!is.null(df)) {
       tibble(
         refdate = df$refdate,
@@ -207,7 +207,7 @@ get_single_yc_ipca <- function(idx_date,
     curve_name = "DIC"
   )
   if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
+    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
     if (!is.null(df)) {
       tibble(
         refdate = df$refdate,
@@ -315,7 +315,7 @@ get_single_yc_usd <- function(idx_date,
     curve_name = "DOC"
   )
   if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, cache_folder, do_cache)
+    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
     if (!is.null(df)) {
       tibble(
         refdate = df$refdate,

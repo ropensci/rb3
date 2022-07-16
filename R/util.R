@@ -66,7 +66,7 @@ get_single_marketdata <- function(template,
     refdate = refdate, ...
   )
   if (!is.null(fname)) {
-    read_marketdata(fname, template, TRUE, cache_folder, do_cache)
+    read_marketdata(fname, template, TRUE, do_cache)
   } else {
     cli::cli_alert_danger("Error: no data found for date {refdate}")
     return(NULL)

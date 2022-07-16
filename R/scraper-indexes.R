@@ -21,7 +21,7 @@ index_comp_get <- function(index_name,
   )
   df <- read_marketdata(
     f, "GetTheoricalPortfolio", TRUE,
-    cache_folder, do_cache
+    do_cache
   )
   df$Results$code
 }
@@ -51,7 +51,7 @@ index_weights_get <- function(index_name,
   )
   df <- read_marketdata(
     f, "GetTheoricalPortfolio", TRUE,
-    cache_folder, do_cache
+    do_cache
   )
   ds <- df$Results[, c("code", "part", "theoricalQty")]
   colnames(ds) <- c("symbol", "weight", "position")
@@ -75,8 +75,10 @@ index_weights_get <- function(index_name,
 #' @export
 indexes_last_update <- function(cache_folder = cachedir(),
                                 do_cache = TRUE) {
-  f <- download_marketdata("GetStockIndex")
-  df <- read_marketdata(f, "GetStockIndex")
+  f <- download_marketdata("GetStockIndex",
+    cache_folder = cache_folder, do_cache = do_cache
+  )
+  df <- read_marketdata(f, "GetStockIndex", do_cache = do_cache)
   df$Header$update
 }
 
@@ -96,8 +98,10 @@ indexes_last_update <- function(cache_folder = cachedir(),
 #' @export
 indexes_get <- function(cache_folder = cachedir(),
                         do_cache = TRUE) {
-  f <- download_marketdata("GetStockIndex")
-  df <- read_marketdata(f, "GetStockIndex")
+  f <- download_marketdata("GetStockIndex",
+    cache_folder = cache_folder, do_cache = do_cache
+  )
+  df <- read_marketdata(f, "GetStockIndex", do_cache = do_cache)
   str_split(df$Results$indexes, ",") |>
     unlist() |>
     unique() |>
@@ -128,7 +132,7 @@ index_by_segment_get <- function(index_name,
     do_cache = do_cache,
     index_name = index_name
   )
-  pp <- read_marketdata(f, "GetPortfolioDay")
+  pp <- read_marketdata(f, "GetPortfolioDay", do_cache = do_cache)
   df <- pp$Results[, c("code", "segment", "part", "part_acum", "theoricalQty")]
   colnames(df) <- c("symbol", "segment", "weight", "segment_weight", "position")
   df$weight <- df$weight / 100

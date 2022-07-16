@@ -8,7 +8,6 @@ read_marketdata(
   filename,
   template = NULL,
   parse_fields = TRUE,
-  cache_folder = cachedir(),
   do_cache = TRUE
 )
 }
@@ -18,8 +17,6 @@ read_marketdata(
 \item{template}{a string with the template name.}
 
 \item{parse_fields}{a logical indicating if the fields must be parsed.}
-
-\item{cache_folder}{Location of cache folder (default = cachedir())}
 
 \item{do_cache}{Whether to use cache or not (default = TRUE)
 
