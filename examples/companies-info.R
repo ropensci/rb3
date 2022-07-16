@@ -79,28 +79,7 @@ create_codes <- function(codes) {
 }
 
 company_info_get <- function(symbols) {
-  codes <- tibble(
-    symbol = symbols,
-    asset_name = str_sub(symbol, 1, 4)
-  ) |>
-    group_by(asset_name) |>
-    summarise(symbols = list(symbol))
-
-  rxx <- function(x, idx = 0) {
-    codes_ <- codes[x, ]
-    res <- if (idx == 0) {
-      try(.company_info_get(codes_$asset_name), TRUE)
-    } else {
-      try(.company_info_get(codes_$symbols[[1]][idx]), TRUE)
-    }
-    if (is(res, "try-error") && length(codes_$symbols[[1]]) >= idx + 1) {
-      rxx(x, idx + 1)
-    } else {
-      res
-    }
-  }
-  companies_list <- map(seq_len(nrow(codes)), rxx)
-  bind_rows(companies_list)
+  .company_mget(.company_info_get, symbols)
 }
 
 .company_stock_dividends_get <- function(code) {
@@ -125,28 +104,7 @@ company_info_get <- function(symbols) {
 }
 
 company_stock_dividends_get <- function(symbols) {
-  codes <- tibble(
-    symbol = symbols,
-    asset_name = str_sub(symbol, 1, 4)
-  ) |>
-    group_by(asset_name) |>
-    summarise(symbols = list(symbol))
-
-  rxx <- function(x, idx = 0) {
-    codes_ <- codes[x, ]
-    res <- if (idx == 0) {
-      try(.company_stock_dividends_get(codes_$asset_name), TRUE)
-    } else {
-      try(.company_stock_dividends_get(codes_$symbols[[1]][idx]), TRUE)
-    }
-    if (is(res, "try-error") && length(codes_$symbols[[1]]) >= idx + 1) {
-      rxx(x, idx + 1)
-    } else {
-      res
-    }
-  }
-  companies_list <- map(seq_len(nrow(codes)), rxx)
-  bind_rows(companies_list)
+  .company_mget(.company_stock_dividends_get, symbols)
 }
 
 .company_subscriptions_get <- function(code) {
@@ -177,36 +135,34 @@ company_stock_dividends_get <- function(symbols) {
 }
 
 company_subscriptions_get <- function(symbols) {
-  codes <- tibble(
-    symbol = symbols,
-    asset_name = str_sub(symbol, 1, 4)
-  ) |>
-    group_by(asset_name) |>
-    summarise(symbols = list(symbol))
+  .company_mget(.company_subscriptions_get, symbols)
+}
 
-  rxx <- function(x, idx = 0) {
-    codes_ <- codes[x, ]
-    res <- if (idx == 0) {
-      try(.company_subscriptions_get(codes_$asset_name), TRUE)
-    } else {
-      try(.company_subscriptions_get(codes_$symbols[[1]][idx]), TRUE)
-    }
-    if (is(res, "try-error") && length(codes_$symbols[[1]]) >= idx + 1) {
-      rxx(x, idx + 1)
-    } else {
-      res
-    }
+.company_info_cash_dividends_get <- function(code) {
+  company_info <- .company_supplement_get(code)
+
+  # Proventos distribuídos pelo emissor nos últimos 12 meses ou o último,
+  # se anterior aos 12 últimos meses.
+  if (!is.null(company_info$CashDividends)) {
+    company_info$CashDividends |>
+      mutate(ratio = 1) |>
+      rename(
+        isin = isinCode,
+        approved = approvedOn,
+        last_date_prior_ex = lastDatePrior,
+        description = label,
+        value_cash = rate,
+      ) |>
+      select(
+        isin, description, approved, last_date_prior_ex, value_cash, ratio
+      )
+  } else {
+    NULL
   }
-  companies_list <- map(seq_len(nrow(codes)), rxx)
-  bind_rows(companies_list)
 }
 
 .company_cash_dividends_get <- function(code) {
   company_info <- .company_supplement_get(code)
-
-  # template <- "GetDetailsCompany"
-  # f <- download_marketdata(template, code_cvm = company_info$Info$codeCVM)
-  # company_details <- read_marketdata(f, template)
 
   template <- "GetListedCashDividends"
   f <- download_marketdata(template,
@@ -214,100 +170,74 @@ company_subscriptions_get <- function(symbols) {
   )
   company_dividends <- read_marketdata(f, template)
 
-  # Proventos distribuídos pelo emissor nos últimos 12 meses ou o último,
-  # se anterior aos 12 últimos meses.
-  # cs1 <- if (!is.null(company_info$CashDividends)) {
-  #   company_info$CashDividends |>
-  #     left_join(symbols_table, c("isinCode" = "isin")) |>
-  #     mutate(
-  #       closing_date_prior_ex = NA,
-  #       closing_price_prior_ex = NA,
-  #       quoted_per_shares = NA,
-  #       corporate_action_price = NA,
-  #       ratio = 1,
-  #     ) |>
-  #     rename(
-  #       approved = approvedOn,
-  #       payment_date = paymentDate,
-  #       last_date_prior_ex = lastDatePrior,
-  #       description = label,
-  #       value_cash = rate,
-  #     ) |>
-  #     select(
-  #       symbol, asset_name, spec_type, description, approved,
-  #       last_date_prior_ex, value_cash, ratio, payment_date,
-  #       closing_date_prior_ex, closing_price_prior_ex, quoted_per_shares,
-  #       corporate_action_price
-  #     )
-  # } else {
-  #   NULL
-  # }
-
   # Data do Últ. Preço 'Com' (III) - dateClosingPricePriorExDate
   # (III) - A informação 'preço teórico' indica que a ação não apresentou
   # cotação na B3 desde que ficou 'ex' a algum provento anterior.
   # Se tal data estiver em branco, significa que não houve negócio com o ativo.
-  cs2 <- if (!is.null(company_dividends)) {
+  if (!is.null(company_dividends)) {
     company_dividends |>
       mutate(
         asset_name = company_info$Info$code
       ) |>
-      # left_join(
-      #   symbols_table,
-      #   c("typeStock" = "spec_type", "asset_name" = "asset_name")
-      # ) |>
       rename(
         spec_type = typeStock,
         approved = dateApproval,
         last_date_prior_ex = lastDatePriorEx,
-        closing_date_prior_ex = dateClosingPricePriorExDate,
-        closing_price_prior_ex = closingPricePriorExDate,
-        quoted_per_shares = quotedPerShares,
-        corporate_action_price = corporateActionPrice,
         description = corporateAction,
         value_cash = valueCash,
       ) |>
       select(
         asset_name, spec_type, description, approved,
-        last_date_prior_ex, value_cash, ratio,
-        closing_date_prior_ex, closing_price_prior_ex, quoted_per_shares,
-        corporate_action_price
+        last_date_prior_ex, value_cash, ratio
       )
   } else {
     NULL
   }
-
-  if (anyNA(cs2$spec_type)) {
-    warning(str_glue(code, " NA spec_type error"))
-  }
-
-  # bind_rows(cs1, cs2)
-  cs2
 }
 
 company_cash_dividends_get <- function(symbols, symbols_table) {
+  cs1 <- .company_mget(.company_cash_dividends_get, symbols)
+  cs2 <- .company_mget(.company_info_cash_dividends_get, symbols)
+  cs1 <- cs1 |>
+    left_join(symbols_table, c("asset_name", "spec_type")) |>
+    select(
+      symbol, description, approved, last_date_prior_ex, value_cash, ratio
+    )
+  cs2 <- cs2 |>
+    left_join(symbols_table, c("isin")) |>
+    select(
+      symbol, description, approved, last_date_prior_ex, value_cash, ratio
+    )
+  bind_rows(cs1, cs2) |>
+    arrange(symbol, last_date_prior_ex) |>
+    unique()
+}
+
+.shrink_symbols <- function(symbols) {
   codes <- tibble(
     symbol = symbols,
     asset_name = str_sub(symbol, 1, 4)
   ) |>
     group_by(asset_name) |>
-    summarise(symbols = list(symbol))
+    summarise(symbols = list(unique(symbol)))
+}
+
+.company_mget <- function(func, symbols) {
+  codes <- .shrink_symbols(symbols)
 
   rxx <- function(x, idx = 0) {
     codes_ <- codes[x, ]
     res <- if (idx == 0) {
-      try(
-        .company_cash_dividends_get(codes_$asset_name),
-        TRUE
-      )
+      try(func(codes_$asset_name), TRUE)
     } else {
-      try(
-        .company_cash_dividends_get(codes_$symbols[[1]][idx]),
-        TRUE
-      )
+      try(func(codes_$symbols[[1]][idx]), TRUE)
     }
-    if (is(res, "try-error") && length(codes_$symbols[[1]]) >= idx + 1) {
-      rxx(x, idx + 1)
+    if (is(res, "try-error")) {
+      if (length(codes_$symbols[[1]]) >= idx + 1) {
+        rxx(x, idx + 1)
+      } else {
+        NULL
+      }
     } else {
       res
     }

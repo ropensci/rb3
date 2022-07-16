@@ -12,7 +12,7 @@ eqs <- cotahist_equity_get(ch)
 divs_df <- company_stock_dividends_get(eqs$symbol)
 subs_df <- company_subscriptions_get(eqs$symbol)
 symbols_table <- cotahist_equity_symbols_get(ch)
-cash_divs_df <- company_cash_dividends_get(eqs$symbol)
+cash_divs_df <- company_cash_dividends_get(eqs$symbol, symbols_table)
 company_df <- company_info_get(eqs$symbol)
 
 company_df |>
@@ -26,7 +26,7 @@ company_df |>
 # ----
 
 template <- "GetListedSupplementCompany"
-f <- download_marketdata(template, company_name = "LREN3")
+f <- download_marketdata(template, company_name = "ITUB")
 company_info <- read_marketdata(f, template)
 
 template <- "GetDetailsCompany"
