@@ -35,7 +35,7 @@ cachedir <- function() {
 #' @return Has no return
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' clearcache()
 #' }
 #' @export
