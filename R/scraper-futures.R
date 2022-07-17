@@ -12,7 +12,7 @@ flatten_names <- function(nx) {
 
 #' Get month from maturity code
 #'
-#' Get the corresponding month for the letters that represent maturities of
+#' Get the corresponding month for the string that represent maturities of
 #' futures contracts.
 #'
 #' @param x a character with letters that represent the month of maturity of
@@ -22,11 +22,28 @@ flatten_names <- function(nx) {
 #'
 #' @examples
 #' code2month(c("F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"))
+#' code2month(c("JAN", "FEV", "MAR", "NOV", "DEZ"))
 #' @export
 code2month <- function(x) {
+  ifelse(
+    str_length(x) == 1,
+    code2month_newcode(x),
+    code2month_oldcode(x)
+  )
+}
+
+code2month_newcode <- function(x) {
   m <- c(
     F = 1, G = 2, H = 3, J = 4, K = 5, M = 6,
     N = 7, Q = 8, U = 9, V = 10, X = 11, Z = 12
+  )
+  m[x] |> unname()
+}
+
+code2month_oldcode <- function(x) {
+  m <- c(
+    JAN = 1, FEV = 2, MAR = 3, ABR = 4, MAI = 5, JUN = 6,
+    JUL = 7, AGO = 8, SET = 9, OUT = 10, NOV = 11, DEZ = 12
   )
   m[x] |> unname()
 }
@@ -46,12 +63,33 @@ code2month <- function(x) {
 #' @examples
 #' maturity2date(c("F22", "F23", "G23", "H23", "F45"), "first day")
 #' maturity2date(c("F23", "K35"), "15th day")
+#' maturity2date(c("AGO2", "SET2"), "first day")
 #' @export
 maturity2date <- function(x, expr = "first day") {
+  res <- character(length(x))
+  ix <- which(str_length(x) == 3)
+  if (length(ix)) {
+    res[ix] <- maturity2date_newcode(x[ix], expr)
+  }
+  ix <- which(str_length(x) == 4)
+  if (length(ix)) {
+    res[ix] <- maturity2date_oldcode(x[ix], expr)
+  }
+  as.Date(res)
+}
+
+maturity2date_newcode <- function(x, expr = "first day") {
   year <- as.integer(str_sub(x, 2)) + 2000
-  month <- code2month(str_sub(x, 1, 1))
+  month <- code2month_newcode(str_sub(x, 1, 1))
   month <- str_pad(month, 2, pad = "0")
-  getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA")
+  getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA") |> as.character()
+}
+
+maturity2date_oldcode <- function(x, expr = "first day") {
+  year <- as.integer(str_sub(x, 4)) + 2000
+  month <- code2month_oldcode(str_sub(x, 1, 3))
+  month <- str_pad(month, 2, pad = "0")
+  getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA") |> as.character()
 }
 
 #' Get futures prices from trading session settlements page
