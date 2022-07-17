@@ -10,3 +10,5 @@ copy_file_to_temp <- function(f_name) {
     stop("Can't copy file to tempdir")
   }
 }
+
+options(rb3.cachedir = NULL)
