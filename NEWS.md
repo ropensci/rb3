@@ -1,6 +1,7 @@
 # rb3 0.0.6
 
 * Updated documentation
+* functions `code2month` and `maturity2date` now accept old 4 characters maturity code, before 2006
 
 # rb3 0.0.5
 
