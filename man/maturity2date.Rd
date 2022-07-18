@@ -23,4 +23,5 @@ that represent maturity of futures contracts.
 \examples{
 maturity2date(c("F22", "F23", "G23", "H23", "F45"), "first day")
 maturity2date(c("F23", "K35"), "15th day")
+maturity2date(c("AGO2", "SET2"), "first day")
 }

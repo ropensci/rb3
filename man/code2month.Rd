@@ -14,9 +14,10 @@ futures contracts.}
 a vector of integers
 }
 \description{
-Get the corresponding month for the letters that represent maturities of
+Get the corresponding month for the string that represent maturities of
 futures contracts.
 }
 \examples{
 code2month(c("F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"))
+code2month(c("JAN", "FEV", "MAR", "NOV", "DEZ"))
 }
