@@ -19,6 +19,10 @@ reference:
   - show_templates
   - display_template
 
+- title: Yield Curves
+  contents:
+  - yc_get
+
 - title: COTAHIST datasets
   contents:
   - cotahist_get
