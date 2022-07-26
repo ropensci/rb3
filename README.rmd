@@ -28,7 +28,7 @@ support and access to trading systems for equity and fixed income markets.
 In its website you can find a vast number of datasets regarding prices and transactions 
 for contracts available for trading at these markets, including:
 
-* equities (unadjusted for corporate events)
+* equities/stocks
 * futures
 * FII (Reits)
 * options
@@ -36,9 +36,14 @@ for contracts available for trading at these markets, including:
 * historical yield curves (calculated from futures contracts)
 * B3 indexes composition
 
-Package **rb3** facilitates downloading and reading these datasets from 
-[B3](https://www.b3.com.br), making it easy to consume it in R in a structured way.
-These datasets can be used in industry or academic studies.
+For example, you can find the current yield curve at this [link](https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/consultas/mercado-de-derivativos/precos-referenciais/taxas-referenciais-bm-fbovespa/). Package **rb3** uses webscraping tools 
+to download and read these datasets from 
+[B3](https://www.b3.com.br), making it easy to consume it in R in a structured way. 
+
+The available datasets are highly valuable, going back as early as 2000's, and 
+can be used by industry practioneers or academics. None of these datasets are available 
+anywhere else, which makes rb3 an unique package for data importation from the 
+Brazilian financial exchange.
 
 
 # Documentation
@@ -48,11 +53,13 @@ where articles (vignettes) with real applications can be found.
 
 ## Installation
 
-```r
-install.packages("rb3")
-```
+Package rb3 is available in its stable form in CRAN and its development version in Github. 
+Please find the installation commands below:
 
 ```r
+# stable (CRAN)
+install.packages("rb3")
+
 # github (Development branch)
 if (!require(devtools)) install.packages("devtools")
 devtools::install_github("wilsonfreitas/rb3")
@@ -62,7 +69,8 @@ devtools::install_github("wilsonfreitas/rb3")
 
 ### Yield curve
 
-Download and use historical yield curve data with `yc_get`.
+In this first example we'll import and plot the historical yeild curve for Brazil using 
+function `yc_get`.
 
 ```{r setup}
 library(rb3)
@@ -98,6 +106,7 @@ p <- ggplot(
 
 print(p)
 ```
+
 
 ### Futures prices
 
@@ -142,7 +151,9 @@ glimpse(
 )
 ```
 
-Funds data
+### Funds data
+
+One can also download hedge fund data with `cotahist_etfs_get`.
 
 ```{r}
 glimpse(
@@ -150,7 +161,10 @@ glimpse(
 )
 ```
 
-FIIs data
+### FIIs (brazilian REITs) data
+
+Download FII (Fundo de Investimento Imobiliário) data with `cotahist_fiis_get`:
+
 
 ```{r}
 glimpse(
@@ -158,7 +172,9 @@ glimpse(
 )
 ```
 
-BDRs data
+### BDRs data
+
+Download BDR (Brazilian depositary receipts) with `cotahist_bdrs_get`:
 
 ```{r}
 glimpse(
@@ -166,13 +182,16 @@ glimpse(
 )
 ```
 
-Equity options
+### Equity options
+
+Download equity options contracts with `cotahist_option_get`:
 
 ```{r}
 glimpse(
   cotahist_equity_options_get(ch)
 )
 ```
+
 
 ### Indexes composition
 
@@ -195,6 +214,7 @@ glimpse(
   cotahist_get_symbols(ch, ibov_comp)
 )
 ```
+
 
 ## Template System
 
