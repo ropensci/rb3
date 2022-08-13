@@ -88,4 +88,6 @@ test_that("it should use cotahist_equity_options_superset", {
   yc <- yc_get(date)
   df <- cotahist_equity_options_superset(ch, yc)
   expect_true(!anyNA(df))
+  df <- cotahist_options_by_symbol_superset("PETR4", ch, yc)
+  expect_true(!anyNA(df))
 })

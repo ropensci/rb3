@@ -260,6 +260,7 @@ cotahist_get_symbols <- function(x, symbols) {
 #'
 #' @param ch cotahist data structure
 #' @param yc yield curve
+#' @param symbol character with the name of the stock
 #'
 #' @return
 #' A dataframe with data of equities, equity options, and interest rates.
@@ -270,7 +271,14 @@ cotahist_get_symbols <- function(x, symbols) {
 #' ch <- cotahist_get(refdate, "daily")
 #' yc <- yc_get(refdate)
 #' ch_ss <- cotahist_equity_options_superset(ch, yc)
+#' petr4_ch_ss <- cotahist_options_by_symbol_superset("PETR4", ch, yc)
 #' }
+#' @name cotahist-options-superset
+#'
+#'
+NULL
+
+#' @rdname cotahist-options-superset
 #' @export
 cotahist_equity_options_superset <- function(ch, yc) {
   eqs <- filter_equity_data(ch, 10, c("UNT", "CDA", "ACN")) |>
@@ -279,6 +287,29 @@ cotahist_equity_options_superset <- function(ch, yc) {
     format_options(TRUE)
   inner_join(eqs_opts, eqs, by = "cod_isin", suffix = c("", ".underlying")) |>
     select(-c(.data$refdate.underlying, .data$cod_isin)) |>
+    mutate(
+      fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
+    ) |>
+    inner_join(yc |> select(.data$refdate, .data$forward_date, .data$r_252),
+      by = c("refdate", "fixing_maturity_date" = "forward_date")
+    )
+}
+
+#' @rdname cotahist-options-superset
+#' @export
+cotahist_options_by_symbol_superset <- function(symbol, ch, yc) {
+  eqs <- ch[["HistoricalPrices"]] |>
+    filter(.data$cod_negociacao == symbol) |>
+    format_equity(TRUE)
+  eqs_opts <- ch[["HistoricalPrices"]] |>
+    filter(.data$tipo_mercado %in% c(70, 80)) |>
+    format_options(TRUE) |>
+    filter(.data$cod_isin == eqs$cod_isin[1])
+  inner_join(eqs_opts, eqs,
+    by = c("refdate", "cod_isin"),
+    suffix = c("", ".underlying")
+  ) |>
+    select(-c(.data$cod_isin)) |>
     mutate(
       fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
     ) |>
