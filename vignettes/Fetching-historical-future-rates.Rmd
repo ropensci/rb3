@@ -51,7 +51,7 @@ In the graphic we can see the dynamics of the nominal interest rates
 of the contracts DI1F23 and DI1F33.
 These contracts are exactly 10 years distant from each other.
 
-```{r}
+```{r, fig.width=9, fig.height=6}
 di1_futures <- df |>
     filter(commodity == "DI1") |>
     mutate(
@@ -83,7 +83,7 @@ di1_futures |>
 Differently from DI1 contracts, that trade nominal interest rates, the DAP
 contracts trade real interest rates.
 
-```{r}
+```{r, fig.width=9, fig.height=6}
 dap_futures <- df |>
     filter(commodity == "DAP") |>
     mutate(
@@ -119,7 +119,7 @@ difference of a few days.
 The implied inflation can be computed by the division of the prices of these
 contracts.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, fig.width=9, fig.height=6}
 infl_futures <- df |>
     filter(symbol %in% c("DI1F23", "DAPF23")) |>
     mutate(
@@ -151,7 +151,7 @@ infl_expec |>
 The contracts DI1F23 and DI1F33 are used to compute the 10Y forward rates that
 ranges from Jan. 2023 to Jan. 2033.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, fig.width=9, fig.height=6}
 df_fut <- df |>
     filter(symbol %in% c("DI1F23", "DI1F33")) |>
     mutate(
@@ -178,7 +178,7 @@ df_fwd <- df_fut |>
     na.omit()
 ```
 
-```{r}
+```{r, warning=FALSE, fig.width=9, fig.height=6}
 df_fwd |>
     ggplot(aes(x = refdate, y = fwd)) +
     geom_line() +
