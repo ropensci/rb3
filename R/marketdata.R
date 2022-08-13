@@ -50,10 +50,21 @@ read_marketdata <- function(filename, template = NULL,
 
   if (file.exists(f_cache) && do_cache) {
     df_ <- read_rds(f_cache)
+    if (is.null(df_)) {
+      "Removed cached file {f_cache} that returns NULL." |>
+        str_glue() |>
+        cli::cli_alert_warning()
+      unlink(f_cache)
+    }
     return(df_)
   }
   df <- template$read_file(filename, parse_fields)
-  if (do_cache) {
+  if (is.null(df)) {
+    "File {filename} hasn't valid content, consider removing if it is cached." |>
+      str_glue() |>
+      cli::cli_alert_warning()
+  }
+  if (do_cache && !is.null(df)) {
     write_rds(df, f_cache)
   }
   df
