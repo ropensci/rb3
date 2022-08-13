@@ -2,6 +2,9 @@
 
 * Updated documentation
 * functions `code2month` and `maturity2date` now accept old 4 characters maturity code, before 2006
+* New function `cotahist_options_by_symbol_superset` joins options data, equity data and interest rates for each option for a given symbol (Issue #50)
+* Corrected BUG in cache system, avoid caching NULL returns (Issue #52)
+* Corrected BUG cdi_get and idi_get use do_cache = FALSE (Issue #51)
 
 # rb3 0.0.5
 
