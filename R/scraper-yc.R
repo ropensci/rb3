@@ -6,7 +6,7 @@
 #' - DI X Pre (`yc_get`)
 #' - Cupom limpo (`yc_usd_get`)
 #' - DI x IPCA (`yc_ipca_get`)
-#' -
+#'
 #' See <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
 #'

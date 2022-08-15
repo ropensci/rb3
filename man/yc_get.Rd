@@ -63,13 +63,12 @@ Particularly, we import data for
 \item DI X Pre (\code{yc_get})
 \item Cupom limpo (\code{yc_usd_get})
 \item DI x IPCA (\code{yc_ipca_get})
-\item 
 }
-
-See \url{https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf}
-for more details.
 }
 \details{
+See \url{https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf}
+for more details.
+
 \code{yc_get} returns the yield curve for the given date and \code{yc_mget} returns
 multiple yield curves for a given range of dates.
 
