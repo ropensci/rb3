@@ -2,7 +2,7 @@
 title: "How to Compute Historical Rates from B3 Future Prices"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How to Compute Historical DI1 Future Rates from B3 Future Prices}
+  %\VignetteIndexEntry{How to Compute Historical Rates from B3 Future Prices}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,7 +27,6 @@ library(ggplot2)
 library(stringr)
 library(dplyr)
 library(bizdays)
-library(fixedincome)
 
 df <- futures_mget(
     first_date = "2021-01-01",
@@ -43,9 +42,8 @@ The interest rates can be extracted from the futures prices.
 The DI1 futures matures at the first day of the month.
 The code below generates the maturities from the three characters maturity
 codes.
-After the business days and implied rates are calculated with the
-`fixedincome::rates` function, once we know that the notional amount of
-these contracts is 100000.
+After the business days, the implied rates are calculated,
+once we know that the notional amount of these contracts is 100000.
 
 In the graphic we can see the dynamics of the nominal interest rates 
 of the contracts DI1F23 and DI1F33.
@@ -58,7 +56,7 @@ di1_futures <- df |>
         maturity_date = maturity2date(maturity_code),
         fixing = following(maturity_date, "Brazil/ANBIMA"),
         business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
-        adjusted_tax = implied_rate("discrete", business_days / 252, 100000 / price)
+        adjusted_tax = (100000 / price) ^ (252 / business_days) - 1
     ) |>
     filter(business_days > 0)
 
@@ -90,7 +88,7 @@ dap_futures <- df |>
         maturity_date = maturity2date(maturity_code, "15th day"),
         fixing = following(maturity_date, "Brazil/ANBIMA"),
         business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
-        adjusted_tax = implied_rate("discrete", business_days / 252, 100000 / price)
+        adjusted_tax = (100000 / price) ^ (252 / business_days) - 1
     ) |>
     filter(business_days > 0)
 
@@ -129,7 +127,7 @@ infl_futures <- df |>
         ),
         fixing = following(maturity_date, "Brazil/ANBIMA"),
         business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
-        adjusted_tax = implied_rate("discrete", business_days / 252, 100000 / price)
+        adjusted_tax = (100000 / price) ^ (252 / business_days) - 1
     ) |>
     arrange(refdate)
 

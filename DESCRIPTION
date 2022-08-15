@@ -46,7 +46,6 @@ Suggests:
     magrittr,
     tibble,
     tidyr,
-    fixedincome,
     withr
 Collate:
     'rb3-package.R'
