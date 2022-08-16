@@ -1,6 +1,5 @@
-if (!covr::in_covr()) {
-  skip_on_cran()
-}
+
+skip_on_cran()
 
 test_that("it should download cdi/idi file", {
   f <- download_marketdata("CDIIDI")

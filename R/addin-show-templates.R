@@ -32,8 +32,5 @@ show_templates <- function() {
   app <- shiny::shinyApp(ui = ui, server = server)
   viewer <- shiny::dialogViewer("rb3 Templates", width = 1200, height = 900)
 
-  # dont call shiny when in covr
-  if (!covr::in_covr()) {
-    shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
-  }
+  shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
 }

@@ -1,8 +1,6 @@
 test_that("cdi", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
+  skip_on_cran()
+  skip_if_offline()
 
   # first call
   cdi_1 <- cdi_get()

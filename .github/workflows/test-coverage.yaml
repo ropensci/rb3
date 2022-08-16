@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main, master]
 
+env:
+  NOT_CRAN: true
+
 name: test-coverage
 
 jobs:

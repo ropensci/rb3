@@ -1,9 +1,7 @@
 
 test_that("it should get futures data with futures_mget", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
+  skip_on_cran()
+  skip_if_offline()
 
   first_date <- Sys.Date() - 5
   last_date <- Sys.Date()
@@ -24,10 +22,8 @@ test_that("it should get futures data with futures_mget", {
 })
 
 test_that("it should get futures data with futures_get", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
+  skip_on_cran()
+  skip_if_offline()
 
   refdate <- bizdays::offset(Sys.Date(), -1, "Brazil/ANBIMA")
 

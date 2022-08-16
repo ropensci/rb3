@@ -1,8 +1,6 @@
 
 test_that("read file using filename to find template", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-  }
+  skip_on_cran()
 
   f <- system.file("extdata/big-files/BDIN.zip", package = "rb3")
   f <- copy_file_to_temp(f)

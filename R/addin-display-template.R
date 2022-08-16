@@ -77,8 +77,5 @@ display_template <- function() {
     height = 900
   )
 
-  # dont call shiny when in covr
-  if (!covr::in_covr()) {
-    shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
-  }
+  shiny::runGadget(app, viewer = viewer, stopOnCancel = TRUE)
 }

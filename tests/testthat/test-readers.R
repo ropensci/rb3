@@ -1,8 +1,6 @@
 test_that("it should read options_open_interest_read", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
+  skip_on_cran()
+  skip_if_offline()
 
   f <- system.file("extdata/big-files/OpcoesAcoesEmAberto.zip",
     package = "rb3"

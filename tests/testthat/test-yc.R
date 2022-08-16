@@ -1,4 +1,7 @@
 
+skip_on_cran()
+skip_if_offline()
+
 test_df <- function(df_in) {
   expect_true(nrow(df_in) > 0)
   expect_true(ncol(df_in) > 0)
@@ -8,11 +11,6 @@ test_df <- function(df_in) {
 }
 
 test_that("Test of yc_mget function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   first_date <- Sys.Date() - 50
   last_date <- Sys.Date()
 
@@ -37,11 +35,6 @@ test_that("Test of yc_mget function", {
 })
 
 test_that("Test of yc_get function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   refdate <- bizdays::offset(Sys.Date(), -30, "Brazil/ANBIMA")
 
   # first call (no cache)
@@ -58,11 +51,6 @@ test_that("Test of yc_get function", {
 })
 
 test_that("Test of yc_ipca_mget function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   first_date <- Sys.Date() - 10
   last_date <- Sys.Date()
 
@@ -87,11 +75,6 @@ test_that("Test of yc_ipca_mget function", {
 })
 
 test_that("Test of yc_ipca_get function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   refdate <- bizdays::offset(Sys.Date(), -30, "Brazil/ANBIMA")
 
   # first call (no cache)
@@ -108,11 +91,6 @@ test_that("Test of yc_ipca_get function", {
 })
 
 test_that("Test of yc_usd_mget function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   first_date <- Sys.Date() - 10
   last_date <- Sys.Date()
 
@@ -137,11 +115,6 @@ test_that("Test of yc_usd_mget function", {
 })
 
 test_that("Test of yc_usd_get function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   refdate <- bizdays::offset(Sys.Date(), -30, "Brazil/ANBIMA")
 
   # first call (no cache)
@@ -158,11 +131,6 @@ test_that("Test of yc_usd_get function", {
 })
 
 test_that("Test of yc_superset function", {
-  if (!covr::in_covr()) {
-    skip_on_cran()
-    skip_if_offline()
-  }
-
   refdate <- bizdays::offset(Sys.Date(), -30, "Brazil/ANBIMA")
 
   fut <- futures_get(refdate)

@@ -1,7 +1,6 @@
-if (!covr::in_covr()) {
-  skip_on_cran()
-  skip_if_offline()
-}
+
+skip_on_cran()
+skip_if_offline()
 
 test_that("it should get index composition", {
   x <- index_comp_get("IBOV")

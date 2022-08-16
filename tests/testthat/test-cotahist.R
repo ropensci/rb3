@@ -1,7 +1,5 @@
-if (!covr::in_covr()) {
-  skip_on_cran()
-  skip_if_offline()
-}
+skip_on_cran()
+skip_if_offline()
 
 if (Sys.info()["sysname"] == "Linux") {
   httr::set_config(httr::config(ssl_verifypeer = FALSE))
