@@ -246,6 +246,9 @@ stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
+    if (is.null(jason[[part$name]])) {
+      return(NULL)
+    }
     df <- as.data.frame(jason[[part$name]])
     colnames(df) <- part$colnames
     l[[part_name]] <- if (parse_fields) {

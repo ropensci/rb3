@@ -100,6 +100,21 @@ stock_indexes_current_portfolio_download <- function(., dest, ...) {
   )
 }
 
+stock_indexes_statistics_download <- function(., dest, ...) {
+  if (!check_parameters(..., arg_name = "index_name")) {
+    return(FALSE)
+  }
+  if (!check_parameters(..., arg_name = "year")) {
+    return(FALSE)
+  }
+  args <- list(...)
+  url_encoded_download(., dest,
+    language = "pt-br",
+    index = args$index_name,
+    year = args$year
+  )
+}
+
 company_listed_supplement_download <- function(., dest, ...) {
   if (!check_parameters(..., arg_name = "company_name")) {
     return(FALSE)

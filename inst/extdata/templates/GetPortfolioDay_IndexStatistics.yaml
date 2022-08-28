@@ -1,0 +1,100 @@
+id: GetPortfolioDay_IndexStatistics
+filename: ~
+filetype: MCUSTOM
+description: Dados históricos de cotação dos índices da Bolsa
+locale: pt
+downloader:
+  function: stock_indexes_statistics_download
+  url: https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetPortfolioDay
+  format: json
+  encoding: UTF-8
+reader:
+  function: stock_indexes_json_reader
+parts:
+  Min:
+    name: min
+    fields:
+    - name: day
+      description: Dia do mês
+    - name: month01
+      description: Valor do mês de janeiro
+    - name: month02
+      description: Valor do mês de fevereiro
+    - name: month03
+      description: Valor do mês de março
+    - name: month04
+      description: Valor do mês de abril
+    - name: month05
+      description: Valor do mês de maio
+    - name: month06
+      description: Valor do mês de junho
+    - name: month07
+      description: Valor do mês de julho
+    - name: month08
+      description: Valor do mês de agosto
+    - name: month09
+      description: Valor do mês de setembro
+    - name: month10
+      description: Valor do mês de outubro
+    - name: month11
+      description: Valor do mês de novembro
+    - name: month12
+      description: Valor do mês de dezembro
+  Max:
+    name: max
+    fields:
+    - name: day
+      description: Dia do mês
+    - name: month01
+      description: Valor do mês de janeiro
+    - name: month02
+      description: Valor do mês de fevereiro
+    - name: month03
+      description: Valor do mês de março
+    - name: month04
+      description: Valor do mês de abril
+    - name: month05
+      description: Valor do mês de maio
+    - name: month06
+      description: Valor do mês de junho
+    - name: month07
+      description: Valor do mês de julho
+    - name: month08
+      description: Valor do mês de agosto
+    - name: month09
+      description: Valor do mês de setembro
+    - name: month10
+      description: Valor do mês de outubro
+    - name: month11
+      description: Valor do mês de novembro
+    - name: month12
+      description: Valor do mês de dezembro
+  Results:
+    name: results
+    fields:
+    - name: day
+      description: Dia do mês
+    - name: month01
+      description: Valor do mês de janeiro
+    - name: month02
+      description: Valor do mês de fevereiro
+    - name: month03
+      description: Valor do mês de março
+    - name: month04
+      description: Valor do mês de abril
+    - name: month05
+      description: Valor do mês de maio
+    - name: month06
+      description: Valor do mês de junho
+    - name: month07
+      description: Valor do mês de julho
+    - name: month08
+      description: Valor do mês de agosto
+    - name: month09
+      description: Valor do mês de setembro
+    - name: month10
+      description: Valor do mês de outubro
+    - name: month11
+      description: Valor do mês de novembro
+    - name: month12
+      description: Valor do mês de dezembro

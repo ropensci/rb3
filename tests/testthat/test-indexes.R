@@ -46,3 +46,25 @@ test_that("it should get indexreport", {
   expect_true(ncol(x) == 8)
   expect_true(nrow(x) > 0)
 })
+
+test_that("it should get index historical data", {
+  index_name <- "IBOV"
+  x <- index_get(index_name, as.Date("2020-01-01"))
+  expect_s3_class(x, "data.frame")
+  expect_true(ncol(x) == 3)
+  expect_true(nrow(x) > 0)
+  expect_equal(format(x$refdate[1], "%Y"), "2020")
+
+  x <- index_get(index_name, as.Date("1997-01-01"))
+  expect_s3_class(x, "data.frame")
+  expect_true(ncol(x) == 3)
+  expect_true(nrow(x) > 0)
+  expect_equal(format(x$refdate[1], "%Y"), "1997")
+
+  x <- index_get(index_name, as.Date("1997-01-01"), as.Date("1999-01-01"))
+  expect_s3_class(x, "data.frame")
+  expect_true(ncol(x) == 3)
+  expect_true(nrow(x) > 0)
+  expect_equal(format(x$refdate[1], "%Y"), "1997")
+  expect_equal(format(x$refdate[nrow(x)], "%Y"), "1998")
+})

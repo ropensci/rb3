@@ -227,3 +227,102 @@ get_single_indexreport <- function(idx_date,
     NULL
   }
 }
+
+index_get_from_file <- function(year) {
+  index_data <- read_excel("./examples/IBOVDIA.XLS",
+    sheet = as.character(year), skip = 1, range = "A3:M33",
+    col_names = c("day", 1:12),
+  )
+
+  pivot_longer(index_data, "1":"12", names_to = "month") |>
+    mutate(
+      month = as.integer(.data$month),
+      year = year,
+      refdate = ISOdate(.data$year, .data$month, .data$day) |> as.Date(),
+      index_name = "IBOV"
+    ) |>
+    filter(!is.na(.data$value)) |>
+    arrange(.data$refdate) |>
+    select(.data$refdate, .data$index_name, .data$value)
+}
+
+ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
+  f <- system.file("extdata/IBOV.rds", package = "rb3")
+  read_rds(f) |> filter(.data$refdate >= first_date, .data$refdate <= last_date)
+}
+
+single_index_get <- function(index_name, year, cache_folder, do_cache) {
+  template <- "GetPortfolioDay_IndexStatistics"
+  f <- download_marketdata(template,
+    index_name = index_name, year = year,
+    cache_folder = cache_folder, do_cache = do_cache
+  )
+  index_data <- read_marketdata(f, template, do_cache = do_cache)
+
+  if (is.null(index_data)) {
+    return(NULL)
+  }
+
+  index_data <- pivot_longer(index_data$Results, .data$month01:.data$month12, names_to = "month") |>
+    mutate(
+      month = str_match(.data$month, "\\d\\d$") |> as.integer(),
+      year = year,
+      refdate = ISOdate(.data$year, .data$month, .data$day) |> as.Date(),
+      index_name = index_name
+    ) |>
+    filter(!is.na(.data$value)) |>
+    arrange(.data$refdate)
+
+  index_data |> select(.data$refdate, .data$index_name, .data$value)
+}
+
+#' Get index historical data
+#'
+#' Gets historical data from B3 indexes
+#'
+#' @param index_name a string with the index name
+#' @param first_date First date
+#' @param last_date Last date
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
+#'
+#' @return A data.frame/tibble with index data
+#'
+#' @examples
+#' \dontrun{
+#' index_get("IBOV", as.Date("1977-01-01"), as.Date("1999-12-31"))
+#' }
+#'
+#' @export
+index_get <- function(index_name, first_date,
+                      last_date = Sys.Date(),
+                      cache_folder = cachedir(),
+                      do_cache = TRUE) {
+  start_year <- format(first_date, "%Y") |> as.integer()
+  end_year <- format(last_date, "%Y") |> as.integer()
+  if (index_name == "IBOV") {
+    if (start_year > 1997) {
+      year <- seq(start_year, end_year)
+      map_dfr(year, \(year) single_index_get(index_name, year, cache_folder, do_cache))
+    } else {
+      if (end_year <= 1997) {
+        df <- ibovespa_index_get(first_date, last_date)
+      } else {
+        df1 <- ibovespa_index_get(first_date, as.Date("1997-12-31"))
+        year <- seq(1998, end_year)
+        df2 <- map_dfr(year, \(year) single_index_get(index_name, year, cache_folder, do_cache)) |>
+          filter(.data$refdate <= last_date)
+        df <- bind_rows(df1, df2) |> arrange(.data$refdate)
+      }
+    }
+  } else {
+    year <- seq(start_year, end_year)
+    df <- map_dfr(year, \(year) single_index_get(index_name, year, cache_folder, do_cache))
+    if (any(dim(df) == 0)) {
+      return(NULL)
+    } else {
+      df |>
+        filter(.data$refdate <= last_date, .data$refdate >= first_date)
+    }
+  }
+}

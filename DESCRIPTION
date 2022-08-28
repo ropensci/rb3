@@ -3,7 +3,7 @@ Title: Download and Parse Public Data Released by B3 Exchange
 Description: Download and parse public files released by B3 and convert them
     into useful formats and data structures common to data analysis
     practitioners.
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: c(person("Wilson", "Freitas",
                     email = "wilson.freitas@gmail.com",
                     role = c("aut", "cre")),
@@ -31,7 +31,9 @@ Imports:
     yaml,
     digest,
     base64enc,
-    XML
+    XML,
+    readxl,
+    tidyr
 Suggests:
     testthat,
     knitr,
@@ -45,7 +47,6 @@ Suggests:
     scales,
     magrittr,
     tibble,
-    tidyr,
     withr
 Collate:
     'rb3-package.R'
