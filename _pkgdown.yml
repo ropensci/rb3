@@ -30,6 +30,7 @@ reference:
 
 - title: Indexes
   contents:
+  - index_get
   - indexes_get
   - indexes_last_update
   - index_comp_get
