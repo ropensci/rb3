@@ -1,0 +1,141 @@
+---
+title: "B3 Indexes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{B3 Indexes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`rb3` comes with a diverse range of functions to explore the index delivered by the B3 Exchange.
+These functions will be presented here.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(rb3)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+```
+
+## B3 Indexes
+
+The function `rb3::indexes_get` list the names of available indexes.
+
+```{r}
+indexes_get()
+```
+
+## Indexes Composition and Weights
+
+The compositon of B3 indexes are available throught the function `rb3::index_weights_get`.
+This function returns a data.frame with the current compostion of the requested index, all
+symbols that compound the index, their weights and theoretical position.
+Here the IBOVESPA (`IBOV`) Index has its compositon listed.
+
+```{r}
+index_weights_get("IBOV")
+```
+
+The IBr100 Index (`IBXX`)
+
+```{r}
+index_weights_get("IBXX")
+```
+
+The Small Caps Index (`SMLL`)
+
+```{r}
+index_weights_get("SMLL")
+```
+
+### Index Composition
+
+`rb3::index_comp_get` returns a vector with symbols that compound the given index.
+
+```{r}
+index_comp_get("SMLL")
+```
+
+### Index by Segment
+
+`rb3::index_by_segment_get` returns a data.frame with all stocks that are in the index, their
+economic segment, weights, position and segment weight in the index.
+
+```{r}
+index_by_segment_get("IBOV")
+```
+
+## Indexes Time Series
+
+`rb3` downloads data from B3 website to build time series for B3 indexes.
+
+The function `rb3::index_get` downloads data from B3 for the given index name and returns
+data structured in a data.frame.
+The index names are obtained with `rb3::indexes_get` function.
+
+```{r}
+index_name <- "IBOV"
+index_data <- index_get(index_name, as.Date("2019-01-01"))
+head(index_data)
+```
+
+The returned data.frame has three columns: `refdate`, `index_name` and `value`.
+
+```{r fig.width=9, fig.height=6}
+index_data |>
+  ggplot(aes(x = refdate, y = value)) +
+  geom_line() +
+  labs(
+    x = NULL, y = "Index",
+    title = str_glue("{index_name} Historical Data"),
+    caption = str_glue("Data imported using rb3")
+  )
+```
+
+The IBOVESPA index starts at 1968 and the series is adjusted for all economic events the that
+affected the brazilian currency in the 80-90's decades.
+
+```{r fig.width=9, fig.height=6}
+index_data <- index_get(index_name, as.Date("1968-01-01"))
+index_data |>
+  ggplot(aes(x = refdate, y = value)) +
+  geom_line() +
+  scale_y_log10() +
+  labs(
+    x = NULL, y = "Index (log scale)",
+    title = str_glue("{index_name} Historical Data - since 1968"),
+    caption = str_glue("Data imported using rb3")
+  )
+```
+
+The y-axis was transformed to log scale in order to get the visualization improved.
+
+Change `index_name` to get data for other indexes, for example, the Small Caps Index SMLL.
+
+```{r fig.width=9, fig.height=6}
+index_name <- "SMLL"
+index_data <- index_get(index_name, as.Date("2010-01-01"))
+index_data |>
+  ggplot(aes(x = refdate, y = value)) +
+  geom_line() +
+  labs(
+    x = NULL, y = "Index",
+    title = str_glue("{index_name} Historical Data"),
+    caption = str_glue("Data imported using rb3")
+  )
+```
+
+## Indexes Last Update
+
+`rb3::indexes_last_update` returns the date where the indexes have been last updated.
+
+```{r}
+indexes_last_update()
+```
