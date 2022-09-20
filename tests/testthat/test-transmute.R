@@ -34,7 +34,8 @@ test_that("it should apply a regex_rule with a group", {
   expect_equal(res$value, c(50, NA, 25))
 })
 
-test_that("it should apply a regex_rule if at least one element has been matched", {
+test_that("it should apply a regex_rule
+if at least one element has been matched", {
   rule <- match_regex("\\d+", function(data, match) {
     as.integer(match[, 1])
   }, apply_to = "any")
@@ -176,7 +177,9 @@ test_that("it should transform a data.frame", {
       factor(text, levels = c("A", "E"), labels = c("American", "European"))
     }),
     match_regex("^\\d+$", as.integer),
-    match_regex("^\\d{8}$", function(text, match) as.Date(text, format = "%Y%m%d"), priority = 1)
+    match_regex("^\\d{8}$", function(text, match) {
+      as.Date(text, format = "%Y%m%d")
+    }, priority = 1)
   )
 
   df <- data.frame(
@@ -190,14 +193,19 @@ test_that("it should transform a data.frame", {
   )
   .names <- names(df)
   df <- parse_text(trm, df)
-  expect_equal(unname(sapply(df, class)), c("factor", "integer", "numeric", "character", "Date"))
+  expect_equal(
+    unname(sapply(df, class)),
+    c("factor", "integer", "numeric", "character", "Date")
+  )
   expect_equal(names(df), .names)
 })
 
 test_that("it should parse values considering priority", {
   trm <- transmuter(
     match_regex("\\d+", as.integer),
-    match_regex("\\d{8}", function(text, match) as.Date(text, format = "%Y%m%d"), priority = 1)
+    match_regex("\\d{8}", function(text, match) {
+      as.Date(text, format = "%Y%m%d")
+    }, priority = 1)
   )
   expect_equal(parse_text(trm, "1"), 1)
   expect_equal(parse_text(trm, "20100101"), as.Date("2010-01-01"))

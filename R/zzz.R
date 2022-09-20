@@ -113,11 +113,11 @@ load_templates <- function() {
 
 .onLoad <- function(libname, pkgname) {
   op <- options()
-  op.rb3 <- list(
+  op_rb3 <- list(
     rb3.cachedir = NULL
   )
-  toset <- !(names(op.rb3) %in% names(op))
-  if(any(toset)) options(op.rb3[toset])
+  toset <- !(names(op_rb3) %in% names(op))
+  if (any(toset)) options(op_rb3[toset])
 
   invisible()
 }

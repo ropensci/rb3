@@ -276,8 +276,12 @@ indexreport_reader <- function(., filename, parse_fields = TRUE) {
       refdate = refdate_,
       symbol = xmlValue(inf_node[["SctyId"]][["TckrSymb"]]),
       security_id = xmlValue(inf_node[["FinInstrmId"]][["OthrId"]][["Id"]]),
-      security_proprietary = xmlValue(inf_node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]),
-      security_market = xmlValue(inf_node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]),
+      security_proprietary = xmlValue(
+        inf_node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]
+      ),
+      security_market = xmlValue(
+        inf_node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]
+      ),
       asset_desc = xmlValue(node[["AsstDesc"]]),
       settlement_price = xmlValue(node[["SttlmVal"]]),
       open = xmlValue(inf_node[["OpngPric"]]),
@@ -314,8 +318,12 @@ pricereport_reader <- function(., filename, parse_fields = TRUE) {
       refdate = refdate,
       ticker_symbol = ticker,
       security_id = xmlValue(node[["FinInstrmId"]][["OthrId"]][["Id"]]),
-      security_proprietary = xmlValue(node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]),
-      security_market = xmlValue(node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]),
+      security_proprietary = xmlValue(
+        node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]
+      ),
+      security_market = xmlValue(
+        node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]
+      ),
       volume = xmlValue(attrib[["NtlFinVol"]]),
       open_interest = xmlValue(attrib[["OpnIntrst"]]),
       traded_contracts = xmlValue(attrib[["FinInstrmQty"]]),

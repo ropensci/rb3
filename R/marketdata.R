@@ -60,7 +60,7 @@ read_marketdata <- function(filename, template = NULL,
   }
   df <- template$read_file(filename, parse_fields)
   if (is.null(df)) {
-    "File {filename} hasn't valid content, consider removing if it is cached." |>
+    "{filename} hasn't valid content, consider removing if it is cached." |>
       str_glue() |>
       cli::cli_alert_warning()
   }

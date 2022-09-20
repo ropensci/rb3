@@ -40,7 +40,6 @@ download_marketdata <- function(template,
   )
 
   if (file.exists(dest) && do_cache) {
-    # cli::cli_alert_info(str_glue("Skipping download - using cached version"))
     fname <- unzip_recursive(dest)
     return(fname)
   }

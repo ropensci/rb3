@@ -32,16 +32,3 @@ Filename <- setRefClass("Filename",
     }
   )
 )
-
-# CSVFile <- setRefClass("CSVFile",
-#   methods=list(
-#     write=function(filename, dialect) {
-#       if (dialect == 'en-US') {
-#
-#       } else if (dialect == 'pt-BR') {
-#
-#       } else
-#         stop(paste('Invalid dialect:', dialect))
-#     }
-#   )
-# )

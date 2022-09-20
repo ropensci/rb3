@@ -54,10 +54,6 @@ display_template <- function() {
           elm[[length(elm) + 1]] <- shiny::tags$p(
             sprintf("Part %d: %s\n", ix, nx)
           )
-          # if (! is.null(.$parts[[nx]]$lines))
-          #   cat('Lines:', .$parts[[nx]]$lines, '\n')
-          # else
-          #   cat('Pattern:', .$parts[[nx]]$pattern, '\n')
           elm[[length(elm) + 1]] <- shiny::HTML(
             print(xtable::xtable(as.data.frame(tpl_$parts[[nx]]$fields)),
               type = "html", print.results = FALSE,
