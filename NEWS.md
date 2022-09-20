@@ -1,3 +1,10 @@
+# rb3 0.0.7
+
+* function `index_get` to download historical data from B3 indexes (Issue #39)
+* new templates
+  * `GetPortfolioDay_IndexStatistics` historical time series for B3 indexes
+* New vignette: B3 Indexes
+
 # rb3 0.0.6
 
 * Updated documentation
