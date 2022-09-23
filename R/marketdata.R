@@ -45,7 +45,7 @@ read_marketdata <- function(filename, template = NULL,
   parsed_ <- if (parse_fields) "parsed" else "strict"
   cache_folder <- dirname(filename)
   f_cache <- file.path(
-    cache_folder, str_glue("{basename_}-{parsed_}.rds")
+    cache_folder, str_glue("{b}-{p}.rds", b = basename_, p = parsed_)
   )
 
   if (file.exists(f_cache) && do_cache) {

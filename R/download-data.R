@@ -36,7 +36,7 @@ download_marketdata <- function(template,
 
   dest <- file.path(
     cache_folder,
-    str_glue("{code_}.{template$downloader$format}")
+    str_glue("{c}.{template$downloader$format}", c = code_)
   )
 
   if (file.exists(dest) && do_cache) {
