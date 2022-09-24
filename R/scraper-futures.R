@@ -126,18 +126,11 @@ futures_mget <- function(first_date = Sys.Date() - 5,
   date_vec <- bizseq(first_date, last_date, "Brazil/ANBIMA")
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
   df <- bind_rows(
-    map(cli::cli_progress_along(
-      date_vec,
-      format = paste0(
-        "{cli::pb_spin} Fetching data points ",
-        "{cli::pb_current}/{cli::pb_total}",
-        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
-      )
-    ),
-    single_futures_get,
-    date_vec,
-    cache_folder = cache_folder,
-    do_cache = do_cache
+    log_map_process_along(date_vec, single_futures_get,
+      "Fetching data points",
+      date_vec = date_vec,
+      cache_folder = cache_folder,
+      do_cache = do_cache
     )
   )
   return(df)
@@ -180,7 +173,7 @@ single_futures_get <- function(idx_date,
       NULL
     }
   } else {
-    cli::cli_alert_danger("Failed download")
+    alert("danger", "Failed download")
     return(NULL)
   }
 }

@@ -5,7 +5,7 @@ query_cdi <- function() {
   if (!is.null(fname)) {
     read_marketdata(fname, "CDIIDI", do_cache = FALSE)
   } else {
-    cli::cli_alert_danger("Failed CDIIDI download")
+    alert("danger", "Failed CDIIDI download")
     NULL
   }
 }

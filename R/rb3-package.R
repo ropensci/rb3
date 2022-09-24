@@ -12,6 +12,10 @@
 #' @importFrom base64enc base64encode
 #' @importFrom bizdays following preceding load_builtin_calendars
 #' @importFrom bizdays add.bizdays bizdayse bizseq getdate
+#' @importFrom cli cli_alert_info cli_alert_danger cli_alert_success
+#' @importFrom cli cli_alert_warning
+#' @importFrom cli cli_progress_along pb_spin pb_current pb_total pb_bar
+#' @importFrom cli pb_percent pb_eta_str
 #' @importFrom digest digest
 #' @importFrom dplyr tibble inner_join mutate select filter left_join as_tibble
 #' @importFrom dplyr bind_rows arrange

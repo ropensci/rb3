@@ -49,18 +49,11 @@ yc_mget <- function(first_date = Sys.Date() - 5,
 
   # get data!
   df_yc <- bind_rows(
-    map(cli::cli_progress_along(
-      date_vec,
-      format = paste0(
-        "{cli::pb_spin} Fetching data points",
-        "{cli::pb_current}/{cli::pb_total}",
-        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
-      )
-    ),
-    get_single_yc,
-    date_vec = date_vec,
-    cache_folder = cache_folder,
-    do_cache = do_cache
+    log_map_process_along(date_vec, get_single_yc,
+      "Fetching data points",
+      date_vec = date_vec,
+      cache_folder = cache_folder,
+      do_cache = do_cache
     )
   )
 
@@ -117,7 +110,9 @@ get_single_yc <- function(idx_date,
       NULL
     }
   } else {
-    cli::cli_alert_danger("Error: no data found for date {refdate}")
+    alert("danger", "Error: no data found for date {refdate}",
+      refdate = refdate
+    )
     return(NULL)
   }
 }
@@ -156,18 +151,11 @@ yc_ipca_mget <- function(first_date = Sys.Date() - 5,
 
   # get data!
   df_yc <- bind_rows(
-    map(cli::cli_progress_along(
-      date_vec,
-      format = paste0(
-        "{cli::pb_spin} Fetching data points",
-        "{cli::pb_current}/{cli::pb_total}",
-        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
-      )
-    ),
-    get_single_yc_ipca,
-    date_vec = date_vec,
-    cache_folder = cache_folder,
-    do_cache = do_cache
+    log_map_process_along(date_vec, get_single_yc_ipca,
+      "Fetching data points",
+      date_vec = date_vec,
+      cache_folder = cache_folder,
+      do_cache = do_cache
     )
   )
 
@@ -223,7 +211,9 @@ get_single_yc_ipca <- function(idx_date,
       NULL
     }
   } else {
-    cli::cli_alert_danger("Error: no data found for date {refdate}")
+    alert("danger", "Error: no data found for date {refdate}",
+      refdate = refdate
+    )
     return(NULL)
   }
 }
@@ -264,18 +254,11 @@ yc_usd_mget <- function(first_date = Sys.Date() - 5,
 
   # get data!
   df_yc <- bind_rows(
-    map(cli::cli_progress_along(
-      date_vec,
-      format = paste0(
-        "{cli::pb_spin} Fetching data points",
-        "{cli::pb_current}/{cli::pb_total}",
-        " | {cli::pb_bar} {cli::pb_percent} | {cli::pb_eta_str}"
-      )
-    ),
-    get_single_yc_usd,
-    date_vec = date_vec,
-    cache_folder = cache_folder,
-    do_cache = do_cache
+    log_map_process_along(date_vec, get_single_yc_usd,
+      "Fetching data points",
+      date_vec = date_vec,
+      cache_folder = cache_folder,
+      do_cache = do_cache
     )
   )
 
@@ -331,7 +314,9 @@ get_single_yc_usd <- function(idx_date,
       NULL
     }
   } else {
-    cli::cli_alert_danger("Error: no data found for date {refdate}")
+    alert("danger", "Error: no data found for date {refdate}",
+      refdate = refdate
+    )
     return(NULL)
   }
 }

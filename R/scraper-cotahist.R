@@ -47,7 +47,9 @@ cotahist_get <- function(refdate,
   if (!is.null(fname)) {
     read_marketdata(fname, tpl)
   } else {
-    cli::cli_alert_danger("Failed {tpl} download for reference date {refdate}")
+    alert("danger", "Failed {tpl} download for reference date {refdate}",
+      tpl = tpl, refdate = refdate
+    )
     NULL
   }
 }
