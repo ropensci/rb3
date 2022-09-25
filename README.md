@@ -15,6 +15,8 @@ coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rb3)](https://CRAN.R-project.org/package=rb3)
 [![](https://cranlogs.r-pkg.org/badges/rb3)](https://cran.r-project.org/package=rb3)
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/534_status.svg)](https://github.com/ropensci/software-review/issues/534)
 <!-- badges: end -->
 
 [B3](https://www.b3.com.br) is the main financial exchange in Brazil,
@@ -126,14 +128,14 @@ glimpse(
 )
 #> Rows: 153
 #> Columns: 8
-#> $ refdate          <date> 2022-04-01, 2022-04-01, 2022-04-01, 2022-04-01, 2022…
-#> $ commodity        <chr> "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1…
-#> $ maturity_code    <chr> "J22", "K22", "M22", "N22", "Q22", "U22", "V22", "X22…
-#> $ symbol           <chr> "DI1J22", "DI1K22", "DI1M22", "DI1N22", "DI1Q22", "DI…
-#> $ price_previous   <dbl> 99999.99, 99172.50, 98159.27, 97181.87, 96199.14, 951…
-#> $ price            <dbl> 100000.00, 99172.31, 98160.23, 97185.43, 96210.42, 95…
-#> $ change           <dbl> 0.01, -0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, …
-#> $ settlement_value <dbl> 0.01, 0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, 5…
+#> $ refdate          <date> 2022-04-01, 2022-04-01, 2022-04-01, 2022-04-01, 2022~
+#> $ commodity        <chr> "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1", "DI1~
+#> $ maturity_code    <chr> "J22", "K22", "M22", "N22", "Q22", "U22", "V22", "X22~
+#> $ symbol           <chr> "DI1J22", "DI1K22", "DI1M22", "DI1N22", "DI1Q22", "DI~
+#> $ price_previous   <dbl> 99999.99, 99172.50, 98159.27, 97181.87, 96199.14, 951~
+#> $ price            <dbl> 100000.00, 99172.31, 98160.23, 97185.43, 96210.42, 95~
+#> $ change           <dbl> 0.01, -0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, ~
+#> $ settlement_value <dbl> 0.01, 0.19, 0.96, 3.56, 11.28, 21.61, 34.93, 48.85, 5~
 ```
 
 ### Equity data
@@ -163,21 +165,21 @@ ch <- cotahist_get(date, "daily")
 glimpse(
   cotahist_equity_get(ch)
 )
-#> Rows: 383
+#> Rows: 391
 #> Columns: 13
-#> $ refdate               <date> 2022-07-25, 2022-07-25, 2022-07-25, 2022-07-25,…
-#> $ symbol                <chr> "AALR3", "ABCB4", "ABEV3", "AERI3", "AESB3", "AG…
-#> $ open                  <dbl> 19.88, 16.42, 14.53, 2.97, 10.30, 23.43, 7.10, 9…
-#> $ high                  <dbl> 20.18, 16.92, 14.78, 2.97, 10.50, 23.74, 7.22, 1…
-#> $ low                   <dbl> 19.71, 16.42, 14.45, 2.77, 10.30, 23.37, 6.69, 9…
-#> $ close                 <dbl> 19.88, 16.82, 14.68, 2.78, 10.44, 23.37, 6.78, 9…
-#> $ average               <dbl> 19.88, 16.77, 14.68, 2.82, 10.40, 23.53, 6.92, 9…
-#> $ best_bid              <dbl> 19.76, 16.73, 14.68, 2.77, 10.44, 23.37, 6.78, 9…
-#> $ best_ask              <dbl> 19.88, 16.82, 14.69, 2.78, 10.46, 23.55, 7.00, 9…
-#> $ volume                <dbl> 3837126, 8321425, 210650873, 7862655, 9334466, 7…
-#> $ traded_contracts      <dbl> 193000, 496100, 14348000, 2782600, 897400, 31690…
-#> $ transactions_quantity <int> 889, 3406, 20723, 4508, 3304, 1941, 464, 133, 46…
-#> $ distribution_id       <int> 102, 141, 125, 101, 102, 112, 101, 103, 231, 231…
+#> $ refdate               <date> 2022-09-23, 2022-09-23, 2022-09-23, 2022-09-23,~
+#> $ symbol                <chr> "AALR3", "ABCB4", "ABEV3", "AERI3", "AESB3", "AF~
+#> $ open                  <dbl> 21.02, 20.58, 15.40, 2.25, 9.64, 9.60, 30.96, 7.~
+#> $ high                  <dbl> 21.32, 20.82, 15.48, 2.26, 9.74, 9.69, 31.20, 7.~
+#> $ low                   <dbl> 21.02, 20.36, 15.17, 2.16, 9.58, 9.60, 30.35, 6.~
+#> $ close                 <dbl> 21.15, 20.82, 15.37, 2.18, 9.64, 9.69, 30.56, 6.~
+#> $ average               <dbl> 21.23, 20.58, 15.33, 2.19, 9.65, 9.64, 30.69, 6.~
+#> $ best_bid              <dbl> 21.15, 20.75, 15.36, 2.18, 9.64, 9.50, 30.55, 6.~
+#> $ best_ask              <dbl> 21.27, 20.82, 15.37, 2.19, 9.65, 9.74, 30.56, 7.~
+#> $ volume                <dbl> 9702201, 13210268, 598903006, 9119526, 16974620,~
+#> $ traded_contracts      <dbl> 457000, 641700, 39045900, 4150600, 1758500, 200,~
+#> $ transactions_quantity <int> 1552, 3862, 34816, 3415, 4934, 2, 1877, 212, 182~
+#> $ distribution_id       <int> 102, 141, 125, 101, 104, 119, 112, 101, 103, 231~
 ```
 
 ### Funds data
@@ -188,21 +190,21 @@ One can also download hedge fund data with `cotahist_etfs_get`.
 glimpse(
   cotahist_etfs_get(ch)
 )
-#> Rows: 87
+#> Rows: 89
 #> Columns: 13
-#> $ refdate               <date> 2022-07-25, 2022-07-25, 2022-07-25, 2022-07-25,…
-#> $ symbol                <chr> "5GTK11", "ACWI11", "AGRI11", "ALUG11", "ASIA11"…
-#> $ open                  <dbl> 85.10, 9.80, 45.60, 40.60, 8.01, 50.65, 81.48, 9…
-#> $ high                  <dbl> 87.20, 9.80, 46.26, 40.60, 8.01, 51.59, 82.34, 9…
-#> $ low                   <dbl> 84.52, 9.51, 45.60, 39.66, 7.82, 50.65, 81.48, 8…
-#> $ close                 <dbl> 84.80, 9.53, 46.19, 39.85, 7.84, 51.58, 81.93, 8…
-#> $ average               <dbl> 85.20, 9.53, 45.93, 40.06, 7.84, 51.48, 81.85, 8…
-#> $ best_bid              <dbl> 74.01, 9.53, 45.00, 39.70, 7.80, 50.64, 81.66, 8…
-#> $ best_ask              <dbl> 84.80, 9.57, 46.25, 39.85, 7.84, 53.91, 82.07, 8…
-#> $ volume                <dbl> 1107.65, 1769630.74, 3812.84, 112492.61, 509566.…
-#> $ traded_contracts      <dbl> 13, 185568, 83, 2808, 64994, 2285, 54, 2647, 434…
-#> $ transactions_quantity <int> 7, 237, 10, 47, 43, 17, 19, 183, 664, 5, 58540, …
-#> $ distribution_id       <int> 100, 100, 100, 100, 100, 100, 100, 108, 100, 100…
+#> $ refdate               <date> 2022-09-23, 2022-09-23, 2022-09-23, 2022-09-23,~
+#> $ symbol                <chr> "5GTK11", "ACWI11", "AGRI11", "ALUG11", "ASIA11"~
+#> $ open                  <dbl> 72.02, 8.53, 48.33, 34.09, 6.80, 58.40, 90.57, 1~
+#> $ high                  <dbl> 72.30, 8.58, 48.96, 34.63, 6.86, 58.40, 90.58, 1~
+#> $ low                   <dbl> 71.68, 8.50, 48.33, 34.01, 6.80, 57.01, 88.70, 1~
+#> $ close                 <dbl> 72.30, 8.58, 48.60, 34.27, 6.86, 57.28, 89.13, 1~
+#> $ average               <dbl> 72.09, 8.57, 48.64, 34.24, 6.85, 57.11, 89.08, 1~
+#> $ best_bid              <dbl> 70.00, 8.55, 48.57, 34.06, 6.85, 57.28, 36.00, 1~
+#> $ best_ask              <dbl> 72.30, 8.58, 48.60, 34.27, 7.37, 58.67, 91.20, 1~
+#> $ volume                <dbl> 43620.12, 2070659.80, 3405.33, 119906.09, 38014.~
+#> $ traded_contracts      <dbl> 605, 241405, 70, 3501, 5545, 830, 710, 1924, 1, ~
+#> $ transactions_quantity <int> 11, 83, 8, 86, 18, 25, 51, 38, 1, 315, 2, 68057,~
+#> $ distribution_id       <int> 100, 100, 100, 100, 100, 100, 100, 108, 100, 100~
 ```
 
 ### FIIs (brazilian REITs) data
@@ -214,21 +216,21 @@ Download FII (Fundo de Investimento Imobiliário) data with
 glimpse(
   cotahist_fiis_get(ch)
 )
-#> Rows: 261
+#> Rows: 266
 #> Columns: 13
-#> $ refdate               <date> 2022-07-25, 2022-07-25, 2022-07-25, 2022-07-25,…
-#> $ symbol                <chr> "BZLI11", "ABCP11", "AFHI11", "AFOF11", "AIEC11"…
-#> $ open                  <dbl> 17.00, 68.73, 98.71, 85.51, 73.56, 851.01, 113.5…
-#> $ high                  <dbl> 19.50, 69.65, 99.04, 86.39, 73.93, 851.03, 114.0…
-#> $ low                   <dbl> 17.00, 68.60, 98.50, 85.46, 73.25, 851.01, 112.6…
-#> $ close                 <dbl> 17.03, 68.66, 98.90, 86.13, 73.27, 851.03, 112.9…
-#> $ average               <dbl> 17.09, 68.92, 98.81, 85.92, 73.65, 851.02, 113.5…
-#> $ best_bid              <dbl> 17.00, 68.66, 98.75, 86.12, 73.27, 851.03, 112.9…
-#> $ best_ask              <dbl> 19.78, 69.44, 98.90, 86.38, 73.76, 888.94, 112.9…
-#> $ volume                <dbl> 3624.63, 62788.29, 1926722.95, 98128.51, 311114.…
-#> $ traded_contracts      <dbl> 212, 911, 19498, 1142, 4224, 13, 15693, 1812, 30…
-#> $ transactions_quantity <int> 7, 214, 1005, 121, 380, 3, 1963, 464, 5697, 183,…
-#> $ distribution_id       <int> 100, 316, 117, 116, 122, 250, 158, 107, 129, 133…
+#> $ refdate               <date> 2022-09-23, 2022-09-23, 2022-09-23, 2022-09-23,~
+#> $ symbol                <chr> "ABCP11", "AFHI11", "AIEC11", "ALZM11", "ALZR11"~
+#> $ open                  <dbl> 75.51, 98.38, 80.32, 93.00, 117.54, 9.22, 101.00~
+#> $ high                  <dbl> 76.20, 99.39, 81.30, 94.44, 118.07, 9.22, 101.50~
+#> $ low                   <dbl> 75.25, 98.00, 79.60, 92.51, 115.06, 9.09, 100.45~
+#> $ close                 <dbl> 75.90, 98.00, 79.97, 94.30, 117.16, 9.19, 100.80~
+#> $ average               <dbl> 75.87, 98.50, 80.07, 93.76, 117.20, 9.13, 100.87~
+#> $ best_bid              <dbl> 75.15, 97.90, 79.95, 92.85, 117.16, 9.09, 100.80~
+#> $ best_ask              <dbl> 75.90, 98.00, 79.97, 94.30, 117.20, 9.18, 100.93~
+#> $ volume                <dbl> 56530.30, 791180.59, 289308.60, 25971.95, 228449~
+#> $ traded_contracts      <dbl> 745, 8032, 3613, 277, 19492, 3749, 10220, 25059,~
+#> $ transactions_quantity <int> 382, 622, 769, 51, 2764, 394, 2101, 787, 1, 3, 8~
+#> $ distribution_id       <int> 318, 119, 124, 101, 160, 109, 131, 136, 101, 137~
 ```
 
 ### BDRs data
@@ -239,21 +241,21 @@ Download BDR (Brazilian depositary receipts) with `cotahist_bdrs_get`:
 glimpse(
   cotahist_bdrs_get(ch)
 )
-#> Rows: 501
+#> Rows: 474
 #> Columns: 13
-#> $ refdate               <date> 2022-07-25, 2022-07-25, 2022-07-25, 2022-07-25,…
-#> $ symbol                <chr> "A1BB34", "A1CR34", "A1DI34", "A1DM34", "A1EE34"…
-#> $ open                  <dbl> 38.36, 67.81, 439.86, 409.00, 236.89, 22.82, 311…
-#> $ high                  <dbl> 38.36, 68.78, 439.86, 409.00, 236.89, 22.86, 311…
-#> $ low                   <dbl> 38.36, 67.81, 432.87, 409.00, 236.89, 22.65, 311…
-#> $ close                 <dbl> 38.36, 68.37, 436.18, 409.00, 236.89, 22.65, 311…
-#> $ average               <dbl> 38.36, 68.30, 435.99, 409.00, 236.89, 22.77, 311…
-#> $ best_bid              <dbl> 0.00, 0.00, 0.00, 198.00, 0.00, 0.00, 0.00, 50.0…
-#> $ best_ask              <dbl> 0.00, 0.00, 0.00, 0.00, 0.00, 23.66, 0.00, 0.00,…
-#> $ volume                <dbl> 38.36, 1092.80, 152598.19, 1227.00, 51405.13, 17…
-#> $ traded_contracts      <dbl> 1, 16, 350, 3, 217, 79, 1, 42, 4, 1, 1, 4, 31, 9…
-#> $ transactions_quantity <int> 1, 6, 350, 1, 1, 5, 1, 3, 2, 1, 1, 4, 2, 38, 8, …
-#> $ distribution_id       <int> 102, 107, 110, 110, 110, 103, 110, 110, 106, 101…
+#> $ refdate               <date> 2022-09-23, 2022-09-23, 2022-09-23, 2022-09-23,~
+#> $ symbol                <chr> "A1BB34", "A1CR34", "A1EG34", "A1EP34", "A1IV34"~
+#> $ open                  <dbl> 33.55, 58.11, 22.35, 255.84, 41.30, 35.21, 1359.~
+#> $ high                  <dbl> 33.79, 58.11, 22.35, 257.40, 41.30, 35.21, 1367.~
+#> $ low                   <dbl> 33.55, 57.72, 22.05, 254.22, 41.30, 35.16, 1359.~
+#> $ close                 <dbl> 33.79, 57.72, 22.05, 257.40, 41.30, 35.16, 1361.~
+#> $ average               <dbl> 33.55, 57.79, 22.08, 255.63, 41.30, 35.18, 1361.~
+#> $ best_bid              <dbl> 33.30, 0.00, 21.85, 0.00, 24.33, 34.75, 1361.78,~
+#> $ best_ask              <dbl> 39.00, 0.00, 24.40, 0.00, 0.00, 0.00, 0.00, 44.0~
+#> $ volume                <dbl> 34627.83, 635.70, 6692.05, 153383.48, 41.30, 70.~
+#> $ traded_contracts      <dbl> 1032, 11, 303, 600, 1, 2, 19, 1314, 9257, 28, 46~
+#> $ transactions_quantity <int> 4, 2, 3, 323, 1, 2, 6, 26, 61, 1, 27, 1, 9, 25, ~
+#> $ distribution_id       <int> 102, 108, 104, 111, 107, 101, 111, 112, 100, 111~
 ```
 
 ### Equity options
@@ -264,22 +266,22 @@ Download equity options contracts with `cotahist_option_get`:
 glimpse(
   cotahist_equity_options_get(ch)
 )
-#> Rows: 4,911
+#> Rows: 5,595
 #> Columns: 14
-#> $ refdate               <date> 2022-07-25, 2022-07-25, 2022-07-25, 2022-07-25,…
-#> $ symbol                <chr> "ABCBH170", "ABEVH160", "ABEVI16", "ABEVI20", "A…
-#> $ type                  <fct> Call, Call, Call, Call, Call, Call, Call, Call, …
-#> $ strike                <dbl> 16.70, 15.04, 15.47, 19.47, 13.29, 16.04, 14.54,…
-#> $ maturity_date         <date> 2022-08-19, 2022-08-19, 2023-09-15, 2022-09-16,…
-#> $ open                  <dbl> 0.40, 0.34, 2.70, 0.02, 1.26, 0.10, 0.52, 0.07, …
-#> $ high                  <dbl> 0.40, 0.43, 2.70, 0.02, 1.70, 0.13, 0.71, 0.10, …
-#> $ low                   <dbl> 0.38, 0.33, 2.61, 0.01, 1.26, 0.10, 0.52, 0.07, …
-#> $ close                 <dbl> 0.38, 0.40, 2.61, 0.01, 1.62, 0.11, 0.65, 0.10, …
-#> $ average               <dbl> 0.38, 0.39, 2.62, 0.01, 1.58, 0.11, 0.64, 0.08, …
-#> $ volume                <dbl> 1914, 238187, 1575, 31, 205109, 9310, 224798, 12…
-#> $ traded_contracts      <dbl> 5000, 609800, 600, 1600, 129700, 81300, 346300, …
-#> $ transactions_quantity <int> 28, 240, 2, 5, 21, 49, 125, 17, 7, 3, 1, 79, 15,…
-#> $ distribution_id       <int> 140, 122, 124, 124, 124, 124, 124, 124, 124, 124…
+#> $ refdate               <date> 2022-09-23, 2022-09-23, 2022-09-23, 2022-09-23,~
+#> $ symbol                <chr> "ABEVL160", "ABEVB15", "ABEVD220", "ABEVD100", "~
+#> $ type                  <fct> Call, Call, Call, Call, Call, Put, Call, Call, C~
+#> $ strike                <dbl> 15.39, 14.47, 21.47, 9.47, 15.64, 14.89, 17.00, ~
+#> $ maturity_date         <date> 2022-12-16, 2023-02-17, 2023-04-20, 2023-04-20,~
+#> $ open                  <dbl> 0.95, 2.00, 0.18, 6.58, 0.85, 0.42, 0.06, 0.23, ~
+#> $ high                  <dbl> 0.95, 2.00, 0.18, 6.58, 0.87, 0.46, 0.06, 0.23, ~
+#> $ low                   <dbl> 0.95, 2.00, 0.13, 6.50, 0.76, 0.40, 0.04, 0.19, ~
+#> $ close                 <dbl> 0.95, 2.00, 0.13, 6.50, 0.87, 0.42, 0.05, 0.22, ~
+#> $ average               <dbl> 0.95, 2.00, 0.13, 6.52, 0.78, 0.44, 0.05, 0.20, ~
+#> $ volume                <dbl> 95, 200, 203, 2608, 4483, 5050, 18381, 96844, 62~
+#> $ traded_contracts      <dbl> 100, 100, 1500, 400, 5700, 11300, 366100, 469200~
+#> $ transactions_quantity <int> 1, 1, 6, 2, 6, 7, 79, 27, 10, 17, 7, 2, 7, 64, 1~
+#> $ distribution_id       <int> 123, 124, 124, 124, 124, 124, 125, 125, 125, 125~
 ```
 
 ### Indexes composition
@@ -319,19 +321,19 @@ glimpse(
 )
 #> Rows: 90
 #> Columns: 13
-#> $ refdate               <date> 2022-07-25, 2022-07-25, 2022-07-25, 2022-07-25,…
-#> $ symbol                <chr> "ABEV3", "ALPA4", "AMER3", "ASAI3", "AZUL4", "B3…
-#> $ open                  <dbl> 14.53, 20.83, 16.01, 15.79, 11.65, 10.79, 34.55,…
-#> $ high                  <dbl> 14.78, 20.92, 16.29, 16.02, 11.77, 10.79, 35.31,…
-#> $ low                   <dbl> 14.45, 20.34, 15.47, 15.48, 11.30, 10.49, 34.55,…
-#> $ close                 <dbl> 14.68, 20.56, 15.57, 15.50, 11.46, 10.73, 35.20,…
-#> $ average               <dbl> 14.68, 20.57, 15.68, 15.66, 11.49, 10.64, 35.14,…
-#> $ best_bid              <dbl> 14.68, 20.56, 15.57, 15.50, 11.45, 10.72, 35.19,…
-#> $ best_ask              <dbl> 14.69, 20.61, 15.58, 15.56, 11.46, 10.73, 35.22,…
-#> $ volume                <dbl> 210650873, 42503172, 139585738, 97558778, 108594…
-#> $ traded_contracts      <dbl> 14348000, 2066100, 8901400, 6226600, 9446600, 30…
-#> $ transactions_quantity <int> 20723, 9770, 13032, 17344, 17329, 28779, 48368, …
-#> $ distribution_id       <int> 125, 231, 101, 104, 101, 122, 307, 744, 744, 120…
+#> $ refdate               <date> 2022-09-23, 2022-09-23, 2022-09-23, 2022-09-23,~
+#> $ symbol                <chr> "ABEV3", "ALPA4", "AMER3", "ASAI3", "AZUL4", "B3~
+#> $ open                  <dbl> 15.40, 22.30, 16.87, 17.76, 17.00, 13.03, 40.80,~
+#> $ high                  <dbl> 15.48, 22.55, 17.80, 18.09, 17.05, 13.39, 40.90,~
+#> $ low                   <dbl> 15.17, 21.96, 16.84, 17.61, 16.00, 13.01, 40.08,~
+#> $ close                 <dbl> 15.37, 22.35, 17.53, 17.79, 16.14, 13.39, 40.73,~
+#> $ average               <dbl> 15.33, 22.27, 17.39, 17.79, 16.30, 13.24, 40.52,~
+#> $ best_bid              <dbl> 15.36, 22.33, 17.53, 17.78, 16.13, 13.39, 40.69,~
+#> $ best_ask              <dbl> 15.37, 22.35, 17.54, 17.79, 16.14, 13.40, 40.75,~
+#> $ volume                <dbl> 598903006, 43377998, 492345131, 214449477, 20167~
+#> $ traded_contracts      <dbl> 39045900, 1947300, 28306800, 12048200, 12371700,~
+#> $ transactions_quantity <int> 34816, 9533, 41228, 25408, 18741, 36027, 29738, ~
+#> $ distribution_id       <int> 125, 231, 101, 104, 101, 123, 309, 746, 746, 121~
 ```
 
 ## Template System
@@ -354,7 +356,7 @@ regarding primitive risk factor used by B3 in its risk engine.
 ``` r
 f <- download_marketdata("FPR", refdate = as.Date("2022-05-10"))
 f
-#> [1] "/tmp/RtmpDXjc8M/rb3-cache/FPR/7a2422cc97221426a3b2bd4419215481/FP220510/FatoresPrimitivosRisco.txt"
+#> [1] "C:/Users/wilso/R/rb3-cache/FPR/7a2422cc97221426a3b2bd4419215481/FP220510/FatoresPrimitivosRisco.txt"
 ```
 
 `download_marketdata` returns the path for the downloaded file.
@@ -363,30 +365,29 @@ f
 fpr <- read_marketdata(f, "FPR")
 fpr
 #> $Header
-#> # A tibble: 1 × 2
+#> # A tibble: 1 x 2
 #>   tipo_registro data_geracao_arquivo
 #>           <int> <date>              
 #> 1             1 2022-05-10          
 #> 
 #> $Data
-#> # A tibble: 3,204 × 11
-#>    tipo_r…¹ id_fpr nome_…² forma…³ id_gr…⁴ id_ca…⁵ id_in…⁶ orige…⁷  base base_…⁸
+#> # A tibble: 3,204 x 11
+#>    tipo_r~1 id_fpr nome_~2 forma~3 id_gr~4 id_ca~5 id_in~6 orige~7  base base_~8
 #>       <int>  <int> <chr>   <fct>     <dbl> <chr>     <dbl>   <int> <int>   <int>
-#>  1        2   1422 VLRAPT4 Basis …       1 BVMF    2.00e11       8     0       0
-#>  2        2   1423 VLPETR3 Basis …       1 BVMF    2.00e11       8     0       0
-#>  3        2   1424 VLSEER3 Basis …       1 BVMF    2.00e11       8     0       0
-#>  4        2   1426 VLJBSS3 Basis …       1 BVMF    2.00e11       8     0       0
-#>  5        2   1427 VLKLBN… Basis …       1 BVMF    2.00e11       8     0       0
-#>  6        2   1428 VLITUB3 Basis …       1 BVMF    2.00e11       8     0       0
-#>  7        2   1429 VLITSA4 Basis …       1 BVMF    2.00e11       8     0       0
-#>  8        2   1430 VLHYPE3 Basis …       1 BVMF    2.00e11       8     0       0
-#>  9        2   1431 VLGRND3 Basis …       1 BVMF    2.00e11       8     0       0
-#> 10        2   1433 VLUGPA3 Basis …       1 BVMF    2.00e11       8     0       0
-#> # … with 3,194 more rows, 1 more variable: criterio_capitalizacao <int>, and
-#> #   abbreviated variable names ¹​tipo_registro, ²​nome_fpr, ³​formato_variacao,
-#> #   ⁴​id_grupo_fpr, ⁵​id_camara_indicador, ⁶​id_instrumento_indicador,
-#> #   ⁷​origem_instrumento, ⁸​base_interpolacao
-#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
+#>  1        2   1422 VLRAPT4 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  2        2   1423 VLPETR3 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  3        2   1424 VLSEER3 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  4        2   1426 VLJBSS3 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  5        2   1427 VLKLBN~ Basis ~       1 BVMF    2.00e11       8     0       0
+#>  6        2   1428 VLITUB3 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  7        2   1429 VLITSA4 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  8        2   1430 VLHYPE3 Basis ~       1 BVMF    2.00e11       8     0       0
+#>  9        2   1431 VLGRND3 Basis ~       1 BVMF    2.00e11       8     0       0
+#> 10        2   1433 VLUGPA3 Basis ~       1 BVMF    2.00e11       8     0       0
+#> # ... with 3,194 more rows, 1 more variable: criterio_capitalizacao <int>, and
+#> #   abbreviated variable names 1: tipo_registro, 2: nome_fpr,
+#> #   3: formato_variacao, 4: id_grupo_fpr, 5: id_camara_indicador,
+#> #   6: id_instrumento_indicador, 7: origem_instrumento, 8: base_interpolacao
 #> 
 #> attr(,"class")
 #> [1] "parts"
