@@ -1,26 +1,27 @@
 # rb3 0.0.7
 
 * function `index_get` to download historical data from B3 indexes (Issue #39)
+* added options `rb3.silent` (defaults to `FALSE`) hide alert messages and progress bar
 * new templates
   * `GetPortfolioDay_IndexStatistics` historical time series for B3 indexes
-* New vignette: B3 Indexes
+* new vignette: B3 Indexes
 
 # rb3 0.0.6
 
-* Updated documentation
+* updated documentation
 * functions `code2month` and `maturity2date` now accept old 4 characters maturity code, before 2006
-* New function `cotahist_options_by_symbol_superset` joins options data, equity data and interest rates for each option for a given symbol (Issue #50)
-* Corrected BUG in cache system, avoid caching NULL returns (Issue #52)
-* Corrected BUG cdi_get and idi_get use do_cache = FALSE (Issue #51)
+* new function `cotahist_options_by_symbol_superset` joins options data, equity data and interest rates for each option for a given symbol (Issue #50)
+* corrected BUG in cache system, avoid caching NULL returns (Issue #52)
+* corrected BUG cdi_get and idi_get use do_cache = FALSE (Issue #51)
 
 # rb3 0.0.5
 
-* Updated documentation
-* The cache creates a folder with the template to organize files inside the cache folder.
+* updated documentation
+* the cache creates a folder with the template to organize files inside the cache folder.
 * `read_marketdata` lost the argument `cachedir`, the RDS file with parsed data is saved in the directory of the given file.
   * Pass `do_cache = FALSE` to not save the RDS file, it defaults to `TRUE`.
-* Corrected BUG in `COTAHIST_YEARLY`, it uses cache wrongly (Issue #44)
-* Corrected BUG due to change in fixedincome - function `rates` was renamed to `implied_rate`
+* corrected BUG in `COTAHIST_YEARLY`, it uses cache wrongly (Issue #44)
+* corrected BUG due to change in fixedincome - function `rates` was renamed to `implied_rate`
 
 # rb3 0.0.4
 
