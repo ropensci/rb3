@@ -97,7 +97,7 @@ log_map_process_along <- function(x, func, msg, ...) {
     "|",
     "{pb_eta_str}"
   )
-  rb3_hide_progressbar <- getOption("rb3.hide.progressbar")
+  rb3_hide_progressbar <- getOption("rb3.silent")
   if (!is.null(rb3_hide_progressbar) && isTRUE(rb3_hide_progressbar)) {
     map(seq_along(x), func, ...)
   } else {
