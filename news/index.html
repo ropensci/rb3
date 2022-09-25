@@ -66,26 +66,27 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.7" id="rb3-007">rb3 0.0.7<a class="anchor" aria-label="anchor" href="#rb3-007"></a></h2>
 <ul><li>function <code>index_get</code> to download historical data from B3 indexes (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/39" class="external-link">#39</a>)</li>
+<li>added options <code>rb3.silent</code> (defaults to <code>FALSE</code>) hide alert messages and progress bar</li>
 <li>new templates<ul><li>
 <code>GetPortfolioDay_IndexStatistics</code> historical time series for B3 indexes</li></ul></li>
-<li>New vignette: B3 Indexes</li>
+<li>new vignette: B3 Indexes</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.6" id="rb3-006">rb3 0.0.6<small>2022-08-19</small><a class="anchor" aria-label="anchor" href="#rb3-006"></a></h2>
-<ul><li>Updated documentation</li>
+<ul><li>updated documentation</li>
 <li>functions <code>code2month</code> and <code>maturity2date</code> now accept old 4 characters maturity code, before 2006</li>
-<li>New function <code>cotahist_options_by_symbol_superset</code> joins options data, equity data and interest rates for each option for a given symbol (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/50" class="external-link">#50</a>)</li>
-<li>Corrected BUG in cache system, avoid caching NULL returns (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/52" class="external-link">#52</a>)</li>
-<li>Corrected BUG cdi_get and idi_get use do_cache = FALSE (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/51" class="external-link">#51</a>)</li>
+<li>new function <code>cotahist_options_by_symbol_superset</code> joins options data, equity data and interest rates for each option for a given symbol (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/50" class="external-link">#50</a>)</li>
+<li>corrected BUG in cache system, avoid caching NULL returns (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/52" class="external-link">#52</a>)</li>
+<li>corrected BUG cdi_get and idi_get use do_cache = FALSE (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/51" class="external-link">#51</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.5" id="rb3-005">rb3 0.0.5<small>2022-07-16</small><a class="anchor" aria-label="anchor" href="#rb3-005"></a></h2>
-<ul><li>Updated documentation</li>
-<li>The cache creates a folder with the template to organize files inside the cache folder.</li>
+<ul><li>updated documentation</li>
+<li>the cache creates a folder with the template to organize files inside the cache folder.</li>
 <li>
 <code>read_marketdata</code> lost the argument <code>cachedir</code>, the RDS file with parsed data is saved in the directory of the given file.<ul><li>Pass <code>do_cache = FALSE</code> to not save the RDS file, it defaults to <code>TRUE</code>.</li></ul></li>
-<li>Corrected BUG in <code>COTAHIST_YEARLY</code>, it uses cache wrongly (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/44" class="external-link">#44</a>)</li>
-<li>Corrected BUG due to change in fixedincome - function <code>rates</code> was renamed to <code>implied_rate</code>
+<li>corrected BUG in <code>COTAHIST_YEARLY</code>, it uses cache wrongly (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/44" class="external-link">#44</a>)</li>
+<li>corrected BUG due to change in fixedincome - function <code>rates</code> was renamed to <code>implied_rate</code>
 </li>
 </ul></div>
     <div class="section level2">

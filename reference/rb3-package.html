@@ -71,6 +71,37 @@ convert them into useful formats and data structures.</p>
     </div>
 
 
+    <div id="details">
+    <h2>Details</h2>
+    
+<div class="section">
+<h3 id="rb-options">rb3 options<a class="anchor" aria-label="anchor" href="#rb-options"></a></h3>
+
+
+<p>rb3 uses <code><a href="https://rdrr.io/r/base/options.html" class="external-link">base::options</a></code> to allow user set global options that affect the
+way the package works and display its alerts.</p>
+<dl><dt>rb3.cachedir</dt>
+<dd><p>rb3 cache folder is named <code>rb3-cache</code> and it is created inside the
+directory returned by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">base::tempdir</a></code>.
+Since it is changed for every new session it is interesting to use the
+same directory for cache accross sessions.
+Once the option <code>rb3.cachedir</code> is set the files are always cached in
+the same directory.
+This is very useful to build a historical data.
+Historical time series can be loaded directly from cached files.</p></dd>
+
+<dt>rb3.silent</dt>
+<dd><p>rb3 default behavior on communicating users what's going on is total
+transparency.
+So, it displays many alert messages to inform users many of the details.
+On the other hand, this behavior can be sometimes annoying.
+The option <code>rb3.silent</code> can be set to <code>TRUE</code> in order to avoid that the
+alerts be displayed.</p></dd>
+
+
+</dl></div>
+
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
