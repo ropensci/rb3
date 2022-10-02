@@ -4,7 +4,7 @@
 \alias{maturity2date}
 \title{Get maturity date from maturity code}
 \usage{
-maturity2date(x, expr = "first day")
+maturity2date(x, expr = "first day", refdate = NULL)
 }
 \arguments{
 \item{x}{a character vector with three letters string that represent
@@ -12,6 +12,11 @@ maturity of futures contracts.}
 
 \item{expr}{a string which indicates the day to use in maturity date.
 See \code{bizdays::getdate} for more details on this argument.}
+
+\item{refdate}{reference date to be passed. It is necessary to convert old
+maturities like JAN0, that can be Jan/2000 or Jan/2010. If \code{refdate}
+is greater that 2001-01-01 JAN0 is converted to Jan/2010, otherwise,
+Jan/2000.}
 }
 \value{
 a Date vector with maturity dates

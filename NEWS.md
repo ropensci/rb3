@@ -5,6 +5,8 @@
 * new templates
   * `GetPortfolioDay_IndexStatistics` historical time series for B3 indexes
 * new vignette: B3 Indexes
+* changed `futures_get` and `maturity2date` to use calendar `Brazil/BMF`
+* `maturity2date` has a new argument refdate, it must be passed when converting old maturities like JAN0, FEV0, ...
 
 # rb3 0.0.6
 

@@ -57,6 +57,10 @@ code2month_oldcode <- function(x) {
 #'        maturity of futures contracts.
 #' @param expr a string which indicates the day to use in maturity date.
 #'        See `bizdays::getdate` for more details on this argument.
+#' @param refdate reference date to be passed. It is necessary to convert old
+#'        maturities like JAN0, that can be Jan/2000 or Jan/2010. If `refdate`
+#'        is greater that 2001-01-01 JAN0 is converted to Jan/2010, otherwise,
+#'        Jan/2000.
 #'
 #' @return a Date vector with maturity dates
 #'
@@ -65,7 +69,7 @@ code2month_oldcode <- function(x) {
 #' maturity2date(c("F23", "K35"), "15th day")
 #' maturity2date(c("AGO2", "SET2"), "first day")
 #' @export
-maturity2date <- function(x, expr = "first day") {
+maturity2date <- function(x, expr = "first day", refdate = NULL) {
   res <- character(length(x))
   ix <- which(str_length(x) == 3)
   if (length(ix)) {
@@ -73,7 +77,7 @@ maturity2date <- function(x, expr = "first day") {
   }
   ix <- which(str_length(x) == 4)
   if (length(ix)) {
-    res[ix] <- maturity2date_oldcode(x[ix], expr)
+    res[ix] <- maturity2date_oldcode(x[ix], expr, refdate)
   }
   as.Date(res)
 }
@@ -82,14 +86,18 @@ maturity2date_newcode <- function(x, expr = "first day") {
   year <- as.integer(str_sub(x, 2)) + 2000
   month <- code2month_newcode(str_sub(x, 1, 1))
   month <- str_pad(month, 2, pad = "0")
-  getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA") |> as.character()
+  getdate(expr, paste0(year, "-", month), "Brazil/BMF") |> as.character()
 }
 
-maturity2date_oldcode <- function(x, expr = "first day") {
-  year <- as.integer(str_sub(x, 4)) + 2000
+maturity2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
+  base_year <- 2000
+  if (!is.null(refdate) && refdate >= as.Date("2001-01-01")) {
+    base_year <- 2010
+  }
+  year <- as.integer(str_sub(x, 4)) + base_year
   month <- code2month_oldcode(str_sub(x, 1, 3))
   month <- str_pad(month, 2, pad = "0")
-  getdate(expr, paste0(year, "-", month), "Brazil/ANBIMA") |> as.character()
+  getdate(expr, paste0(year, "-", month), "Brazil/BMF") |> as.character()
 }
 
 #' Get futures prices from trading session settlements page
@@ -123,7 +131,7 @@ futures_mget <- function(first_date = Sys.Date() - 5,
                          do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
-  date_vec <- bizseq(first_date, last_date, "Brazil/ANBIMA")
+  date_vec <- bizseq(first_date, last_date, "Brazil/BMF")
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
   df <- bind_rows(
     log_map_process_along(date_vec, single_futures_get,
