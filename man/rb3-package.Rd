@@ -25,6 +25,13 @@ the same directory.
 This is very useful to build a historical data.
 Historical time series can be loaded directly from cached files.
 }
+\item{rb3.clear.cache}{
+Some files have invalid content returning NULL data.
+Every downloaded file is stored in the cache folder.
+If \code{rb3.clear.cache} is TRUE these invalid files are remove once they
+are detected.
+It helps with keeping only files with valid content in the cache folder.
+}
 \item{rb3.silent}{
 rb3 default behavior on communicating users what's going on is total
 transparency.

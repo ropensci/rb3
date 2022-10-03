@@ -1,7 +1,8 @@
 # rb3 0.0.7
 
 * function `index_get` to download historical data from B3 indexes (Issue #39)
-* added options `rb3.silent` (defaults to `FALSE`) hide alert messages and progress bar
+* added option `rb3.silent` (defaults to `FALSE`) hide alert messages and progress bar
+* added option `rb3.clear.cache` (defaults to `FALSE`) remove files with invalid content from cache folder
 * new templates
   * `GetPortfolioDay_IndexStatistics` historical time series for B3 indexes
 * new vignette: B3 Indexes
