@@ -90,6 +90,13 @@ the same directory.
 This is very useful to build a historical data.
 Historical time series can be loaded directly from cached files.</p></dd>
 
+<dt>rb3.clear.cache</dt>
+<dd><p>Some files have invalid content returning NULL data.
+Every downloaded file is stored in the cache folder.
+If <code>rb3.clear.cache</code> is TRUE these invalid files are remove once they
+are detected.
+It helps with keeping only files with valid content in the cache folder.</p></dd>
+
 <dt>rb3.silent</dt>
 <dd><p>rb3 default behavior on communicating users what's going on is total
 transparency.

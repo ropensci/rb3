@@ -71,7 +71,7 @@ that represent maturity of futures contracts.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">maturity2date</span><span class="op">(</span><span class="va">x</span>, expr <span class="op">=</span> <span class="st">"first day"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">maturity2date</span><span class="op">(</span><span class="va">x</span>, expr <span class="op">=</span> <span class="st">"first day"</span>, refdate <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -84,6 +84,13 @@ maturity of futures contracts.</p></dd>
 <dt>expr</dt>
 <dd><p>a string which indicates the day to use in maturity date.
 See <code><a href="https://rdrr.io/pkg/bizdays/man/getdate.html" class="external-link">bizdays::getdate</a></code> for more details on this argument.</p></dd>
+
+
+<dt>refdate</dt>
+<dd><p>reference date to be passed. It is necessary to convert old
+maturities like JAN0, that can be Jan/2000 or Jan/2010. If <code>refdate</code>
+is greater that 2001-01-01 JAN0 is converted to Jan/2010, otherwise,
+Jan/2000.</p></dd>
 
 </dl></div>
     <div id="value">
