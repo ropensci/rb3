@@ -108,7 +108,7 @@
 <li>B3 indexes composition</li>
 </ul>
 <p>For example, you can find the current yield curve at this <a href="https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/consultas/mercado-de-derivativos/precos-referenciais/taxas-referenciais-bm-fbovespa/" class="external-link">link</a>. Package <strong>rb3</strong> uses webscraping tools to download and read these datasets from <a href="https://www.b3.com.br" class="external-link">B3</a>, making it easy to consume it in R in a structured way.</p>
-<p>The available datasets are highly valuable, going back as early as 2000’s, and can be used by industry practioneers or academics. None of these datasets are available anywhere else, which makes rb3 an unique package for data importation from the Brazilian financial exchange.</p>
+<p>The available datasets are highly valuable, going back as early as 2000’s, and can be used by industry practitioners or academics. None of these datasets are available anywhere else, which makes rb3 an unique package for data importation from the Brazilian financial exchange.</p>
 </div>
 <div class="section level1">
 <h1 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -132,7 +132,7 @@
 <div class="section level3">
 <h3 id="yield-curve">Yield curve<a class="anchor" aria-label="anchor" href="#yield-curve"></a>
 </h3>
-<p>In this first example we’ll import and plot the historical yeild curve for Brazil using function <code>yc_get</code>.</p>
+<p>In this first example we’ll import and plot the historical yield curve for Brazil using function <code>yc_get</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -264,7 +264,7 @@
 <span><span class="co">#&gt; $ distribution_id       &lt;int&gt; 100, 100, 100, 100, 100, 100, 100, 108, 100, 100~</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="fiis-brazilian-reits-data">FIIs (brazilian REITs) data<a class="anchor" aria-label="anchor" href="#fiis-brazilian-reits-data"></a>
+<h3 id="fiis-brazilian-reits-data">FIIs (Brazilian REITs) data<a class="anchor" aria-label="anchor" href="#fiis-brazilian-reits-data"></a>
 </h3>
 <p>Download FII (Fundo de Investimento Imobiliário) data with <code>cotahist_fiis_get</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

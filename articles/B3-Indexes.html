@@ -120,7 +120,7 @@
 <div class="section level2">
 <h2 id="indexes-composition-and-weights">Indexes Composition and Weights<a class="anchor" aria-label="anchor" href="#indexes-composition-and-weights"></a>
 </h2>
-<p>The compositon of B3 indexes are available throught the function <code><a href="../reference/index_weights_get.html">rb3::index_weights_get</a></code>. This function returns a data.frame with the current compostion of the requested index, all symbols that compound the index, their weights and theoretical position. Here the IBOVESPA (<code>IBOV</code>) Index has its compositon listed.</p>
+<p>The composition of B3 indexes are available through the function <code><a href="../reference/index_weights_get.html">rb3::index_weights_get</a></code>. This function returns a data.frame with the current compostion of the requested index, all symbols that compound the index, their weights and theoretical position. Here the IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 3</span></span></span>
@@ -204,16 +204,16 @@
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 6</span></span></span>
 <span><span class="co">#&gt;    symbol segment                              weight segme…¹ posit…² refdate   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips          0.023<span style="text-decoration: underline;">7</span>  0.023<span style="text-decoration: underline;">7</span>   1.48<span style="color: #949494;">e</span>9 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte         0.004<span style="text-decoration: underline;">24</span> 0.004<span style="text-decoration: underline;">24</span>  7.35<span style="color: #949494;">e</span>8 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte               0.002<span style="text-decoration: underline;">45</span> 0.022<span style="text-decoration: underline;">3</span>   3.28<span style="color: #949494;">e</span>8 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte               0.006<span style="text-decoration: underline;">49</span> 0.022<span style="text-decoration: underline;">3</span>   1.12<span style="color: #949494;">e</span>9 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ECOR3  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">82</span> 0.022<span style="text-decoration: underline;">3</span>   3.34<span style="color: #949494;">e</span>8 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GOLL4  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">81</span> 0.022<span style="text-decoration: underline;">3</span>   1.90<span style="color: #949494;">e</span>8 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RAIL3  Bens Indls/Transporte               0.011<span style="text-decoration: underline;">7</span>  0.022<span style="text-decoration: underline;">3</span>   1.22<span style="color: #949494;">e</span>9 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> POSI3  Comput e Equips                     0.000<span style="text-decoration: underline;">41</span> 0.000<span style="text-decoration: underline;">41</span>  7.36<span style="color: #949494;">e</span>7 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BRFS3  Cons N  Básico / Alimentos Process… 0.006<span style="text-decoration: underline;">79</span> 0.025<span style="text-decoration: underline;">4</span>   1.08<span style="color: #949494;">e</span>9 2022-10-25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> JBSS3  Cons N  Básico / Alimentos Process… 0.013<span style="text-decoration: underline;">5</span>  0.025<span style="text-decoration: underline;">4</span>   1.13<span style="color: #949494;">e</span>9 2022-10-25</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips          0.028<span style="text-decoration: underline;">6</span>  0.028<span style="text-decoration: underline;">6</span>   1.48<span style="color: #949494;">e</span>9 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte         0.005<span style="text-decoration: underline;">2</span>  0.005<span style="text-decoration: underline;">2</span>   7.35<span style="color: #949494;">e</span>8 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte               0.002<span style="text-decoration: underline;">02</span> 0.021<span style="text-decoration: underline;">1</span>   3.28<span style="color: #949494;">e</span>8 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte               0.006<span style="text-decoration: underline;">27</span> 0.021<span style="text-decoration: underline;">1</span>   1.12<span style="color: #949494;">e</span>9 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ECOR3  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">73</span> 0.021<span style="text-decoration: underline;">1</span>   3.34<span style="color: #949494;">e</span>8 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GOLL4  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">74</span> 0.021<span style="text-decoration: underline;">1</span>   1.90<span style="color: #949494;">e</span>8 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RAIL3  Bens Indls/Transporte               0.011<span style="text-decoration: underline;">4</span>  0.021<span style="text-decoration: underline;">1</span>   1.22<span style="color: #949494;">e</span>9 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> POSI3  Comput e Equips                     0.000<span style="text-decoration: underline;">32</span> 0.000<span style="text-decoration: underline;">32</span>  7.36<span style="color: #949494;">e</span>7 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BRFS3  Cons N  Básico / Alimentos Process… 0.005<span style="text-decoration: underline;">42</span> 0.023<span style="text-decoration: underline;">6</span>   1.08<span style="color: #949494;">e</span>9 2022-11-28</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> JBSS3  Cons N  Básico / Alimentos Process… 0.013<span style="text-decoration: underline;">1</span>  0.023<span style="text-decoration: underline;">6</span>   1.13<span style="color: #949494;">e</span>9 2022-11-28</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 82 more rows, and abbreviated variable names ¹​segment_weight,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   ²​position</span></span></span></code></pre></div>
 </div>
@@ -228,14 +228,14 @@
 <span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-01-01"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">index_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
-<span><span class="co">#&gt;   refdate    index_name  value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2019-01-02 IBOV       <span style="text-decoration: underline;">91</span>012.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2019-01-03 IBOV       <span style="text-decoration: underline;">91</span>564.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2019-01-04 IBOV       <span style="text-decoration: underline;">91</span>841.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2019-01-07 IBOV       <span style="text-decoration: underline;">91</span>699.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2019-01-08 IBOV       <span style="text-decoration: underline;">92</span>032.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2019-01-09 IBOV       <span style="text-decoration: underline;">93</span>613.</span></span></code></pre></div>
+<span><span class="co">#&gt;   refdate    index_name   value</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2019-02-01 IBOV        <span style="text-decoration: underline;">97</span>861.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2019-03-01 IBOV        <span style="text-decoration: underline;">94</span>604.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2019-04-01 IBOV        <span style="text-decoration: underline;">96</span>054.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2019-07-01 IBOV       <span style="text-decoration: underline;">101</span>340.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2019-08-01 IBOV       <span style="text-decoration: underline;">102</span>126.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2019-10-01 IBOV       <span style="text-decoration: underline;">104</span>053.</span></span></code></pre></div>
 <p>The returned data.frame has three columns: <code>refdate</code>, <code>index_name</code> and <code>value</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
@@ -247,7 +247,7 @@
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="B3-Indexes_files/figure-html/unnamed-chunk-9-1.png" width="864"></p>
-<p>The IBOVESPA index starts at 1968 and the series is adjusted for all economic events the that affected the brazilian currency in the 80-90’s decades.</p>
+<p>The IBOVESPA index starts at 1968 and the series is adjusted for all economic events the that affected the Brazilian currency in the 80-90’s decades.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"1968-01-01"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
@@ -281,7 +281,7 @@
 <p><code><a href="../reference/indexes_last_update.html">rb3::indexes_last_update</a></code> returns the date where the indexes have been last updated.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_last_update.html">indexes_last_update</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2022-10-25"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2022-11-28"</span></span></code></pre></div>
 </div>
   </div>
 
