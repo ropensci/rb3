@@ -235,8 +235,8 @@ index_get_from_file <- function(year) {
       index_name = "IBOV"
     ) |>
     filter(!is.na(.data$value)) |>
-    arrange(.data$refdate) |>
-    select(.data$refdate, .data$index_name, .data$value)
+    arrange("refdate") |>
+    select("refdate", "index_name", "value")
 }
 
 ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
@@ -256,7 +256,7 @@ single_index_get <- function(index_name, year, cache_folder, do_cache) {
     return(NULL)
   }
 
-  index_data <- pivot_longer(index_data$Results, .data$month01:.data$month12,
+  index_data <- pivot_longer(index_data$Results, "month01":"month12",
     names_to = "month"
   ) |>
     mutate(
@@ -266,9 +266,9 @@ single_index_get <- function(index_name, year, cache_folder, do_cache) {
       index_name = index_name
     ) |>
     filter(!is.na(.data$value)) |>
-    arrange(.data$refdate)
+    arrange("refdate")
 
-  index_data |> select(.data$refdate, .data$index_name, .data$value)
+  index_data |> select("refdate", "index_name", "value")
 }
 
 #' Get index historical data
@@ -313,7 +313,7 @@ index_get <- function(index_name, first_date,
           cache_folder, do_cache
         )) |>
           filter(.data$refdate <= last_date)
-        df <- bind_rows(df1, df2) |> arrange(.data$refdate)
+        df <- bind_rows(df1, df2) |> arrange("refdate")
       }
     }
   } else {

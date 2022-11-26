@@ -12,10 +12,10 @@ cotahist_equity_symbols_get <- function(ch) {
   codes[["symbol"]] <- df[["cod_negociacao"]]
   codes |>
     select(
-      symbol, asset_name, spec_type, isin_spec_type, isin, country
+      "symbol", "asset_name", "spec_type", "isin_spec_type", "isin", "country"
     ) |>
     unique() |>
-    arrange(symbol)
+    arrange("symbol")
 }
 
 smartget <- function(key, dict) {

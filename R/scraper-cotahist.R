@@ -288,11 +288,11 @@ cotahist_equity_options_superset <- function(ch, yc) {
   eqs_opts <- filter_equity_data(ch, c(70, 80), c("UNT", "CDA", "ACN")) |>
     format_options(TRUE)
   inner_join(eqs_opts, eqs, by = "cod_isin", suffix = c("", ".underlying")) |>
-    select(-c(.data$refdate.underlying, .data$cod_isin)) |>
+    select(-c("refdate.underlying", "cod_isin")) |>
     mutate(
       fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
     ) |>
-    inner_join(yc |> select(.data$refdate, .data$forward_date, .data$r_252),
+    inner_join(yc |> select("refdate", "forward_date", "r_252"),
       by = c("refdate", "fixing_maturity_date" = "forward_date")
     )
 }
@@ -311,11 +311,11 @@ cotahist_options_by_symbol_superset <- function(symbol, ch, yc) {
     by = c("refdate", "cod_isin"),
     suffix = c("", ".underlying")
   ) |>
-    select(-c(.data$cod_isin)) |>
+    select(-c("cod_isin")) |>
     mutate(
       fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
     ) |>
-    inner_join(yc |> select(.data$refdate, .data$forward_date, .data$r_252),
+    inner_join(yc |> select("refdate", "forward_date", "r_252"),
       by = c("refdate", "fixing_maturity_date" = "forward_date")
     )
 }

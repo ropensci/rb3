@@ -353,7 +353,7 @@ yc_superset <- function(yc, fut) {
     filter(.data$commodity == "DI1") |>
     mutate(forward_date = maturity2date(.data$maturity_code) |>
       following("Brazil/ANBIMA")) |>
-    select(.data$refdate, .data$forward_date, .data$symbol)
+    select("refdate", "forward_date", "symbol")
 
   yc |>
     left_join(fut_di1, by = c("refdate", "forward_date"))
@@ -366,7 +366,7 @@ yc_usd_superset <- function(yc, fut) {
     filter(.data$commodity == "DDI") |>
     mutate(forward_date = maturity2date(.data$maturity_code) |>
       following("Brazil/ANBIMA")) |>
-    select(.data$refdate, .data$forward_date, .data$symbol)
+    select("refdate", "forward_date", "symbol")
 
   yc |>
     left_join(fut_di1, by = c("refdate", "forward_date"))
@@ -379,7 +379,7 @@ yc_ipca_superset <- function(yc, fut) {
     filter(.data$commodity == "DAP") |>
     mutate(forward_date = maturity2date(.data$maturity_code, "15th day") |>
       following("Brazil/ANBIMA")) |>
-    select(.data$refdate, .data$forward_date, .data$symbol)
+    select("refdate", "forward_date", "symbol")
 
   yc |>
     left_join(fut_di1, by = c("refdate", "forward_date"))
