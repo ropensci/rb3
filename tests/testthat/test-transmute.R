@@ -194,7 +194,7 @@ test_that("it should transform a data.frame", {
   .names <- names(df)
   df <- parse_text(trm, df)
   expect_equal(
-    unname(sapply(df, class)),
+    unname(vapply(df, class, "")),
     c("factor", "integer", "numeric", "character", "Date")
   )
   expect_equal(names(df), .names)
@@ -298,7 +298,7 @@ test_that("convert all data.frame columns to character", {
     series = c("ABC1", "ABC2"),
     stringsAsFactors = FALSE
   )
-  expect_true(all(sapply(unformat(df), class) == "character"))
+  expect_true(all(vapply(unformat(df), class, "") == "character"))
 })
 
 test_that("convert all data.frame factors to character", {
@@ -309,7 +309,7 @@ test_that("convert all data.frame factors to character", {
     series = c("ABC1", "ABC2")
   )
   expect_equal(
-    unname(sapply(unfactor(df), class)),
+    unname(vapply(unfactor(df), class, "")),
     c("character", "character", "numeric", "character")
   )
 })
