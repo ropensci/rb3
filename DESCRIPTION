@@ -47,7 +47,8 @@ Suggests:
     scales,
     magrittr,
     tibble,
-    withr
+    withr,
+    vcr
 Collate:
     'rb3-package.R'
     'util.R'
