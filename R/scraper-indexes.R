@@ -36,7 +36,7 @@ index_comp_get <- function(index_name,
 #'
 #' @return
 #' data.frame with symbols that belong to the given index name with its weights
-#' and theorical positions.
+#' and theoretical positions.
 #'
 #' @examples
 #' \dontrun{
@@ -330,4 +330,3 @@ index_get <- function(index_name, first_date,
     }
   }
 }
-

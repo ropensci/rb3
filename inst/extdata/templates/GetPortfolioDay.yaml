@@ -14,37 +14,37 @@ parts:
   Header:
     name: header
     fields:
-    - name: date
-      description: Data de referência
-      handler:
-        type: Date
-        format: '%d/%m/%y'
-    - name: text
-      description: Descrição
-    - name: part
-      description: Participação % no índice
-    - name: part_acum
-      description: Participação % acumulada no segmento no índice
-    - name: text_reductor
-      description: Texto de descrição do redutor
-    - name: reductor
-      description: Redutor
-    - name: theoreticalQty
-      description: Quantidade teórica no índice
+      - name: date
+        description: Data de referência
+        handler:
+          type: Date
+          format: "%d/%m/%y"
+      - name: text
+        description: Descrição
+      - name: part
+        description: Participação % no índice
+      - name: part_acum
+        description: Participação % acumulada no segmento no índice
+      - name: text_reductor
+        description: Texto de descrição do redutor
+      - name: reductor
+        description: Redutor
+      - name: theoricalQty
+        description: Quantidade teórica no índice
   Results:
     name: results
     fields:
-    - name: segment
-      description: Segmento da ação
-    - name: code
-      description: Código da ação
-    - name: company
-      description: Nome da companhia
-    - name: spotlight
-      description: Código de especificação da ação
-    - name: part
-      description: Participação % no índice
-    - name: part_acum
-      description: Participação % acumulada no segmento no índice
-    - name: theoreticalQty
-      description: Quantidade teórica no índice
+      - name: segment
+        description: Segmento da ação
+      - name: code
+        description: Código da ação
+      - name: company
+        description: Nome da companhia
+      - name: spotlight
+        description: Código de especificação da ação
+      - name: part
+        description: Participação % no índice
+      - name: part_acum
+        description: Participação % acumulada no segmento no índice
+      - name: theoricalQty
+        description: Quantidade teórica no índice

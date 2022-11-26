@@ -15,7 +15,7 @@ index_weights_get(index_name, cache_folder = cachedir(), do_cache = TRUE)
 }
 \value{
 data.frame with symbols that belong to the given index name with its weights
-and theorical positions.
+and theoretical positions.
 }
 \description{
 Gets the assets weights of B3 indexes.
