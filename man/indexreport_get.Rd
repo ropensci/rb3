@@ -33,7 +33,7 @@ indexreport_get(
 \item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
 }
 \value{
-A dataframe with index data (OHLC, average and daily oscilation)
+A dataframe with index data (OHLC, average and daily oscillation)
 }
 \description{
 Downloads index data from B3 website

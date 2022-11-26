@@ -6,7 +6,7 @@
 #' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache a logical indicating if the existing file (previously
 #'        downloaded) should be used or replaced.
-#' @param ... aditional arguments
+#' @param ... additional arguments
 #'
 #' @return a string with the file path of downloaded file or `NULL` if download
 #'        fails.

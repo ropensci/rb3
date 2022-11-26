@@ -29,7 +29,7 @@ parts:
       description: Texto de descrição do redutor
     - name: reductor
       description: Redutor
-    - name: theoricalQty
+    - name: theoreticalQty
       description: Quantidade teórica no índice
   Results:
     name: results
@@ -46,5 +46,5 @@ parts:
       description: Participação % no índice
     - name: part_acum
       description: Participação % acumulada no segmento no índice
-    - name: theoricalQty
+    - name: theoreticalQty
       description: Quantidade teórica no índice

@@ -34,7 +34,7 @@
   * `NegociosBalcao` intraday OTC (Debentures) trades
   * `NegociosBTB` intraday lending trades
 * imports organized (using importFrom in NAMESPACE)
-* added option `rb3.cachedir` to set default cache directory in order to use cached files accross multiple sessions
+* added option `rb3.cachedir` to set default cache directory in order to use cached files across multiple sessions
 
 
 # rb3 0.0.3 

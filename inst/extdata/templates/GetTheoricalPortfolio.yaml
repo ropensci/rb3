@@ -16,7 +16,7 @@ parts:
     fields:
     - name: part
       description: Participação % no índice
-    - name: theoricalQty
+    - name: theoreticalQty
       description: Quantidade teórica no índice
     - name: reductor
       description: Redutor
@@ -29,7 +29,7 @@ parts:
       description: Nome da companhia
     - name: spotlight
       description: Código de especificação da ação
-    - name: theoricalQty
+    - name: theoreticalQty
       description: Quantidade teórica no índice
     - name: part
       description: Participação % no índice

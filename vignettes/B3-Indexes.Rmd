@@ -34,10 +34,10 @@ indexes_get()
 
 ## Indexes Composition and Weights
 
-The compositon of B3 indexes are available throught the function `rb3::index_weights_get`.
+The composition of B3 indexes are available through the function `rb3::index_weights_get`.
 This function returns a data.frame with the current compostion of the requested index, all
 symbols that compound the index, their weights and theoretical position.
-Here the IBOVESPA (`IBOV`) Index has its compositon listed.
+Here the IBOVESPA (`IBOV`) Index has its composition listed.
 
 ```{r}
 index_weights_get("IBOV")
@@ -100,7 +100,7 @@ index_data |>
 ```
 
 The IBOVESPA index starts at 1968 and the series is adjusted for all economic events the that
-affected the brazilian currency in the 80-90's decades.
+affected the Brazilian currency in the 80-90's decades.
 
 ```{r fig.width=9, fig.height=6}
 index_data <- index_get(index_name, as.Date("1968-01-01"))

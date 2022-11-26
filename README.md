@@ -40,7 +40,7 @@ datasets from [B3](https://www.b3.com.br), making it easy to consume it
 in R in a structured way.
 
 The available datasets are highly valuable, going back as early as
-2000’s, and can be used by industry practioneers or academics. None of
+2000’s, and can be used by industry practitioners or academics. None of
 these datasets are available anywhere else, which makes rb3 an unique
 package for data importation from the Brazilian financial exchange.
 
@@ -68,7 +68,7 @@ devtools::install_github("wilsonfreitas/rb3")
 
 ### Yield curve
 
-In this first example we’ll import and plot the historical yeild curve
+In this first example we’ll import and plot the historical yield curve
 for Brazil using function `yc_get`.
 
 ``` r
@@ -207,7 +207,7 @@ glimpse(
 #> $ distribution_id       <int> 100, 100, 100, 100, 100, 100, 100, 108, 100, 100~
 ```
 
-### FIIs (brazilian REITs) data
+### FIIs (Brazilian REITs) data
 
 Download FII (Fundo de Investimento Imobiliário) data with
 `cotahist_fiis_get`:

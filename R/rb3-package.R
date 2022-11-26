@@ -15,7 +15,7 @@
 #'     rb3 cache folder is named `rb3-cache` and it is created inside the
 #'     directory returned by `base::tempdir`.
 #'     Since it is changed for every new session it is interesting to use the
-#'     same directory for cache accross sessions.
+#'     same directory for cache across sessions.
 #'     Once the option `rb3.cachedir` is set the files are always cached in
 #'     the same directory.
 #'     This is very useful to build a historical data.

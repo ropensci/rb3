@@ -14,7 +14,7 @@ download_marketdata(template, cache_folder = cachedir(), do_cache = TRUE, ...)
 \item{do_cache}{a logical indicating if the existing file (previously
 downloaded) should be used or replaced.}
 
-\item{...}{aditional arguments}
+\item{...}{additional arguments}
 }
 \value{
 a string with the file path of downloaded file or \code{NULL} if download

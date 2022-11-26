@@ -159,7 +159,7 @@ index_by_segment_get <- function(index_name,
 #' `indexreport_mget` returns index data for a given range of dates.
 #'
 #' @return
-#' A dataframe with index data (OHLC, average and daily oscilation)
+#' A dataframe with index data (OHLC, average and daily oscillation)
 #'
 #' @name indexreport_get
 #'
@@ -330,3 +330,4 @@ index_get <- function(index_name, first_date,
     }
   }
 }
+

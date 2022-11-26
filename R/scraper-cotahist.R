@@ -4,14 +4,14 @@
 #' objects.
 #'
 #' @param refdate the reference date used to download the file. This reference
-#'        date will be formated as year/month/day according to the given type.
-#'        Accepts ISO formated date strings.
+#'        date will be formatted as year/month/day according to the given type.
+#'        Accepts ISO formatted date strings.
 #' @param type a string with `yearly` for all data of the given year, `monthly`
 #'        for all data of the given month and `daily` for the given day.
 #' @param cache_folder Location of cache folder (default = cachedir())
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
-#' All valueable information is in the `HistoricalPrices` element of the
+#' All valuable information is in the `HistoricalPrices` element of the
 #' returned list.
 #' `Header` and `Trailer` have informations regarding file generation.
 #' The `HistoricalPrices` element has a data.frame with data of many assets
