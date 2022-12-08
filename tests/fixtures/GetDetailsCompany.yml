@@ -1,0 +1,43 @@
+http_interactions:
+  - request:
+      method: get
+      uri: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetDetail/eyJjb2RlQ1ZNIjoiMjQ5MTAiLCJsYW5ndWFnZSI6InB0LWJyIn0=
+      body:
+        encoding: ""
+        string: ""
+      headers:
+        Accept: application/json, text/xml, application/xml, */*
+    response:
+      status:
+        status_code: 200
+        category: Success
+        reason: OK
+        message: "Success: (200) OK"
+      headers:
+        content-type: text/plain; charset=utf-8
+        strict-transport-security: max-age=31536000; includeSubDomains
+        x-xss-protection: 1; mode=block
+        x-content-type-options: nosniff
+        content-security-policy:
+          "default-src 'self' https://*.google-analytics.com;
+          font-src 'self' data: https://fonts.gstatic.com/ ;img-src * data: ; script-src
+          'unsafe-eval' * 'unsafe-inline'; style-src * 'unsafe-inline'; frame-src
+          http://*.b3.com.br https://*.b3.com.br https://s.tradingview.com/"
+        referrer-policy: strict-origin
+        server-timing: dtSInfo;desc="0", dtRpid;desc="-1824760784"
+        date: Thu, 08 Dec 2022 09:00:24 GMT
+        set-cookie:
+          TS01871345=016e3b076f3061e78067672c94ca6c123637a1c656f34f31157a650e657dfa2cee5a27b282aa2491468c4f973b7d8d309bf4c8835b;
+          Path=/; HTTPOnly
+        transfer-encoding: chunked
+      body:
+        encoding: "latin1"
+        file: no
+        string:
+          '{"issuingCompany":"LWSA","companyName":"LOCAWEB SERVI�OS DE INTERNET
+          S.A.","tradingName":"LOCAWEB","cnpj":"02351877000152","industryClassification":"Tecnologia
+          da Informa��o / Programas e Servi�os / Programas e Servi�os","industryClassificationEng":null,"activity":null,"website":"","hasQuotation":null,"status":"A","marketIndicator":"18","market":"NOVO
+          MERCADO","institutionCommon":"ITAU CORRETORA ACOES","institutionPreferred":"","code":"LWSA3","codeCVM":"24910","lastDate":"07/12/2022
+          23:23:33","otherCodes":[{"code":"LWSA3","isin":"BRLWSAACNOR8"}],"hasEmissions":false,"hasBDR":false,"typeBDR":null,"describleCategoryBVMF":null}'
+    recorded_at: 2022-12-08 09:00:24 GMT
+    recorded_with: vcr/1.2.0, webmockr/0.8.2

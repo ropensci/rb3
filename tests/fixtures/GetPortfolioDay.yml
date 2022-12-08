@@ -1,0 +1,132 @@
+http_interactions:
+  - request:
+      method: get
+      uri: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay/eyJwYWdlTnVtYmVyIjoxLCJwYWdlU2l6ZSI6OTk5OSwibGFuZ3VhZ2UiOiJwdC1iciIsImluZGV4IjoiSUJPViIsInNlZ21lbnQiOjJ9
+      body:
+        encoding: ""
+        string: ""
+      headers:
+        Accept: application/json, text/xml, application/xml, */*
+    response:
+      status:
+        status_code: 200
+        category: Success
+        reason: OK
+        message: "Success: (200) OK"
+      headers:
+        content-length: "15153"
+        content-security-policy:
+          "default-src 'self' https://*.google-analytics.com;
+          font-src 'self' data: https://fonts.gstatic.com/ ;img-src * data: ; script-src
+          'unsafe-eval' * 'unsafe-inline'; style-src * 'unsafe-inline'; frame-src
+          http://*.b3.com.br https://*.b3.com.br https://s.tradingview.com/"
+        content-type: application/json; charset=utf-8
+        date: Thu, 08 Dec 2022 09:10:54 GMT
+        referrer-policy: strict-origin
+        server-timing: dtSInfo;desc="0", dtRpid;desc="1970137597"
+        set-cookie:
+          - TS01871345=016e3b076f2e0b4dfe86a5a6e832ea52f5d90c52c037dacc0ac71c45a59d17155de2470401d6fae62105361a67fd0b888177ec9ab0;
+            Path=/; HTTPOnly
+          - BIGipServerpool_sistemaswebb3-listados_8443_WAF=1329145866.64288.0000; path=/;
+            Httponly; Secure
+        strict-transport-security: max-age=31536000; includeSubDomains
+        x-content-type-options: nosniff
+        x-xss-protection: 1; mode=block
+      body:
+        encoding: "latin1"
+        file: no
+        string:
+          '{"page":{"pageNumber":1,"pageSize":9999,"totalRecords":92,"totalPages":1},"header":{"date":"08/12/22","text":"Quantidade
+          Te�rica Total","part":"100,000","partAcum":"100,000","textReductor":"Redutor","reductor":"18.553.794,87445950","theoricalQty":"101.053.551.382"},"results":[{"segment":"Bens
+          Indls / M�qs e Equips","cod":"WEGE3","asset":"WEG","type":"ON      NM","part":"2,728","partAcum":"2,728","theoricalQty":"1.481.593.024"},{"segment":"Bens
+          Indls / Mat Transporte","cod":"EMBR3","asset":"EMBRAER","type":"ON      NM","part":"0,492","partAcum":"0,492","theoricalQty":"734.632.205"},{"segment":"Bens
+          Indls/Transporte","cod":"AZUL4","asset":"AZUL","type":"PN      N2","part":"0,187","partAcum":"2,089","theoricalQty":"327.646.296"},{"segment":"Bens
+          Indls/Transporte","cod":"CCRO3","asset":"CCR SA","type":"ON      NM","part":"0,632","partAcum":"2,089","theoricalQty":"1.115.681.435"},{"segment":"Bens
+          Indls/Transporte","cod":"ECOR3","asset":"ECORODOVIAS","type":"ON  ED  NM","part":"0,070","partAcum":"2,089","theoricalQty":"333.657.615"},{"segment":"Bens
+          Indls/Transporte","cod":"GOLL4","asset":"GOL","type":"PN      N2","part":"0,076","partAcum":"2,089","theoricalQty":"190.059.275"},{"segment":"Bens
+          Indls/Transporte","cod":"RAIL3","asset":"RUMO S.A.","type":"ON      NM","part":"1,124","partAcum":"2,089","theoricalQty":"1.215.642.613"},{"segment":"Comput
+          e Equips","cod":"POSI3","asset":"POSITIVO TEC","type":"ON      NM","part":"0,030","partAcum":"0,030","theoricalQty":"73.573.028"},{"segment":"Cons
+          N  B�sico / Alimentos Processados","cod":"BRFS3","asset":"BRF SA","type":"ON      NM","part":"0,441","partAcum":"2,112","theoricalQty":"1.076.512.610"},{"segment":"Cons
+          N  B�sico / Alimentos Processados","cod":"JBSS3","asset":"JBS","type":"ON      NM","part":"1,204","partAcum":"2,112","theoricalQty":"1.134.986.483"},{"segment":"Cons
+          N  B�sico / Alimentos Processados","cod":"MRFG3","asset":"MARFRIG","type":"ON      NM","part":"0,126","partAcum":"2,112","theoricalQty":"316.724.584"},{"segment":"Cons
+          N  B�sico / Alimentos Processados","cod":"BEEF3","asset":"MINERVA","type":"ON      NM","part":"0,151","partAcum":"2,112","theoricalQty":"260.409.710"},{"segment":"Cons
+          N  B�sico / Alimentos Processados","cod":"SMTO3","asset":"SAO MARTINHO","type":"ON      NM","part":"0,190","partAcum":"2,112","theoricalQty":"143.294.210"},{"segment":"Cons
+          N C�clico / Bebidas","cod":"ABEV3","asset":"AMBEV S/A","type":"ON","part":"3,468","partAcum":"3,468","theoricalQty":"4.386.652.506"},{"segment":"Cons
+          N C�clico / Com�rcio Distr.","cod":"ASAI3","asset":"ASSAI","type":"ON      NM","part":"0,791","partAcum":"1,338","theoricalQty":"795.949.801"},{"segment":"Cons
+          N C�clico / Com�rcio Distr.","cod":"CRFB3","asset":"CARREFOUR BR","type":"ON  EJ  NM","part":"0,395","partAcum":"1,338","theoricalQty":"528.743.156"},{"segment":"Cons
+          N C�clico / Com�rcio Distr.","cod":"PCAR3","asset":"P.ACUCAR-CBD","type":"ON      NM","part":"0,152","partAcum":"1,338","theoricalQty":"157.889.627"},{"segment":"Cons
+          N C�clico / Pr Pessoal Limp","cod":"NTCO3","asset":"GRUPO NATURA","type":"ON      NM","part":"0,512","partAcum":"0,512","theoricalQty":"835.961.011"},{"segment":"Cons
+          N Ciclico/Agropecu�ria","cod":"RAIZ4","asset":"RAIZEN","type":"PN  ED  N2","part":"0,216","partAcum":"0,426","theoricalQty":"1.246.412.032"},{"segment":"Cons
+          N Ciclico/Agropecu�ria","cod":"SLCE3","asset":"SLC AGRICOLA","type":"ON      NM","part":"0,210","partAcum":"0,426","theoricalQty":"96.272.020"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"AMER3","asset":"AMERICANAS","type":"ON      NM","part":"0,265","partAcum":"2,516","theoricalQty":"596.086.291"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"ARZZ3","asset":"AREZZO CO","type":"ON      NM","part":"0,250","partAcum":"2,516","theoricalQty":"60.358.029"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"SOMA3","asset":"GRUPO SOMA","type":"ON      NM","part":"0,255","partAcum":"2,516","theoricalQty":"490.736.222"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"LREN3","asset":"LOJAS RENNER","type":"ON      NM","part":"1,057","partAcum":"2,516","theoricalQty":"970.515.779"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"MGLU3","asset":"MAGAZ LUIZA","type":"ON      NM","part":"0,418","partAcum":"2,516","theoricalQty":"2.874.188.573"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"PETZ3","asset":"PETZ","type":"ON      NM","part":"0,109","partAcum":"2,516","theoricalQty":"335.672.329"},{"segment":"Consumo
+          C�clico / Com�rcio","cod":"VIIA3","asset":"VIA","type":"ON      NM","part":"0,162","partAcum":"2,516","theoricalQty":"1.576.975.642"},{"segment":"Consumo
+          C�clico / Tecid Vest Cal�","cod":"ALPA4","asset":"ALPARGATAS","type":"PN      N1","part":"0,149","partAcum":"0,149","theoricalQty":"202.765.994"},{"segment":"Consumo
+          C�clico/Constr Civil","cod":"CYRE3","asset":"CYRELA REALT","type":"ON      NM","part":"0,188","partAcum":"0,380","theoricalQty":"274.142.301"},{"segment":"Consumo
+          C�clico/Constr Civil","cod":"EZTC3","asset":"EZTEC","type":"ON      NM","part":"0,070","partAcum":"0,380","theoricalQty":"94.318.339"},{"segment":"Consumo
+          C�clico/Constr Civil","cod":"MRVE3","asset":"MRV","type":"ON      NM","part":"0,122","partAcum":"0,380","theoricalQty":"298.436.955"},{"segment":"Consumo
+          C�clico/Viagens e Lazer","cod":"CVCB3","asset":"CVC BRASIL","type":"ON      NM","part":"0,066","partAcum":"0,066","theoricalQty":"275.967.676"},{"segment":"Diversos","cod":"COGN3","asset":"COGNA
+          ON","type":"ON      NM","part":"0,198","partAcum":"2,820","theoricalQty":"1.820.405.422"},{"segment":"Diversos","cod":"RENT3","asset":"LOCALIZA","type":"ON      NM","part":"2,465","partAcum":"2,820","theoricalQty":"893.978.241"},{"segment":"Diversos","cod":"YDUQ3","asset":"YDUQS
+          PART","type":"ON      NM","part":"0,157","partAcum":"2,820","theoricalQty":"296.015.511"},{"segment":"Financ
+          e Outros / Explor Im�veis","cod":"BRML3","asset":"BR MALLS PAR","type":"ON      NM","part":"0,348","partAcum":"0,835","theoricalQty":"828.273.884"},{"segment":"Financ
+          e Outros / Explor Im�veis","cod":"IGTI11","asset":"IGUATEMI S.A","type":"UNT     N1","part":"0,194","partAcum":"0,835","theoricalQty":"216.457.368"},{"segment":"Financ
+          e Outros / Explor Im�veis","cod":"MULT3","asset":"MULTIPLAN","type":"ON      N2","part":"0,293","partAcum":"0,835","theoricalQty":"268.145.328"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"BPAN4","asset":"BANCO PAN","type":"PN      N1","part":"0,112","partAcum":"17,711","theoricalQty":"341.549.703"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"BBDC3","asset":"BRADESCO","type":"ON  EJ  N1","part":"0,980","partAcum":"17,711","theoricalQty":"1.508.883.586"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"BBDC4","asset":"BRADESCO","type":"PN  EJ  N1","part":"3,816","partAcum":"17,711","theoricalQty":"5.156.077.326"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"BBAS3","asset":"BRASIL","type":"ON      NM","part":"2,491","partAcum":"17,711","theoricalQty":"1.420.731.069"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"BPAC11","asset":"BTGP BANCO","type":"UNT     N2","part":"1,449","partAcum":"17,711","theoricalQty":"1.225.470.424"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"ITSA4","asset":"ITAUSA","type":"PN  EJ  N1","part":"2,217","partAcum":"17,711","theoricalQty":"5.209.666.310"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"ITUB4","asset":"ITAUUNIBANCO","type":"PN  EJ  N1","part":"6,157","partAcum":"17,711","theoricalQty":"4.799.907.051"},{"segment":"Financ
+          e Outros / Interms Financs","cod":"SANB11","asset":"SANTANDER BR","type":"UNT","part":"0,489","partAcum":"17,711","theoricalQty":"355.642.848"},{"segment":"Financ
+          e Outros / Previd  Seguros","cod":"BBSE3","asset":"BBSEGURIDADE","type":"ON      NM","part":"1,051","partAcum":"1,427","theoricalQty":"671.682.536"},{"segment":"Financ
+          e Outros / Previd  Seguros","cod":"IRBR3","asset":"IRBBRASIL RE","type":"ON      NM","part":"0,083","partAcum":"1,427","theoricalQty":"2.455.237.214"},{"segment":"Financ
+          e Outros / Previd  Seguros","cod":"SULA11","asset":"SUL AMERICA","type":"UNT     N2","part":"0,293","partAcum":"1,427","theoricalQty":"284.059.601"},{"segment":"Financeiro
+          e Outros/Servi�os Financeiros Diversos","cod":"B3SA3","asset":"B3","type":"ON      NM","part":"3,573","partAcum":"3,811","theoricalQty":"5.901.731.302"},{"segment":"Financeiro
+          e Outros/Servi�os Financeiros Diversos","cod":"CIEL3","asset":"CIELO","type":"ON      NM","part":"0,238","partAcum":"3,811","theoricalQty":"1.095.401.258"},{"segment":"Mats
+          B�sicos / Madeira e Papel","cod":"DXCO3","asset":"DEXCO","type":"ON      NM","part":"0,109","partAcum":"2,733","theoricalQty":"274.863.424"},{"segment":"Mats
+          B�sicos / Madeira e Papel","cod":"KLBN11","asset":"KLABIN S/A","type":"UNT     N2","part":"0,719","partAcum":"2,733","theoricalQty":"701.899.756"},{"segment":"Mats
+          B�sicos / Madeira e Papel","cod":"SUZB3","asset":"SUZANO S.A.","type":"ON      NM","part":"1,905","partAcum":"2,733","theoricalQty":"726.823.001"},{"segment":"Mats
+          B�sicos / Minera��o","cod":"BRAP4","asset":"BRADESPAR","type":"PN      N1","part":"0,355","partAcum":"19,625","theoricalQty":"251.025.058"},{"segment":"Mats
+          B�sicos / Minera��o","cod":"CMIN3","asset":"CSNMINERACAO","type":"ON      N2","part":"0,206","partAcum":"19,625","theoricalQty":"1.110.550.596"},{"segment":"Mats
+          B�sicos / Minera��o","cod":"VALE3","asset":"VALE","type":"ON      NM","part":"19,064","partAcum":"19,625","theoricalQty":"4.547.296.398"},{"segment":"Mats
+          B�sicos / Qu�micos","cod":"BRKM5","asset":"BRASKEM","type":"PNA     N1","part":"0,342","partAcum":"0,342","theoricalQty":"265.212.486"},{"segment":"Mats
+          B�sicos / Sid Metalurgia","cod":"GGBR4","asset":"GERDAU","type":"PN      N1","part":"1,702","partAcum":"2,786","theoricalQty":"1.111.956.242"},{"segment":"Mats
+          B�sicos / Sid Metalurgia","cod":"GOAU4","asset":"GERDAU MET","type":"PN      N1","part":"0,464","partAcum":"2,786","theoricalQty":"686.077.578"},{"segment":"Mats
+          B�sicos / Sid Metalurgia","cod":"CSNA3","asset":"SID NACIONAL","type":"ON","part":"0,420","partAcum":"2,786","theoricalQty":"589.695.175"},{"segment":"Mats
+          B�sicos / Sid Metalurgia","cod":"USIM5","asset":"USIMINAS","type":"PNA     N1","part":"0,200","partAcum":"2,786","theoricalQty":"515.014.562"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"RRRP3","asset":"3R PETROLEUM","type":"ON      NM","part":"0,330","partAcum":"13,759","theoricalQty":"200.453.863"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"CSAN3","asset":"COSAN","type":"ON      NM","part":"0,961","partAcum":"13,759","theoricalQty":"1.171.063.698"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"PETR3","asset":"PETROBRAS","type":"ON      N2","part":"3,812","partAcum":"13,759","theoricalQty":"2.684.384.823"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"PETR4","asset":"PETROBRAS","type":"PN      N2","part":"5,720","partAcum":"13,759","theoricalQty":"4.566.441.248"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"PRIO3","asset":"PETRORIO","type":"ON      NM","part":"1,355","partAcum":"13,759","theoricalQty":"839.159.130"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"UGPA3","asset":"ULTRAPAR","type":"ON      NM","part":"0,722","partAcum":"13,759","theoricalQty":"1.087.887.681"},{"segment":"Petr�leo,
+          G�s e Biocombust�veis","cod":"VBBR3","asset":"VIBRA","type":"ON      NM","part":"0,859","partAcum":"13,759","theoricalQty":"1.114.442.976"},{"segment":"Sa�de/Com�rcio
+          Distr.","cod":"HYPE3","asset":"HYPERA","type":"ON      NM","part":"0,848","partAcum":"2,252","theoricalQty":"400.842.480"},{"segment":"Sa�de/Com�rcio
+          Distr.","cod":"RADL3","asset":"RAIADROGASIL","type":"ON  EJ  NM","part":"1,404","partAcum":"2,252","theoricalQty":"1.196.069.386"},{"segment":"Sa�de/SM
+          Hosp An.Diag","cod":"FLRY3","asset":"FLEURY","type":"ON      NM","part":"0,307","partAcum":"2,831","theoricalQty":"370.847.036"},{"segment":"Sa�de/SM
+          Hosp An.Diag","cod":"HAPV3","asset":"HAPVIDA","type":"ON      NM","part":"1,127","partAcum":"2,831","theoricalQty":"4.454.740.939"},{"segment":"Sa�de/SM
+          Hosp An.Diag","cod":"QUAL3","asset":"QUALICORP","type":"ON      NM","part":"0,079","partAcum":"2,831","theoricalQty":"277.039.277"},{"segment":"Sa�de/SM
+          Hosp An.Diag","cod":"RDOR3","asset":"REDE D OR","type":"ON      NM","part":"1,318","partAcum":"2,831","theoricalQty":"932.048.593"},{"segment":"Tec.Informa��o/Programas
+          Servs","cod":"LWSA3","asset":"LOCAWEB","type":"ON      NM","part":"0,164","partAcum":"0,909","theoricalQty":"419.466.860"},{"segment":"Tec.Informa��o/Programas
+          Servs","cod":"CASH3","asset":"MELIUZ","type":"ON      NM","part":"0,037","partAcum":"0,909","theoricalQty":"657.963.256"},{"segment":"Tec.Informa��o/Programas
+          Servs","cod":"TOTS3","asset":"TOTVS","type":"ON      NM","part":"0,708","partAcum":"0,909","theoricalQty":"519.851.955"},{"segment":"Telecomunica��o","cod":"VIVT3","asset":"TELEF
+          BRASIL","type":"ON","part":"0,814","partAcum":"1,327","theoricalQty":"429.455.552"},{"segment":"Telecomunica��o","cod":"TIMS3","asset":"TIM","type":"ON      NM","part":"0,513","partAcum":"1,327","theoricalQty":"808.436.195"},{"segment":"Utilidade
+          P�bl / �gua Saneamento","cod":"SBSP3","asset":"SABESP","type":"ON      NM","part":"0,965","partAcum":"0,965","theoricalQty":"340.002.999"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"CMIG4","asset":"CEMIG","type":"PN      N1","part":"0,807","partAcum":"9,561","theoricalQty":"1.442.098.974"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"CPLE6","asset":"COPEL","type":"PNB     N2","part":"0,620","partAcum":"9,561","theoricalQty":"1.563.365.506"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"CPFE3","asset":"CPFL ENERGIA","type":"ON      NM","part":"0,308","partAcum":"9,561","theoricalQty":"187.732.538"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"ELET3","asset":"ELETROBRAS","type":"ON      N1","part":"3,142","partAcum":"9,561","theoricalQty":"1.447.696.333"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"ELET6","asset":"ELETROBRAS","type":"PNB     N1","part":"0,648","partAcum":"9,561","theoricalQty":"279.941.393"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"ENBR3","asset":"ENERGIAS BR","type":"ON      NM","part":"0,255","partAcum":"9,561","theoricalQty":"246.028.184"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"ENGI11","asset":"ENERGISA","type":"UNT     N2","part":"0,522","partAcum":"9,561","theoricalQty":"248.477.689"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"ENEV3","asset":"ENEVA","type":"ON      NM","part":"0,926","partAcum":"9,561","theoricalQty":"1.561.135.009"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"EGIE3","asset":"ENGIE BRASIL","type":"ON      NM","part":"0,504","partAcum":"9,561","theoricalQty":"255.208.461"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"EQTL3","asset":"EQUATORIAL","type":"ON      NM","part":"1,447","partAcum":"9,561","theoricalQty":"1.100.513.485"},{"segment":"Utilidade
+          P�bl / Energ El�trica","cod":"TAEE11","asset":"TAESA","type":"UNT     N2","part":"0,382","partAcum":"9,561","theoricalQty":"218.568.234"}]}'
+    recorded_at: 2022-12-08 09:10:53 GMT
+    recorded_with: vcr/1.2.0, webmockr/0.8.2

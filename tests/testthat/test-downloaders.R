@@ -9,20 +9,25 @@ if (Sys.info()["sysname"] == "Linux") {
 test_that("it should download a file with a simple downloader", {
   tpl <- .retrieve_template(NULL, "CDIIDI")
   dest <- tempfile()
-  expect_true(tpl$download_marketdata(dest))
+  vcr::use_cassette("CDIIDI", {
+    x <- tpl$download_marketdata(dest)
+  })
+  expect_true(x)
   expect_true(file.exists(dest))
 })
 
 test_that("it should download a file with a datetime downloader", {
-  tpl <- .retrieve_template(NULL, "COTAHIST_YEARLY")
+  tpl <- .retrieve_template(NULL, "COTAHIST_DAILY")
   dest <- tempfile()
   expect_false(tpl$download_marketdata(dest))
   expect_false(file.exists(dest))
   skip_on_os("linux")
-  expect_true(tpl$download_marketdata(dest, refdate = Sys.Date()))
+  date <- getdate("last bizday", Sys.Date(), "Brazil/B3")
+  x <- tpl$download_marketdata(dest, refdate = date)
+  expect_true(x)
   expect_true(file.exists(dest))
-  info <- file.info(dest)
-  expect_true(info$size > 1000000)
+  # info <- file.info(dest)
+  # expect_true(info$size > 1000000)
 })
 
 test_that("it should fail to datetime_download", {
@@ -35,11 +40,17 @@ test_that("it should fail to settlement_prices_download", {
   tpl <- .retrieve_template(NULL, "AjustesDiarios")
   f <- settlement_prices_download(tpl, tempfile())
   expect_false(f)
+  dest <- tempfile()
+  x <- settlement_prices_download(tpl, dest, refdate = as.Date("2022-12-01"))
+  expect_true(x)
+  expect_true(file.exists(dest))
 })
 
 test_that("it should stock_indexes_composition_download", {
   tpl <- .retrieve_template(NULL, "GetStockIndex")
-  f <- stock_indexes_composition_download(tpl, tempfile())
+  vcr::use_cassette("GetStockIndex", {
+    f <- stock_indexes_composition_download(tpl, tempfile())
+  })
   expect_true(f)
 })
 
@@ -58,7 +69,9 @@ test_that("it should defaults to PRE in curve_download", {
 test_that("it should base64_datetime_download", {
   tpl <- .retrieve_template(NULL, "NegociosBalcao")
   refdate <- preceding(Sys.Date() - 1, "Brazil/B3")
-  f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
+  vcr::use_cassette("NegociosBalcao", {
+    f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
+  })
   expect_true(f)
 })
 
@@ -71,24 +84,50 @@ test_that("it should fail base64_datetime_download", {
 
 test_that("it should company_listed_supplement_download", {
   tpl <- .retrieve_template(NULL, "GetListedSupplementCompany")
-  f <- company_listed_supplement_download(tpl, tempfile(),
-    company_name = "ABEV"
-  )
+  vcr::use_cassette("GetListedSupplementCompany", {
+    f <- company_listed_supplement_download(tpl, tempfile(),
+      company_name = "ABEV"
+    )
+  })
   expect_true(f)
 })
 
 test_that("it should company_details_download", {
   tpl <- .retrieve_template(NULL, "GetDetailsCompany")
-  f <- company_details_download(tpl, tempfile(),
-    code_cvm = "23264"
-  )
+  vcr::use_cassette("GetDetailsCompany", {
+    f <- company_details_download(tpl, tempfile(),
+      code_cvm = "24910"
+    )
+  })
   expect_true(f)
 })
 
 test_that("it should company_cash_dividends_download ", {
   tpl <- .retrieve_template(NULL, "GetListedCashDividends")
-  f <- company_cash_dividends_download(tpl, tempfile(),
-    trading_name = "AMBEVSA"
-  )
+  vcr::use_cassette("GetListedCashDividends", {
+    f <- company_cash_dividends_download(tpl, tempfile(),
+      trading_name = "AMBEVSA"
+    )
+  })
+  expect_true(f)
+})
+
+test_that("it should stock_indexes_statistics_download ", {
+  tpl <- .retrieve_template(NULL, "GetPortfolioDay_IndexStatistics")
+  vcr::use_cassette("GetPortfolioDay_IndexStatistics", {
+    f <- stock_indexes_statistics_download(tpl, tempfile(),
+      index_name = "IBOV", year = 2022
+    )
+  })
+  expect_true(f)
+})
+
+test_that("it should stock_indexes_current_portfolio_download ", {
+  tpl <- .retrieve_template(NULL, "GetPortfolioDay")
+  vcr::use_cassette("GetPortfolioDay", {
+    f <- stock_indexes_current_portfolio_download(tpl, tempfile(),
+      index_name = "IBOV"
+    )
+  })
   expect_true(f)
 })

@@ -1,0 +1,313 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetStockIndex/eyJwYWdlTnVtYmVyIjoxLCJwYWdlU2l6ZSI6OTk5OX0=
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-length: '48862'
+      content-type: application/json; charset=utf-8
+      strict-transport-security: max-age=31536000; includeSubDomains
+      x-xss-protection: 1; mode=block
+      x-content-type-options: nosniff
+      content-security-policy: 'default-src ''self'' https://*.google-analytics.com;
+        font-src ''self'' data: https://fonts.gstatic.com/ ;img-src * data: ; script-src
+        ''unsafe-eval'' * ''unsafe-inline''; style-src * ''unsafe-inline''; frame-src
+        http://*.b3.com.br https://*.b3.com.br https://s.tradingview.com/'
+      referrer-policy: strict-origin
+      server-timing: dtSInfo;desc="0", dtRpid;desc="509644490"
+      date: Thu, 08 Dec 2022 08:30:21 GMT
+      set-cookie: TS01871345=016e3b076f01745c3ddd74276384dfdb32ee1976ac8c14e45085a26ab5a676e0d6a77de60bc36117ac58ee7e7cd17a8b222f9fffc2;
+        Path=/; HTTPOnly
+    body:
+      encoding: ''
+      file: no
+      string: '{"page":{"pageNumber":1,"pageSize":9999,"totalRecords":517,"totalPages":1},"header":{"update":"2022-12-08","startMonth":9,"endMonth":12,"year":2022},"results":[{"company":"3M","spotlight":"DRN","code":"MMMC34","indexes":"BDRX"},{"company":"3R
+        PETROLEUM","spotlight":"ON   NM","code":"RRRP3","indexes":"IBOV,IBRA,IBXL,IBXX,IGCT,IGCX,IGNM,ITAG,IVBX,SMLL"},{"company":"3TENTOS","spotlight":"ON   NM","code":"TTEN3","indexes":"AGFS,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ABBVIE","spotlight":"DRN","code":"ABBV34","indexes":"BDRX"},{"company":"ABC
+        BRASIL","spotlight":"PN   N2","code":"ABCB4","indexes":"IBRA,IDIV,IFNC,IGCT,IGCX,ITAG,SMLL"},{"company":"ACTIVISION","spotlight":"DRN","code":"ATVI34","indexes":"BDRX"},{"company":"ADOBE
+        INC","spotlight":"DRN","code":"ADBE34","indexes":"BDRX"},{"company":"ADVANCED
+        MIC","spotlight":"DRN","code":"A1MD34","indexes":"BDRX"},{"company":"AERIS","spotlight":"ON   NM","code":"AERI3","indexes":"GPTW,IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"AES
+        BRASIL","spotlight":"ON   NM","code":"AESB3","indexes":"IBRA,IEEX,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL,UTIL"},{"company":"AGROGALAXY","spotlight":"ON   NM","code":"AGXY3","indexes":"IGCX,IGNM,ITAG"},{"company":"AIRBNB","spotlight":"DRN","code":"AIRB34","indexes":"BDRX"},{"company":"ALIANSCSONAE","spotlight":"ON   NM","code":"ALSO3","indexes":"IBRA,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"ALIBABAGR","spotlight":"DRN","code":"BABA34","indexes":"BDRX"},{"company":"ALLIAR","spotlight":"ON   NM","code":"AALR3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ALLIED","spotlight":"ON   NM","code":"ALLD3","indexes":"IGCX,IGNM,ITAG"},{"company":"ALPARGATAS","spotlight":"ON   N1","code":"ALPA3","indexes":"IGCX"},{"company":"ALPARGATAS","spotlight":"PN   N1","code":"ALPA4","indexes":"GPTW,IBOV,IBRA,IBXX,ICON,IGCT,IGCX,INDX,IVBX,MLCX"},{"company":"ALPER
+        S.A.","spotlight":"ON   NM","code":"APER3","indexes":"IGCX,IGNM,ITAG"},{"company":"ALPHABET","spotlight":"DRN","code":"GOGL34","indexes":"BDRX"},{"company":"ALPHABET","spotlight":"DRN","code":"GOGL35","indexes":"BDRX"},{"company":"ALPHAVILLE","spotlight":"ON   NM","code":"AVLL3","indexes":"IGCX,IGNM,ITAG"},{"company":"ALUPAR","spotlight":"UNT  N2","code":"ALUP11","indexes":"IBRA,IEEX,IGCT,IGCX,ITAG,SMLL,UTIL"},{"company":"AMAZON","spotlight":"DRN","code":"AMZO34","indexes":"BDRX"},{"company":"AMBEV
+        S/A","spotlight":"ON","code":"ABEV3","indexes":"AGFS,GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,INDX,MLCX"},{"company":"AMBIPAR","spotlight":"ON   NM","code":"AMBP3","indexes":"IBRA,IBXX,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL,UTIL"},{"company":"AMC
+        ENTERT H","spotlight":"DRN","code":"A2MC34","indexes":"BDRX"},{"company":"AMERICAN
+        AIR","spotlight":"DRN","code":"AALL34","indexes":"BDRX"},{"company":"AMERICAN
+        EXP","spotlight":"DRN","code":"AXPB34","indexes":"BDRX"},{"company":"AMERICANAS","spotlight":"ON   NM","code":"AMER3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"ANGLOGOLD
+        AS","spotlight":"DRN","code":"A1UA34","indexes":"BDRX"},{"company":"ANIMA","spotlight":"ON   NM","code":"ANIM3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"APPLE","spotlight":"DRN","code":"AAPL34","indexes":"BDRX"},{"company":"ARCELOR","spotlight":"DRN","code":"ARMT34","indexes":"BDRX"},{"company":"AREZZO
+        CO","spotlight":"ON   NM","code":"ARZZ3","indexes":"AGFS,GPTW,IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL"},{"company":"ARMAC","spotlight":"ON   NM","code":"ARML3","indexes":"AGFS,IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ASSAI","spotlight":"ON   NM","code":"ASAI3","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"ASTRAZENECA","spotlight":"DRN","code":"A1ZN34","indexes":"BDRX"},{"company":"ATT
+        INC","spotlight":"DRN","code":"ATTB34","indexes":"BDRX"},{"company":"AUREN","spotlight":"ON   NM","code":"AURE3","indexes":"IBRA,IBXX,IDIV,IEEX,IGCT,IGCX,IGNM,ITAG,MLCX,UTIL"},{"company":"AZUL","spotlight":"PN   N2","code":"AZUL4","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,ISEE,ITAG,IVBX,SMLL"},{"company":"B3","spotlight":"ON   NM","code":"B3SA3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IFNC,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"BAHEMA","spotlight":"ON   MA","code":"BAHI3","indexes":"ITAG"},{"company":"BAIDU
+        INC","spotlight":"DRN","code":"BIDU34","indexes":"BDRX"},{"company":"BANCO
+        BMG","spotlight":"PN   N1","code":"BMGB4","indexes":"IGCX,ITAG"},{"company":"BANCO
+        PAN","spotlight":"PN   N1","code":"BPAN4","indexes":"GPTW,IBOV,IBRA,IBXX,IFNC,IGCT,IGCX,ITAG,SMLL"},{"company":"BANCO
+        SANTAN","spotlight":"DRN","code":"B1SA34","indexes":"BDRX"},{"company":"BANESE","spotlight":"PN","code":"BGIP4","indexes":"ITAG"},{"company":"BANK
+        AMERICA","spotlight":"DRN","code":"BOAC34","indexes":"BDRX"},{"company":"BANRISUL","spotlight":"ON   N1","code":"BRSR3","indexes":"IGCX,ITAG"},{"company":"BANRISUL","spotlight":"PNB  N1","code":"BRSR6","indexes":"IBRA,IDIV,IFNC,IGCT,IGCX,ITAG,SMLL"},{"company":"BBSEGURIDADE","spotlight":"ON   NM","code":"BBSE3","indexes":"IBOV,IBRA,IBXL,IBXX,IDIV,IFNC,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"BEMOBI
+        TECH","spotlight":"ON   NM","code":"BMOB3","indexes":"GPTW,IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"BERKSHIRE","spotlight":"DRN","code":"BERK34","indexes":"BDRX"},{"company":"BEYOND
+        MEAT","spotlight":"DRN","code":"B2YN34","indexes":"BDRX"},{"company":"BILIBILI
+        INC","spotlight":"DRN","code":"B1IL34","indexes":"BDRX"},{"company":"BIOMM","spotlight":"ON   MA","code":"BIOM3","indexes":"ITAG"},{"company":"BIONTECH
+        SE","spotlight":"DRN","code":"B1NT34","indexes":"BDRX"},{"company":"BLACKROCK","spotlight":"DRN","code":"BLAK34","indexes":"BDRX"},{"company":"BLAU","spotlight":"ON   NM","code":"BLAU3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"BLOCK
+        INC.","spotlight":"DRN","code":"S2QU34","indexes":"BDRX"},{"company":"BNY
+        MELLON","spotlight":"DRN","code":"BONY34","indexes":"BDRX"},{"company":"BOA
+        SAFRA","spotlight":"ON   NM","code":"SOJA3","indexes":"IGCX,IGNM,ITAG"},{"company":"BOA
+        VISTA","spotlight":"ON   NM","code":"BOAS3","indexes":"IBRA,IFNC,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"BOEING","spotlight":"DRN","code":"BOEI34","indexes":"BDRX"},{"company":"BOOKING","spotlight":"DRN","code":"BKNG34","indexes":"BDRX"},{"company":"BP
+        PLC","spotlight":"DRN","code":"B1PP34","indexes":"BDRX"},{"company":"BR MALLS
+        PAR","spotlight":"ON   NM","code":"BRML3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,IMOB,ITAG,IVBX,SMLL"},{"company":"BR
+        PARTNERS","spotlight":"UNT  N2","code":"BRBI11","indexes":"IGCX"},{"company":"BR
+        PROPERT","spotlight":"ON   NM","code":"BRPR3","indexes":"IBRA,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"BRADESCO","spotlight":"ON   N1","code":"BBDC3","indexes":"IBOV,IBRA,IBXX,ICO2,IDIV,IFNC,IGCT,IGCX,ITAG,MLCX"},{"company":"BRADESCO","spotlight":"PN   N1","code":"BBDC4","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IFNC,IGCT,IGCX,ISEE,ITAG,MLCX"},{"company":"BRADESPAR","spotlight":"ON   N1","code":"BRAP3","indexes":"IBRA,IDIV,IGCT,IGCX,IMAT,ITAG,SMLL"},{"company":"BRADESPAR","spotlight":"PN   N1","code":"BRAP4","indexes":"IBOV,IBRA,IBXL,IBXX,IDIV,IGCT,IGCX,IMAT,ITAG,IVBX,SMLL"},{"company":"BRASIL","spotlight":"ON   NM","code":"BBAS3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IFNC,IGCT,IGCX,IGNM,ISEE,ITAG,MLCX"},{"company":"BRASILAGRO","spotlight":"ON   NM","code":"AGRO3","indexes":"AGFS,IBRA,ICON,IDIV,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"BRASKEM","spotlight":"ON   N1","code":"BRKM3","indexes":"IGCX,ITAG"},{"company":"BRASKEM","spotlight":"PNA  N1","code":"BRKM5","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IMAT,INDX,ISEE,ITAG,IVBX,MLCX"},{"company":"BRF
+        SA","spotlight":"ON   NM","code":"BRFS3","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,IVBX,MLCX"},{"company":"BRISANET","spotlight":"ON   NM","code":"BRIT3","indexes":"IGCX,IGNM,ITAG"},{"company":"BRITISH
+        AMER","spotlight":"DRN","code":"B1TI34","indexes":"BDRX"},{"company":"BROADCOM
+        INC","spotlight":"DRN","code":"AVGO34","indexes":"BDRX"},{"company":"BTGP
+        BANCO","spotlight":"UNT  N2","code":"BPAC11","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IFNC,IGCT,IGCX,ISEE,ITAG,MLCX"},{"company":"CAIXA
+        SEGURI","spotlight":"ON   NM","code":"CXSE3","indexes":"IBRA,IFNC,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"CAMIL","spotlight":"ON   NM","code":"CAML3","indexes":"AGFS,IBRA,ICON,IGCT,IGCX,IGNM,INDX,ITAG,SMLL"},{"company":"CARNIVAL
+        COR","spotlight":"DRN","code":"C1CL34","indexes":"BDRX"},{"company":"CARREFOUR
+        BR","spotlight":"ON   NM","code":"CRFB3","indexes":"AGFS,IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"CARTESIA
+        FII","spotlight":"CI","code":"CACR11","indexes":"IFIX"},{"company":"CATERPILLAR","spotlight":"DRN","code":"CATP34","indexes":"BDRX"},{"company":"CBA","spotlight":"ON   NM","code":"CBAV3","indexes":"IBRA,IBXX,IGCT,IGCX,IGNM,IMAT,ITAG,SMLL"},{"company":"CCR
+        SA","spotlight":"ON   NM","code":"CCRO3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"CEA
+        MODAS","spotlight":"ON   NM","code":"CEAB3","indexes":"GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"CEDRO","spotlight":"ON   N1","code":"CEDO3","indexes":"IGCX"},{"company":"CEDRO","spotlight":"PN   N1","code":"CEDO4","indexes":"IGCX,ITAG"},{"company":"CELESC","spotlight":"ON   N2","code":"CLSC3","indexes":"ITAG"},{"company":"CELESC","spotlight":"PN   N2","code":"CLSC4","indexes":"IGCX,ITAG"},{"company":"CEMIG","spotlight":"ON   N1","code":"CMIG3","indexes":"IBRA,IDIV,IGCT,IGCX,MLCX,UTIL"},{"company":"CEMIG","spotlight":"PN   N1","code":"CMIG4","indexes":"IBOV,IBRA,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,ISEE,IVBX,MLCX,UTIL"},{"company":"CHARTER
+        COMM","spotlight":"DRN","code":"CHCM34","indexes":"BDRX"},{"company":"CHEVRON","spotlight":"DRN","code":"CHVX34","indexes":"BDRX"},{"company":"CIELO","spotlight":"ON   NM","code":"CIEL3","indexes":"GPTW,IBOV,IBRA,IBXX,ICO2,IFNC,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"CISCO","spotlight":"DRN","code":"CSCO34","indexes":"BDRX"},{"company":"CITIGROUP","spotlight":"DRN","code":"CTGP34","indexes":"BDRX"},{"company":"CLEARSALE","spotlight":"ON   NM","code":"CLSA3","indexes":"GPTW,IBRA,IFNC,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"COCA
+        COLA","spotlight":"DRN","code":"COCA34","indexes":"BDRX"},{"company":"COELCE","spotlight":"PNA","code":"COCE5","indexes":"IEEX"},{"company":"COGNA
+        ON","spotlight":"ON   NM","code":"COGN3","indexes":"IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,SMLL"},{"company":"COINBASEGLOB","spotlight":"DRN","code":"C2OI34","indexes":"BDRX"},{"company":"COLGATE","spotlight":"DRN","code":"COLG34","indexes":"BDRX"},{"company":"COMCAST","spotlight":"DRN","code":"CMCS34","indexes":"BDRX"},{"company":"COPASA","spotlight":"ON   NM","code":"CSMG3","indexes":"IBRA,IDIV,IGCT,IGCX,IGNM,ITAG,SMLL,UTIL"},{"company":"COPEL","spotlight":"ON   N2","code":"CPLE3","indexes":"IBRA,IDIV,IGCT,IGCX,MLCX,UTIL"},{"company":"COPEL","spotlight":"PNB  N2","code":"CPLE6","indexes":"GPTW,IBOV,IBRA,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,ISEE,IVBX,MLCX,UTIL"},{"company":"COPHILLIPS","spotlight":"DRN","code":"COPH34","indexes":"BDRX"},{"company":"COSAN","spotlight":"ON   NM","code":"CSAN3","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"COSTCO","spotlight":"DRN","code":"COWC34","indexes":"BDRX"},{"company":"COTEMINAS","spotlight":"PN","code":"CTNM4","indexes":"ITAG"},{"company":"CPFL
+        ENERGIA","spotlight":"ON   NM","code":"CPFE3","indexes":"IBOV,IBRA,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,IGNM,ISEE,ITAG,MLCX,UTIL"},{"company":"CREDIT
+        SUISS","spotlight":"DRN","code":"C1SU34","indexes":"BDRX"},{"company":"CRUZEIRO
+        EDU","spotlight":"ON   NM","code":"CSED3","indexes":"IGCX,IGNM,ITAG"},{"company":"CSNMINERACAO","spotlight":"ON   N2","code":"CMIN3","indexes":"IBOV,IBRA,IBXX,IDIV,IGCT,IGCX,IMAT,ITAG,MLCX"},{"company":"CSU
+        DIGITAL","spotlight":"ON   NM","code":"CSUD3","indexes":"IGCX,IGNM,ITAG"},{"company":"CURY
+        S/A","spotlight":"ON   NM","code":"CURY3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"CVC
+        BRASIL","spotlight":"ON   NM","code":"CVCB3","indexes":"IBOV,IBRA,IBXL,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,SMLL"},{"company":"CYRELA
+        REALT","spotlight":"ON   NM","code":"CYRE3","indexes":"IBOV,IBRA,IBXX,ICON,IDIV,IGCT,IGCX,IGNM,IMOB,INDX,ITAG,IVBX,SMLL"},{"company":"D1000VFARMA","spotlight":"ON   NM","code":"DMVF3","indexes":"IGCX,IGNM,ITAG"},{"company":"DASA","spotlight":"ON   NM","code":"DASA3","indexes":"GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"DESKTOP","spotlight":"ON   NM","code":"DESK3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"DEVON
+        ENERGY","spotlight":"DRN","code":"D1VN34","indexes":"BDRX"},{"company":"DEXCO","spotlight":"ON   NM","code":"DXCO3","indexes":"AGFS,IBOV,IBRA,IBXX,ICO2,IGCT,IGCX,IGNM,IMAT,INDX,ISEE,ITAG,SMLL"},{"company":"DEXXOS
+        PAR","spotlight":"ON   N1","code":"DEXP3","indexes":"IGCX"},{"company":"DEXXOS
+        PAR","spotlight":"PN   N1","code":"DEXP4","indexes":"IGCX"},{"company":"DIMED","spotlight":"ON   NM","code":"PNVL3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"DIRECIONAL","spotlight":"ON   NM","code":"DIRR3","indexes":"IBRA,ICON,IDIV,IGCT,IGCX,IGNM,IMOB,INDX,ITAG,SMLL"},{"company":"DOCUSIGN
+        INC","spotlight":"DRN","code":"D1OC34","indexes":"BDRX"},{"company":"DOMMO","spotlight":"ON","code":"DMMO3","indexes":"IBRA,SMLL"},{"company":"DOTZ
+        SA","spotlight":"ON   NM","code":"DOTZ3","indexes":"IGCX,IGNM,ITAG"},{"company":"ECORODOVIAS","spotlight":"ON   NM","code":"ECOR3","indexes":"IBOV,IBRA,IBXX,ICO2,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL"},{"company":"ELECTR
+        ARTS","spotlight":"DRN","code":"EAIN34","indexes":"BDRX"},{"company":"ELETROBRAS","spotlight":"ON   N1","code":"ELET3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,ISEE,MLCX,UTIL"},{"company":"ELETROBRAS","spotlight":"PNB  N1","code":"ELET6","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IGCT,IGCX,MLCX,UTIL"},{"company":"ELETROMIDIA","spotlight":"ON   NM","code":"ELMD3","indexes":"IGCX,IGNM,ITAG"},{"company":"EMBRAER","spotlight":"ON   NM","code":"EMBR3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,INDX,ITAG,IVBX,SMLL"},{"company":"ENAUTA
+        PART","spotlight":"ON   NM","code":"ENAT3","indexes":"IBRA,IBXX,IDIV,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ENERGIAS
+        BR","spotlight":"ON   NM","code":"ENBR3","indexes":"IBOV,IBRA,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL,UTIL"},{"company":"ENERGISA","spotlight":"UNT  N2","code":"ENGI11","indexes":"IBOV,IBRA,IBXX,IEEX,IGCT,IGCX,ITAG,MLCX,UTIL"},{"company":"ENEVA","spotlight":"ON   NM","code":"ENEV3","indexes":"IBOV,IBRA,IBXX,ICO2,IEEX,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX,UTIL"},{"company":"ENGIE
+        BRASIL","spotlight":"ON   NM","code":"EGIE3","indexes":"IBOV,IBRA,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,IGNM,ISEE,ITAG,MLCX,UTIL"},{"company":"ENJOEI","spotlight":"ON   NM","code":"ENJU3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"EQUATORIAL","spotlight":"ON   NM","code":"EQTL3","indexes":"IBOV,IBRA,IBXL,IBXX,IEEX,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX,UTIL"},{"company":"EQUINIX
+        INC","spotlight":"DRN","code":"EQIX34","indexes":"BDRX"},{"company":"ESPACOLASER","spotlight":"ON   NM","code":"ESPA3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ESTAPAR","spotlight":"ON   NM","code":"ALPK3","indexes":"IGCX,IGNM,ITAG"},{"company":"EUCATEX","spotlight":"ON   N1","code":"EUCA3","indexes":"IGCX"},{"company":"EUCATEX","spotlight":"PN   N1","code":"EUCA4","indexes":"IGCX"},{"company":"EVEN","spotlight":"ON   NM","code":"EVEN3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"EXXON
+        MOBIL","spotlight":"DRN","code":"EXXO34","indexes":"BDRX"},{"company":"EZTEC","spotlight":"ON   NM","code":"EZTC3","indexes":"IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,IMOB,INDX,ITAG,SMLL"},{"company":"FER
+        HERINGER","spotlight":"ON   NM","code":"FHER3","indexes":"AGFS,IBRA,IGCT,IGCX,IGNM,IMAT,ITAG,SMLL"},{"company":"FERBASA","spotlight":"ON   N1","code":"FESA3","indexes":"IGCX"},{"company":"FERBASA","spotlight":"PN   N1","code":"FESA4","indexes":"IBRA,IDIV,IGCT,IGCX,IMAT,INDX,SMLL"},{"company":"FII
+        ABSOLUTO","spotlight":"CI","code":"BPFF11","indexes":"IFIX"},{"company":"FII
+        AFHI CRI","spotlight":"CI","code":"AFHI11","indexes":"IFIX"},{"company":"FII
+        ALIANZA","spotlight":"CI","code":"ALZR11","indexes":"IFIL,IFIX"},{"company":"FII
+        ARCTIUM","spotlight":"CI","code":"ARCT11","indexes":"IFIL,IFIX"},{"company":"FII
+        ATRIO","spotlight":"CI","code":"ARRI11","indexes":"IFIX"},{"company":"FII
+        AUTONOMY","spotlight":"CI","code":"AIEC11","indexes":"IFIX"},{"company":"FII
+        BARIGUI","spotlight":"CI","code":"BARI11","indexes":"IFIL,IFIX"},{"company":"FII
+        BB PRGII","spotlight":"CI","code":"BBPO11","indexes":"IFIL,IFIX"},{"company":"FII
+        BC FFII","spotlight":"CI","code":"BCFF11","indexes":"IFIL,IFIX"},{"company":"FII
+        BC FUND","spotlight":"CI","code":"BRCR11","indexes":"IFIL,IFIX"},{"company":"FII
+        BCIA","spotlight":"CI","code":"BCIA11","indexes":"IFIX"},{"company":"FII BEES
+        CRI","spotlight":"CI","code":"BCRI11","indexes":"IFIL,IFIX"},{"company":"FII
+        BLUE FOF","spotlight":"CI","code":"BLMR11","indexes":"IFIX"},{"company":"FII
+        BLUE LOG","spotlight":"CI","code":"BLMG11","indexes":"IFIX"},{"company":"FII
+        BRESCO","spotlight":"CI","code":"BRCO11","indexes":"IFIL,IFIX"},{"company":"FII
+        BTG AGRO","spotlight":"CI","code":"BTAL11","indexes":"IFIL,IFIX"},{"company":"FII
+        BTG CRI","spotlight":"CI","code":"BTCI11","indexes":"IFIL,IFIX"},{"company":"FII
+        BTG TAGR","spotlight":"CI","code":"BTRA11","indexes":"IFIX"},{"company":"FII
+        BTLG","spotlight":"CI","code":"BTLG11","indexes":"IFIL,IFIX"},{"company":"FII
+        CAP REIT","spotlight":"CI","code":"CPFF11","indexes":"IFIL,IFIX"},{"company":"FII
+        CAPI SEC","spotlight":"CI","code":"CPTS11","indexes":"IFIL,IFIX"},{"company":"FII
+        CSHG CRI","spotlight":"CI","code":"HGCR11","indexes":"IFIL,IFIX"},{"company":"FII
+        CSHG FOF","spotlight":"CI","code":"HGFF11","indexes":"IFIX"},{"company":"FII
+        CSHG LOG","spotlight":"CI","code":"HGLG11","indexes":"IFIL,IFIX"},{"company":"FII
+        CSHG URB","spotlight":"CI","code":"HGRU11","indexes":"IFIL,IFIX"},{"company":"FII
+        DEA CARE","spotlight":"CI","code":"CARE11","indexes":"IFIX"},{"company":"FII
+        DEVANT","spotlight":"CI","code":"DEVA11","indexes":"IFIL,IFIX"},{"company":"FII
+        FATOR VE","spotlight":"CI","code":"VRTA11","indexes":"IFIL,IFIX"},{"company":"FII
+        G TOWERS","spotlight":"CI","code":"GTWR11","indexes":"IFIX"},{"company":"FII
+        GGRCOVEP","spotlight":"CI","code":"GGRC11","indexes":"IFIL,IFIX"},{"company":"FII
+        GUARDIAN","spotlight":"CI","code":"GALG11","indexes":"IFIX"},{"company":"FII
+        HABIT II","spotlight":"CI","code":"HABT11","indexes":"IFIL,IFIX"},{"company":"FII
+        HECTARE","spotlight":"CI","code":"HCTR11","indexes":"IFIL,IFIX"},{"company":"FII
+        HEDGEBS","spotlight":"CI","code":"HGBS11","indexes":"IFIL,IFIX"},{"company":"FII
+        HG REAL","spotlight":"CI","code":"HGRE11","indexes":"IFIL,IFIX"},{"company":"FII
+        HSI CRI","spotlight":"CI","code":"HSAF11","indexes":"IFIX"},{"company":"FII
+        HSI LOG","spotlight":"CI","code":"HSLG11","indexes":"IFIX"},{"company":"FII
+        HSI MALL","spotlight":"CI","code":"HSML11","indexes":"IFIL,IFIX"},{"company":"FII
+        HTOPFOF3","spotlight":"CI","code":"HFOF11","indexes":"IFIL,IFIX"},{"company":"FII
+        INDL BR","spotlight":"CI","code":"FIIB11","indexes":"IFIX"},{"company":"FII
+        IRIDIUM","spotlight":"CI","code":"IRDM11","indexes":"IFIL,IFIX"},{"company":"FII
+        JS REAL","spotlight":"CI","code":"JSRE11","indexes":"IFIL,IFIX"},{"company":"FII
+        KILIMA","spotlight":"CI","code":"KISU11","indexes":"IFIL,IFIX"},{"company":"FII
+        KINEA","spotlight":"CI","code":"KNRI11","indexes":"IFIL,IFIX"},{"company":"FII
+        KINEA HY","spotlight":"CI","code":"KNHY11","indexes":"IFIL,IFIX"},{"company":"FII
+        KINEA IP","spotlight":"CI","code":"KNIP11","indexes":"IFIL,IFIX"},{"company":"FII
+        KINEA RI","spotlight":"CI","code":"KNCR11","indexes":"IFIL,IFIX"},{"company":"FII
+        KINEA SC","spotlight":"CI","code":"KNSC11","indexes":"IFIL,IFIX"},{"company":"FII
+        KINEAFOF","spotlight":"CI","code":"KFOF11","indexes":"IFIX"},{"company":"FII
+        LOURDES","spotlight":"CI","code":"NSLU11","indexes":"IFIX"},{"company":"FII
+        MALLS BP","spotlight":"CI","code":"MALL11","indexes":"IFIL,IFIX"},{"company":"FII
+        MAUA","spotlight":"CI","code":"MCCI11","indexes":"IFIL,IFIX"},{"company":"FII
+        MAUA HF","spotlight":"CI","code":"MCHF11","indexes":"IFIX"},{"company":"FII
+        MAXI REN","spotlight":"CI","code":"MXRF11","indexes":"IFIL,IFIX"},{"company":"FII
+        MERITO I","spotlight":"CI","code":"MFII11","indexes":"IFIX"},{"company":"FII
+        MOGNO","spotlight":"CI","code":"MGFF11","indexes":"IFIL,IFIX"},{"company":"FII
+        MORE RE","spotlight":"CI","code":"MORE11","indexes":"IFIX"},{"company":"FII
+        NCH BR","spotlight":"CI","code":"NCHB11","indexes":"IFIX"},{"company":"FII
+        OURI JPP","spotlight":"CI","code":"OUJP11","indexes":"IFIX"},{"company":"FII
+        PATR LOG","spotlight":"CI","code":"PATL11","indexes":"IFIL,IFIX"},{"company":"FII
+        PLURAL R","spotlight":"CI","code":"PLCR11","indexes":"IFIX"},{"company":"FII
+        POLO CRI","spotlight":"CI","code":"PORD11","indexes":"IFIX"},{"company":"FII
+        QUASAR A","spotlight":"CI","code":"QAGR11","indexes":"IFIX"},{"company":"FII
+        RBR LOG","spotlight":"CI","code":"RBRL11","indexes":"IFIX"},{"company":"FII
+        RBR PCRI","spotlight":"CI","code":"RBRY11","indexes":"IFIX"},{"company":"FII
+        RBR PROP","spotlight":"CI","code":"RBRP11","indexes":"IFIL,IFIX"},{"company":"FII
+        RBRALPHA","spotlight":"CI","code":"RBRF11","indexes":"IFIL,IFIX"},{"company":"FII
+        RBRHGRAD","spotlight":"CI","code":"RBRR11","indexes":"IFIL,IFIX"},{"company":"FII
+        REC RECE","spotlight":"CI","code":"RECR11","indexes":"IFIL,IFIX"},{"company":"FII
+        REC REND","spotlight":"CI","code":"RECT11","indexes":"IFIX"},{"company":"FII
+        RIOB FF","spotlight":"CI","code":"RBFF11","indexes":"IFIX"},{"company":"FII
+        RIOB RC","spotlight":"CI","code":"RCRB11","indexes":"IFIX"},{"company":"FII
+        RIOB VA","spotlight":"CI","code":"RBVA11","indexes":"IFIL,IFIX"},{"company":"FII
+        RIZA AKN","spotlight":"CI","code":"RZAK11","indexes":"IFIL,IFIX"},{"company":"FII
+        RIZA TX","spotlight":"CI","code":"RZTR11","indexes":"IFIL,IFIX"},{"company":"FII
+        SANT PAP","spotlight":"CI","code":"SADI11","indexes":"IFIX"},{"company":"FII
+        SANT REN","spotlight":"CI","code":"SARE11","indexes":"IFIL,IFIX"},{"company":"FII
+        SDI LOG","spotlight":"CI","code":"SDIL11","indexes":"IFIL,IFIX"},{"company":"FII
+        SP DOWNT","spotlight":"CI","code":"SPTW11","indexes":"IFIX"},{"company":"FII
+        SUNO CRI","spotlight":"CI","code":"SNCI11","indexes":"IFIL,IFIX"},{"company":"FII
+        SUNOFOFI","spotlight":"CI","code":"SNFF11","indexes":"IFIX"},{"company":"FII
+        TG ATIVO","spotlight":"CI","code":"TGAR11","indexes":"IFIL,IFIX"},{"company":"FII
+        TORDE EI","spotlight":"CI","code":"TORD11","indexes":"IFIL,IFIX"},{"company":"FII
+        TRX REAL","spotlight":"CI","code":"TRXF11","indexes":"IFIL,IFIX"},{"company":"FII
+        URCA REN","spotlight":"CI","code":"URPR11","indexes":"IFIL,IFIX"},{"company":"FII
+        VALOR HE","spotlight":"CI","code":"VGHF11","indexes":"IFIL,IFIX"},{"company":"FII
+        VALORAIP","spotlight":"CI","code":"VGIP11","indexes":"IFIL,IFIX"},{"company":"FII
+        VALREIII","spotlight":"CI","code":"VGIR11","indexes":"IFIL,IFIX"},{"company":"FII
+        VBI CRI","spotlight":"CI","code":"CVBI11","indexes":"IFIL,IFIX"},{"company":"FII
+        VBI LOG","spotlight":"CI","code":"LVBI11","indexes":"IFIL,IFIX"},{"company":"FII
+        VBI PRI","spotlight":"CI","code":"PVBI11","indexes":"IFIL,IFIX"},{"company":"FII
+        VBI REIT","spotlight":"CI","code":"RVBI11","indexes":"IFIX"},{"company":"FII
+        VECTIS","spotlight":"CI","code":"VCJR11","indexes":"IFIL,IFIX"},{"company":"FII
+        VERS CRI","spotlight":"CI","code":"VSLH11","indexes":"IFIL,IFIX"},{"company":"FII
+        VINCI IF","spotlight":"CI","code":"VIFI11","indexes":"IFIX"},{"company":"FII
+        VINCI IU","spotlight":"CI","code":"VIUR11","indexes":"IFIX"},{"company":"FII
+        VINCI LG","spotlight":"CI","code":"VILG11","indexes":"IFIL,IFIX"},{"company":"FII
+        VINCI OF","spotlight":"CI","code":"VINO11","indexes":"IFIL,IFIX"},{"company":"FII
+        VINCI SC","spotlight":"CI","code":"VISC11","indexes":"IFIL,IFIX"},{"company":"FII
+        VOT LOG","spotlight":"CI","code":"VTLT11","indexes":"IFIX"},{"company":"FII
+        XP CRED","spotlight":"CI","code":"XPCI11","indexes":"IFIL,IFIX"},{"company":"FII
+        XP INDL","spotlight":"CI","code":"XPIN11","indexes":"IFIX"},{"company":"FII
+        XP LOG","spotlight":"CI","code":"XPLG11","indexes":"IFIL,IFIX"},{"company":"FII
+        XP MALLS","spotlight":"CI","code":"XPML11","indexes":"IFIL,IFIX"},{"company":"FII
+        XP PROP","spotlight":"CI","code":"XPPR11","indexes":"IFIL,IFIX"},{"company":"FII
+        XP SELEC","spotlight":"CI","code":"XPSF11","indexes":"IFIL,IFIX"},{"company":"FLEURY","spotlight":"ON   NM","code":"FLRY3","indexes":"IBOV,IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL"},{"company":"FORD
+        MOTORS","spotlight":"DRN","code":"FDMO34","indexes":"BDRX"},{"company":"FRAS-LE","spotlight":"ON   N1","code":"FRAS3","indexes":"IGCX"},{"company":"FREEPORT","spotlight":"DRN","code":"FCXO34","indexes":"BDRX"},{"company":"GAFISA","spotlight":"ON   NM","code":"GFSA3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"GE","spotlight":"DRN","code":"GEOO34","indexes":"BDRX"},{"company":"GENERAL
+        MOT","spotlight":"DRN","code":"GMCO34","indexes":"BDRX"},{"company":"GENERALSHOPP","spotlight":"ON","code":"GSHP3","indexes":"ITAG"},{"company":"GER
+        PARANAP","spotlight":"PN","code":"GEPA4","indexes":"ITAG"},{"company":"GERDAU","spotlight":"ON   N1","code":"GGBR3","indexes":"IGCX,ITAG"},{"company":"GERDAU","spotlight":"PN   N1","code":"GGBR4","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IGCT,IGCX,IMAT,INDX,ITAG,IVBX,MLCX"},{"company":"GERDAU
+        MET","spotlight":"ON   N1","code":"GOAU3","indexes":"IGCX,ITAG"},{"company":"GERDAU
+        MET","spotlight":"PN   N1","code":"GOAU4","indexes":"IBOV,IBRA,IBXX,IDIV,IGCT,IGCX,IMAT,INDX,ITAG,IVBX,SMLL"},{"company":"GETNINJAS","spotlight":"ON   NM","code":"NINJ3","indexes":"IGCX,IGNM,ITAG"},{"company":"GOL","spotlight":"PN   N2","code":"GOLL4","indexes":"IBOV,IBRA,IBXX,ICO2,IGCT,IGCX,ITAG,IVBX,SMLL"},{"company":"GOLDMANSACHS","spotlight":"DRN","code":"GSGI34","indexes":"BDRX"},{"company":"GPS","spotlight":"ON   NM","code":"GGPS3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"GRAZZIOTIN","spotlight":"ON","code":"CGRA3","indexes":"ITAG"},{"company":"GRAZZIOTIN","spotlight":"PN","code":"CGRA4","indexes":"ITAG"},{"company":"GRENDENE","spotlight":"ON   NM","code":"GRND3","indexes":"IBRA,ICON,IDIV,IGCT,IGCX,IGNM,INDX,ITAG,SMLL"},{"company":"GRUPO
+        MATEUS","spotlight":"ON   NM","code":"GMAT3","indexes":"AGFS,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"GRUPO
+        NATURA","spotlight":"ON   NM","code":"NTCO3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,IVBX,MLCX"},{"company":"GRUPO
+        SBF","spotlight":"ON   NM","code":"SBFG3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"GRUPO
+        SOMA","spotlight":"ON   NM","code":"SOMA3","indexes":"IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"GUARARAPES","spotlight":"ON   NM","code":"GUAR3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"HAPVIDA","spotlight":"ON   NM","code":"HAPV3","indexes":"IBOV,IBRA,IBXL,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"HBR
+        REALTY","spotlight":"ON   NM","code":"HBRE3","indexes":"IGCX,IGNM,ITAG"},{"company":"HELBOR","spotlight":"ON   NM","code":"HBOR3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"HIDROVIAS","spotlight":"ON   NM","code":"HBSA3","indexes":"AGFS,IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"HOME
+        DEPOT","spotlight":"DRN","code":"HOME34","indexes":"BDRX"},{"company":"HYPERA","spotlight":"ON   NM","code":"HYPE3","indexes":"GPTW,IBOV,IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"IGUATEMI
+        S.A","spotlight":"UNT  N1","code":"IGTI11","indexes":"IBOV,IBRA,IBXX,IGCT,IGCX,IMOB,ITAG,SMLL"},{"company":"IHPARDINI","spotlight":"ON   NM","code":"PARD3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"IMC
+        S/A","spotlight":"ON   NM","code":"MEAL3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"INFRACOMM","spotlight":"ON   NM","code":"IFCM3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"INTEL","spotlight":"DRN","code":"ITLC34","indexes":"BDRX"},{"company":"INTELBRAS","spotlight":"ON   NM","code":"INTB3","indexes":"GPTW,IBRA,IGCT,IGCX,IGNM,INDX,ITAG,SMLL"},{"company":"INTUITIVE
+        SU","spotlight":"DRN","code":"I1SR34","indexes":"BDRX"},{"company":"IOCHP-MAXION","spotlight":"ON   NM","code":"MYPK3","indexes":"IBRA,ICON,IDIV,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,SMLL"},{"company":"IRANI","spotlight":"ON   NM","code":"RANI3","indexes":"AGFS,GPTW,IBRA,IGCT,IGCX,IGNM,IMAT,ITAG,SMLL"},{"company":"IRBBRASIL
+        RE","spotlight":"ON   NM","code":"IRBR3","indexes":"IBOV,IBRA,IBXX,IFNC,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ITAUSA","spotlight":"ON   N1","code":"ITSA3","indexes":"IGCX"},{"company":"ITAUSA","spotlight":"PN   N1","code":"ITSA4","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IFNC,IGCT,IGCX,ISEE,ITAG,IVBX,MLCX"},{"company":"ITAUUNIBANCO","spotlight":"ON   N1","code":"ITUB3","indexes":"IBRA,IFNC,IGCT,IGCX,MLCX"},{"company":"ITAUUNIBANCO","spotlight":"PN   N1","code":"ITUB4","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,IFNC,IGCT,IGCX,ISEE,ITAG,MLCX"},{"company":"JALLESMACHAD","spotlight":"ON   NM","code":"JALL3","indexes":"AGFS,GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"JBS","spotlight":"ON   NM","code":"JBSS3","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IDIV,IGCT,IGCX,IGNM,INDX,ITAG,IVBX,MLCX"},{"company":"JD
+        COM","spotlight":"DRN","code":"JDCO34","indexes":"BDRX"},{"company":"JHSF
+        PART","spotlight":"ON   NM","code":"JHSF3","indexes":"IBRA,ICON,IDIV,IGCT,IGCX,IGNM,IMOB,INDX,ITAG,SMLL"},{"company":"JOHNSON","spotlight":"DRN","code":"JNJB34","indexes":"BDRX"},{"company":"JPMORGAN","spotlight":"DRN","code":"JPMC34","indexes":"BDRX"},{"company":"JSL","spotlight":"ON   NM","code":"JSLG3","indexes":"IGCX,IGNM,ITAG"},{"company":"KEPLER
+        WEBER","spotlight":"ON","code":"KEPL3","indexes":"AGFS,GPTW,IBRA,ITAG,SMLL"},{"company":"KLABIN
+        S/A","spotlight":"UNT  N2","code":"KLBN11","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IMAT,INDX,ISEE,ITAG,IVBX,MLCX"},{"company":"KORA
+        SAUDE","spotlight":"ON   NM","code":"KRSA3","indexes":"IGCX,IGNM,ITAG"},{"company":"KRAFT
+        HEINZ","spotlight":"DRN","code":"KHCB34","indexes":"BDRX"},{"company":"LAVVI","spotlight":"ON   NM","code":"LAVV3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"LIGHT
+        S/A","spotlight":"ON   NM","code":"LIGT3","indexes":"IBRA,IEEX,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL,UTIL"},{"company":"LLOYDS
+        BANKI","spotlight":"DRN","code":"L1YG34","indexes":"BDRX"},{"company":"LOCALIZA","spotlight":"ON   NM","code":"RENT3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"LOCAWEB","spotlight":"ON   NM","code":"LWSA3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,IGCT,IGCX,IGNM,ITAG,IVBX,SMLL"},{"company":"LOG
+        COM PROP","spotlight":"ON   NM","code":"LOGG3","indexes":"IBRA,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"LOG-IN","spotlight":"ON   NM","code":"LOGN3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"LOJAS
+        MARISA","spotlight":"ON   NM","code":"AMAR3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"LOJAS
+        RENNER","spotlight":"ON   NM","code":"LREN3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"LOPES
+        BRASIL","spotlight":"ON   NM","code":"LPSB3","indexes":"IGCX,IGNM,ITAG"},{"company":"M.DIASBRANCO","spotlight":"ON   NM","code":"MDIA3","indexes":"AGFS,IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,SMLL"},{"company":"MACY
+        S","spotlight":"DRN","code":"MACY34","indexes":"BDRX"},{"company":"MAGAZ LUIZA","spotlight":"ON   NM","code":"MGLU3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,MLCX"},{"company":"MARCOPOLO","spotlight":"ON   N2","code":"POMO3","indexes":"IGCX,ITAG"},{"company":"MARCOPOLO","spotlight":"PN   N2","code":"POMO4","indexes":"IBRA,IGCT,IGCX,INDX,ITAG,SMLL"},{"company":"MARFRIG","spotlight":"ON   NM","code":"MRFG3","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,IVBX,SMLL"},{"company":"MASTERCARD","spotlight":"DRN","code":"MSCD34","indexes":"BDRX"},{"company":"MATER
+        DEI","spotlight":"ON   NM","code":"MATD3","indexes":"GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"MCDONALDS","spotlight":"DRN","code":"MCDC34","indexes":"BDRX"},{"company":"MELIUZ","spotlight":"ON   NM","code":"CASH3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,IGCT,IGCX,IGNM,ITAG,IVBX,SMLL"},{"company":"MELNICK","spotlight":"ON   NM","code":"MELK3","indexes":"IGCX,IGNM,ITAG"},{"company":"MERC
+        BRASIL","spotlight":"PN   N1","code":"BMEB4","indexes":"IGCX"},{"company":"MERCADOLIBRE","spotlight":"DRN","code":"MELI34","indexes":"BDRX"},{"company":"MERCK","spotlight":"DRN","code":"MRCK34","indexes":"BDRX"},{"company":"META
+        PLAT","spotlight":"DRN","code":"M1TA34","indexes":"BDRX"},{"company":"METAL
+        LEVE","spotlight":"ON   NM","code":"LEVE3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"MICRON
+        TECHN","spotlight":"DRN","code":"MUTC34","indexes":"BDRX"},{"company":"MICROSOFT","spotlight":"DRN","code":"MSFT34","indexes":"BDRX"},{"company":"MILLS","spotlight":"ON   NM","code":"MILS3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"MINERVA","spotlight":"ON   NM","code":"BEEF3","indexes":"AGFS,IBOV,IBRA,IBXX,ICO2,ICON,IDIV,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,IVBX,SMLL"},{"company":"MITRE
+        REALTY","spotlight":"ON   NM","code":"MTRE3","indexes":"IGCX,IGNM,ITAG,SMLL"},{"company":"MOBLY","spotlight":"ON   NM","code":"MBLY3","indexes":"IGCX,IGNM,ITAG"},{"company":"MODALMAIS","spotlight":"ON   NM","code":"MODL3","indexes":"IBRA,IFNC,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"MODERNA
+        INC","spotlight":"DRN","code":"M1RN34","indexes":"BDRX"},{"company":"MONSTER
+        BEVE","spotlight":"DRN","code":"M1NS34","indexes":"BDRX"},{"company":"MORGAN
+        STAN","spotlight":"DRN","code":"MSBR34","indexes":"BDRX"},{"company":"MOSAIC
+        CO","spotlight":"DRN","code":"MOSC34","indexes":"BDRX"},{"company":"MOURA
+        DUBEUX","spotlight":"ON   NM","code":"MDNE3","indexes":"IGCX,IGNM,ITAG"},{"company":"MOVIDA","spotlight":"ON   NM","code":"MOVI3","indexes":"IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL"},{"company":"MRV","spotlight":"ON   NM","code":"MRVE3","indexes":"IBOV,IBRA,IBXX,ICO2,ICON,IDIV,IGCT,IGCX,IGNM,IMOB,INDX,ISEE,ITAG,SMLL"},{"company":"MULTILASER","spotlight":"ON   NM","code":"MLAS3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"MULTIPLAN","spotlight":"ON   N2","code":"MULT3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IMOB,ITAG,IVBX,MLCX"},{"company":"NASDAQ
+        INC","spotlight":"DRN","code":"N1DA34","indexes":"BDRX"},{"company":"NEOENERGIA","spotlight":"ON   NM","code":"NEOE3","indexes":"IBRA,IEEX,IGCT,IGCX,IGNM,ISEE,ITAG,MLCX,UTIL"},{"company":"NEOGRID","spotlight":"ON   NM","code":"NGRD3","indexes":"GPTW,IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"NETFLIX","spotlight":"DRN","code":"NFLX34","indexes":"BDRX"},{"company":"NEW
+        ORIENTAL","spotlight":"DRN","code":"E1DU34","indexes":"BDRX"},{"company":"NEWMONT
+        GOLD","spotlight":"DRN","code":"N1EM34","indexes":"BDRX"},{"company":"NEXTERA
+        ENER","spotlight":"DRN","code":"NEXT34","indexes":"BDRX"},{"company":"NIKE","spotlight":"DRN","code":"NIKE34","indexes":"BDRX"},{"company":"NOVO
+        NORDISK","spotlight":"DRN","code":"N1VO34","indexes":"BDRX"},{"company":"NVIDIA
+        CORP","spotlight":"DRN","code":"NVDC34","indexes":"BDRX"},{"company":"OCCIDENT
+        PTR","spotlight":"DRN","code":"OXYP34","indexes":"BDRX"},{"company":"OCEANPACT","spotlight":"ON   NM","code":"OPCT3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ODONTOPREV","spotlight":"ON   NM","code":"ODPV3","indexes":"GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"OMEGAENERGIA","spotlight":"ON   NM","code":"MEGA3","indexes":"IBRA,IEEX,IGCT,IGCX,IGNM,ITAG,SMLL,UTIL"},{"company":"ONCOCLINICAS","spotlight":"ON   NM","code":"ONCO3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ORACLE","spotlight":"DRN","code":"ORCL34","indexes":"BDRX"},{"company":"ORIZON","spotlight":"ON   NM","code":"ORVR3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL,UTIL"},{"company":"OSX
+        BRASIL","spotlight":"ON   NM","code":"OSXB3","indexes":"IGCX,IGNM,ITAG"},{"company":"OUROFINO
+        S/A","spotlight":"ON   NM","code":"OFSA3","indexes":"IGCX,IGNM,ITAG"},{"company":"P.ACUCAR-CBD","spotlight":"ON   NM","code":"PCAR3","indexes":"AGFS,IBOV,IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL"},{"company":"PADTEC","spotlight":"ON   NM","code":"PDTC3","indexes":"IGCX,IGNM,ITAG"},{"company":"PAGSEGURO","spotlight":"DRN","code":"PAGS34","indexes":"BDRX"},{"company":"PAGUE
+        MENOS","spotlight":"ON   NM","code":"PGMN3","indexes":"GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"PAYPAL
+        HOLD","spotlight":"DRN","code":"PYPL34","indexes":"BDRX"},{"company":"PDG
+        REALT","spotlight":"ON   NM","code":"PDGR3","indexes":"IGCX,IGNM,ITAG"},{"company":"PEPSICO
+        INC","spotlight":"DRN","code":"PEPB34","indexes":"BDRX"},{"company":"PETROBRAS","spotlight":"ON   N2","code":"PETR3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IGCT,IGCX,ITAG,MLCX"},{"company":"PETROBRAS","spotlight":"PN   N2","code":"PETR4","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IGCT,IGCX,ITAG,MLCX"},{"company":"PETRORECSA","spotlight":"ON   NM","code":"RECV3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"PETRORIO","spotlight":"ON   NM","code":"PRIO3","indexes":"IBOV,IBRA,IBXL,IBXX,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"PETTENATI","spotlight":"PN","code":"PTNT4","indexes":"ITAG"},{"company":"PETZ","spotlight":"ON   NM","code":"PETZ3","indexes":"IBOV,IBRA,IBXL,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,SMLL"},{"company":"PFIZER","spotlight":"DRN","code":"PFIZ34","indexes":"BDRX"},{"company":"PG","spotlight":"DRN","code":"PGCO34","indexes":"BDRX"},{"company":"PINDUODUO
+        IN","spotlight":"DRN","code":"P1DD34","indexes":"BDRX"},{"company":"PINE","spotlight":"PN   N2","code":"PINE4","indexes":"IGCX,ITAG"},{"company":"PLANOEPLANO","spotlight":"ON   NM","code":"PLPL3","indexes":"IGCX,IGNM,ITAG"},{"company":"PORTO
+        SEGURO","spotlight":"ON   NM","code":"PSSA3","indexes":"IBRA,IBXX,ICO2,IDIV,IFNC,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"PORTOBELLO","spotlight":"ON   NM","code":"PTBL3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"POSITIVO
+        TEC","spotlight":"ON   NM","code":"POSI3","indexes":"GPTW,IBOV,IBRA,IGCT,IGCX,IGNM,INDX,ITAG,SMLL"},{"company":"PRINER","spotlight":"ON   NM","code":"PRNR3","indexes":"IGCX,IGNM,ITAG"},{"company":"PROFARMA","spotlight":"ON   NM","code":"PFRM3","indexes":"IGCX,IGNM,ITAG"},{"company":"PROLOGIS
+        INC","spotlight":"DRN","code":"P1LD34","indexes":"BDRX"},{"company":"QUALCOMM","spotlight":"DRN","code":"QCOM34","indexes":"BDRX"},{"company":"QUALICORP","spotlight":"ON   NM","code":"QUAL3","indexes":"GPTW,IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"QUERO-QUERO","spotlight":"ON   NM","code":"LJQQ3","indexes":"GPTW,IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"RAIADROGASIL","spotlight":"ON   NM","code":"RADL3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"RAIZEN","spotlight":"PN   N2","code":"RAIZ4","indexes":"AGFS,IBOV,IBRA,IBXX,ICON,IGCT,IGCX,ITAG,MLCX"},{"company":"RANDON
+        PART","spotlight":"ON   N1","code":"RAPT3","indexes":"IGCX"},{"company":"RANDON
+        PART","spotlight":"PN   N1","code":"RAPT4","indexes":"AGFS,IBRA,IDIV,IGCT,IGCX,INDX,ITAG,SMLL"},{"company":"RAYTHEONTECH","spotlight":"DRN","code":"RYTT34","indexes":"BDRX"},{"company":"RECRUSUL","spotlight":"ON","code":"RCSL3","indexes":"AGFS,IBRA,SMLL"},{"company":"REDE
+        D OR","spotlight":"ON   NM","code":"RDOR3","indexes":"IBOV,IBRA,IBXL,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"RIO
+        TINTO","spotlight":"DRN","code":"RIOT34","indexes":"BDRX"},{"company":"RNI","spotlight":"ON   NM","code":"RDNI3","indexes":"IGCX,IGNM,ITAG"},{"company":"ROBLOX
+        CORP","spotlight":"DRN","code":"R2BL34","indexes":"BDRX"},{"company":"ROKU
+        INC","spotlight":"DRN","code":"R1KU34","indexes":"BDRX"},{"company":"ROMI","spotlight":"ON   NM","code":"ROMI3","indexes":"IBRA,IDIV,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"RUMO
+        S.A.","spotlight":"ON   NM","code":"RAIL3","indexes":"AGFS,IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"SABESP","spotlight":"ON   NM","code":"SBSP3","indexes":"GPTW,IBOV,IBRA,IBXX,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX,UTIL"},{"company":"SALESFOR
+        INC","spotlight":"DRN","code":"SSFO34","indexes":"BDRX"},{"company":"SANEPAR","spotlight":"UNT  N2","code":"SAPR11","indexes":"IBRA,IGCT,IGCX,ITAG,SMLL,UTIL"},{"company":"SANTANDER","spotlight":"DRN","code":"BCSA34","indexes":"BDRX"},{"company":"SANTANDER
+        BR","spotlight":"UNT","code":"SANB11","indexes":"GPTW,IBOV,IBRA,IBXX,ICO2,IDIV,IFNC,ISEE,ITAG,MLCX"},{"company":"SANTOS
+        BRP","spotlight":"ON   NM","code":"STBP3","indexes":"GPTW,IBRA,IBXX,ICO2,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"SAO
+        CARLOS","spotlight":"ON   NM","code":"SCAR3","indexes":"IGCX,IGNM,ITAG"},{"company":"SAO
+        MARTINHO","spotlight":"ON   NM","code":"SMTO3","indexes":"AGFS,IBOV,IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,INDX,ITAG,MLCX"},{"company":"SCHWAB","spotlight":"DRN","code":"SCHW34","indexes":"BDRX"},{"company":"SEA
+        LTD","spotlight":"DRN","code":"S2EA34","indexes":"BDRX"},{"company":"SEQUOIA
+        LOG","spotlight":"ON   NM","code":"SEQL3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"SER
+        EDUCA","spotlight":"ON   NM","code":"SEER3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"SHOPIFY
+        INC","spotlight":"DRN","code":"S2HO34","indexes":"BDRX"},{"company":"SIBANYE
+        STIL","spotlight":"DRN","code":"S1BS34","indexes":"BDRX"},{"company":"SID
+        NACIONAL","spotlight":"ON","code":"CSNA3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IMAT,INDX,IVBX,MLCX"},{"company":"SIMON
+        PROP","spotlight":"DRN","code":"SIMN34","indexes":"BDRX"},{"company":"SIMPAR","spotlight":"ON   NM","code":"SIMH3","indexes":"IBRA,IGCT,IGCX,IGNM,ISEE,ITAG,SMLL"},{"company":"SINQIA","spotlight":"ON   NM","code":"SQIA3","indexes":"GPTW,IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"SLC
+        AGRICOLA","spotlight":"ON   NM","code":"SLCE3","indexes":"AGFS,GPTW,IBOV,IBRA,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"SMART
+        FIT","spotlight":"ON   NM","code":"SMFT3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"SONY
+        GROUP","spotlight":"DRN","code":"SNEC34","indexes":"BDRX"},{"company":"SPOTIFY
+        TECH","spotlight":"DRN","code":"S1PO34","indexes":"BDRX"},{"company":"SPRINGS","spotlight":"ON   NM","code":"SGPS3","indexes":"IGCX,IGNM,ITAG"},{"company":"STARBUCKS","spotlight":"DRN","code":"SBUB34","indexes":"BDRX"},{"company":"STORECAPITAL","spotlight":"DRN","code":"S2TO34","indexes":"BDRX"},{"company":"SUL
+        AMERICA","spotlight":"UNT  N2","code":"SULA11","indexes":"IBOV,IBRA,IBXX,ICO2,IFNC,IGCT,IGCX,ISEE,ITAG,IVBX,SMLL"},{"company":"SUZANO
+        S.A.","spotlight":"ON   NM","code":"SUZB3","indexes":"AGFS,GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,IMAT,INDX,ISEE,ITAG,IVBX,MLCX"},{"company":"SYN
+        PROP TEC","spotlight":"ON   NM","code":"SYNE3","indexes":"IBRA,IDIV,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"TAESA","spotlight":"UNT  N2","code":"TAEE11","indexes":"GPTW,IBOV,IBRA,IBXX,ICO2,IDIV,IEEX,IGCT,IGCX,ITAG,MLCX,UTIL"},{"company":"TAIWANSMFAC","spotlight":"DRN","code":"TSMC34","indexes":"BDRX"},{"company":"TAKE-TWO
+        INT","spotlight":"DRN","code":"T1TW34","indexes":"BDRX"},{"company":"TAL EDUCATIO","spotlight":"DRN","code":"T1AL34","indexes":"BDRX"},{"company":"TARGET
+        CORP","spotlight":"DRN","code":"TGTB34","indexes":"BDRX"},{"company":"TAURUS
+        ARMAS","spotlight":"ON   N2","code":"TASA3","indexes":"IGCX,ITAG"},{"company":"TAURUS
+        ARMAS","spotlight":"PN   N2","code":"TASA4","indexes":"IBRA,IGCT,IGCX,INDX,ITAG,SMLL"},{"company":"TC","spotlight":"ON   NM","code":"TRAD3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"TECHNOS","spotlight":"ON   NM","code":"TECN3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"TECNISA","spotlight":"ON   NM","code":"TCSA3","indexes":"IGCX,IGNM,ITAG"},{"company":"TEGMA","spotlight":"ON   NM","code":"TGMA3","indexes":"IBRA,IDIV,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"TELADOCHEALT","spotlight":"DRN","code":"T2DH34","indexes":"BDRX"},{"company":"TELEF
+        BRASIL","spotlight":"ON","code":"VIVT3","indexes":"GPTW,IBOV,IBRA,IBXX,ICO2,IDIV,ISEE,IVBX,MLCX"},{"company":"TELEFONIC","spotlight":"DRN","code":"TLNC34","indexes":"BDRX"},{"company":"TENDA","spotlight":"ON   NM","code":"TEND3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,INDX,ITAG,SMLL"},{"company":"TERNIUMSA","spotlight":"DRN","code":"TXSA34","indexes":"BDRX"},{"company":"TERRASANTAPA","spotlight":"ON   NM","code":"LAND3","indexes":"IGCX,IGNM,ITAG"},{"company":"TESLA
+        INC","spotlight":"DRN","code":"TSLA34","indexes":"BDRX"},{"company":"TEXAS
+        INC","spotlight":"DRN","code":"TEXA34","indexes":"BDRX"},{"company":"THERMFISCHER","spotlight":"DRN","code":"TMOS34","indexes":"BDRX"},{"company":"TIM","spotlight":"ON   NM","code":"TIMS3","indexes":"IBOV,IBRA,IBXX,ICO2,IGCT,IGCX,IGNM,ISEE,ITAG,MLCX"},{"company":"TIME
+        FOR FUN","spotlight":"ON   NM","code":"SHOW3","indexes":"IGCX,IGNM,ITAG"},{"company":"TOTVS","spotlight":"ON   NM","code":"TOTS3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"TOYOTAMO","spotlight":"DRN","code":"TMCO34","indexes":"BDRX"},{"company":"TRACK
+        FIELD","spotlight":"PN   N2","code":"TFCO4","indexes":"IGCX,ITAG"},{"company":"TRADE
+        DESK","spotlight":"DRN","code":"T2TD34","indexes":"BDRX"},{"company":"TRAN
+        PAULIST","spotlight":"ON   N1","code":"TRPL3","indexes":"IGCX"},{"company":"TRAN
+        PAULIST","spotlight":"PN   N1","code":"TRPL4","indexes":"IBRA,IDIV,IEEX,IGCT,IGCX,MLCX,UTIL"},{"company":"TRANSOCEAN","spotlight":"DRN","code":"RIGG34","indexes":"BDRX"},{"company":"TRISUL","spotlight":"ON   NM","code":"TRIS3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,IMOB,ITAG,SMLL"},{"company":"TRIUNFO
+        PART","spotlight":"ON   NM","code":"TPIS3","indexes":"IGCX,IGNM,ITAG"},{"company":"TUPY","spotlight":"ON   NM","code":"TUPY3","indexes":"AGFS,IBRA,IGCT,IGCX,IGNM,INDX,ITAG,SMLL"},{"company":"UBER
+        TECH IN","spotlight":"DRN","code":"U1BE34","indexes":"BDRX"},{"company":"ULTRAPAR","spotlight":"ON   NM","code":"UGPA3","indexes":"IBOV,IBRA,IBXX,ICO2,IGCT,IGCX,IGNM,ITAG,IVBX,MLCX"},{"company":"UNICASA","spotlight":"ON   NM","code":"UCAS3","indexes":"IGCX,IGNM,ITAG"},{"company":"UNIFIQUE","spotlight":"ON   NM","code":"FIQE3","indexes":"IGCX,IGNM,ITAG"},{"company":"UNILEVER","spotlight":"DRN","code":"ULEV34","indexes":"BDRX"},{"company":"UNIPAR","spotlight":"PNB","code":"UNIP6","indexes":"IBRA,IDIV,IMAT,INDX,SMLL"},{"company":"UNITEDHEALTH","spotlight":"DRN","code":"UNHH34","indexes":"BDRX"},{"company":"UNITY
+        SOFTWR","spotlight":"DRN","code":"U2ST34","indexes":"BDRX"},{"company":"US
+        STEEL","spotlight":"DRN","code":"USSX34","indexes":"BDRX"},{"company":"USIMINAS","spotlight":"ON   N1","code":"USIM3","indexes":"IBRA,IDIV,IGCT,IGCX,IMAT,SMLL"},{"company":"USIMINAS","spotlight":"PNA  N1","code":"USIM5","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IDIV,IGCT,IGCX,IMAT,INDX,IVBX,SMLL"},{"company":"VALE","spotlight":"ON   NM","code":"VALE3","indexes":"IBOV,IBRA,IBXL,IBXX,IDIV,IGCT,IGCX,IGNM,IMAT,ITAG,MLCX"},{"company":"VALID","spotlight":"ON   NM","code":"VLID3","indexes":"IBRA,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"VAMOS","spotlight":"ON   NM","code":"VAMO3","indexes":"AGFS,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,MLCX"},{"company":"VERIZON","spotlight":"DRN","code":"VERZ34","indexes":"BDRX"},{"company":"VIA","spotlight":"ON   NM","code":"VIIA3","indexes":"GPTW,IBOV,IBRA,IBXL,IBXX,ICO2,ICON,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,SMLL"},{"company":"VIBRA","spotlight":"ON   NM","code":"VBBR3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,ISEE,ITAG,IVBX,MLCX"},{"company":"VISA
+        INC","spotlight":"DRN","code":"VISA34","indexes":"BDRX"},{"company":"VITTIA","spotlight":"ON   NM","code":"VITT3","indexes":"IGCX,IGNM,ITAG"},{"company":"VIVARA
+        S.A.","spotlight":"ON   NM","code":"VIVA3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,INDX,ITAG,SMLL"},{"company":"VIVEO","spotlight":"ON   NM","code":"VVEO3","indexes":"IGCX,IGNM,ITAG"},{"company":"VULCABRAS","spotlight":"ON   NM","code":"VULC3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"WAL
+        MART","spotlight":"DRN","code":"WALM34","indexes":"BDRX"},{"company":"WALT
+        DISNEY","spotlight":"DRN","code":"DISB34","indexes":"BDRX"},{"company":"WDC
+        NETWORKS","spotlight":"ON   NM","code":"LVTC3","indexes":"IGCX,IGNM,ITAG"},{"company":"WEG","spotlight":"ON   NM","code":"WEGE3","indexes":"IBOV,IBRA,IBXL,IBXX,ICO2,IGCT,IGCX,IGNM,INDX,ISEE,ITAG,MLCX"},{"company":"WELLS
+        FARGO","spotlight":"DRN","code":"WFCO34","indexes":"BDRX"},{"company":"WESTWING","spotlight":"ON   NM","code":"WEST3","indexes":"IGCX,IGNM,ITAG"},{"company":"WILSON
+        SONS","spotlight":"ON   NM","code":"PORT3","indexes":"IGCX,IGNM,ITAG"},{"company":"WIZ
+        S.A.","spotlight":"ON   NM","code":"WIZS3","indexes":"GPTW,IBRA,IDIV,IFNC,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"YDUQS
+        PART","spotlight":"ON   NM","code":"YDUQ3","indexes":"IBOV,IBRA,IBXX,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ZAMP
+        S.A.","spotlight":"ON   NM","code":"ZAMP3","indexes":"IBRA,ICON,IGCT,IGCX,IGNM,ITAG,SMLL"},{"company":"ZOOM
+        VIDEO","spotlight":"DRN","code":"Z1OM34","indexes":"BDRX"}]}'
+  recorded_at: 2022-12-08 08:30:21 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.8.2

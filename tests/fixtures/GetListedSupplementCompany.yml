@@ -1,0 +1,37 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany/eyJpc3N1aW5nQ29tcGFueSI6IkFCRVYiLCJsYW5ndWFnZSI6InB0LWJyIn0=
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: text/plain; charset=utf-8
+      strict-transport-security: max-age=31536000; includeSubDomains
+      x-xss-protection: 1; mode=block
+      x-content-type-options: nosniff
+      content-security-policy: 'default-src ''self'' https://*.google-analytics.com;
+        font-src ''self'' data: https://fonts.gstatic.com/ ;img-src * data: ; script-src
+        ''unsafe-eval'' * ''unsafe-inline''; style-src * ''unsafe-inline''; frame-src
+        http://*.b3.com.br https://*.b3.com.br https://s.tradingview.com/'
+      referrer-policy: strict-origin
+      server-timing: dtSInfo;desc="0", dtRpid;desc="-232193393"
+      date: Thu, 08 Dec 2022 08:34:29 GMT
+      transfer-encoding: chunked
+    body:
+      encoding: ''
+      file: no
+      string: '[{"stockCapital":"58.130.517.165,22","quotedPerSharSince":"01/11/2013","commonSharesForm":"Escritural","preferredSharesForm":"","hasCommom":"BRADESCO","hasPreferred":"","roundLot":"100","tradingName":"AMBEV
+        S/A   ","numberCommonShares":"15.750.216.851","numberPreferredShares":"0","totalNumberShares":"15.750.216.851","code":"ABEV","codeCVM":"23264","segment":"BOLSA","cashDividends":[{"assetIssued":"BRABEVACNOR1","paymentDate":"30/12/2021","rate":"0,13340000000","relatedTo":"Anual/2021","approvedOn":"09/12/2021","isinCode":"BRABEVACNOR1","label":"DIVIDENDO","lastDatePrior":"17/12/2021","remarks":""},{"assetIssued":"BRABEVACNOR1","paymentDate":"30/12/2021","rate":"0,47020000000","relatedTo":"Anual/2021","approvedOn":"09/12/2021","isinCode":"BRABEVACNOR1","label":"JRS
+        CAP PROPRIO","lastDatePrior":"17/12/2021","remarks":""}],"stockDividends":[],"subscriptions":[{"assetIssued":"BRABEVACNOR1","percentage":"0,13994090200","priceUnit":"16,09000000000","tradingPeriod":"30/04/2014
+        a 22/05/2014","subscriptionDate":"29/05/2014","approvedOn":"28/04/2014","isinCode":"BRABEVACNOR1","label":"SUBSCRICAO","lastDatePrior":"28/04/2014","remarks":""}]}]'
+  recorded_at: 2022-12-08 08:34:29 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.8.2

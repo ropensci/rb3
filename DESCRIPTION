@@ -48,7 +48,7 @@ Suggests:
     magrittr,
     tibble,
     withr,
-    vcr
+    vcr (>= 0.6.0)
 Collate:
     'rb3-package.R'
     'util.R'
