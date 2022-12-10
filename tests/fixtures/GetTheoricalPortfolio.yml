@@ -1,0 +1,78 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetTheoricalPortfolio/eyJwYWdlTnVtYmVyIjoxLCJwYWdlU2l6ZSI6OTk5OSwibGFuZ3VhZ2UiOiJwdC1iciIsImluZGV4IjoiSUJPViJ9
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-length: '10267'
+      content-security-policy: 'default-src ''self'' https://*.google-analytics.com;
+        font-src ''self'' data: https://fonts.gstatic.com/ ;img-src * data: ; script-src
+        ''unsafe-eval'' * ''unsafe-inline''; style-src * ''unsafe-inline''; frame-src
+        http://*.b3.com.br https://*.b3.com.br https://s.tradingview.com/'
+      content-type: application/json; charset=utf-8
+      date: Sat, 10 Dec 2022 09:34:59 GMT
+      referrer-policy: strict-origin
+      server-timing: dtSInfo;desc="0", dtRpid;desc="-1976565348"
+      set-cookie:
+      - dtCookie=v_4_srv_33_sn_E048ED3E9D19F5911B8462AEA4D31FE2_perc_100000_ol_0_mul_1_app-3A2fa0c7805985f6bf_1_rcs-3Acss_0;
+        Path=/; Domain=.b3.com.br
+      - TS01871345=011d592ce158af63b29b820646f49affc204c58e179f65b57325968576243925d251836fcde3c9ec868404bf5a99993b44b0774c8e;
+        Path=/; HTTPOnly
+      - TS0134a800=011d592ce158af63b29b820646f49affc204c58e179f65b57325968576243925d251836fcde3c9ec868404bf5a99993b44b0774c8e;
+        path=/; domain=.b3.com.br; HTTPonly
+      - BIGipServerpool_sistemaswebb3-listados_8443_WAF=1329140746.64288.0000; path=/;
+        Httponly; Secure
+      strict-transport-security: max-age=31536000; includeSubDomains
+      x-content-type-options: nosniff
+      x-xss-protection: 1; mode=block
+    body:
+      encoding: ''
+      file: no
+      string: '{"page":{"pageNumber":1,"pageSize":9999,"totalRecords":92,"totalPages":1},"header":{"part":"100,000","theoricalQty":"99.273.271.525","reductor":"18.842.281,23696071"},"results":[{"cod":"ABEV3","asset":"AMBEV
+        S/A","type":"ON","theoricalQty":"4.386.652.506","part":"3,251","cont":3},{"cod":"ALPA4","asset":"ALPARGATAS","type":"PN      N1","theoricalQty":"202.765.994","part":"0,202","cont":2},{"cod":"AMER3","asset":"AMERICANAS","type":"ON      NM","theoricalQty":"596.086.291","part":"0,443","cont":4},{"cod":"ARZZ3","asset":"AREZZO
+        CO","type":"ON      NM","theoricalQty":"60.358.029","part":"0,268","cont":5},{"cod":"ASAI3","asset":"ASSAI","type":"ON      NM","theoricalQty":"795.949.801","part":"0,720","cont":6},{"cod":"AZUL4","asset":"AZUL","type":"PN      N2","theoricalQty":"327.646.296","part":"0,253","cont":7},{"cod":"B3SA3","asset":"B3","type":"ON      NM","theoricalQty":"5.901.731.302","part":"3,571","cont":8},{"cod":"BBAS3","asset":"BRASIL","type":"ON      NM","theoricalQty":"1.420.731.069","part":"2,893","cont":15},{"cod":"BBDC3","asset":"BRADESCO","type":"ON  EJ  N1","theoricalQty":"1.508.883.586","part":"1,151","cont":12},{"cod":"BBDC4","asset":"BRADESCO","type":"PN  EJ  N1","theoricalQty":"5.156.077.326","part":"4,766","cont":13},{"cod":"BBSE3","asset":"BBSEGURIDADE","type":"ON      NM","theoricalQty":"671.682.536","part":"0,915","cont":10},{"cod":"BEEF3","asset":"MINERVA","type":"ON      NM","theoricalQty":"260.409.710","part":"0,187","cont":61},{"cod":"BPAC11","asset":"BTGP
+        BANCO","type":"UNT     N2","theoricalQty":"1.225.470.424","part":"1,525","cont":18},{"cod":"BPAN4","asset":"BANCO
+        PAN","type":"PN      N1","theoricalQty":"341.549.703","part":"0,130","cont":9},{"cod":"BRAP4","asset":"BRADESPAR","type":"PN      N1","theoricalQty":"251.025.058","part":"0,260","cont":14},{"cod":"BRFS3","asset":"BRF
+        SA","type":"ON      NM","theoricalQty":"1.076.512.610","part":"0,828","cont":17},{"cod":"BRKM5","asset":"BRASKEM","type":"PNA     N1","theoricalQty":"265.212.486","part":"0,413","cont":16},{"cod":"BRML3","asset":"BR
+        MALLS PAR","type":"ON      NM","theoricalQty":"828.273.884","part":"0,343","cont":11},{"cod":"CASH3","asset":"MELIUZ","type":"ON      NM","theoricalQty":"657.963.256","part":"0,042","cont":60},{"cod":"CCRO3","asset":"CCR
+        SA","type":"ON      NM","theoricalQty":"1.115.681.435","part":"0,746","cont":20},{"cod":"CIEL3","asset":"CIELO","type":"ON      NM","theoricalQty":"1.095.401.258","part":"0,279","cont":22},{"cod":"CMIG4","asset":"CEMIG","type":"PN      N1","theoricalQty":"1.442.098.974","part":"0,836","cont":21},{"cod":"CMIN3","asset":"CSNMINERACAO","type":"ON      N2","theoricalQty":"1.110.550.596","part":"0,189","cont":27},{"cod":"COGN3","asset":"COGNA
+        ON","type":"ON      NM","theoricalQty":"1.820.405.422","part":"0,224","cont":23},{"cod":"CPFE3","asset":"CPFL
+        ENERGIA","type":"ON      NM","theoricalQty":"187.732.538","part":"0,321","cont":26},{"cod":"CPLE6","asset":"COPEL","type":"PNB     N2","theoricalQty":"1.563.365.506","part":"0,528","cont":24},{"cod":"CRFB3","asset":"CARREFOUR
+        BR","type":"ON      NM","theoricalQty":"528.743.156","part":"0,515","cont":19},{"cod":"CSAN3","asset":"COSAN","type":"ON      NM","theoricalQty":"1.171.063.698","part":"1,104","cont":25},{"cod":"CSNA3","asset":"SID
+        NACIONAL","type":"ON","theoricalQty":"589.695.175","part":"0,379","cont":78},{"cod":"CVCB3","asset":"CVC
+        BRASIL","type":"ON      NM","theoricalQty":"275.967.676","part":"0,102","cont":28},{"cod":"CYRE3","asset":"CYRELA
+        REALT","type":"ON      NM","theoricalQty":"274.142.301","part":"0,214","cont":29},{"cod":"DXCO3","asset":"DEXCO","type":"ON      NM","theoricalQty":"274.863.424","part":"0,138","cont":30},{"cod":"ECOR3","asset":"ECORODOVIAS","type":"ON      NM","theoricalQty":"333.657.615","part":"0,094","cont":31},{"cod":"EGIE3","asset":"ENGIE
+        BRASIL","type":"ON      NM","theoricalQty":"255.208.461","part":"0,496","cont":38},{"cod":"ELET3","asset":"ELETROBRAS","type":"ON      N1","theoricalQty":"1.447.696.333","part":"3,223","cont":32},{"cod":"ELET6","asset":"ELETROBRAS","type":"PNB     N1","theoricalQty":"279.941.393","part":"0,642","cont":33},{"cod":"EMBR3","asset":"EMBRAER","type":"ON      NM","theoricalQty":"734.632.205","part":"0,469","cont":34},{"cod":"ENBR3","asset":"ENERGIAS
+        BR","type":"ON      NM","theoricalQty":"246.028.184","part":"0,269","cont":35},{"cod":"ENEV3","asset":"ENEVA","type":"ON      NM","theoricalQty":"1.561.135.009","part":"1,192","cont":37},{"cod":"ENGI11","asset":"ENERGISA","type":"UNT
+        ED  N2","theoricalQty":"248.477.689","part":"0,519","cont":36},{"cod":"EQTL3","asset":"EQUATORIAL","type":"ON      NM","theoricalQty":"1.100.513.485","part":"1,285","cont":39},{"cod":"EZTC3","asset":"EZTEC","type":"ON      NM","theoricalQty":"94.318.339","part":"0,091","cont":40},{"cod":"FLRY3","asset":"FLEURY","type":"ON      NM","theoricalQty":"303.383.609","part":"0,242","cont":41},{"cod":"GGBR4","asset":"GERDAU","type":"PN      N1","theoricalQty":"1.111.956.242","part":"1,281","cont":42},{"cod":"GOAU4","asset":"GERDAU
+        MET","type":"PN      N1","theoricalQty":"686.077.578","part":"0,335","cont":43},{"cod":"GOLL4","asset":"GOL","type":"PN      N2","theoricalQty":"190.059.275","part":"0,091","cont":44},{"cod":"HAPV3","asset":"HAPVIDA","type":"ON      NM","theoricalQty":"4.454.740.939","part":"1,676","cont":47},{"cod":"HYPE3","asset":"HYPERA","type":"ON      NM","theoricalQty":"400.842.480","part":"0,840","cont":48},{"cod":"IGTI11","asset":"IGUATEMI
+        S.A","type":"UNT     N1","theoricalQty":"179.981.368","part":"0,179","cont":49},{"cod":"IRBR3","asset":"IRBBRASIL
+        RE","type":"ON      NM","theoricalQty":"1.255.237.214","part":"0,073","cont":50},{"cod":"ITSA4","asset":"ITAUSA","type":"PN  EJ  N1","theoricalQty":"4.736.060.282","part":"2,109","cont":51},{"cod":"ITUB4","asset":"ITAUUNIBANCO","type":"PN  EJ  N1","theoricalQty":"4.799.907.051","part":"6,101","cont":52},{"cod":"JBSS3","asset":"JBS","type":"ON      NM","theoricalQty":"1.134.986.483","part":"1,583","cont":53},{"cod":"KLBN11","asset":"KLABIN
+        S/A","type":"UNT     N2","theoricalQty":"701.899.756","part":"0,624","cont":54},{"cod":"LREN3","asset":"LOJAS
+        RENNER","type":"ON      NM","theoricalQty":"970.515.779","part":"1,240","cont":57},{"cod":"LWSA3","asset":"LOCAWEB","type":"ON      NM","theoricalQty":"419.466.860","part":"0,190","cont":56},{"cod":"MGLU3","asset":"MAGAZ
+        LUIZA","type":"ON      NM","theoricalQty":"2.874.188.573","part":"0,586","cont":58},{"cod":"MRFG3","asset":"MARFRIG","type":"ON      NM","theoricalQty":"316.724.584","part":"0,202","cont":59},{"cod":"MRVE3","asset":"MRV","type":"ON      NM","theoricalQty":"298.436.955","part":"0,171","cont":62},{"cod":"MULT3","asset":"MULTIPLAN","type":"ON      N2","theoricalQty":"268.145.328","part":"0,314","cont":63},{"cod":"NTCO3","asset":"GRUPO
+        NATURA","type":"ON      NM","theoricalQty":"835.961.011","part":"0,595","cont":45},{"cod":"PCAR3","asset":"P.ACUCAR-CBD","type":"ON      NM","theoricalQty":"157.889.627","part":"0,163","cont":64},{"cod":"PETR3","asset":"PETROBRAS","type":"ON      N2","theoricalQty":"2.684.384.823","part":"4,792","cont":65},{"cod":"PETR4","asset":"PETROBRAS","type":"PN      N2","theoricalQty":"4.566.441.248","part":"7,306","cont":66},{"cod":"PETZ3","asset":"PETZ","type":"ON      NM","theoricalQty":"335.672.329","part":"0,163","cont":68},{"cod":"POSI3","asset":"POSITIVO
+        TEC","type":"ON      NM","theoricalQty":"73.573.028","part":"0,042","cont":69},{"cod":"PRIO3","asset":"PETRORIO","type":"ON      NM","theoricalQty":"839.159.130","part":"1,115","cont":67},{"cod":"QUAL3","asset":"QUALICORP","type":"ON      NM","theoricalQty":"277.039.277","part":"0,128","cont":70},{"cod":"RADL3","asset":"RAIADROGASIL","type":"ON      NM","theoricalQty":"1.196.069.386","part":"1,291","cont":71},{"cod":"RAIL3","asset":"RUMO
+        S.A.","type":"ON      NM","theoricalQty":"1.215.642.613","part":"1,179","cont":74},{"cod":"RAIZ4","asset":"RAIZEN","type":"PN      N2","theoricalQty":"1.246.412.032","part":"0,274","cont":72},{"cod":"RDOR3","asset":"REDE
+        D OR","type":"ON      NM","theoricalQty":"932.048.593","part":"1,517","cont":73},{"cod":"RENT3","asset":"LOCALIZA","type":"ON      NM","theoricalQty":"891.243.839","part":"2,680","cont":55},{"cod":"RRRP3","asset":"3R
+        PETROLEUM","type":"ON      NM","theoricalQty":"200.453.863","part":"0,358","cont":1},{"cod":"SANB11","asset":"SANTANDER
+        BR","type":"UNT","theoricalQty":"355.642.848","part":"0,503","cont":76},{"cod":"SBSP3","asset":"SABESP","type":"ON      NM","theoricalQty":"340.002.999","part":"0,804","cont":75},{"cod":"SLCE3","asset":"SLC
+        AGRICOLA","type":"ON      NM","theoricalQty":"96.272.020","part":"0,224","cont":79},{"cod":"SMTO3","asset":"SAO
+        MARTINHO","type":"ON      NM","theoricalQty":"143.294.210","part":"0,195","cont":77},{"cod":"SOMA3","asset":"GRUPO
+        SOMA","type":"ON      NM","theoricalQty":"490.736.222","part":"0,316","cont":46},{"cod":"SULA11","asset":"SUL
+        AMERICA","type":"UNT     N2","theoricalQty":"284.059.601","part":"0,339","cont":80},{"cod":"SUZB3","asset":"SUZANO
+        S.A.","type":"ON      NM","theoricalQty":"726.823.001","part":"1,514","cont":81},{"cod":"TAEE11","asset":"TAESA","type":"UNT     N2","theoricalQty":"218.568.234","part":"0,441","cont":82},{"cod":"TIMS3","asset":"TIM","type":"ON      NM","theoricalQty":"808.436.195","part":"0,461","cont":84},{"cod":"TOTS3","asset":"TOTVS","type":"ON      NM","theoricalQty":"519.851.955","part":"0,721","cont":85},{"cod":"UGPA3","asset":"ULTRAPAR","type":"ON      NM","theoricalQty":"1.087.887.681","part":"0,713","cont":86},{"cod":"USIM5","asset":"USIMINAS","type":"PNA     N1","theoricalQty":"515.014.562","part":"0,204","cont":87},{"cod":"VALE3","asset":"VALE","type":"ON      NM","theoricalQty":"4.547.296.398","part":"13,697","cont":88},{"cod":"VBBR3","asset":"VIBRA","type":"ON      NM","theoricalQty":"1.114.442.976","part":"1,004","cont":90},{"cod":"VIIA3","asset":"VIA","type":"ON      NM","theoricalQty":"1.576.975.642","part":"0,234","cont":89},{"cod":"VIVT3","asset":"TELEF
+        BRASIL","type":"ON  EJ","theoricalQty":"429.455.552","part":"0,854","cont":83},{"cod":"WEGE3","asset":"WEG","type":"ON      NM","theoricalQty":"1.481.593.024","part":"2,143","cont":91},{"cod":"YDUQ3","asset":"YDUQS
+        PART","type":"ON      NM","theoricalQty":"296.015.511","part":"0,177","cont":92}]}'
+  recorded_at: 2022-12-10 09:35:00 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.8.2

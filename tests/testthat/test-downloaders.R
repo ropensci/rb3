@@ -68,7 +68,7 @@ test_that("it should defaults to PRE in curve_download", {
 
 test_that("it should base64_datetime_download", {
   tpl <- .retrieve_template(NULL, "NegociosBalcao")
-  refdate <- preceding(Sys.Date() - 1, "Brazil/B3")
+  refdate <- as.Date("2022-12-07")
   vcr::use_cassette("NegociosBalcao", {
     f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
   })
@@ -128,6 +128,46 @@ test_that("it should stock_indexes_current_portfolio_download ", {
     f <- stock_indexes_current_portfolio_download(tpl, tempfile(),
       index_name = "IBOV"
     )
+  })
+  expect_true(f)
+})
+
+test_that("it should stock_indexes_theo_portfolio_download ", {
+  tpl <- .retrieve_template(NULL, "GetTheoricalPortfolio")
+  vcr::use_cassette("GetTheoricalPortfolio", {
+    f <- stock_indexes_theo_portfolio_download(tpl, tempfile(),
+      index_name = "IBOV"
+    )
+  })
+  expect_true(f)
+})
+
+test_that("it should datetime_download FPR file", {
+  tpl <- .retrieve_template(NULL, "FPR")
+  refdate <- as.Date("2022-12-07")
+  vcr::use_cassette("FPR", {
+    f <- datetime_download(tpl, tempfile(), refdate = refdate)
+  })
+  expect_true(f)
+})
+
+test_that("it should datetime_download NegociosBTB file", {
+  tpl <- .retrieve_template(NULL, "NegociosBTB")
+  refdate <- as.Date("2022-12-07")
+  vcr::use_cassette("NegociosBTB",
+    {
+      f <- datetime_download(tpl, tempfile(), refdate = refdate)
+    },
+    record = "all"
+  )
+  expect_true(f)
+})
+
+test_that("it should datetime_download OpcoesAcoesEmAberto", {
+  tpl <- .retrieve_template(NULL, "OpcoesAcoesEmAberto")
+  refdate <- as.Date("2022-12-07")
+  vcr::use_cassette("OpcoesAcoesEmAberto", {
+    f <- datetime_download(tpl, tempfile(), refdate = refdate)
   })
   expect_true(f)
 })
