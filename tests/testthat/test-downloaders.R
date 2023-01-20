@@ -22,7 +22,7 @@ test_that("it should download a file with a datetime downloader", {
   expect_false(tpl$download_marketdata(dest))
   expect_false(file.exists(dest))
   skip_on_os("linux")
-  date <- getdate("last bizday", Sys.Date(), "Brazil/B3")
+  date <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
   x <- tpl$download_marketdata(dest, refdate = date)
   expect_true(x)
   expect_true(file.exists(dest))
@@ -153,7 +153,7 @@ test_that("it should datetime_download FPR file", {
 
 test_that("it should datetime_download NegociosBTB file", {
   tpl <- .retrieve_template(NULL, "NegociosBTB")
-  refdate <- as.Date("2022-12-07")
+  refdate <- as.Date("2023-01-06")
   vcr::use_cassette("NegociosBTB",
     {
       f <- datetime_download(tpl, tempfile(), refdate = refdate)
