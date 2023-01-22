@@ -88,7 +88,7 @@
 
       
 
-      </header><script src="B3-Indexes_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>B3 Indexes</h1>
@@ -101,7 +101,9 @@
 
     
     
-<p><code>rb3</code> comes with a diverse range of functions to explore the index delivered by the B3 Exchange. These functions will be presented here.</p>
+<p><code>rb3</code> comes with a diverse range of functions to explore
+the index delivered by the B3 Exchange. These functions will be
+presented here.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -110,9 +112,14 @@
 <div class="section level2">
 <h2 id="b3-indexes">B3 Indexes<a class="anchor" aria-label="anchor" href="#b3-indexes"></a>
 </h2>
-<p>The function <code><a href="../reference/indexes_get.html">rb3::indexes_get</a></code> list the names of available indexes.</p>
+<p>The function <code><a href="../reference/indexes_get.html">rb3::indexes_get</a></code> list the names of
+available indexes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Automatic coercion from double to character was deprecated in purrr 1.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use an explicit call to `as.character()` within `map_chr()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">rb3</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/wilsonfreitas/rb3/issues&gt;</span>.</span></span>
 <span><span class="co">#&gt;  [1] "AGFS" "BDRX" "GPTW" "IBOV" "IBRA" "IBXL" "IBXX" "ICO2" "ICON" "IDIV"</span></span>
 <span><span class="co">#&gt; [11] "IEEX" "IFIL" "IFIX" "IFNC" "IGCT" "IGCX" "IGNM" "IMAT" "IMOB" "INDX"</span></span>
 <span><span class="co">#&gt; [21] "ISEE" "ITAG" "IVBX" "MLCX" "SMLL" "UTIL"</span></span></code></pre></div>
@@ -120,109 +127,120 @@
 <div class="section level2">
 <h2 id="indexes-composition-and-weights">Indexes Composition and Weights<a class="anchor" aria-label="anchor" href="#indexes-composition-and-weights"></a>
 </h2>
-<p>The composition of B3 indexes are available through the function <code><a href="../reference/index_weights_get.html">rb3::index_weights_get</a></code>. This function returns a data.frame with the current compostion of the requested index, all symbols that compound the index, their weights and theoretical position. Here the IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
+<p>The composition of B3 indexes are available through the function
+<code><a href="../reference/index_weights_get.html">rb3::index_weights_get</a></code>. This function returns a data.frame
+with the current compostion of the requested index, all symbols that
+compound the index, their weights and theoretical position. Here the
+IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 89 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight   position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.032<span style="text-decoration: underline;">5</span>  <span style="text-decoration: underline;">4</span>386<span style="text-decoration: underline;">652</span>506</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALPA4  0.002<span style="text-decoration: underline;">02</span>  202<span style="text-decoration: underline;">765</span>994</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AMER3  0.004<span style="text-decoration: underline;">43</span>  596<span style="text-decoration: underline;">086</span>291</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.002<span style="text-decoration: underline;">68</span>   60<span style="text-decoration: underline;">358</span>029</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.007<span style="text-decoration: underline;">2</span>   795<span style="text-decoration: underline;">949</span>801</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AZUL4  0.002<span style="text-decoration: underline;">53</span>  327<span style="text-decoration: underline;">646</span>296</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> B3SA3  0.035<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">5</span>901<span style="text-decoration: underline;">731</span>302</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BBAS3  0.028<span style="text-decoration: underline;">9</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">731</span>069</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBDC3  0.011<span style="text-decoration: underline;">5</span>  <span style="text-decoration: underline;">1</span>508<span style="text-decoration: underline;">883</span>586</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC4  0.047<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">5</span>156<span style="text-decoration: underline;">077</span>326</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 82 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.032<span style="text-decoration: underline;">8</span>  <span style="text-decoration: underline;">4</span>386<span style="text-decoration: underline;">652</span>506</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALPA4  0.001<span style="text-decoration: underline;">57</span>  202<span style="text-decoration: underline;">765</span>994</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AMER3  0.003<span style="text-decoration: underline;">03</span>  611<span style="text-decoration: underline;">169</span>249</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.002<span style="text-decoration: underline;">44</span>   60<span style="text-decoration: underline;">758</span>326</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.009<span style="text-decoration: underline;">37</span>  935<span style="text-decoration: underline;">793</span>199</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AZUL4  0.001<span style="text-decoration: underline;">85</span>  327<span style="text-decoration: underline;">646</span>296</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> B3SA3  0.039<span style="text-decoration: underline;">9</span>  <span style="text-decoration: underline;">5</span>901<span style="text-decoration: underline;">731</span>302</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BBAS3  0.025<span style="text-decoration: underline;">4</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">731</span>069</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBDC3  0.010<span style="text-decoration: underline;">4</span>  <span style="text-decoration: underline;">1</span>508<span style="text-decoration: underline;">883</span>586</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC4  0.040<span style="text-decoration: underline;">2</span>  <span style="text-decoration: underline;">5</span>156<span style="text-decoration: underline;">077</span>326</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 79 more rows</span></span></span></code></pre></div>
 <p>The IBr100 Index (<code>IBXX</code>)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBXX"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight   position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.031<span style="text-decoration: underline;">1</span>  <span style="text-decoration: underline;">4</span>386<span style="text-decoration: underline;">652</span>506</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALPA4  0.001<span style="text-decoration: underline;">93</span>  202<span style="text-decoration: underline;">765</span>994</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AMBP3  0.000<span style="text-decoration: underline;">57</span>   43<span style="text-decoration: underline;">853</span>759</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AMER3  0.004<span style="text-decoration: underline;">24</span>  596<span style="text-decoration: underline;">086</span>291</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ARZZ3  0.002<span style="text-decoration: underline;">57</span>   60<span style="text-decoration: underline;">358</span>029</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ASAI3  0.006<span style="text-decoration: underline;">89</span>  795<span style="text-decoration: underline;">949</span>801</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AURE3  0.002<span style="text-decoration: underline;">07</span>  301<span style="text-decoration: underline;">966</span>318</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AZUL4  0.002<span style="text-decoration: underline;">42</span>  327<span style="text-decoration: underline;">646</span>296</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> B3SA3  0.034<span style="text-decoration: underline;">2</span>  <span style="text-decoration: underline;">5</span>901<span style="text-decoration: underline;">731</span>302</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBAS3  0.027<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">731</span>069</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.030<span style="text-decoration: underline;">1</span>  <span style="text-decoration: underline;">4</span>386<span style="text-decoration: underline;">652</span>506</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALPA4  0.001<span style="text-decoration: underline;">45</span>  202<span style="text-decoration: underline;">765</span>994</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AMER3  0.002<span style="text-decoration: underline;">79</span>  611<span style="text-decoration: underline;">169</span>249</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.002<span style="text-decoration: underline;">25</span>   60<span style="text-decoration: underline;">758</span>326</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.008<span style="text-decoration: underline;">62</span>  935<span style="text-decoration: underline;">793</span>199</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AURE3  0.002<span style="text-decoration: underline;">1</span>   301<span style="text-decoration: underline;">966</span>318</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AZUL4  0.001<span style="text-decoration: underline;">71</span>  327<span style="text-decoration: underline;">646</span>296</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B3SA3  0.036<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">5</span>901<span style="text-decoration: underline;">731</span>302</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBAS3  0.023<span style="text-decoration: underline;">4</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">731</span>069</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC3  0.009<span style="text-decoration: underline;">62</span> <span style="text-decoration: underline;">1</span>508<span style="text-decoration: underline;">883</span>586</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 90 more rows</span></span></span></code></pre></div>
 <p>The Small Caps Index (<code>SMLL</code>)</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 134 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 129 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight  position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> AALR3  0.002<span style="text-decoration: underline;">81</span>  42<span style="text-decoration: underline;">288</span>232</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ABCB4  0.004<span style="text-decoration: underline;">49</span>  67<span style="text-decoration: underline;">449</span>065</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AERI3  0.001<span style="text-decoration: underline;">73</span> 227<span style="text-decoration: underline;">070</span>796</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AESB3  0.010<span style="text-decoration: underline;">6</span>  324<span style="text-decoration: underline;">190</span>156</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> AGRO3  0.004<span style="text-decoration: underline;">9</span>   51<span style="text-decoration: underline;">771</span>532</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALSO3  0.007<span style="text-decoration: underline;">37</span> 122<span style="text-decoration: underline;">470</span>927</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ALUP11 0.013<span style="text-decoration: underline;">2</span>  140<span style="text-decoration: underline;">050</span>337</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AMAR3  0.001<span style="text-decoration: underline;">29</span> 154<span style="text-decoration: underline;">147</span>193</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AMBP3  0.004<span style="text-decoration: underline;">13</span>  43<span style="text-decoration: underline;">853</span>759</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ANIM3  0.004<span style="text-decoration: underline;">78</span> 272<span style="text-decoration: underline;">558</span>877</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 124 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> AALR3  0.003<span style="text-decoration: underline;">26</span>  42<span style="text-decoration: underline;">015</span>455</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ABCB4  0.004<span style="text-decoration: underline;">69</span>  67<span style="text-decoration: underline;">562</span>128</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AERI3  0.000<span style="text-decoration: underline;">92</span> 227<span style="text-decoration: underline;">070</span>796</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AESB3  0.010<span style="text-decoration: underline;">9</span>  315<span style="text-decoration: underline;">209</span>392</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> AGRO3  0.006<span style="text-decoration: underline;">37</span>  59<span style="text-decoration: underline;">212</span>546</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALPA4  0.011<span style="text-decoration: underline;">0</span>  202<span style="text-decoration: underline;">765</span>994</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ALSO3  0.007<span style="text-decoration: underline;">48</span> 122<span style="text-decoration: underline;">470</span>927</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ALUP11 0.014<span style="text-decoration: underline;">2</span>  140<span style="text-decoration: underline;">050</span>337</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AMAR3  0.000<span style="text-decoration: underline;">7</span>  156<span style="text-decoration: underline;">188</span>662</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> AMBP3  0.003<span style="text-decoration: underline;">29</span>  43<span style="text-decoration: underline;">853</span>759</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 119 more rows</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="index-composition">Index Composition<a class="anchor" aria-label="anchor" href="#index-composition"></a>
 </h3>
-<p><code><a href="../reference/index_comp_get.html">rb3::index_comp_get</a></code> returns a vector with symbols that compound the given index.</p>
+<p><code><a href="../reference/index_comp_get.html">rb3::index_comp_get</a></code> returns a vector with symbols that
+compound the given index.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_comp_get.html">index_comp_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   [1] "AALR3"  "ABCB4"  "AERI3"  "AESB3"  "AGRO3"  "ALSO3"  "ALUP11" "AMAR3" </span></span>
-<span><span class="co">#&gt;   [9] "AMBP3"  "ANIM3"  "ARML3"  "ARZZ3"  "AZUL4"  "BEEF3"  "BKBR3"  "BLAU3" </span></span>
-<span><span class="co">#&gt;  [17] "BMOB3"  "BOAS3"  "BPAN4"  "BRAP3"  "BRAP4"  "BRML3"  "BRPR3"  "BRSR6" </span></span>
-<span><span class="co">#&gt;  [25] "CAML3"  "CASH3"  "CBAV3"  "CEAB3"  "CLSA3"  "COGN3"  "CSMG3"  "CURY3" </span></span>
-<span><span class="co">#&gt;  [33] "CVCB3"  "CYRE3"  "DESK3"  "DIRR3"  "DMMO3"  "DXCO3"  "ECOR3"  "EMBR3" </span></span>
-<span><span class="co">#&gt;  [41] "ENAT3"  "ENBR3"  "ENJU3"  "ESPA3"  "EVEN3"  "EZTC3"  "FESA4"  "FHER3" </span></span>
-<span><span class="co">#&gt;  [49] "FLRY3"  "GETT11" "GFSA3"  "GGPS3"  "GMAT3"  "GOAU4"  "GOLL4"  "GRND3" </span></span>
-<span><span class="co">#&gt;  [57] "GUAR3"  "HBOR3"  "HBSA3"  "IFCM3"  "IGTI11" "INTB3"  "IRBR3"  "JALL3" </span></span>
-<span><span class="co">#&gt;  [65] "JHSF3"  "KEPL3"  "LAVV3"  "LEVE3"  "LIGT3"  "LJQQ3"  "LOGG3"  "LOGN3" </span></span>
-<span><span class="co">#&gt;  [73] "LWSA3"  "MATD3"  "MDIA3"  "MEAL3"  "MEGA3"  "MILS3"  "MLAS3"  "MODL11"</span></span>
-<span><span class="co">#&gt;  [81] "MOVI3"  "MRFG3"  "MRVE3"  "MTRE3"  "MYPK3"  "NGRD3"  "ODPV3"  "ONCO3" </span></span>
-<span><span class="co">#&gt;  [89] "OPCT3"  "ORVR3"  "PARD3"  "PCAR3"  "PETZ3"  "PGMN3"  "PNVL3"  "POMO4" </span></span>
-<span><span class="co">#&gt;  [97] "POSI3"  "PTBL3"  "QUAL3"  "RANI3"  "RAPT4"  "RCSL3"  "RECV3"  "ROMI3" </span></span>
-<span><span class="co">#&gt; [105] "RRRP3"  "SAPR11" "SBFG3"  "SEER3"  "SEQL3"  "SIMH3"  "SLCE3"  "SMFT3" </span></span>
-<span><span class="co">#&gt; [113] "SOMA3"  "SQIA3"  "STBP3"  "SULA11" "SYNE3"  "TASA4"  "TECN3"  "TEND3" </span></span>
-<span><span class="co">#&gt; [121] "TGMA3"  "TRAD3"  "TRIS3"  "TTEN3"  "TUPY3"  "UNIP6"  "USIM3"  "USIM5" </span></span>
-<span><span class="co">#&gt; [129] "VIIA3"  "VIVA3"  "VLID3"  "VULC3"  "WIZS3"  "YDUQ3"</span></span></code></pre></div>
+<span><span class="co">#&gt;   [1] "AALR3"  "ABCB4"  "AERI3"  "AESB3"  "AGRO3"  "ALPA4"  "ALSO3"  "ALUP11"</span></span>
+<span><span class="co">#&gt;   [9] "AMAR3"  "AMBP3"  "AMER3"  "ANIM3"  "ARML3"  "ARZZ3"  "AZUL4"  "BEEF3" </span></span>
+<span><span class="co">#&gt;  [17] "BLAU3"  "BMOB3"  "BOAS3"  "BPAN4"  "BRAP4"  "BRFS3"  "BRML3"  "BRPR3" </span></span>
+<span><span class="co">#&gt;  [25] "BRSR6"  "CAML3"  "CASH3"  "CBAV3"  "CEAB3"  "CLSA3"  "COGN3"  "CSMG3" </span></span>
+<span><span class="co">#&gt;  [33] "CURY3"  "CVCB3"  "CYRE3"  "DASA3"  "DIRR3"  "DMMO3"  "DXCO3"  "ECOR3" </span></span>
+<span><span class="co">#&gt;  [41] "EMBR3"  "ENAT3"  "ENBR3"  "ENJU3"  "ESPA3"  "EVEN3"  "EZTC3"  "FESA4" </span></span>
+<span><span class="co">#&gt;  [49] "FHER3"  "FLRY3"  "GFSA3"  "GGPS3"  "GMAT3"  "GOAU4"  "GOLL4"  "GRND3" </span></span>
+<span><span class="co">#&gt;  [57] "GUAR3"  "HBSA3"  "IFCM3"  "IGTI11" "INTB3"  "JALL3"  "JHSF3"  "KEPL3" </span></span>
+<span><span class="co">#&gt;  [65] "LAVV3"  "LEVE3"  "LIGT3"  "LJQQ3"  "LOGG3"  "LOGN3"  "LWSA3"  "MATD3" </span></span>
+<span><span class="co">#&gt;  [73] "MBLY3"  "MDIA3"  "MEAL3"  "MEGA3"  "MILS3"  "MLAS3"  "MODL3"  "MOVI3" </span></span>
+<span><span class="co">#&gt;  [81] "MRFG3"  "MRVE3"  "MYPK3"  "ODPV3"  "ONCO3"  "ORVR3"  "PARD3"  "PCAR3" </span></span>
+<span><span class="co">#&gt;  [89] "PETZ3"  "PGMN3"  "PNVL3"  "POMO4"  "POSI3"  "PTBL3"  "QUAL3"  "RANI3" </span></span>
+<span><span class="co">#&gt;  [97] "RAPT4"  "RCSL3"  "RECV3"  "ROMI3"  "RRRP3"  "SAPR11" "SBFG3"  "SEER3" </span></span>
+<span><span class="co">#&gt; [105] "SEQL3"  "SIMH3"  "SLCE3"  "SMFT3"  "SMTO3"  "SOMA3"  "SQIA3"  "STBP3" </span></span>
+<span><span class="co">#&gt; [113] "SYNE3"  "TASA4"  "TEND3"  "TRAD3"  "TRIS3"  "TTEN3"  "TUPY3"  "UNIP6" </span></span>
+<span><span class="co">#&gt; [121] "USIM3"  "USIM5"  "VIIA3"  "VIVA3"  "VLID3"  "VULC3"  "WIZS3"  "YDUQ3" </span></span>
+<span><span class="co">#&gt; [129] "ZAMP3"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="index-by-segment">Index by Segment<a class="anchor" aria-label="anchor" href="#index-by-segment"></a>
 </h3>
-<p><code><a href="../reference/index_by_segment_get.html">rb3::index_by_segment_get</a></code> returns a data.frame with all stocks that are in the index, their economic segment, weights, position and segment weight in the index.</p>
+<p><code><a href="../reference/index_by_segment_get.html">rb3::index_by_segment_get</a></code> returns a data.frame with all
+stocks that are in the index, their economic segment, weights, position
+and segment weight in the index.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_by_segment_get.html">index_by_segment_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 92 × 6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 88 × 6</span></span></span>
 <span><span class="co">#&gt;    symbol segment                              weight segme…¹ posit…² refdate   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips          0.028<span style="text-decoration: underline;">6</span>  0.028<span style="text-decoration: underline;">6</span>   1.48<span style="color: #949494;">e</span>9 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte         0.005<span style="text-decoration: underline;">2</span>  0.005<span style="text-decoration: underline;">2</span>   7.35<span style="color: #949494;">e</span>8 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte               0.002<span style="text-decoration: underline;">02</span> 0.021<span style="text-decoration: underline;">1</span>   3.28<span style="color: #949494;">e</span>8 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte               0.006<span style="text-decoration: underline;">27</span> 0.021<span style="text-decoration: underline;">1</span>   1.12<span style="color: #949494;">e</span>9 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ECOR3  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">73</span> 0.021<span style="text-decoration: underline;">1</span>   3.34<span style="color: #949494;">e</span>8 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GOLL4  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">74</span> 0.021<span style="text-decoration: underline;">1</span>   1.90<span style="color: #949494;">e</span>8 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RAIL3  Bens Indls/Transporte               0.011<span style="text-decoration: underline;">4</span>  0.021<span style="text-decoration: underline;">1</span>   1.22<span style="color: #949494;">e</span>9 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> POSI3  Comput e Equips                     0.000<span style="text-decoration: underline;">32</span> 0.000<span style="text-decoration: underline;">32</span>  7.36<span style="color: #949494;">e</span>7 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BRFS3  Cons N  Básico / Alimentos Process… 0.005<span style="text-decoration: underline;">42</span> 0.023<span style="text-decoration: underline;">6</span>   1.08<span style="color: #949494;">e</span>9 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> JBSS3  Cons N  Básico / Alimentos Process… 0.013<span style="text-decoration: underline;">1</span>  0.023<span style="text-decoration: underline;">6</span>   1.13<span style="color: #949494;">e</span>9 2022-11-28</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 82 more rows, and abbreviated variable names ¹​segment_weight,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips          0.024<span style="text-decoration: underline;">9</span>  0.024<span style="text-decoration: underline;">9</span>   1.32<span style="color: #949494;">e</span>9 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte         0.006<span style="text-decoration: underline;">02</span> 0.006<span style="text-decoration: underline;">02</span>  7.35<span style="color: #949494;">e</span>8 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte               0.001<span style="text-decoration: underline;">86</span> 0.020<span style="text-decoration: underline;">6</span>   3.28<span style="color: #949494;">e</span>8 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte               0.006<span style="text-decoration: underline;">03</span> 0.020<span style="text-decoration: underline;">6</span>   9.98<span style="color: #949494;">e</span>8 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ECOR3  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">71</span> 0.020<span style="text-decoration: underline;">6</span>   3.10<span style="color: #949494;">e</span>8 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GOLL4  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">73</span> 0.020<span style="text-decoration: underline;">6</span>   1.90<span style="color: #949494;">e</span>8 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RAIL3  Bens Indls/Transporte               0.011<span style="text-decoration: underline;">3</span>  0.020<span style="text-decoration: underline;">6</span>   1.22<span style="color: #949494;">e</span>9 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BRFS3  Cons N  Básico / Alimentos Process… 0.004<span style="text-decoration: underline;">3</span>  0.021<span style="text-decoration: underline;">7</span>   1.08<span style="color: #949494;">e</span>9 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> JBSS3  Cons N  Básico / Alimentos Process… 0.012<span style="text-decoration: underline;">4</span>  0.021<span style="text-decoration: underline;">7</span>   1.13<span style="color: #949494;">e</span>9 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> MRFG3  Cons N  Básico / Alimentos Process… 0.001<span style="text-decoration: underline;">31</span> 0.021<span style="text-decoration: underline;">7</span>   3.17<span style="color: #949494;">e</span>8 2023-01-23</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 78 more rows, and abbreviated variable names ¹​segment_weight,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   ²​position</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="indexes-time-series">Indexes Time Series<a class="anchor" aria-label="anchor" href="#indexes-time-series"></a>
 </h2>
-<p><code>rb3</code> downloads data from B3 website to build time series for B3 indexes.</p>
-<p>The function <code><a href="../reference/index_get.html">rb3::index_get</a></code> downloads data from B3 for the given index name and returns data structured in a data.frame. The index names are obtained with <code><a href="../reference/indexes_get.html">rb3::indexes_get</a></code> function.</p>
+<p><code>rb3</code> downloads data from B3 website to build time series
+for B3 indexes.</p>
+<p>The function <code><a href="../reference/index_get.html">rb3::index_get</a></code> downloads data from B3 for
+the given index name and returns data structured in a data.frame. The
+index names are obtained with <code><a href="../reference/indexes_get.html">rb3::indexes_get</a></code>
+function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_name</span> <span class="op">&lt;-</span> <span class="st">"IBOV"</span></span>
 <span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-01-01"</span><span class="op">)</span><span class="op">)</span></span>
@@ -236,7 +254,8 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2019-07-01 IBOV       <span style="text-decoration: underline;">101</span>340.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 2019-08-01 IBOV       <span style="text-decoration: underline;">102</span>126.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2019-10-01 IBOV       <span style="text-decoration: underline;">104</span>053.</span></span></code></pre></div>
-<p>The returned data.frame has three columns: <code>refdate</code>, <code>index_name</code> and <code>value</code>.</p>
+<p>The returned data.frame has three columns: <code>refdate</code>,
+<code>index_name</code> and <code>value</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">refdate</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -247,7 +266,9 @@
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="B3-Indexes_files/figure-html/unnamed-chunk-9-1.png" width="864"></p>
-<p>The IBOVESPA index starts at 1968 and the series is adjusted for all economic events the that affected the Brazilian currency in the 80-90’s decades.</p>
+<p>The IBOVESPA index starts at 1968 and the series is adjusted for all
+economic events the that affected the Brazilian currency in the 80-90’s
+decades.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"1968-01-01"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
@@ -260,8 +281,10 @@
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="B3-Indexes_files/figure-html/unnamed-chunk-10-1.png" width="864"></p>
-<p>The y-axis was transformed to log scale in order to get the visualization improved.</p>
-<p>Change <code>index_name</code> to get data for other indexes, for example, the Small Caps Index SMLL.</p>
+<p>The y-axis was transformed to log scale in order to get the
+visualization improved.</p>
+<p>Change <code>index_name</code> to get data for other indexes, for
+example, the Small Caps Index SMLL.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_name</span> <span class="op">&lt;-</span> <span class="st">"SMLL"</span></span>
 <span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span></span>
@@ -278,10 +301,11 @@
 <div class="section level2">
 <h2 id="indexes-last-update">Indexes Last Update<a class="anchor" aria-label="anchor" href="#indexes-last-update"></a>
 </h2>
-<p><code><a href="../reference/indexes_last_update.html">rb3::indexes_last_update</a></code> returns the date where the indexes have been last updated.</p>
+<p><code><a href="../reference/indexes_last_update.html">rb3::indexes_last_update</a></code> returns the date where the
+indexes have been last updated.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_last_update.html">indexes_last_update</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2022-11-28"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2023-01-23"</span></span></code></pre></div>
 </div>
   </div>
 
@@ -302,7 +326,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

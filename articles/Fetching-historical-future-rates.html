@@ -88,10 +88,11 @@
 
       
 
-      </header><script src="Fetching-historical-future-rates_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>How to Compute Historical Rates from B3 Future Prices</h1>
+      <h1 data-toc-skip>How to Compute Historical Rates from B3 Future
+Prices</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/wilsonfreitas/rb3/blob/HEAD/vignettes/Fetching-historical-future-rates.Rmd" class="external-link"><code>vignettes/Fetching-historical-future-rates.Rmd</code></a></small>
@@ -101,7 +102,10 @@
 
     
     
-<p>The historical prices of all futures contracts traded at B3 can be obtained with the <code>futures_mget</code> function. These are the settlement prices delivered daily by B3 at the <a href="https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/" title="Trading session settlements" class="external-link">Trading session settlements</a> page.</p>
+<p>The historical prices of all futures contracts traded at B3 can be
+obtained with the <code>futures_mget</code> function. These are the
+settlement prices delivered daily by B3 at the <a href="https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/" title="Trading session settlements" class="external-link">Trading session settlements</a>
+page.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -113,12 +117,22 @@
 <span>    first_date <span class="op">=</span> <span class="st">"2021-01-01"</span>,</span>
 <span>    last_date <span class="op">=</span> <span class="st">"2022-04-27"</span>,</span>
 <span>    by <span class="op">=</span> <span class="fl">5</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Automatic coercion from double to character was deprecated in purrr 1.0.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use an explicit call to `as.character()` within `map_chr()` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">rb3</span> package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/wilsonfreitas/rb3/issues&gt;</span>.</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="historical-nominal-interest-rates">Historical nominal interest rates<a class="anchor" aria-label="anchor" href="#historical-nominal-interest-rates"></a>
 </h2>
-<p>The interest rates can be extracted from the futures prices. The DI1 futures matures at the first day of the month. The code below generates the maturities from the three characters maturity codes. After the business days, the implied rates are calculated, once we know that the notional amount of these contracts is 100000.</p>
-<p>In the graphic we can see the dynamics of the nominal interest rates of the contracts DI1F23 and DI1F33. These contracts are exactly 10 years distant from each other.</p>
+<p>The interest rates can be extracted from the futures prices. The DI1
+futures matures at the first day of the month. The code below generates
+the maturities from the three characters maturity codes. After the
+business days, the implied rates are calculated, once we know that the
+notional amount of these contracts is 100000.</p>
+<p>In the graphic we can see the dynamics of the nominal interest rates
+of the contracts DI1F23 and DI1F33. These contracts are exactly 10 years
+distant from each other.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">di1_futures</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DI1"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -148,7 +162,8 @@
 <div class="section level2">
 <h2 id="historical-real-interest-rates">Historical real interest rates<a class="anchor" aria-label="anchor" href="#historical-real-interest-rates"></a>
 </h2>
-<p>Differently from DI1 contracts, that trade nominal interest rates, the DAP contracts trade real interest rates.</p>
+<p>Differently from DI1 contracts, that trade nominal interest rates,
+the DAP contracts trade real interest rates.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dap_futures</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DAP"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -178,8 +193,11 @@
 <div class="section level2">
 <h2 id="implied-inflation">Implied inflation<a class="anchor" aria-label="anchor" href="#implied-inflation"></a>
 </h2>
-<p>With the difference between real and nominal interest rates we can obtain the forward inflation implied in these contracts.</p>
-<p>Using the contracts DI1F23 and DAPF23, which matures in the same month, with a difference of a few days. The implied inflation can be computed by the division of the prices of these contracts.</p>
+<p>With the difference between real and nominal interest rates we can
+obtain the forward inflation implied in these contracts.</p>
+<p>Using the contracts DI1F23 and DAPF23, which matures in the same
+month, with a difference of a few days. The implied inflation can be
+computed by the division of the prices of these contracts.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">infl_futures</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">symbol</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DI1F23"</span>, <span class="st">"DAPF23"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -208,7 +226,9 @@
 <div class="section level2">
 <h2 id="forward-rates">Forward rates<a class="anchor" aria-label="anchor" href="#forward-rates"></a>
 </h2>
-<p>10Y Forward rates implied in DI1 Futures prices. The contracts DI1F23 and DI1F33 are used to compute the 10Y forward rates that ranges from Jan. 2023 to Jan. 2033.</p>
+<p>10Y Forward rates implied in DI1 Futures prices. The contracts DI1F23
+and DI1F33 are used to compute the 10Y forward rates that ranges from
+Jan. 2023 to Jan. 2033.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_fut</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">symbol</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DI1F23"</span>, <span class="st">"DI1F33"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -265,7 +285,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

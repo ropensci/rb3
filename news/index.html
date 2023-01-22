@@ -64,12 +64,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.0.7" id="rb3-007">rb3 0.0.7<a class="anchor" aria-label="anchor" href="#rb3-007"></a></h2>
+<h2 class="page-header" data-toc-text="0.0.7" id="rb3-007">rb3 0.0.7<small>2022-12-14</small><a class="anchor" aria-label="anchor" href="#rb3-007"></a></h2>
 <ul><li>function <code>index_get</code> to download historical data from B3 indexes (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/39" class="external-link">#39</a>)</li>
 <li>added option <code>rb3.silent</code> (defaults to <code>FALSE</code>) hide alert messages and progress bar</li>
 <li>added option <code>rb3.clear.cache</code> (defaults to <code>FALSE</code>) remove files with invalid content from cache folder</li>
-<li>new templates<ul><li>
-<code>GetPortfolioDay_IndexStatistics</code> historical time series for B3 indexes</li></ul></li>
+<li>new templates
+<ul><li>
+<code>GetPortfolioDay_IndexStatistics</code> historical time series for B3 indexes</li>
+</ul></li>
 <li>new vignette: B3 Indexes</li>
 <li>changed <code>futures_get</code> and <code>maturity2date</code> to use calendar <code>Brazil/BMF</code>
 </li>
@@ -89,7 +91,9 @@
 <ul><li>updated documentation</li>
 <li>the cache creates a folder with the template to organize files inside the cache folder.</li>
 <li>
-<code>read_marketdata</code> lost the argument <code>cachedir</code>, the RDS file with parsed data is saved in the directory of the given file.<ul><li>Pass <code>do_cache = FALSE</code> to not save the RDS file, it defaults to <code>TRUE</code>.</li></ul></li>
+<code>read_marketdata</code> lost the argument <code>cachedir</code>, the RDS file with parsed data is saved in the directory of the given file.
+<ul><li>Pass <code>do_cache = FALSE</code> to not save the RDS file, it defaults to <code>TRUE</code>.</li>
+</ul></li>
 <li>corrected BUG in <code>COTAHIST_YEARLY</code>, it uses cache wrongly (Issue <a href="https://github.com/wilsonfreitas/rb3/issues/44" class="external-link">#44</a>)</li>
 <li>corrected BUG due to change in fixedincome - function <code>rates</code> was renamed to <code>implied_rate</code>
 </li>
@@ -98,7 +102,8 @@
 <h2 class="page-header" data-toc-text="0.0.4" id="rb3-004">rb3 0.0.4<small>2022-06-22</small><a class="anchor" aria-label="anchor" href="#rb3-004"></a></h2>
 <ul><li>added locale <code>en</code> to templates: <code>COTAHIST_*</code>
 </li>
-<li>new templates<ul><li>
+<li>new templates
+<ul><li>
 <code>NegociosIntraday</code> intraday listed market trades</li>
 <li>
 <code>NegociosBalcao</code> intraday OTC (Debentures) trades</li>
@@ -113,7 +118,8 @@
 <ul><li>fixed tests for yc_get().</li>
 <li>updated to bizdays version 0.1.10 (use of load_builtin_calendars - Issue <a href="https://github.com/wilsonfreitas/rb3/issues/31" class="external-link">#31</a>).</li>
 <li>changes to ropensci process: added more tests to improve test coverage, functions renamed, codemeta and Contributing.md.</li>
-<li>new templates<ul><li>
+<li>new templates
+<ul><li>
 <code>GetStockIndex</code> to get the composition of B3 indexes.</li>
 <li>
 <code>GetTheoricalPortfolio</code> to get composition and weights of B3 indexes.</li>
@@ -134,19 +140,22 @@
 <li>
 <code>GetListedCashDividends</code> to get list of cash dividends.</li>
 </ul></li>
-<li>new functions for yield curves<ul><li>
+<li>new functions for yield curves
+<ul><li>
 <code>yc_ipca_get</code> and <code>yc_ipca_mget</code> for real interest rates</li>
 <li>
 <code>yc_usd_get</code> and <code>yc_usd_mget</code> for USD interest rates in Brazil</li>
 </ul></li>
-<li>new functions for cotahist<ul><li>
+<li>new functions for cotahist
+<ul><li>
 <code>cotahist_get_symbols</code> to get stocks by a list of symbols</li>
 <li>
 <code>cotahist_etfs_get</code>, <code>cotahist_fiis_get</code>, <code>cotahist_fidcs_get</code>, <code>cotahist_fiagros_get</code>
 </li>
 <li>function <code>cotahist_funds_get</code> has been replaced by these ones.</li>
 </ul></li>
-<li>new functions to get indexes information (composition, weights and positions)<ul><li>
+<li>new functions to get indexes information (composition, weights and positions)
+<ul><li>
 <code>index_comp_get</code> returns the index composition</li>
 <li>
 <code>index_weights_get</code> returns the index weights</li>
@@ -159,7 +168,8 @@
 <li>
 <code>indexreport_get</code> and <code>indexreport_mget</code> download index report data</li>
 </ul></li>
-<li>Superset datasets<ul><li>
+<li>Superset datasets
+<ul><li>
 <code>cotahist_equity_options_superset</code> joins options data, equity data and interest rates for each option - this is useful to run option and volatility models.</li>
 <li>
 <code>yc_superset</code>, <code>yc_usd_superset</code>, <code>yc_ipca_superset</code> mark futures maturities in yield curve.</li>
@@ -176,7 +186,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.1" id="rb3-001">rb3 0.0.1<small>2022-05-05</small><a class="anchor" aria-label="anchor" href="#rb3-001"></a></h2>
-<ul><li>first release</li></ul></div>
+<ul><li>first release</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -191,7 +202,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
