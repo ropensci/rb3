@@ -1,4 +1,3 @@
-
 .apply_to <- function(x) {
   switch(x,
     all = all,
@@ -243,7 +242,7 @@ take.list <- function(x, k, ...) {
     if (is.null(v)) {
       NA
     } else {
-      v
+      as.character(v)
     }
   })
 }

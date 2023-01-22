@@ -32,7 +32,7 @@ fields_widths <- function(fields) {
 }
 
 fields_description <- function(fields) {
-  map_chr(fields, function(x) attr(x, "description"))
+  map_chr(fields, function(x) as.character(attr(x, "description")))
 }
 
 fields_handlers <- function(fields) {
