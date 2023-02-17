@@ -3,7 +3,7 @@
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wilsonfreitas/rb3?branch=main)
-[![R build (rcmdcheck)](https://github.com/wilsonfreitas/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/wilsonfreitas/rb3/actions)
+[![R build (rcmdcheck)](https://github.com/ropensci/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rb3/actions)
 
 <!-- badges: end -->
 
@@ -19,13 +19,13 @@ Cada arquivo possui um template associado que contém as regras para a leitura d
 
 # Documentação
 
-A documentação do pacote está disponível como [github page](https://wilsonfreitas.github.io/rb3/).
+A documentação do pacote está disponível como [github page](https://ropensci.github.io/rb3/).
 
 
 ## Como instalar
 
 ```{r}
-devtools::install_github('wilsonfreitas/rb3')
+devtools::install_github('ropensci/rb3')
 ```
 
 ## Como usar
@@ -97,27 +97,27 @@ Caso os arquivos sejam renomeados, o `template` associado deve ser definido para
 
 ## Arquivos Tratados
 
-| Arquivo | Template | Mercado | Descrição |
-| ------- | -------- | ------- | --------- |
-| BDIN | `BDIN` | Mercado de Ações | Cotações do Horário Regular |
-| BD_Arbit.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Parcial |
-| BDPrevia.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Preliminar |
-| BD_Final.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Final |
-| BDAfterHour.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - After-Hours (D+1) |
-| BDAtual.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Atualização de Contratos em Aberto |
-| BDAjuste.txt | `BD_Arbit` | Mercado de Derivativos | Negócios Realizados em Pregão - Ajustes |
-| Indica.txt | `Indic` | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Parcial |
-| Indic.txt | `Indic` | Mercado de Derivativos | Indicadores Econômicos e Agropecuários - Final |
-| CONTRCAD.txt | `ContrCad` | Mercado de Derivativos | Contratos Cadastrados |
-| CONTRCAD-IPN.txt | `ContrCad` | Mercado de Derivativos | Contratos Cadastrados Nova Clearing |
-| TaxaSwap.txt | `TaxaSwap` | Mercado de Derivativos | Taxas de Mercado para Swaps |
-| PUWEB.TXT | `PUWEB` | Mercado de Títulos Públicos | Preços Referenciais para Títulos Públicos |
-| Premio.txt | `Premio` | Mercado de Derivativos | Prêmio de Referência para Opções |
-| SupVol.txt | `SupVol` | Mercado de Derivativos | Superfície de Volatilidade por Delta |
-| Eletro.txt | `Eletro` | Mercado de Derivativos | Negócios Realizados no Mercado de Balcão |
-| CodISIND.txt | `ISIND` | Mercado de Derivativos | Relação de Códigos ISIN para Contratos Derivativos
-| CodISINS.txt | `ISINS` | Mercado de Derivativos | Relação de Códigos ISIN para Contratos de Swap
-| DeltaOpcoes.txt | `DeltaOpcoes` | Mercado de Derivativos | Volatilidades implícitas das opções sobre derivativos financeiros em Deltas padronizados
+| Arquivo          | Template      | Mercado                     | Descrição                                                                                |
+| ---------------- | ------------- | --------------------------- | ---------------------------------------------------------------------------------------- |
+| BDIN             | `BDIN`        | Mercado de Ações            | Cotações do Horário Regular                                                              |
+| BD_Arbit.txt     | `BD_Arbit`    | Mercado de Derivativos      | Negócios Realizados em Pregão - Parcial                                                  |
+| BDPrevia.txt     | `BD_Arbit`    | Mercado de Derivativos      | Negócios Realizados em Pregão - Preliminar                                               |
+| BD_Final.txt     | `BD_Arbit`    | Mercado de Derivativos      | Negócios Realizados em Pregão - Final                                                    |
+| BDAfterHour.txt  | `BD_Arbit`    | Mercado de Derivativos      | Negócios Realizados em Pregão - After-Hours (D+1)                                        |
+| BDAtual.txt      | `BD_Arbit`    | Mercado de Derivativos      | Negócios Realizados em Pregão - Atualização de Contratos em Aberto                       |
+| BDAjuste.txt     | `BD_Arbit`    | Mercado de Derivativos      | Negócios Realizados em Pregão - Ajustes                                                  |
+| Indica.txt       | `Indic`       | Mercado de Derivativos      | Indicadores Econômicos e Agropecuários - Parcial                                         |
+| Indic.txt        | `Indic`       | Mercado de Derivativos      | Indicadores Econômicos e Agropecuários - Final                                           |
+| CONTRCAD.txt     | `ContrCad`    | Mercado de Derivativos      | Contratos Cadastrados                                                                    |
+| CONTRCAD-IPN.txt | `ContrCad`    | Mercado de Derivativos      | Contratos Cadastrados Nova Clearing                                                      |
+| TaxaSwap.txt     | `TaxaSwap`    | Mercado de Derivativos      | Taxas de Mercado para Swaps                                                              |
+| PUWEB.TXT        | `PUWEB`       | Mercado de Títulos Públicos | Preços Referenciais para Títulos Públicos                                                |
+| Premio.txt       | `Premio`      | Mercado de Derivativos      | Prêmio de Referência para Opções                                                         |
+| SupVol.txt       | `SupVol`      | Mercado de Derivativos      | Superfície de Volatilidade por Delta                                                     |
+| Eletro.txt       | `Eletro`      | Mercado de Derivativos      | Negócios Realizados no Mercado de Balcão                                                 |
+| CodISIND.txt     | `ISIND`       | Mercado de Derivativos      | Relação de Códigos ISIN para Contratos Derivativos                                       |
+| CodISINS.txt     | `ISINS`       | Mercado de Derivativos      | Relação de Códigos ISIN para Contratos de Swap                                           |
+| DeltaOpcoes.txt  | `DeltaOpcoes` | Mercado de Derivativos      | Volatilidades implícitas das opções sobre derivativos financeiros em Deltas padronizados |
 
 ## Ajuda
 

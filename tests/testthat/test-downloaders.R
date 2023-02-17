@@ -1,4 +1,3 @@
-
 skip_on_cran()
 skip_if_offline()
 
@@ -153,7 +152,7 @@ test_that("it should datetime_download FPR file", {
 
 test_that("it should datetime_download NegociosBTB file", {
   tpl <- .retrieve_template(NULL, "NegociosBTB")
-  refdate <- as.Date("2023-01-06")
+  refdate <- bizdays::getdate("last bizday", Sys.Date(), "Brazil/B3")
   vcr::use_cassette("NegociosBTB",
     {
       f <- datetime_download(tpl, tempfile(), refdate = refdate)

@@ -6,12 +6,12 @@ First, thanks for the interest in the package and apraisal for contributing to t
 
 While I am an academic, my R projects have no official funding. It is always nice to have the community helping maintaing the code. Here are the main links for contributing:
 
-[repo]: https://github.com/wilsonfreitas/rb3
-[issues]: https://github.com/wilsonfreitas/rb3/issues
+[repo]: https://github.com/ropensci/rb3
+[issues]: https://github.com/ropensci/rb3/issues
 [email]: mailto:wilson.freitas@gmail.com
-[new_issue]: https://github.com/wilsonfreitas/rb3/issues/new
-[website]: https://wilsonfreitas.github.io/rb3/
-[citation]: https://wilsonfreitas.github.io/rb3//authors.html
+[new_issue]: https://github.com/ropensci/rb3/issues/new
+[website]: https://ropensci.github.io/rb3/
+[citation]: https://ropensci.github.io/rb3//authors.html
 
 
 ## Code of conduct
