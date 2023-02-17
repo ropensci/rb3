@@ -74,6 +74,6 @@ URL: https://github.com/ropensci/rb3,
     http://ropensci.github.io/rb3/
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Config/testthat/edition: 3
 Encoding: UTF-8
