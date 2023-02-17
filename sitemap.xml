@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/404.html</loc>
+    <loc>https://ropensci.github.io/rb3/404.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/Contributing.html</loc>
+    <loc>https://ropensci.github.io/rb3/Contributing.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/LICENSE-text.html</loc>
+    <loc>https://ropensci.github.io/rb3/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/LICENSE.html</loc>
+    <loc>https://ropensci.github.io/rb3/LICENSE.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/articles/B3-Indexes.html</loc>
+    <loc>https://ropensci.github.io/rb3/articles/B3-Indexes.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/articles/Fetching-historical-future-rates.html</loc>
+    <loc>https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/articles/Fetching-historical-yield-curve.html</loc>
+    <loc>https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/articles/index.html</loc>
+    <loc>https://ropensci.github.io/rb3/articles/index.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/authors.html</loc>
+    <loc>https://ropensci.github.io/rb3/authors.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/index.html</loc>
+    <loc>https://ropensci.github.io/rb3/index.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/news/index.html</loc>
+    <loc>https://ropensci.github.io/rb3/news/index.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/cachedir.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/cachedir.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/cdi-idi.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/cdi-idi.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/clearcache.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/clearcache.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/code2month.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/code2month.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/convert_to.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/convert_to.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/cotahist-extracts.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/cotahist-extracts.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/cotahist-options-superset.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/cotahist-options-superset.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/cotahist_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/cotahist_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/display_template.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/display_template.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/download_marketdata.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/download_marketdata.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/futures_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/futures_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/index.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/index.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/index_by_segment_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/index_by_segment_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/index_comp_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/index_comp_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/index_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/index_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/index_weights_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/index_weights_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/indexes_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/indexes_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/indexes_last_update.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/indexes_last_update.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/indexreport_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/indexreport_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/maturity2date.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/maturity2date.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/rb3-package.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/rb3-package.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/read_marketdata.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/read_marketdata.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/show_templates.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/show_templates.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/yc_get.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/yc_get.html</loc>
   </url>
   <url>
-    <loc>http://wilsonfreitas.github.io/rb3/reference/yc_superset.html</loc>
+    <loc>https://ropensci.github.io/rb3/reference/yc_superset.html</loc>
   </url>
 </urlset>
