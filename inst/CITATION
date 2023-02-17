@@ -6,7 +6,7 @@ citEntry(
   author   = c(person("Wilson", "Freitas"), person("Marcelo", "Perlin")),
   note = "R package version 0.0.1",
   year     = "2022",
-  url      = "https://github.com/wilsonfreitas/rb3",
+  url      = "https://github.com/ropensci/rb3",
   textVersion = paste0(
   "Download and parse public files released by B3 and convert them",
   "into useful formats and data structures common to data analysis",

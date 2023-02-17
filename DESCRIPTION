@@ -69,9 +69,9 @@ Collate:
     'readers.R'
     'downloaders.R'
     'zzz.R'
-BugReports: https://github.com/wilsonfreitas/rb3/issues
-URL: https://github.com/wilsonfreitas/rb3,
-    http://wilsonfreitas.github.io/rb3/
+BugReports: https://github.com/ropensci/rb3/issues
+URL: https://github.com/ropensci/rb3,
+    http://ropensci.github.io/rb3/
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
