@@ -25,8 +25,6 @@ test_that("it should download a file with a datetime downloader", {
   x <- tpl$download_marketdata(dest, refdate = date)
   expect_true(x)
   expect_true(file.exists(dest))
-  # info <- file.info(dest)
-  # expect_true(info$size > 1000000)
 })
 
 test_that("it should fail to datetime_download", {
