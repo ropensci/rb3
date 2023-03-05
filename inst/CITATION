@@ -1,16 +1,25 @@
 citHeader("To cite rb3 in publications use:")
 
-citEntry(
-  entry    = "Manual",
-  title    = "Download and Parse Public Data Released by B3 Exchange",
-  author   = c(person("Wilson", "Freitas"), person("Marcelo", "Perlin")),
-  note = "R package version 0.0.1",
-  year     = "2022",
-  url      = "https://github.com/ropensci/rb3",
+bibentry(
+  bibtype = "Manual",
+  title = "Download and Parse Public Data Released by B3 Exchange",
+  author = c(
+    person("Wilson", "Freitas",
+      email = "wilson.freitas@gmail.com",
+      role = c("aut", "cre")
+    ),
+    person("Marcelo", "Perlin",
+      email = "marceloperlin@gmail.com",
+      role = "aut"
+    )
+  ),
+  year = "2023",
+  note = "R package version 0.0.8",
+  url = "https://github.com/ropensci/rb3",
+  key = "rb3-package",
   textVersion = paste0(
-  "Download and parse public files released by B3 and convert them",
-  "into useful formats and data structures common to data analysis",
-  " practitioners."
-
+    "Download and parse public files released by B3 and convert them",
+    " into useful formats and data structures common to data analysis",
+    " practitioners."
   )
 )
