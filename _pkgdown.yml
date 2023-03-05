@@ -38,6 +38,13 @@ reference:
       - index_by_segment_get
       - indexreport_get
 
+  - title: Companies
+    contents:
+      - company_cash_dividends_get
+      - company_info_get
+      - company_stock_dividends_get
+      - company_subscriptions_get
+
   - title: Futures
     contents:
       - futures_get
