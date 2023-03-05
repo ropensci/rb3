@@ -1,3 +1,8 @@
+# rb3 0.0.8
+
+* functions `company_cash_dividends_get`, `company_info_get`, `company_stock_dividends_get`, `company_subscriptions_get` to get company's informations
+
+
 # rb3 0.0.7
 
 * function `index_get` to download historical data from B3 indexes (Issue #39)
