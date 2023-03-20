@@ -60,6 +60,7 @@ new_template <- function(tpl) {
   obj <- MarketData$proto()
   obj[["has_reader"]] <- FALSE
   obj[["has_downloader"]] <- FALSE
+  obj[["verifyssl"]] <- TRUE
   for (n in names(tpl)) {
     if (n == "fields") {
       obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
