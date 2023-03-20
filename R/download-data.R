@@ -72,8 +72,12 @@ unzip_recursive <- function(fname) {
   }
 }
 
-just_download_data <- function(url, encoding, dest) {
-  res <- GET(url)
+just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
+  res <- if (!is.null(verifyssl) && !verifyssl) {
+    GET(url, config(ssl_verifypeer = FALSE))
+  } else {
+    GET(url)
+  }
   if (status_code(res) != 200 || !.safecontent(res)) {
     return(FALSE)
   }
