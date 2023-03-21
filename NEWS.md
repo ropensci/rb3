@@ -1,3 +1,8 @@
+# rb3 0.0.9
+
+* Corrected BUG: function `company_cash_dividends_get` does not return all cash dividends
+* Implemented new option in templates: `verifyssl`. It defaults to TRUE, always use ssl, but when it is FALSE an option is set in httr to skip ssl verification.
+
 # rb3 0.0.8
 
 * functions `company_cash_dividends_get`, `company_info_get`, `company_stock_dividends_get`, `company_subscriptions_get` to get company's informations

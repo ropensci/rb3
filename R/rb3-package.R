@@ -54,7 +54,7 @@
 #' @importFrom dplyr tibble inner_join mutate select filter left_join as_tibble
 #' @importFrom dplyr bind_rows arrange rename group_by summarise
 #' @importFrom tidyr pivot_longer
-#' @importFrom httr GET POST parse_url status_code headers content
+#' @importFrom httr GET POST parse_url status_code headers content config
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom purrr map_dfr map_lgl map_chr map_int map
 #' @importFrom readr write_rds read_rds read_csv read_file

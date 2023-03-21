@@ -29,13 +29,27 @@ library(dplyr)
 
 ## DI X Pre Curve
 
-```{r, fig.width=9, fig.height=6}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+df_yc <- try(yc_mget(
+  first_date = Sys.Date() - 255 * 5,
+  last_date = Sys.Date(),
+  by = 255
+), silent = TRUE)
+
+if (is(df_yc, "try-error")) {
+  load("yc_mget.rda")
+}
+```
+
+```{r, eval=FALSE}
 df_yc <- yc_mget(
   first_date = Sys.Date() - 255 * 5,
   last_date = Sys.Date(),
   by = 255
 )
+```
 
+```{r, fig.width=9, fig.height=6}
 p <- ggplot(
   df_yc,
   aes(
@@ -45,7 +59,7 @@ p <- ggplot(
     color = factor(refdate)
   )
 ) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   labs(
     title = "Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",
@@ -62,13 +76,27 @@ print(p)
 
 ## DI x IPCA Curve
 
-```{r, fig.width=9, fig.height=6}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+df_yc <- try(yc_ipca_mget(
+  first_date = Sys.Date() - 255 * 5,
+  last_date = Sys.Date(),
+  by = 255
+), silent = TRUE)
+
+if (is(df_yc, "try-error")) {
+  load("yc_ipca_mget.rda")
+}
+```
+
+```{r, eval=FALSE}
 df_yc <- yc_ipca_mget(
   first_date = Sys.Date() - 255 * 5,
   last_date = Sys.Date(),
   by = 255
 )
+```
 
+```{r, fig.width=9, fig.height=6}
 p <- ggplot(
   df_yc |> filter(biz_days > 21, biz_days < 1008),
   aes(
@@ -78,7 +106,7 @@ p <- ggplot(
     color = factor(refdate)
   )
 ) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   labs(
     title = "DIxIPCA Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",
@@ -95,13 +123,27 @@ print(p)
 
 ## Cupom Limpo (USD)
 
-```{r, fig.width=9, fig.height=6}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+df_yc <- try(yc_usd_mget(
+  first_date = Sys.Date() - 255 * 5,
+  last_date = Sys.Date(),
+  by = 255
+), silent = TRUE)
+
+if (is(df_yc, "try-error")) {
+  load("yc_usd_mget.rda")
+}
+```
+
+```{r, eval=FALSE}
 df_yc <- yc_usd_mget(
   first_date = Sys.Date() - 255 * 5,
   last_date = Sys.Date(),
   by = 255
 )
+```
 
+```{r, fig.width=9, fig.height=6}
 p <- ggplot(
   df_yc |> filter(biz_days > 21, biz_days < 2520),
   aes(
@@ -111,7 +153,7 @@ p <- ggplot(
     color = factor(refdate)
   )
 ) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   labs(
     title = "Cupom Limpo (USD) Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",

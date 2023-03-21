@@ -1,6 +1,6 @@
 simple_download <- function(., dest, ...) {
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
-  just_download_data(.$downloader$url, enc, dest)
+  just_download_data(.$downloader$url, enc, dest, .$verifyssl)
 }
 
 datetime_download <- function(., dest, ...) {
@@ -12,7 +12,7 @@ datetime_download <- function(., dest, ...) {
   }
   url <- strftime(params$refdate, .$downloader$url)
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
-  just_download_data(url, enc, dest)
+  just_download_data(url, enc, dest, .$verifyssl)
 }
 
 settlement_prices_download <- function(., dest, ...) {
@@ -23,10 +23,18 @@ settlement_prices_download <- function(., dest, ...) {
     return(FALSE)
   }
   strdate <- format(as.Date(params$refdate), "%d/%m/%Y")
-  res <- POST(.$downloader$url,
-    body = list(dData1 = strdate),
-    encode = "form"
-  )
+  verifyssl <- if (!is.null(.$verifyssl)) .$verifyssl else TRUE
+  if (verifyssl) {
+    res <- POST(.$downloader$url,
+                body = list(dData1 = strdate),
+                encode = "form"
+    )
+  } else {
+    res <- POST(.$downloader$url,
+                body = list(dData1 = strdate),
+                encode = "form", config(ssl_verifypeer = FALSE)
+    )
+  }
   if (status_code(res) != 200) {
     return(FALSE)
   }
@@ -53,7 +61,12 @@ curve_download <- function(., dest, ...) {
     Data1 = format(as.Date(params$refdate), "%Y%m%d"),
     slcTaxa = curve_name
   )
-  res <- GET(url)
+  verifyssl <- if (!is.null(.$verifyssl)) .$verifyssl else TRUE
+  if (verifyssl) {
+    res <- GET(url)
+  } else {
+    res <- GET(url, config(ssl_verifypeer = FALSE))
+  }
   if (status_code(res) != 200) {
     return(FALSE)
   }
@@ -163,7 +176,12 @@ url_encoded_download <- function(., dest, ...) {
   params_enc <- base64encode(charToRaw(params))
   url <- parse_url(.$downloader$url)
   url$path <- c(url$path, params_enc)
-  res <- GET(url)
+  verifyssl <- if (!is.null(.$verifyssl)) .$verifyssl else TRUE
+  if (verifyssl) {
+    res <- GET(url)
+  } else {
+    res <- GET(url, config(ssl_verifypeer = FALSE))
+  }
   if (status_code(res) != 200) {
     return(FALSE)
   }
