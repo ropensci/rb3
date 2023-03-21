@@ -1,3 +1,7 @@
+# rb3 0.1.0
+
+* Corrected `futures_get` and `futures_mget` to handle equity futures
+
 # rb3 0.0.9
 
 * Corrected BUG: function `company_cash_dividends_get` does not return all cash dividends
