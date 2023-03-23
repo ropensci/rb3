@@ -2,6 +2,7 @@
 
 * Corrected BUG: function `company_cash_dividends_get` does not return all cash dividends
 * Implemented new option in templates: `verifyssl`. It defaults to TRUE, always use ssl, but when it is FALSE an option is set in httr to skip ssl verification.
+* Corrected `futures_get` and `futures_mget` to handle equity futures
 
 # rb3 0.0.8
 
