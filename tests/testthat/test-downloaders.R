@@ -163,8 +163,6 @@ test_that("it should datetime_download NegociosBTB file", {
 test_that("it should datetime_download OpcoesAcoesEmAberto", {
   tpl <- .retrieve_template(NULL, "OpcoesAcoesEmAberto")
   refdate <- as.Date("2022-12-07")
-  vcr::use_cassette("OpcoesAcoesEmAberto", {
-    f <- datetime_download(tpl, tempfile(), refdate = refdate)
-  })
+  f <- datetime_download(tpl, tempfile(), refdate = refdate)
   expect_true(f)
 })
