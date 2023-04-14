@@ -1,5 +1,9 @@
 # rb3 0.0.10
 
+* Check empty files download.
+
+# rb3 0.0.10
+
 * Improved error handling in `read_marketdata`.
 * Improved checks in `test-company.R` with exception handling for empty downloaded files.
 * Removed tidyselect warnings in `scraper-company.R`.
