@@ -39,6 +39,10 @@
 read_marketdata <- function(filename, template = NULL,
                             parse_fields = TRUE,
                             do_cache = TRUE) {
+  if (file.size(filename) <= 2) {
+    msg <- str_glue("File is empty: {b}", b = filename)
+    stop(empty_file_error(msg))
+  }
   template <- .retrieve_template(filename, template)
   basename_ <- str_replace(basename(filename), "\\.[^\\.]+$", "") |>
     str_replace("\\.", "_")
@@ -80,6 +84,13 @@ read_marketdata <- function(filename, template = NULL,
     write_rds(df, f_cache)
   }
   df
+}
+
+empty_file_error <- function(message) {
+  structure(
+    class = c("empty_file_error", "condition"),
+    list(message = message, call = sys.call(-1))
+  )
 }
 
 .retrieve_template <- function(filename, template) {
