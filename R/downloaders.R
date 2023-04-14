@@ -194,7 +194,7 @@ base64_datetime_download <- function(., dest, ...) {
   if (!datetime_download(., dest, ...)) {
     return(FALSE)
   }
-  b64 <- scan(dest, "")
+  b64 <- scan(dest, "", quiet = TRUE)
   txt <- rawToChar(base64enc::base64decode(b64))
   writeBin(txt, dest)
   TRUE
