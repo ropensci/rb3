@@ -10,7 +10,7 @@
   read_marketdata(f, template, do_cache = do_cache)
 }
 
-.company_suplement_info_get <- function(code, company_supl,
+.company_supplementary_info_get <- function(code, company_supl,
                                         cache_folder = cachedir(),
                                         do_cache = TRUE) {
   template <- "GetDetailsCompany"
@@ -19,7 +19,7 @@
     cache_folder = cache_folder,
     do_cache = do_cache
   )
-  company_details <- read_marketdata(f, template)
+  company_details <- read_marketdata(f, template, do_cache = do_cache)
 
   sectors <- str_split(company_details$Info$industryClassification, "/")
   sectors <- sectors[[1]] |> str_trim()
@@ -46,10 +46,10 @@
   )
 }
 
-.company_suplement_stock_dividends_get <- function(code, company_supl,
+.company_supplementary_stock_dividends_get <- function(code, company_supl,
                                                    cache_folder = cachedir(),
                                                    do_cache = TRUE) {
-  company_info <- .company_suplement_info_get(code, company_supl,
+  company_info <- .company_supplementary_info_get(code, company_supl,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
@@ -60,26 +60,20 @@
 
   divs <- company_supl$StockDividends |>
     rename(
-      isin = .data$isinCode,
-      approved = .data$approvedOn,
-      last_date_prior_ex = .data$lastDatePrior,
-      description = .data$label
+      isin = "isinCode",
+      approved = "approvedOn",
+      last_date_prior_ex = "lastDatePrior",
+      description = "label"
     ) |>
-    select(
-      .data$isin,
-      .data$approved,
-      .data$last_date_prior_ex,
-      .data$description,
-      .data$factor
-    )
+    select("isin", "approved", "last_date_prior_ex", "description", "factor")
 
   inner_join(company_info$codes[[1]], divs, by = "isin")
 }
 
-.company_suplement_subscriptions_get <- function(code, company_supl,
+.company_supplementary_subscriptions_get <- function(code, company_supl,
                                                  cache_folder = cachedir(),
                                                  do_cache = TRUE) {
-  company_info <- .company_suplement_info_get(code, company_supl,
+  company_info <- .company_supplementary_info_get(code, company_supl,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
@@ -90,35 +84,27 @@
 
   subs <- company_supl$Subscriptions |>
     rename(
-      isin = .data$isinCode,
-      approved = .data$approvedOn,
-      last_date_prior_ex = .data$lastDatePrior,
-      description = .data$label,
-      trading_period = .data$tradingPeriod,
-      price_unit = .data$priceUnit,
-      subscription_date = .data$subscriptionDate,
+      isin = "isinCode",
+      approved = "approvedOn",
+      last_date_prior_ex = "lastDatePrior",
+      description = "label",
+      trading_period = "tradingPeriod",
+      price_unit = "priceUnit",
+      subscription_date = "subscriptionDate",
     ) |>
-    select(
-      .data$isin,
-      .data$approved,
-      .data$last_date_prior_ex,
-      .data$description,
-      .data$percentage,
-      .data$trading_period,
-      .data$price_unit,
-      .data$subscription_date
-    )
+    select("isin", "approved", "last_date_prior_ex", "description",
+           "percentage", "trading_period", "price_unit", "subscription_date")
 
   inner_join(company_info$codes[[1]], subs, by = "isin")
 }
 
-.company_suplement_cash_dividends_get <- function(code, company_supl,
+.company_supplementary_cash_dividends_get <- function(code, company_supl,
                                                   cache_folder = cachedir(),
                                                   do_cache = TRUE) {
   # Proventos distribuídos pelo emissor nos últimos 12 meses ou o último,
   # se anterior aos 12 últimos meses.
   if (!is.null(company_supl$CashDividends)) {
-    company_info <- .company_suplement_info_get(code, company_supl,
+    company_info <- .company_supplementary_info_get(code, company_supl,
       cache_folder = cache_folder,
       do_cache = do_cache
     )
@@ -126,21 +112,15 @@
     divs <- company_supl$CashDividends |>
       mutate(ratio = 1) |>
       rename(
-        isin = .data$isinCode,
-        approved = .data$approvedOn,
-        last_date_prior_ex = .data$lastDatePrior,
-        description = .data$label,
-        value_cash = .data$rate,
+        isin = "isinCode",
+        approved = "approvedOn",
+        last_date_prior_ex = "lastDatePrior",
+        description = "label",
+        value_cash = "rate",
       ) |>
-      select(
-        .data$isin,
-        .data$description,
-        .data$approved,
-        .data$last_date_prior_ex,
-        .data$value_cash,
-        .data$ratio
-      )
-
+      select("isin", "description", "approved", "last_date_prior_ex",
+             "value_cash", "ratio")
+    
     inner_join(company_info$codes[[1]], divs, by = "isin")
   } else {
     NULL
@@ -156,14 +136,14 @@
     cache_folder = cache_folder,
     do_cache = do_cache
   )
-  company_dividends <- read_marketdata(f, template)
+  company_dividends <- read_marketdata(f, template, do_cache = do_cache)
 
   # Data do Últ. Preço 'Com' (III) - dateClosingPricePriorExDate
   # (III) - A informação 'preço teórico' indica que a ação não apresentou
   # cotação na B3 desde que ficou 'ex' a algum provento anterior.
   # Se tal data estiver em branco, significa que não houve negócio com o ativo.
   if (!is.null(company_dividends)) {
-    company_info <- .company_suplement_info_get(code,
+    company_info <- .company_supplementary_info_get(code,
       cache_folder = cache_folder,
       do_cache = do_cache
     )
@@ -176,23 +156,15 @@
         asset_name = company_supl$Info$code
       ) |>
       rename(
-        spec_type = .data$typeStock,
-        approved = .data$dateApproval,
-        last_date_prior_ex = .data$lastDatePriorEx,
-        description = .data$corporateAction,
-        value_cash = .data$valueCash,
+        spec_type = "typeStock",
+        approved = "dateApproval",
+        last_date_prior_ex = "lastDatePriorEx",
+        description = "corporateAction",
+        value_cash = "valueCash",
       )
     inner_join(codes, divs, by = c("asset_name", "spec_type")) |>
-      select(
-        .data$symbol,
-        .data$isin,
-        .data$asset_name,
-        .data$description,
-        .data$approved,
-        .data$last_date_prior_ex,
-        .data$value_cash,
-        .data$ratio
-      )
+      select("symbol", "isin", "asset_name", "description", "approved",
+             "last_date_prior_ex", "value_cash", "ratio")
   } else {
     NULL
   }
@@ -261,7 +233,7 @@
 company_info_get <- function(code,
                              cache_folder = cachedir(),
                              do_cache = TRUE) {
-  .company_mget(.company_suplement_info_get, code,
+  .company_mget(.company_supplementary_info_get, code,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
@@ -296,7 +268,7 @@ company_info_get <- function(code,
 company_stock_dividends_get <- function(code,
                                         cache_folder = cachedir(),
                                         do_cache = TRUE) {
-  .company_mget(.company_suplement_stock_dividends_get, code,
+  .company_mget(.company_supplementary_stock_dividends_get, code,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
@@ -335,12 +307,12 @@ company_cash_dividends_get <- function(code,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
-  cs2 <- .company_mget(.company_suplement_cash_dividends_get, code,
+  cs2 <- .company_mget(.company_supplementary_cash_dividends_get, code,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
   bind_rows(cs1, cs2) |>
-    arrange(.data$symbol, .data$last_date_prior_ex) |>
+    arrange("symbol", "last_date_prior_ex") |>
     unique()
 }
 
@@ -374,7 +346,7 @@ company_cash_dividends_get <- function(code,
 company_subscriptions_get <- function(code,
                                       cache_folder = cachedir(),
                                       do_cache = TRUE) {
-  .company_mget(.company_suplement_subscriptions_get, code,
+  .company_mget(.company_supplementary_subscriptions_get, code,
     cache_folder = cache_folder,
     do_cache = do_cache
   )
@@ -383,8 +355,8 @@ company_subscriptions_get <- function(code,
 cotahist_companies_table_get <- function(ch) {
   df <- ch[["HistoricalPrices"]] |>
     filter(
-      .data$tipo_mercado %in% 10,
-      str_sub(.data$cod_isin, 7, 9) %in% c("UNT", "CDA", "ACN")
+      "tipo_mercado" %in% 10,
+      str_sub("cod_isin", 7, 9) %in% c("UNT", "CDA", "ACN")
     )
 
   spec_split <- df[["especificacao"]] |> str_split("\\s+")
@@ -392,12 +364,10 @@ cotahist_companies_table_get <- function(ch) {
   codes[["spec_type"]] <- spec_split |> map_chr(\(x) x[1])
   codes[["symbol"]] <- df[["cod_negociacao"]]
   codes |>
-    select(
-      .data$symbol, .data$asset_name, .data$spec_type, .data$isin_spec_type,
-      .data$isin, .data$country
-    ) |>
+    select("symbol", "asset_name", "spec_type", "isin_spec_type", "isin",
+           "country") |>
     unique() |>
-    arrange(.data$symbol)
+    arrange("symbol")
 }
 
 parse_isin <- function(isin) {
@@ -407,7 +377,7 @@ parse_isin <- function(isin) {
     asset_name = str_sub(isin, 3, 6),
     asset_type = str_sub(isin, 7, 9),
     isin_spec_type = str_sub(isin, 10, 11),
-    spec_type = .spec_type_map(.data$isin_spec_type),
+    spec_type = .spec_type_map("isin_spec_type"),
     control = str_sub(isin, 12)
   )
 }
