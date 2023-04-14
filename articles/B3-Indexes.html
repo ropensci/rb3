@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rb3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.10</span>
       </span>
     </div>
 
@@ -143,7 +143,7 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BBAS3  0.025<span style="text-decoration: underline;">4</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">731</span>069</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBDC3  0.010<span style="text-decoration: underline;">4</span>  <span style="text-decoration: underline;">1</span>508<span style="text-decoration: underline;">883</span>586</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC4  0.040<span style="text-decoration: underline;">2</span>  <span style="text-decoration: underline;">5</span>156<span style="text-decoration: underline;">077</span>326</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 79 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 79 more rows</span></span></span></code></pre></div>
 <p>The IBr100 Index (<code>IBXX</code>)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBXX"</span><span class="op">)</span></span>
@@ -160,7 +160,7 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B3SA3  0.036<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">5</span>901<span style="text-decoration: underline;">731</span>302</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBAS3  0.023<span style="text-decoration: underline;">4</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">731</span>069</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC3  0.009<span style="text-decoration: underline;">62</span> <span style="text-decoration: underline;">1</span>508<span style="text-decoration: underline;">883</span>586</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 90 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre></div>
 <p>The Small Caps Index (<code>SMLL</code>)</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
@@ -177,7 +177,7 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ALUP11 0.014<span style="text-decoration: underline;">2</span>  140<span style="text-decoration: underline;">050</span>337</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AMAR3  0.000<span style="text-decoration: underline;">7</span>  156<span style="text-decoration: underline;">188</span>662</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> AMBP3  0.003<span style="text-decoration: underline;">29</span>  43<span style="text-decoration: underline;">853</span>759</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 119 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 119 more rows</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="index-composition">Index Composition<a class="anchor" aria-label="anchor" href="#index-composition"></a>
 </h3>
@@ -212,20 +212,19 @@ and segment weight in the index.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_by_segment_get.html">index_by_segment_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 88 × 6</span></span></span>
-<span><span class="co">#&gt;    symbol segment                              weight segme…¹ posit…² refdate   </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips          0.029<span style="text-decoration: underline;">6</span>  0.029<span style="text-decoration: underline;">6</span>   1.32<span style="color: #949494;">e</span>9 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte         0.008<span style="text-decoration: underline;">42</span> 0.008<span style="text-decoration: underline;">42</span>  7.35<span style="color: #949494;">e</span>8 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte               0.002<span style="text-decoration: underline;">29</span> 0.023<span style="text-decoration: underline;">4</span>   3.28<span style="color: #949494;">e</span>8 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte               0.006<span style="text-decoration: underline;">86</span> 0.023<span style="text-decoration: underline;">4</span>   9.98<span style="color: #949494;">e</span>8 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ECOR3  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">85</span> 0.023<span style="text-decoration: underline;">4</span>   3.10<span style="color: #949494;">e</span>8 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GOLL4  Bens Indls/Transporte               0.000<span style="text-decoration: underline;">72</span> 0.023<span style="text-decoration: underline;">4</span>   1.90<span style="color: #949494;">e</span>8 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RAIL3  Bens Indls/Transporte               0.012<span style="text-decoration: underline;">7</span>  0.023<span style="text-decoration: underline;">4</span>   1.22<span style="color: #949494;">e</span>9 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BRFS3  Cons N  Básico / Alimentos Process… 0.003<span style="text-decoration: underline;">75</span> 0.020<span style="text-decoration: underline;">6</span>   1.08<span style="color: #949494;">e</span>9 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> JBSS3  Cons N  Básico / Alimentos Process… 0.011<span style="text-decoration: underline;">9</span>  0.020<span style="text-decoration: underline;">6</span>   1.13<span style="color: #949494;">e</span>9 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> MRFG3  Cons N  Básico / Alimentos Process… 0.001<span style="text-decoration: underline;">21</span> 0.020<span style="text-decoration: underline;">6</span>   3.17<span style="color: #949494;">e</span>8 2023-03-23</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 78 more rows, and abbreviated variable names ¹​segment_weight,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ²​position</span></span></span></code></pre></div>
+<span><span class="co">#&gt;    symbol segment                      weight segment_weight position refdate   </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips  0.027<span style="text-decoration: underline;">8</span>         0.027<span style="text-decoration: underline;">8</span>    1.32<span style="color: #949494;">e</span>9 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte 0.007<span style="text-decoration: underline;">96</span>        0.007<span style="text-decoration: underline;">96</span>   7.35<span style="color: #949494;">e</span>8 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte       0.002<span style="text-decoration: underline;">1</span>         0.023<span style="text-decoration: underline;">6</span>    3.28<span style="color: #949494;">e</span>8 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte       0.007<span style="text-decoration: underline;">22</span>        0.023<span style="text-decoration: underline;">6</span>    9.98<span style="color: #949494;">e</span>8 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ECOR3  Bens Indls/Transporte       0.001<span style="text-decoration: underline;">04</span>        0.023<span style="text-decoration: underline;">6</span>    3.10<span style="color: #949494;">e</span>8 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GOLL4  Bens Indls/Transporte       0.000<span style="text-decoration: underline;">72</span>        0.023<span style="text-decoration: underline;">6</span>    1.90<span style="color: #949494;">e</span>8 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RAIL3  Bens Indls/Transporte       0.012<span style="text-decoration: underline;">5</span>         0.023<span style="text-decoration: underline;">6</span>    1.22<span style="color: #949494;">e</span>9 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BRFS3  Cons N  Básico / Alimentos… 0.003<span style="text-decoration: underline;">62</span>        0.018<span style="text-decoration: underline;">5</span>    1.08<span style="color: #949494;">e</span>9 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> JBSS3  Cons N  Básico / Alimentos… 0.010<span style="text-decoration: underline;">3</span>         0.018<span style="text-decoration: underline;">5</span>    1.13<span style="color: #949494;">e</span>9 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> MRFG3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">07</span>        0.018<span style="text-decoration: underline;">5</span>    3.17<span style="color: #949494;">e</span>8 2023-04-14</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 78 more rows</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -301,7 +300,7 @@ example, the Small Caps Index SMLL.</p>
 indexes have been last updated.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_last_update.html">indexes_last_update</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-03-23"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2023-04-14"</span></span></code></pre></div>
 </div>
   </div>
 

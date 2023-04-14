@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rb3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.10</span>
       </span>
     </div>
 
@@ -64,7 +64,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.0.9" id="rb3-009">rb3 0.0.9<a class="anchor" aria-label="anchor" href="#rb3-009"></a></h2>
+<h2 class="page-header" data-toc-text="0.0.10" id="rb3-0010">rb3 0.0.10<a class="anchor" aria-label="anchor" href="#rb3-0010"></a></h2>
+<ul><li>Improved error handling in <code>read_marketdata</code>.</li>
+<li>Improved checks in <code>test-company.R</code> with exception handling for empty downloaded files.</li>
+<li>Removed tidyselect warnings in <code>scraper-company.R</code>.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.9" id="rb3-009">rb3 0.0.9<small>2023-03-24</small><a class="anchor" aria-label="anchor" href="#rb3-009"></a></h2>
 <ul><li>Corrected BUG: function <code>company_cash_dividends_get</code> does not return all cash dividends</li>
 <li>Implemented new option in templates: <code>verifyssl</code>. It defaults to TRUE, always use ssl, but when it is FALSE an option is set in httr to skip ssl verification.</li>
 <li>Corrected <code>futures_get</code> and <code>futures_mget</code> to handle equity futures</li>
