@@ -1,3 +1,6 @@
+#' @keywords internal
+"_PACKAGE"
+
 #' @title Read files from Brazilian Financial Market
 #'
 #' @description
