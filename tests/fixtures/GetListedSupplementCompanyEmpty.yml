@@ -1,0 +1,36 @@
+http_interactions:
+- request:
+    method: get
+    uri: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany/eyJpc3N1aW5nQ29tcGFueSI6IldXV1ciLCJsYW5ndWFnZSI6InB0LWJyIn0=
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: 200
+      category: Success
+      reason: OK
+      message: 'Success: (200) OK'
+    headers:
+      content-type: text/plain; charset=utf-8
+      strict-transport-security: max-age=31536000; includeSubDomains
+      x-xss-protection: 1; mode=block
+      x-content-type-options: nosniff
+      content-security-policy: 'default-src ''self'' https://*.google-analytics.com;
+        font-src ''self'' data: https://fonts.gstatic.com/ ;img-src * data: ; script-src
+        ''unsafe-eval'' * ''unsafe-inline''; style-src * ''unsafe-inline''; frame-src
+        http://*.b3.com.br https://*.b3.com.br https://s.tradingview.com/'
+      referrer-policy: strict-origin
+      server-timing: dtSInfo;desc="0", dtRpid;desc="-1390190705"
+      date: Fri, 14 Apr 2023 10:19:05 GMT
+      set-cookie: TS01871345=016e3b076f06eb63eacb0e0b9c3bb762afe07ce71435a997f08e493ef9c9061be84cb6d8327427527418df757c8798b1cc9e7cadf5;
+        Path=/; HTTPOnly
+      transfer-encoding: chunked
+    body:
+      encoding: ''
+      file: no
+      string: ''
+  recorded_at: 2023-04-14 10:19:06 GMT
+  recorded_with: vcr/1.2.0, webmockr/0.9.0

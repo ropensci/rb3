@@ -2,9 +2,14 @@
 % Please edit documentation in R/rb3-package.R
 \docType{package}
 \name{rb3-package}
+\alias{rb3}
 \alias{rb3-package}
-\title{Read files from Brazilian Financial Market}
+\title{rb3: Download and Parse Public Data Released by B3 Exchange}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+Download and parse public files released by B3 and convert them into useful formats and data structures common to data analysis practitioners.
+
 Read the many files used in Brazilian Financial Market and
 convert them into useful formats and data structures.
 }
@@ -43,3 +48,22 @@ alerts be displayed.
 }
 }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ropensci/rb3}
+  \item \url{http://ropensci.github.io/rb3/}
+  \item Report bugs at \url{https://github.com/ropensci/rb3/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Wilson Freitas \email{wilson.freitas@gmail.com}
+
+Authors:
+\itemize{
+  \item Marcelo Perlin \email{marceloperlin@gmail.com}
+}
+
+}
+\keyword{internal}

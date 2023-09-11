@@ -12,7 +12,7 @@ test_that("it should get index weights", {
   expect_s3_class(x, "data.frame")
   expect_true(ncol(x) == 3)
   expect_equal(colnames(x), c("symbol", "weight", "position"))
-  expect_equal(as.integer(sum(x$weight)), 1L)
+  expect_equal(as.integer(round(sum(x$weight), 0)), 1L)
   expect_true(nrow(x) > 0)
 })
 

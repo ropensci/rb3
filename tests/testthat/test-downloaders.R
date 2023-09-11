@@ -79,63 +79,81 @@ test_that("it should fail base64_datetime_download", {
   expect_false(f)
 })
 
+test_that("it should download an empty file", {
+  tpl <- .retrieve_template(NULL, "GetListedSupplementCompany")
+  vcr::use_cassette("GetListedSupplementCompanyEmpty", {
+    fname <- tempfile()
+    f <- company_listed_supplement_download(tpl, fname, company_name = "WWWW")
+  })
+  expect_true(file.size(fname) <= 2)
+  expect_true(f)
+})
+
 test_that("it should company_listed_supplement_download", {
   tpl <- .retrieve_template(NULL, "GetListedSupplementCompany")
   vcr::use_cassette("GetListedSupplementCompany", {
-    f <- company_listed_supplement_download(tpl, tempfile(),
-      company_name = "ABEV"
-    )
+    fname <- tempfile()
+    f <- company_listed_supplement_download(tpl, fname, company_name = "ABEV")
   })
+  expect_true(file.size(fname) > 2)
   expect_true(f)
 })
 
 test_that("it should company_details_download", {
   tpl <- .retrieve_template(NULL, "GetDetailsCompany")
   vcr::use_cassette("GetDetailsCompany", {
-    f <- company_details_download(tpl, tempfile(),
-      code_cvm = "24910"
-    )
+    fname <- tempfile()
+    f <- company_details_download(tpl, fname, code_cvm = "24910")
   })
+  expect_true(file.size(fname) > 2)
   expect_true(f)
 })
 
 test_that("it should company_cash_dividends_download ", {
   tpl <- .retrieve_template(NULL, "GetListedCashDividends")
   vcr::use_cassette("GetListedCashDividends", {
-    f <- company_cash_dividends_download(tpl, tempfile(),
+    fname <- tempfile()
+    f <- company_cash_dividends_download(tpl, fname,
       trading_name = "AMBEVSA"
     )
   })
+  expect_true(file.size(fname) > 2)
   expect_true(f)
 })
 
 test_that("it should stock_indexes_statistics_download ", {
   tpl <- .retrieve_template(NULL, "GetPortfolioDay_IndexStatistics")
   vcr::use_cassette("GetPortfolioDay_IndexStatistics", {
-    f <- stock_indexes_statistics_download(tpl, tempfile(),
+    fname <- tempfile()
+    f <- stock_indexes_statistics_download(tpl, fname,
       index_name = "IBOV", year = 2022
     )
   })
+  expect_true(file.size(fname) > 2)
   expect_true(f)
 })
 
 test_that("it should stock_indexes_current_portfolio_download ", {
   tpl <- .retrieve_template(NULL, "GetPortfolioDay")
   vcr::use_cassette("GetPortfolioDay", {
-    f <- stock_indexes_current_portfolio_download(tpl, tempfile(),
+    fname <- tempfile()
+    f <- stock_indexes_current_portfolio_download(tpl, fname,
       index_name = "IBOV"
     )
   })
+  expect_true(file.size(fname) > 2)
   expect_true(f)
 })
 
 test_that("it should stock_indexes_theo_portfolio_download ", {
   tpl <- .retrieve_template(NULL, "GetTheoricalPortfolio")
   vcr::use_cassette("GetTheoricalPortfolio", {
-    f <- stock_indexes_theo_portfolio_download(tpl, tempfile(),
+    fname <- tempfile()
+    f <- stock_indexes_theo_portfolio_download(tpl, fname,
       index_name = "IBOV"
     )
   })
+  expect_true(file.size(fname) > 2)
   expect_true(f)
 })
 
