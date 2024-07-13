@@ -1,6 +1,3 @@
-#' @keywords internal
-"_PACKAGE"
-
 #' @title Read files from Brazilian Financial Market
 #'
 #' @description
@@ -42,7 +39,6 @@
 #' }
 #'
 #' @name rb3-package
-#' @docType package
 #'
 #' @importFrom ascii ascii
 #' @importFrom proto proto
@@ -73,4 +69,5 @@
 #' @importFrom rvest read_html html_nodes html_text
 #' @importFrom rvest html_table html_element read_html
 #' @importFrom XML xmlInternalTreeParse getNodeSet xmlValue
-NULL
+#' @keywords internal
+"_PACKAGE"
