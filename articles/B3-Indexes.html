@@ -12,21 +12,19 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="B3 Indexes">
-<meta property="og:description" content="rb3">
-<meta property="og:image" content="https://ropensci.github.io/rb3/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -52,7 +50,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -75,7 +73,7 @@
 <li>
   <a href="https://github.com/ropensci/rb3/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -86,7 +84,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -94,7 +92,7 @@
       <h1 data-toc-skip>B3 Indexes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ropensci/rb3/blob/HEAD/vignettes/B3-Indexes.Rmd" class="external-link"><code>vignettes/B3-Indexes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/rb3/blob/main/vignettes/B3-Indexes.Rmd" class="external-link"><code>vignettes/B3-Indexes.Rmd</code></a></small>
       <div class="hidden name"><code>B3-Indexes.Rmd</code></div>
 
     </div>
@@ -116,9 +114,9 @@ presented here.</p>
 available indexes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "AGFS" "BDRX" "GPTW" "IBOV" "IBRA" "IBXL" "IBXX" "ICO2" "ICON" "IDIV"</span></span>
-<span><span class="co">#&gt; [11] "IEEX" "IFIL" "IFIX" "IFNC" "IGCT" "IGCX" "IGNM" "IMAT" "IMOB" "INDX"</span></span>
-<span><span class="co">#&gt; [21] "ISEE" "ITAG" "IVBX" "MLCX" "SMLL" "UTIL"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "AGFS" "BDRX" "GPTW" "IBOV" "IBRA" "IBSD" "IBXL" "IBXX" "ICO2" "ICON"</span></span>
+<span><span class="co">#&gt; [11] "IDIV" "IDVR" "IEEX" "IFIL" "IFIX" "IFNC" "IGCT" "IGCX" "IGNM" "IMAT"</span></span>
+<span><span class="co">#&gt; [21] "IMOB" "INDX" "ISEE" "ITAG" "IVBX" "MLCX" "SMLL" "UTIL"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="indexes-composition-and-weights">Indexes Composition and Weights<a class="anchor" aria-label="anchor" href="#indexes-composition-and-weights"></a>
@@ -133,16 +131,16 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 86 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight   position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.029<span style="text-decoration: underline;">5</span>  <span style="text-decoration: underline;">4</span>394<span style="text-decoration: underline;">245</span>879</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALPA4  0.000<span style="text-decoration: underline;">89</span>  208<span style="text-decoration: underline;">965</span>950</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ALSO3  0.005<span style="text-decoration: underline;">93</span>  532<span style="text-decoration: underline;">616</span>595</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.002<span style="text-decoration: underline;">22</span>   62<span style="text-decoration: underline;">305</span>891</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.007<span style="text-decoration: underline;">75</span> <span style="text-decoration: underline;">1</span>349<span style="text-decoration: underline;">645</span>897</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AZUL4  0.002<span style="text-decoration: underline;">37</span>  327<span style="text-decoration: underline;">593</span>725</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> B3SA3  0.035<span style="text-decoration: underline;">8</span>  <span style="text-decoration: underline;">5</span>694<span style="text-decoration: underline;">552</span>584</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BBAS3  0.032<span style="text-decoration: underline;">6</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">949</span>112</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBDC3  0.009<span style="text-decoration: underline;">59</span> <span style="text-decoration: underline;">1</span>500<span style="text-decoration: underline;">728</span>902</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC4  0.037<span style="text-decoration: underline;">3</span>  <span style="text-decoration: underline;">5</span>146<span style="text-decoration: underline;">576</span>868</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.025<span style="text-decoration: underline;">5</span>  <span style="text-decoration: underline;">4</span>394<span style="text-decoration: underline;">245</span>879</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALOS3  0.005<span style="text-decoration: underline;">25</span>  532<span style="text-decoration: underline;">616</span>595</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ALPA4  0.000<span style="text-decoration: underline;">76</span>  166<span style="text-decoration: underline;">362</span>038</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.001<span style="text-decoration: underline;">54</span>   62<span style="text-decoration: underline;">305</span>891</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.008<span style="text-decoration: underline;">57</span> <span style="text-decoration: underline;">1</span>349<span style="text-decoration: underline;">217</span>892</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AZUL4  0.001<span style="text-decoration: underline;">71</span>  332<span style="text-decoration: underline;">825</span>777</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> B3SA3  0.030<span style="text-decoration: underline;">0</span>  <span style="text-decoration: underline;">5</span>602<span style="text-decoration: underline;">790</span>110</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BBAS3  0.037<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">2</span>842<span style="text-decoration: underline;">247</span>534</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBDC3  0.008<span style="text-decoration: underline;">74</span> <span style="text-decoration: underline;">1</span>489<span style="text-decoration: underline;">259</span>656</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC4  0.033<span style="text-decoration: underline;">2</span>  <span style="text-decoration: underline;">5</span>135<span style="text-decoration: underline;">772</span>281</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 76 more rows</span></span></span></code></pre></div>
 <p>The IBr100 Index (<code>IBXX</code>)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -150,34 +148,34 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight   position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.028<span style="text-decoration: underline;">3</span>  <span style="text-decoration: underline;">4</span>394<span style="text-decoration: underline;">245</span>879</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALPA4  0.000<span style="text-decoration: underline;">86</span>  208<span style="text-decoration: underline;">965</span>950</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ALSO3  0.005<span style="text-decoration: underline;">68</span>  532<span style="text-decoration: underline;">616</span>595</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.002<span style="text-decoration: underline;">13</span>   62<span style="text-decoration: underline;">305</span>891</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.007<span style="text-decoration: underline;">43</span> <span style="text-decoration: underline;">1</span>349<span style="text-decoration: underline;">645</span>897</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AURE3  0.001<span style="text-decoration: underline;">95</span>  301<span style="text-decoration: underline;">966</span>319</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AZUL4  0.002<span style="text-decoration: underline;">27</span>  327<span style="text-decoration: underline;">593</span>725</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B3SA3  0.034<span style="text-decoration: underline;">3</span>  <span style="text-decoration: underline;">5</span>694<span style="text-decoration: underline;">552</span>584</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBAS3  0.031<span style="text-decoration: underline;">3</span>  <span style="text-decoration: underline;">1</span>420<span style="text-decoration: underline;">949</span>112</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC3  0.009<span style="text-decoration: underline;">19</span> <span style="text-decoration: underline;">1</span>500<span style="text-decoration: underline;">728</span>902</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.023<span style="text-decoration: underline;">9</span>  <span style="text-decoration: underline;">4</span>394<span style="text-decoration: underline;">245</span>879</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ALOS3  0.004<span style="text-decoration: underline;">92</span>  532<span style="text-decoration: underline;">616</span>595</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ALPA4  0.000<span style="text-decoration: underline;">72</span>  166<span style="text-decoration: underline;">362</span>038</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ARZZ3  0.001<span style="text-decoration: underline;">44</span>   62<span style="text-decoration: underline;">305</span>891</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ASAI3  0.008<span style="text-decoration: underline;">03</span> <span style="text-decoration: underline;">1</span>349<span style="text-decoration: underline;">217</span>892</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AURE3  0.001<span style="text-decoration: underline;">55</span>  301<span style="text-decoration: underline;">966</span>319</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AZUL4  0.001<span style="text-decoration: underline;">6</span>   332<span style="text-decoration: underline;">825</span>777</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B3SA3  0.028<span style="text-decoration: underline;">1</span>  <span style="text-decoration: underline;">5</span>602<span style="text-decoration: underline;">790</span>110</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBAS3  0.035<span style="text-decoration: underline;">3</span>  <span style="text-decoration: underline;">2</span>842<span style="text-decoration: underline;">247</span>534</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC3  0.008<span style="text-decoration: underline;">18</span> <span style="text-decoration: underline;">1</span>489<span style="text-decoration: underline;">259</span>656</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre></div>
 <p>The Small Caps Index (<code>SMLL</code>)</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 117 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 118 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight  position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> AALR3  0.000<span style="text-decoration: underline;">15</span>   5<span style="text-decoration: underline;">721</span>492</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ABCB4  0.004<span style="text-decoration: underline;">23</span>  66<span style="text-decoration: underline;">485</span>201</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AERI3  0.000<span style="text-decoration: underline;">71</span> 214<span style="text-decoration: underline;">066</span>952</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AESB3  0.012<span style="text-decoration: underline;">2</span>  317<span style="text-decoration: underline;">103</span>937</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> AGRO3  0.004<span style="text-decoration: underline;">98</span>  59<span style="text-decoration: underline;">736</span>251</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALPA4  0.006<span style="text-decoration: underline;">29</span> 208<span style="text-decoration: underline;">965</span>950</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ALSO3  0.041<span style="text-decoration: underline;">7</span>  532<span style="text-decoration: underline;">616</span>595</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ALUP11 0.014<span style="text-decoration: underline;">2</span>  145<span style="text-decoration: underline;">652</span>351</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AMBP3  0.003<span style="text-decoration: underline;">21</span>  43<span style="text-decoration: underline;">853</span>759</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ANIM3  0.003<span style="text-decoration: underline;">33</span> 256<span style="text-decoration: underline;">834</span>750</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 107 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABCB4  0.005<span style="text-decoration: underline;">65</span>  72<span style="text-decoration: underline;">245</span>617</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> AESB3  0.010<span style="text-decoration: underline;">4</span>  317<span style="text-decoration: underline;">103</span>937</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AGRO3  0.005<span style="text-decoration: underline;">64</span>  63<span style="text-decoration: underline;">815</span>593</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ALOS3  0.038<span style="text-decoration: underline;">5</span>  532<span style="text-decoration: underline;">616</span>595</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ALPA4  0.005<span style="text-decoration: underline;">61</span> 166<span style="text-decoration: underline;">362</span>038</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALUP11 0.015<span style="text-decoration: underline;">2</span>  151<span style="text-decoration: underline;">478</span>405</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AMAR3  0.000<span style="text-decoration: underline;">18</span>  31<span style="text-decoration: underline;">628</span>685</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AMBP3  0.002<span style="text-decoration: underline;">04</span>  55<span style="text-decoration: underline;">695</span>890</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ANIM3  0.003<span style="text-decoration: underline;">37</span> 257<span style="text-decoration: underline;">038</span>629</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ARML3  0.006<span style="text-decoration: underline;">29</span> 171<span style="text-decoration: underline;">399</span>108</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 108 more rows</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="index-composition">Index Composition<a class="anchor" aria-label="anchor" href="#index-composition"></a>
 </h3>
@@ -185,21 +183,21 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 compound the given index.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/index_comp_get.html">index_comp_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   [1] "AALR3"  "ABCB4"  "AERI3"  "AESB3"  "AGRO3"  "ALPA4"  "ALSO3"  "ALUP11"</span></span>
-<span><span class="co">#&gt;   [9] "AMBP3"  "ANIM3"  "ARML3"  "ARZZ3"  "AZUL4"  "BEEF3"  "BLAU3"  "BMOB3" </span></span>
-<span><span class="co">#&gt;  [17] "BPAN4"  "BRAP4"  "BRPR3"  "BRSR6"  "CAML3"  "CASH3"  "CBAV3"  "CEAB3" </span></span>
+<span><span class="co">#&gt;   [1] "ABCB4"  "AESB3"  "AGRO3"  "ALOS3"  "ALPA4"  "ALUP11" "AMAR3"  "AMBP3" </span></span>
+<span><span class="co">#&gt;   [9] "ANIM3"  "ARML3"  "ARZZ3"  "AURE3"  "AZEV4"  "AZUL4"  "BEEF3"  "BLAU3" </span></span>
+<span><span class="co">#&gt;  [17] "BMOB3"  "BPAN4"  "BRAP4"  "BRSR6"  "CAML3"  "CASH3"  "CBAV3"  "CEAB3" </span></span>
 <span><span class="co">#&gt;  [25] "CIEL3"  "CLSA3"  "COGN3"  "CSMG3"  "CURY3"  "CVCB3"  "CYRE3"  "DASA3" </span></span>
-<span><span class="co">#&gt;  [33] "DIRR3"  "DXCO3"  "ECOR3"  "EMBR3"  "ENAT3"  "ESPA3"  "EVEN3"  "EZTC3" </span></span>
-<span><span class="co">#&gt;  [41] "FESA4"  "FLRY3"  "FRAS3"  "GFSA3"  "GGPS3"  "GOAU4"  "GOLL4"  "GRND3" </span></span>
-<span><span class="co">#&gt;  [49] "GUAR3"  "HBSA3"  "IFCM3"  "IGTI11" "INTB3"  "IRBR3"  "JALL3"  "JHSF3" </span></span>
-<span><span class="co">#&gt;  [57] "KEPL3"  "LAVV3"  "LEVE3"  "LJQQ3"  "LOGG3"  "LOGN3"  "LUPA3"  "LWSA3" </span></span>
-<span><span class="co">#&gt;  [65] "MATD3"  "MBLY3"  "MEGA3"  "MILS3"  "MLAS3"  "MOVI3"  "MRFG3"  "MRVE3" </span></span>
-<span><span class="co">#&gt;  [73] "MYPK3"  "ODPV3"  "ONCO3"  "ORVR3"  "PCAR3"  "PETZ3"  "PGMN3"  "PLPL3" </span></span>
-<span><span class="co">#&gt;  [81] "PNVL3"  "POMO4"  "POSI3"  "PTBL3"  "QUAL3"  "RANI3"  "RAPT4"  "RECV3" </span></span>
-<span><span class="co">#&gt;  [89] "ROMI3"  "RRRP3"  "SAPR11" "SBFG3"  "SEER3"  "SEQL3"  "SIMH3"  "SLCE3" </span></span>
-<span><span class="co">#&gt;  [97] "SMFT3"  "SMTO3"  "SOMA3"  "SQIA3"  "STBP3"  "TAEE11" "TASA4"  "TEND3" </span></span>
-<span><span class="co">#&gt; [105] "TGMA3"  "TRIS3"  "TTEN3"  "TUPY3"  "UNIP6"  "USIM5"  "VIIA3"  "VIVA3" </span></span>
-<span><span class="co">#&gt; [113] "VLID3"  "VULC3"  "WIZC3"  "YDUQ3"  "ZAMP3"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [33] "DIRR3"  "DXCO3"  "ECOR3"  "ENAT3"  "EVEN3"  "EZTC3"  "FESA4"  "FLRY3" </span></span>
+<span><span class="co">#&gt;  [41] "FRAS3"  "GFSA3"  "GGPS3"  "GOAU4"  "GRND3"  "GUAR3"  "HBSA3"  "IFCM3" </span></span>
+<span><span class="co">#&gt;  [49] "IGTI11" "INTB3"  "IRBR3"  "JALL3"  "JHSF3"  "KEPL3"  "LAVV3"  "LEVE3" </span></span>
+<span><span class="co">#&gt;  [57] "LJQQ3"  "LOGG3"  "LWSA3"  "MATD3"  "MBLY3"  "MDIA3"  "MDNE3"  "MGLU3" </span></span>
+<span><span class="co">#&gt;  [65] "MILS3"  "MLAS3"  "MOVI3"  "MRFG3"  "MRVE3"  "MTRE3"  "MYPK3"  "ODPV3" </span></span>
+<span><span class="co">#&gt;  [73] "ONCO3"  "ORVR3"  "PCAR3"  "PETZ3"  "PGMN3"  "PLPL3"  "PNVL3"  "POMO4" </span></span>
+<span><span class="co">#&gt;  [81] "PORT3"  "POSI3"  "PTBL3"  "QUAL3"  "RANI3"  "RAPT4"  "RCSL3"  "RECV3" </span></span>
+<span><span class="co">#&gt;  [89] "ROMI3"  "RRRP3"  "SAPR11" "SBFG3"  "SEER3"  "SIMH3"  "SLCE3"  "SMFT3" </span></span>
+<span><span class="co">#&gt;  [97] "SMTO3"  "SOMA3"  "SRNA3"  "STBP3"  "TAEE11" "TASA4"  "TEND3"  "TGMA3" </span></span>
+<span><span class="co">#&gt; [105] "TRIS3"  "TTEN3"  "TUPY3"  "UNIP6"  "USIM3"  "USIM5"  "VAMO3"  "VIVA3" </span></span>
+<span><span class="co">#&gt; [113] "VLID3"  "VULC3"  "VVEO3"  "WIZC3"  "YDUQ3"  "ZAMP3"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="index-by-segment">Index by Segment<a class="anchor" aria-label="anchor" href="#index-by-segment"></a>
@@ -212,16 +210,16 @@ and segment weight in the index.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 86 × 6</span></span></span>
 <span><span class="co">#&gt;    symbol segment                      weight segment_weight position refdate   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips  0.026<span style="text-decoration: underline;">0</span>         0.026<span style="text-decoration: underline;">0</span>    1.48<span style="color: #949494;">e</span>9 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte 0.006<span style="text-decoration: underline;">71</span>        0.006<span style="text-decoration: underline;">71</span>   7.35<span style="color: #949494;">e</span>8 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte       0.002<span style="text-decoration: underline;">22</span>        0.022<span style="text-decoration: underline;">2</span>    3.28<span style="color: #949494;">e</span>8 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte       0.006<span style="text-decoration: underline;">04</span>        0.022<span style="text-decoration: underline;">2</span>    9.95<span style="color: #949494;">e</span>8 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> GOLL4  Bens Indls/Transporte       0.000<span style="text-decoration: underline;">66</span>        0.022<span style="text-decoration: underline;">2</span>    1.98<span style="color: #949494;">e</span>8 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RAIL3  Bens Indls/Transporte       0.013<span style="text-decoration: underline;">3</span>         0.022<span style="text-decoration: underline;">2</span>    1.22<span style="color: #949494;">e</span>9 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> BRFS3  Cons N  Básico / Alimentos… 0.007<span style="text-decoration: underline;">36</span>        0.022<span style="text-decoration: underline;">7</span>    1.68<span style="color: #949494;">e</span>9 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> JBSS3  Cons N  Básico / Alimentos… 0.010<span style="text-decoration: underline;">4</span>         0.022<span style="text-decoration: underline;">7</span>    1.13<span style="color: #949494;">e</span>9 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> MRFG3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">1</span>         0.022<span style="text-decoration: underline;">7</span>    2.93<span style="color: #949494;">e</span>8 2023-09-11</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BEEF3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">13</span>        0.022<span style="text-decoration: underline;">7</span>    2.61<span style="color: #949494;">e</span>8 2023-09-11</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips  0.032<span style="text-decoration: underline;">1</span>          0.032<span style="text-decoration: underline;">1</span>   1.48<span style="color: #949494;">e</span>9 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte 0.014<span style="text-decoration: underline;">0</span>          0.014<span style="text-decoration: underline;">0</span>   7.35<span style="color: #949494;">e</span>8 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte       0.001<span style="text-decoration: underline;">39</span>         0.020<span style="text-decoration: underline;">6</span>   3.33<span style="color: #949494;">e</span>8 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte       0.006<span style="text-decoration: underline;">1</span>          0.020<span style="text-decoration: underline;">6</span>   9.95<span style="color: #949494;">e</span>8 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RAIL3  Bens Indls/Transporte       0.013<span style="text-decoration: underline;">1</span>          0.020<span style="text-decoration: underline;">6</span>   1.22<span style="color: #949494;">e</span>9 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> BRFS3  Cons N  Básico / Alimentos… 0.008<span style="text-decoration: underline;">86</span>         0.031    8.35<span style="color: #949494;">e</span>8 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> JBSS3  Cons N  Básico / Alimentos… 0.017<span style="text-decoration: underline;">2</span>          0.031    1.13<span style="color: #949494;">e</span>9 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> MRFG3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">92</span>         0.031    3.32<span style="color: #949494;">e</span>8 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BEEF3  Cons N  Básico / Alimentos… 0.000<span style="text-decoration: underline;">84</span>         0.031    2.61<span style="color: #949494;">e</span>8 2024-07-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> SMTO3  Cons N  Básico / Alimentos… 0.002<span style="text-decoration: underline;">18</span>         0.031    1.42<span style="color: #949494;">e</span>8 2024-07-15</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 76 more rows</span></span></span></code></pre></div>
 </div>
 </div>
@@ -298,15 +296,13 @@ example, the Small Caps Index SMLL.</p>
 indexes have been last updated.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_last_update.html">indexes_last_update</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-09-11"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2024-07-15"</span></span></code></pre></div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -319,16 +315,16 @@ indexes have been last updated.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

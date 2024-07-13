@@ -1,12 +1,11 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   B3-Indexes: B3-Indexes.html
   Fetching-historical-future-rates: Fetching-historical-future-rates.html
   Fetching-historical-yield-curve: Fetching-historical-yield-curve.html
-last_built: 2023-09-11T00:03Z
+last_built: 2024-07-13T20:56Z
 urls:
   reference: https://ropensci.github.io/rb3/reference
   article: https://ropensci.github.io/rb3/articles
-
