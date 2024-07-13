@@ -26,13 +26,13 @@ settlement_prices_download <- function(., dest, ...) {
   verifyssl <- if (!is.null(.$verifyssl)) .$verifyssl else TRUE
   if (verifyssl) {
     res <- POST(.$downloader$url,
-                body = list(dData1 = strdate),
-                encode = "form"
+      body = list(dData1 = strdate),
+      encode = "form"
     )
   } else {
     res <- POST(.$downloader$url,
-                body = list(dData1 = strdate),
-                encode = "form", config(ssl_verifypeer = FALSE)
+      body = list(dData1 = strdate),
+      encode = "form", config(ssl_verifypeer = FALSE)
     )
   }
   if (status_code(res) != 200) {
