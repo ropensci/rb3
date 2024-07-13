@@ -3,6 +3,7 @@ filename: ~
 filetype: CUSTOM
 description: Listagem de dividendos em dinheiro
 locale: pt
+verifyssl: false
 downloader:
   function: company_cash_dividends_download
   url: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedCashDividends

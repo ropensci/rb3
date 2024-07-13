@@ -3,6 +3,7 @@ filename: ~
 filetype: MCUSTOM
 description: Informação suplementar das companhias listadas na Bolsa
 locale: pt
+verifyssl: false
 downloader:
   function: company_details_download
   url: https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetDetail

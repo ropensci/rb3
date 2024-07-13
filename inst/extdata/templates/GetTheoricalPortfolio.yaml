@@ -3,6 +3,7 @@ filename: ~
 filetype: MCUSTOM
 description: Carteira Teórica dos índices da B3 com pesos e posições
 locale: pt
+verifyssl: false
 downloader:
   function: stock_indexes_theo_portfolio_download
   url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetTheoricalPortfolio
