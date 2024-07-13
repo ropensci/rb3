@@ -3,6 +3,7 @@ filename: ~
 filetype: MCUSTOM
 description: Composição dos índices da B3
 locale: pt
+verifyssl: false
 downloader:
   function: stock_indexes_composition_download
   url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetStockIndex

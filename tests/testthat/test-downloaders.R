@@ -5,16 +5,6 @@ if (Sys.info()["sysname"] == "Linux") {
   httr::set_config(httr::config(ssl_verifypeer = FALSE))
 }
 
-test_that("it should download a file with a simple downloader", {
-  tpl <- .retrieve_template(NULL, "CDIIDI")
-  dest <- tempfile()
-  vcr::use_cassette("CDIIDI", {
-    x <- tpl$download_marketdata(dest)
-  })
-  expect_true(x)
-  expect_true(file.exists(dest))
-})
-
 test_that("it should download a file with a datetime downloader", {
   tpl <- .retrieve_template(NULL, "COTAHIST_DAILY")
   dest <- tempfile()

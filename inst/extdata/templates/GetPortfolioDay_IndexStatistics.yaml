@@ -3,6 +3,7 @@ filename: ~
 filetype: MCUSTOM
 description: Dados históricos de cotação dos índices da Bolsa
 locale: pt
+verifyssl: false
 downloader:
   function: stock_indexes_statistics_download
   url: https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetPortfolioDay

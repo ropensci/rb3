@@ -17,3 +17,5 @@ templates_save.r
 ^codemeta\.json$
 Contributing.md
 examples
+^doc$
+^Meta$

@@ -7,3 +7,5 @@ aux.R
 .lintr
 inst/doc
 docs
+/doc/
+/Meta/

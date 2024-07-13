@@ -4,12 +4,8 @@
 \name{rb3-package}
 \alias{rb3}
 \alias{rb3-package}
-\title{rb3: Download and Parse Public Data Released by B3 Exchange}
+\title{Read files from Brazilian Financial Market}
 \description{
-\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
-
-Download and parse public files released by B3 and convert them into useful formats and data structures common to data analysis practitioners.
-
 Read the many files used in Brazilian Financial Market and
 convert them into useful formats and data structures.
 }
