@@ -51,10 +51,6 @@ reference:
       - maturity2date
       - code2month
 
-  - title: CDI rate and IDI index
-    contents:
-      - cdi_get
-
   - title: Super datasets (mix datasets)
     contents:
       - yc_superset
