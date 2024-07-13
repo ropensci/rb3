@@ -1,5 +1,6 @@
-
 library(tidyverse)
+library(bizdays)
+library(oplib)
 
 refdate <- Sys.Date() - 2
 
@@ -21,11 +22,11 @@ maturities <- df |>
 df |>
   filter(symbol.underlying == "PETR4", maturity_date %in% maturities[1:2]) |>
   ggplot(aes(
-    x = strike, y = close, size = volume,
+    x = strike, y = close, linewidth = volume,
     group = maturity_date, color = factor(maturity_date)
   )) +
   geom_vline(
-    xintercept = close_underlying[1], size = 1, color = "red", alpha = 0.25
+    xintercept = close_underlying[1], linewidth = 1, color = "red", alpha = 0.25
   ) +
   geom_point(alpha = 0.5) +
   facet_grid(. ~ type)
