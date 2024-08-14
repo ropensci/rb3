@@ -113,10 +113,11 @@ presented here.</p>
 <p>The function <code><a href="../reference/indexes_get.html">rb3::indexes_get</a></code> list the names of
 available indexes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "AGFS" "BDRX" "GPTW" "IBOV" "IBRA" "IBSD" "IBXL" "IBXX" "ICO2" "ICON"</span></span>
-<span><span class="co">#&gt; [11] "IDIV" "IDVR" "IEEX" "IFIL" "IFIX" "IFNC" "IGCT" "IGCX" "IGNM" "IMAT"</span></span>
-<span><span class="co">#&gt; [21] "IMOB" "INDX" "ISEE" "ITAG" "IVBX" "MLCX" "SMLL" "UTIL"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt;  [1] "AGFS" "BDRX" "GPTW" "IBBR" "IBHB" "IBLV" "IBOV" "IBRA" "IBSD" "IBXL"</span></span>
+<span><span class="co">#&gt; [11] "IBXX" "ICO2" "ICON" "IDIV" "IDVR" "IEEX" "IFIL" "IFIX" "IFNC" "IGCT"</span></span>
+<span><span class="co">#&gt; [21] "IGCX" "IGNM" "IMAT" "IMOB" "INDX" "ISEE" "ITAG" "IVBX" "MLCX" "SMLL"</span></span>
+<span><span class="co">#&gt; [31] "UTIL"</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="indexes-composition-and-weights">Indexes Composition and Weights<a class="anchor" aria-label="anchor" href="#indexes-composition-and-weights"></a>
@@ -126,9 +127,9 @@ available indexes.</p>
 with the current compostion of the requested index, all symbols that
 compound the index, their weights and theoretical position. Here the
 IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 86 × 3</span></span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 86 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight   position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.025<span style="text-decoration: underline;">5</span>  <span style="text-decoration: underline;">4</span>394<span style="text-decoration: underline;">245</span>879</span></span>
@@ -141,11 +142,11 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> BBAS3  0.037<span style="text-decoration: underline;">7</span>  <span style="text-decoration: underline;">2</span>842<span style="text-decoration: underline;">247</span>534</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBDC3  0.008<span style="text-decoration: underline;">74</span> <span style="text-decoration: underline;">1</span>489<span style="text-decoration: underline;">259</span>656</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC4  0.033<span style="text-decoration: underline;">2</span>  <span style="text-decoration: underline;">5</span>135<span style="text-decoration: underline;">772</span>281</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 76 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 76 more rows</span></span></span></code></pre>
 <p>The IBr100 Index (<code>IBXX</code>)</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBXX"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 3</span></span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"IBXX"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight   position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABEV3  0.023<span style="text-decoration: underline;">9</span>  <span style="text-decoration: underline;">4</span>394<span style="text-decoration: underline;">245</span>879</span></span>
@@ -158,11 +159,11 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> B3SA3  0.028<span style="text-decoration: underline;">1</span>  <span style="text-decoration: underline;">5</span>602<span style="text-decoration: underline;">790</span>110</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BBAS3  0.035<span style="text-decoration: underline;">3</span>  <span style="text-decoration: underline;">2</span>842<span style="text-decoration: underline;">247</span>534</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BBDC3  0.008<span style="text-decoration: underline;">18</span> <span style="text-decoration: underline;">1</span>489<span style="text-decoration: underline;">259</span>656</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre>
 <p>The Small Caps Index (<code>SMLL</code>)</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 118 × 3</span></span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_weights_get.html">index_weights_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 118 × 3</span></span></span>
 <span><span class="co">#&gt;    symbol  weight  position</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ABCB4  0.005<span style="text-decoration: underline;">65</span>  72<span style="text-decoration: underline;">245</span>617</span></span>
@@ -175,15 +176,15 @@ IBOVESPA (<code>IBOV</code>) Index has its composition listed.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AMBP3  0.002<span style="text-decoration: underline;">04</span>  55<span style="text-decoration: underline;">695</span>890</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ANIM3  0.003<span style="text-decoration: underline;">37</span> 257<span style="text-decoration: underline;">038</span>629</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ARML3  0.006<span style="text-decoration: underline;">29</span> 171<span style="text-decoration: underline;">399</span>108</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 108 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 108 more rows</span></span></span></code></pre>
 <div class="section level3">
 <h3 id="index-composition">Index Composition<a class="anchor" aria-label="anchor" href="#index-composition"></a>
 </h3>
 <p><code><a href="../reference/index_comp_get.html">rb3::index_comp_get</a></code> returns a vector with symbols that
 compound the given index.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_comp_get.html">index_comp_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   [1] "ABCB4"  "AESB3"  "AGRO3"  "ALOS3"  "ALPA4"  "ALUP11" "AMAR3"  "AMBP3" </span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_comp_get.html">index_comp_get</a></span><span class="op">(</span><span class="st">"SMLL"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt;   [1] "ABCB4"  "AESB3"  "AGRO3"  "ALOS3"  "ALPA4"  "ALUP11" "AMAR3"  "AMBP3" </span></span>
 <span><span class="co">#&gt;   [9] "ANIM3"  "ARML3"  "ARZZ3"  "AURE3"  "AZEV4"  "AZUL4"  "BEEF3"  "BLAU3" </span></span>
 <span><span class="co">#&gt;  [17] "BMOB3"  "BPAN4"  "BRAP4"  "BRSR6"  "CAML3"  "CASH3"  "CBAV3"  "CEAB3" </span></span>
 <span><span class="co">#&gt;  [25] "CIEL3"  "CLSA3"  "COGN3"  "CSMG3"  "CURY3"  "CVCB3"  "CYRE3"  "DASA3" </span></span>
@@ -197,7 +198,7 @@ compound the given index.</p>
 <span><span class="co">#&gt;  [89] "ROMI3"  "RRRP3"  "SAPR11" "SBFG3"  "SEER3"  "SIMH3"  "SLCE3"  "SMFT3" </span></span>
 <span><span class="co">#&gt;  [97] "SMTO3"  "SOMA3"  "SRNA3"  "STBP3"  "TAEE11" "TASA4"  "TEND3"  "TGMA3" </span></span>
 <span><span class="co">#&gt; [105] "TRIS3"  "TTEN3"  "TUPY3"  "UNIP6"  "USIM3"  "USIM5"  "VAMO3"  "VIVA3" </span></span>
-<span><span class="co">#&gt; [113] "VLID3"  "VULC3"  "VVEO3"  "WIZC3"  "YDUQ3"  "ZAMP3"</span></span></code></pre></div>
+<span><span class="co">#&gt; [113] "VLID3"  "VULC3"  "VVEO3"  "WIZC3"  "YDUQ3"  "ZAMP3"</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="index-by-segment">Index by Segment<a class="anchor" aria-label="anchor" href="#index-by-segment"></a>
@@ -205,22 +206,22 @@ compound the given index.</p>
 <p><code><a href="../reference/index_by_segment_get.html">rb3::index_by_segment_get</a></code> returns a data.frame with all
 stocks that are in the index, their economic segment, weights, position
 and segment weight in the index.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_by_segment_get.html">index_by_segment_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 86 × 6</span></span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/index_by_segment_get.html">index_by_segment_get</a></span><span class="op">(</span><span class="st">"IBOV"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 85 × 6</span></span></span>
 <span><span class="co">#&gt;    symbol segment                      weight segment_weight position refdate   </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips  0.032<span style="text-decoration: underline;">1</span>          0.032<span style="text-decoration: underline;">1</span>   1.48<span style="color: #949494;">e</span>9 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte 0.014<span style="text-decoration: underline;">0</span>          0.014<span style="text-decoration: underline;">0</span>   7.35<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte       0.001<span style="text-decoration: underline;">39</span>         0.020<span style="text-decoration: underline;">6</span>   3.33<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte       0.006<span style="text-decoration: underline;">1</span>          0.020<span style="text-decoration: underline;">6</span>   9.95<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RAIL3  Bens Indls/Transporte       0.013<span style="text-decoration: underline;">1</span>          0.020<span style="text-decoration: underline;">6</span>   1.22<span style="color: #949494;">e</span>9 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> BRFS3  Cons N  Básico / Alimentos… 0.008<span style="text-decoration: underline;">86</span>         0.031    8.35<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> JBSS3  Cons N  Básico / Alimentos… 0.017<span style="text-decoration: underline;">2</span>          0.031    1.13<span style="color: #949494;">e</span>9 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> MRFG3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">92</span>         0.031    3.32<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BEEF3  Cons N  Básico / Alimentos… 0.000<span style="text-decoration: underline;">84</span>         0.031    2.61<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> SMTO3  Cons N  Básico / Alimentos… 0.002<span style="text-decoration: underline;">18</span>         0.031    1.42<span style="color: #949494;">e</span>8 2024-07-15</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 76 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> WEGE3  Bens Indls / Máqs e Equips  0.034<span style="text-decoration: underline;">7</span>          0.034<span style="text-decoration: underline;">7</span>   1.48<span style="color: #949494;">e</span>9 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> EMBR3  Bens Indls / Mat Transporte 0.014<span style="text-decoration: underline;">8</span>          0.014<span style="text-decoration: underline;">8</span>   7.35<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AZUL4  Bens Indls/Transporte       0.001<span style="text-decoration: underline;">11</span>         0.020<span style="text-decoration: underline;">1</span>   3.33<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> CCRO3  Bens Indls/Transporte       0.006<span style="text-decoration: underline;">11</span>         0.020<span style="text-decoration: underline;">1</span>   9.95<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RAIL3  Bens Indls/Transporte       0.012<span style="text-decoration: underline;">9</span>          0.020<span style="text-decoration: underline;">1</span>   1.22<span style="color: #949494;">e</span>9 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> BRFS3  Cons N  Básico / Alimentos… 0.008<span style="text-decoration: underline;">59</span>         0.031<span style="text-decoration: underline;">4</span>   8.35<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> JBSS3  Cons N  Básico / Alimentos… 0.018<span style="text-decoration: underline;">2</span>          0.031<span style="text-decoration: underline;">4</span>   1.13<span style="color: #949494;">e</span>9 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> MRFG3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">89</span>         0.031<span style="text-decoration: underline;">4</span>   3.32<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> BEEF3  Cons N  Básico / Alimentos… 0.000<span style="text-decoration: underline;">89</span>         0.031<span style="text-decoration: underline;">4</span>   2.61<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> SMTO3  Cons N  Básico / Alimentos… 0.001<span style="text-decoration: underline;">92</span>         0.031<span style="text-decoration: underline;">4</span>   1.42<span style="color: #949494;">e</span>8 2024-08-14</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 75 more rows</span></span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -232,10 +233,11 @@ for B3 indexes.</p>
 the given index name and returns data structured in a data.frame. The
 index names are obtained with <code><a href="../reference/indexes_get.html">rb3::indexes_get</a></code>
 function.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_name</span> <span class="op">&lt;-</span> <span class="st">"IBOV"</span></span>
-<span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-01-01"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">index_data</span><span class="op">)</span></span>
+<span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2019-01-01"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">index_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   refdate    index_name   value</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -247,7 +249,7 @@ function.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 2019-10-01 IBOV       <span style="text-decoration: underline;">104</span>053.</span></span></code></pre></div>
 <p>The returned data.frame has three columns: <code>refdate</code>,
 <code>index_name</code> and <code>value</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">refdate</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -256,11 +258,11 @@ function.</p>
 <span>    title <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{index_name} Historical Data"</span><span class="op">)</span>,</span>
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="B3-Indexes_files/figure-html/unnamed-chunk-9-1.png" width="864"></p>
+<p><img src="B3-Indexes_files/figure-html/ibov-get-2019-plot-1.png" width="672"></p>
 <p>The IBOVESPA index starts at 1968 and the series is adjusted for all
 economic events the that affected the Brazilian currency in the 80-90’s
 decades.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"1968-01-01"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">refdate</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -271,15 +273,16 @@ decades.</p>
 <span>    title <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{index_name} Historical Data - since 1968"</span><span class="op">)</span>,</span>
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="B3-Indexes_files/figure-html/unnamed-chunk-10-1.png" width="864"></p>
+<p><img src="B3-Indexes_files/figure-html/ibov-get-1968-plot-1.png" width="672"></p>
 <p>The y-axis was transformed to log scale in order to get the
 visualization improved.</p>
 <p>Change <code>index_name</code> to get data for other indexes, for
 example, the Small Caps Index SMLL.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index_name</span> <span class="op">&lt;-</span> <span class="st">"SMLL"</span></span>
-<span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
+<span><span class="va">index_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_get.html">index_get</a></span><span class="op">(</span><span class="va">index_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2010-01-01"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">index_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">refdate</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
@@ -287,16 +290,15 @@ example, the Small Caps Index SMLL.</p>
 <span>    title <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{index_name} Historical Data"</span><span class="op">)</span>,</span>
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="B3-Indexes_files/figure-html/unnamed-chunk-11-1.png" width="864"></p>
+<p><img src="B3-Indexes_files/figure-html/smll-get-2010-plot-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="indexes-last-update">Indexes Last Update<a class="anchor" aria-label="anchor" href="#indexes-last-update"></a>
 </h2>
 <p><code><a href="../reference/indexes_last_update.html">rb3::indexes_last_update</a></code> returns the date where the
 indexes have been last updated.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_last_update.html">indexes_last_update</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2024-07-15"</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/indexes_last_update.html">indexes_last_update</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </div>
 
