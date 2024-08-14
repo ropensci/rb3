@@ -19,3 +19,4 @@ Contributing.md
 examples
 ^doc$
 ^Meta$
+.vscode
