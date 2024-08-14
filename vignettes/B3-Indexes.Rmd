@@ -28,8 +28,16 @@ library(stringr)
 
 The function `rb3::indexes_get` list the names of available indexes.
 
-```{r}
+```{r indexes-get, eval=FALSE}
 indexes_get()
+```
+
+```{r indexes-get-load, message=FALSE, warning=FALSE, echo=FALSE}
+indexes_get_ <- try(indexes_get(), silent = TRUE)
+if (is(indexes_get_, "try-error")) {
+  load("indexes_get.rda")
+}
+indexes_get_
 ```
 
 ## Indexes Composition and Weights
@@ -39,28 +47,60 @@ This function returns a data.frame with the current compostion of the requested 
 symbols that compound the index, their weights and theoretical position.
 Here the IBOVESPA (`IBOV`) Index has its composition listed.
 
-```{r}
+```{r ibov-weights-get, eval=FALSE}
 index_weights_get("IBOV")
+```
+
+```{r ibov-weights-get-load, message=FALSE, warning=FALSE, echo=FALSE}
+ibov_weights_get_ <- try(index_weights_get("IBOV"), silent = TRUE)
+if (is(ibov_weights_get_, "try-error")) {
+  load("indexes_data.rda")
+}
+ibov_weights_get_
 ```
 
 The IBr100 Index (`IBXX`)
 
-```{r}
+```{r ibxx-weights-get, eval=FALSE}
 index_weights_get("IBXX")
+```
+
+```{r ibxx-weights-get-load, message=FALSE, warning=FALSE, echo=FALSE}
+ibxx_weights_get_ <- try(index_weights_get("IBXX"), silent = TRUE)
+if (is(ibxx_weights_get_, "try-error")) {
+  load("indexes_data.rda")
+}
+ibxx_weights_get_
 ```
 
 The Small Caps Index (`SMLL`)
 
-```{r}
+```{r smll-weights-get, eval=FALSE}
 index_weights_get("SMLL")
+```
+
+```{r smll-weights-get-load, message=FALSE, warning=FALSE, echo=FALSE}
+smll_weights_get_ <- try(index_weights_get("SMLL"), silent = TRUE)
+if (is(smll_weights_get_, "try-error")) {
+  load("indexes_data.rda")
+}
+smll_weights_get_
 ```
 
 ### Index Composition
 
 `rb3::index_comp_get` returns a vector with symbols that compound the given index.
 
-```{r}
+```{r smll-comp-get, eval=FALSE}
 index_comp_get("SMLL")
+```
+
+```{r smll-comp-get-load, message=FALSE, warning=FALSE, echo=FALSE}
+smll_comp_get_ <- try(index_comp_get("SMLL"), silent = TRUE)
+if (is(smll_comp_get_, "try-error")) {
+  load("indexes_data.rda")
+}
+smll_comp_get_
 ```
 
 ### Index by Segment
@@ -68,8 +108,16 @@ index_comp_get("SMLL")
 `rb3::index_by_segment_get` returns a data.frame with all stocks that are in the index, their
 economic segment, weights, position and segment weight in the index.
 
-```{r}
+```{r ibov-by-segment-get, eval=FALSE}
 index_by_segment_get("IBOV")
+```
+
+```{r ibov-by-segment-get-load, message=FALSE, warning=FALSE, echo=FALSE}
+ibov_by_segment_get_ <- try(index_by_segment_get("IBOV"), silent = TRUE)
+if (is(ibov_by_segment_get_, "try-error")) {
+  load("indexes_data.rda")
+}
+ibov_by_segment_get_
 ```
 
 ## Indexes Time Series
@@ -80,15 +128,27 @@ The function `rb3::index_get` downloads data from B3 for the given index name an
 data structured in a data.frame.
 The index names are obtained with `rb3::indexes_get` function.
 
-```{r}
+```{r ibov-get-2019-load, message=FALSE, warning=FALSE, echo=FALSE}
+index_name <- "IBOV"
+index_data <- try(index_get(index_name, as.Date("2019-01-01")), silent = TRUE)
+if (is(index_data, "try-error")) {
+  load("indexes_data.rda")
+  index_data <- ibov_data_1
+}
+```
+
+```{r ibov-get-2019, eval=FALSE}
 index_name <- "IBOV"
 index_data <- index_get(index_name, as.Date("2019-01-01"))
+```
+
+```{r ibov-get-2019-echo}
 head(index_data)
 ```
 
 The returned data.frame has three columns: `refdate`, `index_name` and `value`.
 
-```{r fig.width=9, fig.height=6}
+```{r ibov-get-2019-plot, fig.width=7, fig.height=3}
 index_data |>
   ggplot(aes(x = refdate, y = value)) +
   geom_line() +
@@ -102,8 +162,29 @@ index_data |>
 The IBOVESPA index starts at 1968 and the series is adjusted for all economic events the that
 affected the Brazilian currency in the 80-90's decades.
 
-```{r fig.width=9, fig.height=6}
+```{r ibov-get-1968-load, message=FALSE, warning=FALSE, echo=FALSE}
+index_name <- "IBOV"
+index_data <- try(index_get(index_name, as.Date("1968-01-01")), silent = TRUE)
+if (is(index_data, "try-error")) {
+  load("indexes_data.rda")
+  index_data <- ibov_data_2
+}
+```
+
+```{r ibov-get-1968, eval=FALSE}
 index_data <- index_get(index_name, as.Date("1968-01-01"))
+index_data |>
+  ggplot(aes(x = refdate, y = value)) +
+  geom_line() +
+  scale_y_log10() +
+  labs(
+    x = NULL, y = "Index (log scale)",
+    title = str_glue("{index_name} Historical Data - since 1968"),
+    caption = str_glue("Data imported using rb3")
+  )
+```
+
+```{r ibov-get-1968-plot, message=FALSE, warning=FALSE, echo=FALSE, fig.width=7, fig.height=3}
 index_data |>
   ggplot(aes(x = refdate, y = value)) +
   geom_line() +
@@ -119,9 +200,21 @@ The y-axis was transformed to log scale in order to get the visualization improv
 
 Change `index_name` to get data for other indexes, for example, the Small Caps Index SMLL.
 
-```{r fig.width=9, fig.height=6}
+```{r smll-get-2010-load, message=FALSE, warning=FALSE, echo=FALSE}
+index_name <- "SMLL"
+index_data <- try(index_get(index_name, as.Date("2010-01-01")), silent = TRUE)
+if (is(index_data, "try-error")) {
+  load("indexes_data.rda")
+  index_data <- smll_data
+}
+```
+
+```{r smll-get-2010, eval=FALSE}
 index_name <- "SMLL"
 index_data <- index_get(index_name, as.Date("2010-01-01"))
+```
+
+```{r smll-get-2010-plot, fig.width=7, fig.height=3}
 index_data |>
   ggplot(aes(x = refdate, y = value)) +
   geom_line() +
@@ -136,6 +229,6 @@ index_data |>
 
 `rb3::indexes_last_update` returns the date where the indexes have been last updated.
 
-```{r}
+```{r indexes-last-update, eval=FALSE}
 indexes_last_update()
 ```
