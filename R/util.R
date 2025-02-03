@@ -123,7 +123,7 @@ alert <- function(x = c("info", "success", "danger", "warning"), text, ...) {
   } else {
     f_ <- alert_fun(x)
     if (! is.null(f_)) {
-      f_(str_glue(text, .envir = list(...)))
+      f_(str_glue(text, .envir = as.environment(list(...))))
     }
   }
 }
