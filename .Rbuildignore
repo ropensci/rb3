@@ -19,4 +19,6 @@ Contributing.md
 examples
 ^doc$
 ^Meta$
-.vscode
+^\.dockerignore$
+^\.devcontainer$
+^\.vscode$
