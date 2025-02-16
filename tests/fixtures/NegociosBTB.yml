@@ -5758,8 +5758,8 @@ http_interactions:
         wlYJgdbc+XctOUdzh7x72XwD4AhAaNylXdmhkvqahOX8mOU5Cwcatzxh/U8AAQYAUEsBAjMALQAAAAgA
         waN2Vs8AJmL//////////xoAFAAAAAAAAAAAAAAAAAAAADIyLTAzLTIwMjNfTkVHT0NJT1NCVEIudHh0
         AQAQACfIIgAAAAAA/DwFAAAAAABQSwUGAAAAAAEAAQBcAAAASD0FAAAA
-  recorded_at: 2023-03-23 10:03:10 GMT
-  recorded_with: vcr/1.2.0, webmockr/0.9.0
+  recorded_at: 2025-02-16 14:50:58 GMT
+  recorded_with: vcr/1.6.0, webmockr/2.0.0
 - request:
     method: get
     uri: https://up2dataweb.blob.core.windows.net/raptor/22-03-2023_NEGOCIOSBTB.zip?sv=2019-12-12&ss=b&srt=o&spr=https&se=2023-03-23T10%3A05%3A14Z&sp=r&sig=GNOCYRBPZcg1VdSqfnSsNNxQXAnrf9iwG3VbiP54GC4%3D
@@ -11519,5 +11519,45 @@ http_interactions:
         wlYJgdbc+XctOUdzh7x72XwD4AhAaNylXdmhkvqahOX8mOU5Cwcatzxh/U8AAQYAUEsBAjMALQAAAAgA
         waN2Vs8AJmL//////////xoAFAAAAAAAAAAAAAAAAAAAADIyLTAzLTIwMjNfTkVHT0NJT1NCVEIudHh0
         AQAQACfIIgAAAAAA/DwFAAAAAABQSwUGAAAAAAEAAQBcAAAASD0FAAAA
-  recorded_at: 2023-03-23 10:03:10 GMT
-  recorded_with: vcr/1.2.0, webmockr/0.9.0
+  recorded_at: 2025-02-16 14:50:58 GMT
+  recorded_with: vcr/1.6.0, webmockr/2.0.0
+- request:
+    method: get
+    uri: https://arquivos.b3.com.br/apinegocios/tickercsvbtb/2025-02-14
+    body:
+      encoding: ''
+      string: ''
+    headers:
+      Accept: application/json, text/xml, application/xml, */*
+  response:
+    status:
+      status_code: 404
+      category: Client error
+      reason: Not Found
+      message: 'Client error: (404) Not Found'
+    headers:
+      date: Sun, 16 Feb 2025 14:50:57 GMT
+      content-length: '0'
+      request-context: appId=cid-v1:0c513226-6f7a-403c-a896-f54dda8c2b7d
+      x-frame-options: ALLOW-FROM b3.com.br
+      referrer-policy: no-referrer
+      permissions-policy: accelerometer=(); camera=(); geolocation=(); gyroscope=();
+        magnetometer=(); microphone=(); payment=(); usb=()
+      expect-ct: enforce, max-age=300
+      x-permitted-cross-domain-policies: none
+      x-xss-protection: 1; mode=block
+      strict-transport-security: max-age=31536000; includeSubDomains
+      x-content-type-options: nosniff
+      cf-cache-status: DYNAMIC
+      set-cookie: __cf_bm=Rtjbhbwn_bKeT5zpDUrdaqrZ_OXWiCpRXW2X5_n.2Lc-1739717457-1.0.1.1-xRuFzshKKzO6B5Cg3jlYKDgL152.ROyFlP6H6ErcG1ibnLll23SOEpbiU.fbT34PXFal7eHNPftK0Mx_G3zFYQ;
+        path=/; expires=Sun, 16-Feb-25 15:20:57 GMT; domain=.b3.com.br; HttpOnly;
+        Secure; SameSite=None
+      server: cloudflare
+      cf-ray: 912e5a5f9cd71aa1-GRU
+      alt-svc: h3=":443"; ma=86400
+    body:
+      encoding: ''
+      file: no
+      string: ''
+  recorded_at: 2025-02-16 14:50:58 GMT
+  recorded_with: vcr/1.6.0, webmockr/2.0.0

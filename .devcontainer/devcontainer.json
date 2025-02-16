@@ -1,0 +1,10 @@
+{
+    "name": "rb3 development environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "TAG": "4.4.2"
+        },
+        "context": "."
+    }
+}
