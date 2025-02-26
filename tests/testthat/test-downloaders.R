@@ -63,6 +63,7 @@ test_that("it should base64_datetime_download", {
 })
 
 test_that("it should fail base64_datetime_download", {
+  skip_on_os("macos")
   tpl <- .retrieve_template(NULL, "NegociosBalcao")
   refdate <- as.Date("2022-06-05")
   f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)

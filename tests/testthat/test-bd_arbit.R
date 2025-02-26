@@ -1,4 +1,3 @@
-
 test_that("it should load BD_Arbit with the correct field types", {
   f_txt <- system.file("extdata/BD_Arbit.txt", package = "rb3")
   f_txt <- copy_file_to_temp(f_txt)

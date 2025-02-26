@@ -1,4 +1,3 @@
-
 fields <- function(...) {
   that <- list(...)
   class(that) <- "fields"

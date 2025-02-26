@@ -37,7 +37,7 @@ test_that("it should get listed supplementary company info", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_info))
-  
+
   cols <- ncol(company_info)
   expect_true(cols == 16)
 
@@ -46,7 +46,7 @@ test_that("it should get listed supplementary company info", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_supl))
-  
+
   company_info <- tryCatch(
     .company_supplementary_info_get("PETR", company_supl),
     empty_file_error = function(e) NULL
@@ -61,13 +61,13 @@ test_that("it should get listed supplementary stock dividends", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_supl))
-  
+
   company_stock_div <- tryCatch(
     .company_supplementary_stock_dividends_get("PDGR", company_supl),
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_stock_div))
-  
+
   cols <- ncol(company_stock_div)
   expect_true(cols == 7)
 
@@ -76,7 +76,7 @@ test_that("it should get listed supplementary stock dividends", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_supl))
-  
+
   company_stock_div <- tryCatch(
     .company_supplementary_stock_dividends_get("PETR", company_supl),
     empty_file_error = function(e) NULL
@@ -93,13 +93,13 @@ test_that("it should get listed supplementary cash dividends", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_supl))
-  
+
   company_cash_div <- tryCatch(
     .company_supplementary_cash_dividends_get("PDGR", company_supl),
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_cash_div))
-  
+
   cols <- ncol(company_cash_div)
   expect_true(cols == 8)
 
@@ -114,7 +114,7 @@ test_that("it should get listed supplementary cash dividends", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_cash_div))
-  
+
   symbols <- unique(company_cash_div$symbol)
   expect_true(all.equal(c("PETR3", "PETR4"), symbols))
 })
@@ -125,13 +125,13 @@ test_that("it should get listed supplementary subscriptions", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_supl))
-  
+
   data <- tryCatch(
     .company_supplementary_subscriptions_get("PDGR", company_supl),
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(data))
-  
+
   cols <- ncol(data)
   expect_true(cols == 10)
 })
@@ -142,7 +142,7 @@ test_that("it should get company info for multiple companies", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_info))
-  
+
   expect_true(all.equal(company_info$asset_name, c("PDGR", "PETR")))
   expect_true(nrow(company_info) == 2)
   expect_true(ncol(company_info) == 16)
@@ -154,7 +154,7 @@ test_that("it should get stock dividends for multiple companies", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_info))
-  
+
   expect_true(all.equal(company_info$asset_name |> unique(), c("PDGR", "PETR")))
   expect_true(ncol(company_info) == 7)
 })
@@ -165,7 +165,7 @@ test_that("it should get cash dividends for multiple companies", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_info))
-  
+
   expect_true(all.equal(company_info$asset_name |> unique(), c("PDGR", "PETR")))
   expect_true(ncol(company_info) == 8)
 })
@@ -176,7 +176,7 @@ test_that("it should get subscriptions for multiple companies", {
     empty_file_error = function(e) NULL
   )
   skip_if(is.null(company_info))
-  
+
   expect_true(all.equal(company_info$asset_name |> unique(), c("INEP", "PDGR")))
   expect_true(ncol(company_info) == 10)
 })

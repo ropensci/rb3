@@ -1,4 +1,3 @@
-
 test_that("it should get futures data with futures_mget", {
   skip_on_cran()
   skip_if_offline()

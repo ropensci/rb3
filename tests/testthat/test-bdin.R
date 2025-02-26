@@ -1,4 +1,3 @@
-
 test_that("read file using filename to find template", {
   skip_on_cran()
 

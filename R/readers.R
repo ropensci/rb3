@@ -445,7 +445,7 @@ company_details_reader <- function(., filename, parse_fields = TRUE) {
 
 company_cash_dividends_reader <- function(., filename, parse_fields = TRUE) {
   jason <- fromJSON(filename)
-  if (length(jason$results) == 0)  {
+  if (length(jason$results) == 0) {
     return(NULL)
   }
   df <- as.data.frame(jason[["results"]])

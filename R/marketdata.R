@@ -1,4 +1,3 @@
-
 #' Read and parses files delivered by B3
 #'
 #' B3, and previously BMF&Bovespa, used to deliver many files with a diverse

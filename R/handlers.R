@@ -1,4 +1,3 @@
-
 width <- function(x) {
   x <- as.numeric(x)
   class(x) <- c("numeric", "width")
