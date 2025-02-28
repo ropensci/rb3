@@ -176,7 +176,7 @@ indexreport_mget <- function(first_date = Sys.Date() - 5,
                              do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
-  tpl <- .retrieve_template(NULL, "IndexReport")
+  tpl <- template_retrieve("IndexReport")
   date_vec <- bizseq(first_date, last_date, tpl$calendar)
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
 

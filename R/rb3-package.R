@@ -41,7 +41,6 @@
 #' @name rb3-package
 #'
 #' @importFrom ascii ascii
-#' @importFrom proto proto
 #' @importFrom base64enc base64encode
 #' @importFrom bizdays following preceding load_builtin_calendars
 #' @importFrom bizdays add.bizdays bizdayse bizseq getdate
