@@ -17,7 +17,6 @@ Depends:
 Imports:
     bizdays,
     stringr,
-    proto,
     cli,
     readr,
     dplyr,
@@ -55,6 +54,8 @@ Collate:
     'transmute.R'
     'fields.R'
     'handlers.R'
+    'registry.R'
+    'template.R'
     'marketdata.R'
     'download-data.R'
     'file.R'
