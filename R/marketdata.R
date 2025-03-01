@@ -11,13 +11,7 @@
 #' @param parse_fields a logical indicating if the fields must be parsed.
 #' @param do_cache Whether to use cache or not (default = TRUE)
 #'
-#' Each `template` has a default value for the `filename`, if the given
-#' file name equals one template filename attribute, the matched template
-#' is used to parse the file.
-#' Otherwise the template must be provided.
-#'
-#' The function `show_templates` can be used to view the available templates
-#' and their default filenames.
+#' The function `show_templates` can be used to view the available templates.
 #'
 #' @return `data.frame` of a list of `data.frame` containing data parsed from
 #' files.
@@ -26,16 +20,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Eletro.txt matches the filename of Eletro template
-#' path <- "Eletro.txt"
-#' df <- read_marketdata(path)
 #' path <- "Indic.txt"
 #' df <- read_marketdata(path, template = "Indic")
 #' path <- "PUWEB.TXT"
 #' df <- read_marketdata(path, template = "PUWEB")
 #' }
 #' @export
-read_marketdata <- function(filename, template = NULL,
+read_marketdata <- function(filename, template,
                             parse_fields = TRUE,
                             do_cache = TRUE) {
   if (file.size(filename) <= 2) {
