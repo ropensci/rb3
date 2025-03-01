@@ -238,12 +238,17 @@ single_index_get <- function(index_name, year, cache_folder, do_cache) {
     return(NULL)
   }
 
-  index_data <- pivot_longer(index_data$Results, "month01":"month12",
-    names_to = "month"
-  ) |>
+  day <- index_data$Results$day
+  months <- index_data$Results |>
+    select("month01":"month12") |>
+    as.list()
+  months_dfs <- names(months) |>
+    lapply(function(m) {
+      month <- as.integer(str_match(m, "\\d\\d")[1])
+      data.frame(year, month, day, value = months[[m]])
+    })
+  index_data <- do.call(rbind, months_dfs) |>
     mutate(
-      month = str_match(.data$month, "\\d\\d$") |> as.integer(),
-      year = year,
       refdate = ISOdate(.data$year, .data$month, .data$day) |> as.Date(),
       index_name = index_name
     ) |>

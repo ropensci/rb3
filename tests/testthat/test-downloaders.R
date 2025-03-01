@@ -8,11 +8,11 @@ if (Sys.info()["sysname"] == "Linux") {
 test_that("it should download a file with a datetime downloader", {
   tpl <- template_retrieve("COTAHIST_DAILY")
   dest <- tempfile()
-  expect_false(tpl$download_marketdata(dest))
+  expect_false(tpl$download_marketdata(tpl, dest))
   expect_false(file.exists(dest))
   skip_on_os("linux")
   date <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
-  x <- tpl$download_marketdata(dest, refdate = date)
+  x <- tpl$download_marketdata(tpl, dest, refdate = date)
   expect_true(x)
   expect_true(file.exists(dest))
 })
