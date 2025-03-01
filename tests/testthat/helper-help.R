@@ -1,5 +1,4 @@
 library(stringr)
-library(proto)
 
 copy_file_to_temp <- function(f_name) {
   folder <- tempdir()
