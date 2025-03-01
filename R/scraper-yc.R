@@ -40,7 +40,7 @@ yc_mget <- function(first_date = Sys.Date() - 5,
   last_date <- as.Date(last_date)
 
   # find biz days in between
-  tpl <- .retrieve_template(NULL, "TaxasReferenciais")
+  tpl <- template_retrieve("TaxasReferenciais")
 
   date_vec <- bizseq(first_date, last_date, tpl$calendar)
 
@@ -86,7 +86,7 @@ get_single_yc <- function(idx_date,
                           cache_folder,
                           do_cache) {
   tpl_name <- "TaxasReferenciais"
-  tpl <- .retrieve_template(NULL, tpl_name)
+  tpl <- template_retrieve(tpl_name)
   refdate <- date_vec[idx_date]
   fname <- download_marketdata(tpl_name, cache_folder, do_cache,
     refdate = refdate,
@@ -142,7 +142,7 @@ yc_ipca_mget <- function(first_date = Sys.Date() - 5,
   last_date <- as.Date(last_date)
 
   # find biz days in between
-  tpl <- .retrieve_template(NULL, "TaxasReferenciais")
+  tpl <- template_retrieve("TaxasReferenciais")
 
   date_vec <- bizseq(first_date, last_date, tpl$calendar)
 
@@ -188,7 +188,7 @@ get_single_yc_ipca <- function(idx_date,
                                cache_folder,
                                do_cache) {
   tpl_name <- "TaxasReferenciais"
-  tpl <- .retrieve_template(NULL, tpl_name)
+  tpl <- template_retrieve(tpl_name)
   refdate <- date_vec[idx_date]
   fname <- download_marketdata(tpl_name, cache_folder, do_cache,
     refdate = refdate,
@@ -245,7 +245,7 @@ yc_usd_mget <- function(first_date = Sys.Date() - 5,
   last_date <- as.Date(last_date)
 
   # find biz days in between
-  tpl <- .retrieve_template(NULL, "TaxasReferenciais")
+  tpl <- template_retrieve("TaxasReferenciais")
 
   date_vec <- bizseq(first_date, last_date, tpl$calendar)
 
@@ -291,7 +291,7 @@ get_single_yc_usd <- function(idx_date,
                               cache_folder,
                               do_cache) {
   tpl_name <- "TaxasReferenciais"
-  tpl <- .retrieve_template(NULL, tpl_name)
+  tpl <- template_retrieve(tpl_name)
   refdate <- date_vec[idx_date]
   fname <- download_marketdata(tpl_name, cache_folder, do_cache,
     refdate = refdate,

@@ -21,7 +21,7 @@ show_templates <- function() {
 
   server <- function(input, output, session) {
     output$tableOutput <- DT::renderDataTable({
-      df <- MarketData$show_templates()
+      df <- list_templates()
       DT::datatable(df,
         selection = "none",
         options = list(paging = FALSE)

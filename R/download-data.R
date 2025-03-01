@@ -25,7 +25,7 @@
 download_marketdata <- function(template,
                                 cache_folder = cachedir(),
                                 do_cache = TRUE, ...) {
-  template <- .retrieve_template(NULL, template)
+  template <- template_retrieve(template)
   x <- list(...)
   code_ <- digest(x)
 
@@ -44,7 +44,7 @@ download_marketdata <- function(template,
     return(fname)
   }
 
-  if (template$download_marketdata(dest, ...)) {
+  if (template$download_marketdata(template, dest, ...)) {
     fname <- unzip_recursive(dest)
     return(fname)
   } else {

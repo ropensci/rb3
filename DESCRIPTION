@@ -17,7 +17,6 @@ Depends:
 Imports:
     bizdays,
     stringr,
-    proto,
     cli,
     readr,
     dplyr,
@@ -25,15 +24,12 @@ Imports:
     httr,
     jsonlite,
     purrr,
-    ascii,
     rlang,
     methods,
     yaml,
     digest,
     base64enc,
-    XML,
-    readxl,
-    tidyr
+    XML
 Suggests:
     testthat,
     knitr,
@@ -48,6 +44,7 @@ Suggests:
     magrittr,
     tibble,
     withr,
+    tidyr,
     vcr (>= 0.6.0)
 Collate:
     'rb3-package.R'
@@ -55,6 +52,8 @@ Collate:
     'transmute.R'
     'fields.R'
     'handlers.R'
+    'registry.R'
+    'template.R'
     'marketdata.R'
     'download-data.R'
     'file.R'

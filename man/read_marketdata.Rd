@@ -4,12 +4,7 @@
 \alias{read_marketdata}
 \title{Read and parses files delivered by B3}
 \usage{
-read_marketdata(
-  filename,
-  template = NULL,
-  parse_fields = TRUE,
-  do_cache = TRUE
-)
+read_marketdata(filename, template, parse_fields = TRUE, do_cache = TRUE)
 }
 \arguments{
 \item{filename}{a string containing a path for the file.}
@@ -20,13 +15,7 @@ read_marketdata(
 
 \item{do_cache}{Whether to use cache or not (default = TRUE)
 
-Each \code{template} has a default value for the \code{filename}, if the given
-file name equals one template filename attribute, the matched template
-is used to parse the file.
-Otherwise the template must be provided.
-
-The function \code{show_templates} can be used to view the available templates
-and their default filenames.}
+The function \code{show_templates} can be used to view the available templates.}
 }
 \value{
 \code{data.frame} of a list of \code{data.frame} containing data parsed from
@@ -41,9 +30,6 @@ rates, currency rates, bonds and many other subjects.
 }
 \examples{
 \dontrun{
-# Eletro.txt matches the filename of Eletro template
-path <- "Eletro.txt"
-df <- read_marketdata(path)
 path <- "Indic.txt"
 df <- read_marketdata(path, template = "Indic")
 path <- "PUWEB.TXT"

@@ -13,7 +13,7 @@
 #' }
 #' @export
 display_template <- function() {
-  classes_ <- MarketData$show_templates()[["Class Name"]]
+  classes_ <- list_templates()[["Class Name"]]
   ui <- miniUI::miniPage(
     miniUI::miniTitleBar("rb3 View Template"),
     miniUI::miniContentPanel(
@@ -30,7 +30,7 @@ display_template <- function() {
 
   server <- function(input, output, session) {
     output$templateOutput <- shiny::renderUI({
-      tpl_ <- MarketData$retrieve_template(input$templateClass)
+      tpl_ <- template_retrieve(input$templateClass)
 
       elm <- list(
         shiny::tags$p("Template ID: ", tpl_$id),
