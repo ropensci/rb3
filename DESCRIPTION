@@ -20,7 +20,6 @@ Imports:
     cli,
     readr,
     dplyr,
-    rvest,
     httr,
     jsonlite,
     purrr,

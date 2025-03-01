@@ -140,11 +140,14 @@ mfwf_read_file <- function(., filename, parse_fields = TRUE) {
 }
 
 settlement_prices_read <- function(., filename, parse_fields = TRUE) {
-  doc <- read_html(filename)
+  doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  table <- html_element(doc, xpath = xpath)
-  if (is(table, "xml_node")) {
-    df <- html_table(table)
+  table <- getNodeSet(doc, xpath)
+  if (is(table, "XMLNodeSet") && length(table) == 1) {
+    tb <- table[[1]]
+    vals <- sapply(tb[["tbody"]]["tr"], \(x) sapply(x["td"], xmlValue))
+    dm <- matrix(vals, nrow = ncol(vals), byrow = TRUE)
+    df <- as.data.frame(dm)
   } else {
     return(NULL)
   }
@@ -177,11 +180,8 @@ cols_number <- c(
 )
 
 curve_read <- function(., filename, parse_fields = TRUE) {
-  text <- read_file(filename)
-
-  char_vec <- read_html(text) |>
-    html_nodes("td") |>
-    html_text()
+  doc <- htmlTreeParse(f, encoding = "UTF8", useInternalNodes = TRUE)
+  char_vec <- xmlSApply(getNodeSet(doc, "//table/td"), xmlValue)
 
   if (length(char_vec) == 0) {
     return(NULL)

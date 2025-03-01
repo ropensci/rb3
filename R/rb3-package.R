@@ -62,8 +62,7 @@
 #' @importFrom yaml yaml.load_file
 #' @importFrom methods is new slot
 #' @importFrom utils write.table unzip getFromNamespace hasName read.table
-#' @importFrom rvest read_html html_nodes html_text
-#' @importFrom rvest html_table html_element read_html
 #' @importFrom XML xmlInternalTreeParse getNodeSet xmlValue
+#' @importFrom XML htmlTreeParse xmlSApply
 #' @keywords internal
 "_PACKAGE"
