@@ -1,4 +1,22 @@
-# rb3 0.0.10
+# rb3 0.0.13
+
+* Implemented registry as a singleton pattern.
+* Removed dependencies:
+  * `rvest`
+  * `proto` (in tests)
+  * `ascii`
+  * `tidyr` (now in Suggests because of the vignettes)
+  * `readxl`
+* Removed the filename text match to find the templates.
+* New template framework:
+  * The new template framework doesn't use `proto`.
+
+# rb3 0.0.12
+
+* Fix for glue / envir list having to be passed as environment
+* Make vignettes fail gracefully
+
+# rb3 0.0.11
 
 * Check empty files download.
 
