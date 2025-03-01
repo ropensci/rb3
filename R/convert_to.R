@@ -21,9 +21,9 @@
 #' @export
 convert_to <- function(filename, template = NULL, parse_fields = TRUE,
                        format = "csv", destdir = NULL) {
-  template <- .retrieve_template(filename, template)
+  template <- template_retrieve(template)
   fname <- Filename(name = filename)
-  df <- template$read_file(filename, parse_fields)
+  df <- template$read_file(template, filename, parse_fields)
   new_filename <- fname$changeExt(paste0(".", format), destdir)
   if (format == "csv") {
     write.table(df,

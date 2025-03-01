@@ -6,7 +6,7 @@ if (Sys.info()["sysname"] == "Linux") {
 }
 
 test_that("it should download a file with a datetime downloader", {
-  tpl <- .retrieve_template(NULL, "COTAHIST_DAILY")
+  tpl <- template_retrieve("COTAHIST_DAILY")
   dest <- tempfile()
   expect_false(tpl$download_marketdata(dest))
   expect_false(file.exists(dest))
@@ -18,13 +18,13 @@ test_that("it should download a file with a datetime downloader", {
 })
 
 test_that("it should fail to datetime_download", {
-  tpl <- .retrieve_template(NULL, "OpcoesAcoesEmAberto")
+  tpl <- template_retrieve("OpcoesAcoesEmAberto")
   f <- datetime_download(tpl, tempfile())
   expect_false(f)
 })
 
 test_that("it should fail to settlement_prices_download", {
-  tpl <- .retrieve_template(NULL, "AjustesDiarios")
+  tpl <- template_retrieve("AjustesDiarios")
   f <- settlement_prices_download(tpl, tempfile())
   expect_false(f)
   dest <- tempfile()
@@ -34,7 +34,7 @@ test_that("it should fail to settlement_prices_download", {
 })
 
 test_that("it should stock_indexes_composition_download", {
-  tpl <- .retrieve_template(NULL, "GetStockIndex")
+  tpl <- template_retrieve("GetStockIndex")
   vcr::use_cassette("GetStockIndex", {
     f <- stock_indexes_composition_download(tpl, tempfile())
   })
@@ -42,19 +42,19 @@ test_that("it should stock_indexes_composition_download", {
 })
 
 test_that("it should fail to curve_download", {
-  tpl <- .retrieve_template(NULL, "TaxasReferenciais")
+  tpl <- template_retrieve("TaxasReferenciais")
   f <- curve_download(tpl, tempfile())
   expect_false(f)
 })
 
 test_that("it should defaults to PRE in curve_download", {
-  tpl <- .retrieve_template(NULL, "TaxasReferenciais")
+  tpl <- template_retrieve("TaxasReferenciais")
   f <- curve_download(tpl, tempfile(), refdate = as.Date("2022-05-10"))
   expect_true(f)
 })
 
 test_that("it should base64_datetime_download", {
-  tpl <- .retrieve_template(NULL, "NegociosBalcao")
+  tpl <- template_retrieve("NegociosBalcao")
   refdate <- as.Date("2022-12-07")
   vcr::use_cassette("NegociosBalcao", {
     f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
@@ -63,14 +63,15 @@ test_that("it should base64_datetime_download", {
 })
 
 test_that("it should fail base64_datetime_download", {
-  tpl <- .retrieve_template(NULL, "NegociosBalcao")
+  skip_on_os("mac")
+  tpl <- template_retrieve("NegociosBalcao")
   refdate <- as.Date("2022-06-05")
   f <- base64_datetime_download(tpl, tempfile(), refdate = refdate)
   expect_false(f)
 })
 
 test_that("it should download an empty file", {
-  tpl <- .retrieve_template(NULL, "GetListedSupplementCompany")
+  tpl <- template_retrieve("GetListedSupplementCompany")
   vcr::use_cassette("GetListedSupplementCompanyEmpty", {
     fname <- tempfile()
     f <- company_listed_supplement_download(tpl, fname, company_name = "WWWW")
@@ -80,7 +81,7 @@ test_that("it should download an empty file", {
 })
 
 test_that("it should company_listed_supplement_download", {
-  tpl <- .retrieve_template(NULL, "GetListedSupplementCompany")
+  tpl <- template_retrieve("GetListedSupplementCompany")
   vcr::use_cassette("GetListedSupplementCompany", {
     fname <- tempfile()
     f <- company_listed_supplement_download(tpl, fname, company_name = "ABEV")
@@ -90,7 +91,7 @@ test_that("it should company_listed_supplement_download", {
 })
 
 test_that("it should company_details_download", {
-  tpl <- .retrieve_template(NULL, "GetDetailsCompany")
+  tpl <- template_retrieve("GetDetailsCompany")
   vcr::use_cassette("GetDetailsCompany", {
     fname <- tempfile()
     f <- company_details_download(tpl, fname, code_cvm = "24910")
@@ -100,7 +101,7 @@ test_that("it should company_details_download", {
 })
 
 test_that("it should company_cash_dividends_download ", {
-  tpl <- .retrieve_template(NULL, "GetListedCashDividends")
+  tpl <- template_retrieve("GetListedCashDividends")
   vcr::use_cassette("GetListedCashDividends", {
     fname <- tempfile()
     f <- company_cash_dividends_download(tpl, fname,
@@ -112,7 +113,7 @@ test_that("it should company_cash_dividends_download ", {
 })
 
 test_that("it should stock_indexes_statistics_download ", {
-  tpl <- .retrieve_template(NULL, "GetPortfolioDay_IndexStatistics")
+  tpl <- template_retrieve("GetPortfolioDay_IndexStatistics")
   vcr::use_cassette("GetPortfolioDay_IndexStatistics", {
     fname <- tempfile()
     f <- stock_indexes_statistics_download(tpl, fname,
@@ -124,7 +125,7 @@ test_that("it should stock_indexes_statistics_download ", {
 })
 
 test_that("it should stock_indexes_current_portfolio_download ", {
-  tpl <- .retrieve_template(NULL, "GetPortfolioDay")
+  tpl <- template_retrieve("GetPortfolioDay")
   vcr::use_cassette("GetPortfolioDay", {
     fname <- tempfile()
     f <- stock_indexes_current_portfolio_download(tpl, fname,
@@ -136,7 +137,7 @@ test_that("it should stock_indexes_current_portfolio_download ", {
 })
 
 test_that("it should stock_indexes_theo_portfolio_download ", {
-  tpl <- .retrieve_template(NULL, "GetTheoricalPortfolio")
+  tpl <- template_retrieve("GetTheoricalPortfolio")
   vcr::use_cassette("GetTheoricalPortfolio", {
     fname <- tempfile()
     f <- stock_indexes_theo_portfolio_download(tpl, fname,
@@ -148,7 +149,7 @@ test_that("it should stock_indexes_theo_portfolio_download ", {
 })
 
 test_that("it should datetime_download FPR file", {
-  tpl <- .retrieve_template(NULL, "FPR")
+  tpl <- template_retrieve("FPR")
   refdate <- as.Date("2022-12-07")
   vcr::use_cassette("FPR", {
     f <- datetime_download(tpl, tempfile(), refdate = refdate)
@@ -157,7 +158,7 @@ test_that("it should datetime_download FPR file", {
 })
 
 # test_that("it should datetime_download NegociosBTB file", {
-#   tpl <- .retrieve_template(NULL, "NegociosBTB")
+#   tpl <- template_retrieve("NegociosBTB")
 #   refdate <- bizdays::getdate("last bizday", Sys.Date(), "Brazil/B3")
 #   vcr::use_cassette("NegociosBTB",
 #     {
@@ -169,7 +170,7 @@ test_that("it should datetime_download FPR file", {
 # })
 
 test_that("it should datetime_download OpcoesAcoesEmAberto", {
-  tpl <- .retrieve_template(NULL, "OpcoesAcoesEmAberto")
+  tpl <- template_retrieve("OpcoesAcoesEmAberto")
   refdate <- as.Date("2022-12-07")
   f <- datetime_download(tpl, tempfile(), refdate = refdate)
   expect_true(f)

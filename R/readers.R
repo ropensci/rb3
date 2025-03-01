@@ -63,23 +63,21 @@ parse_columns <- function(df, colnames, handlers, parser) {
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
   df <- read_fwf(filename, .$widths, colnames = .$colnames)
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
 }
 
 csv_read_file <- function(., filename, parse_fields = TRUE) {
-  skip <- try(.$skip, TRUE)
-  skip <- if (is(skip, "try-error")) 0 else skip
-  comment <- try(.$comment, TRUE)
-  comment <- if (is(comment, "try-error")) "#" else comment
+  skip <- if (is.null(.$skip)) 0 else .$skip
+  comment <- if (is.null(.$comment)) "#" else .$comment
   df <- read.table(filename,
     col.names = .$colnames, sep = .$separator, skip = skip,
     comment.char = comment, as.is = TRUE, stringsAsFactors = FALSE
   )
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -90,7 +88,7 @@ json_read_file <- function(., filename, parse_fields = TRUE) {
   df <- as.data.frame(jason)
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -101,14 +99,18 @@ mcsv_read_file <- function(., filename, parse_fields = TRUE) {
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
-    idx <- .$.detect_lines(part, lines)
+    idx <- template_detect_lines(., part, lines)
     df <- read.table(
-      text = lines[idx], col.names = part$colnames, sep = .$.separator(part),
-      as.is = TRUE, stringsAsFactors = FALSE, check.names = FALSE,
+      text = lines[idx],
+      col.names = part$colnames,
+      sep = template_separator(., part),
+      as.is = TRUE,
+      stringsAsFactors = FALSE,
+      check.names = FALSE,
       colClasses = "character"
     )
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$.parser())
+      parse_columns(df, part$colnames, part$handlers, template_parser(.))
     } else {
       df
     }
@@ -122,13 +124,13 @@ mfwf_read_file <- function(., filename, parse_fields = TRUE) {
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
-    idx <- .$.detect_lines(part, lines)
+    idx <- template_detect_lines(., part, lines)
     df <- read_fwf(
       text = lines[idx], widths = part$widths,
       colnames = part$colnames
     )
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$.parser())
+      parse_columns(df, part$colnames, part$handlers, template_parser(.))
     } else {
       df
     }
@@ -148,7 +150,7 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
   }
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -162,7 +164,7 @@ options_open_interest_read <- function(., filename, parse_fields = TRUE) {
   df <- do.call(rbind, jason$Empresa)
   names(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -217,7 +219,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
 
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -235,7 +237,7 @@ stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {
   df[["year"]] <- jason$header$year
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -252,7 +254,7 @@ stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
     df <- as.data.frame(jason[[part$name]])
     colnames(df) <- part$colnames
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$.parser())
+      parse_columns(df, part$colnames, part$handlers, template_parser(.))
     } else {
       df
     }
@@ -299,7 +301,7 @@ indexreport_reader <- function(., filename, parse_fields = TRUE) {
 
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -352,7 +354,7 @@ pricereport_reader <- function(., filename, parse_fields = TRUE) {
 
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }
@@ -388,7 +390,7 @@ company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
     }
     colnames(df) <- part$colnames
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$.parser())
+      parse_columns(df, part$colnames, part$handlers, template_parser(.))
     } else {
       df
     }
@@ -434,7 +436,7 @@ company_details_reader <- function(., filename, parse_fields = TRUE) {
     }
     colnames(df) <- part$colnames
     l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, .$.parser())
+      parse_columns(df, part$colnames, part$handlers, template_parser(.))
     } else {
       df
     }
@@ -445,13 +447,13 @@ company_details_reader <- function(., filename, parse_fields = TRUE) {
 
 company_cash_dividends_reader <- function(., filename, parse_fields = TRUE) {
   jason <- fromJSON(filename)
-  if (length(jason$results) == 0)  {
+  if (length(jason$results) == 0) {
     return(NULL)
   }
   df <- as.data.frame(jason[["results"]])
   colnames(df) <- .$colnames
   if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, .$.parser())
+    parse_columns(df, .$colnames, .$handlers, template_parser(.))
   } else {
     df
   }

@@ -176,7 +176,7 @@ indexreport_mget <- function(first_date = Sys.Date() - 5,
                              do_cache = TRUE) {
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
-  tpl <- .retrieve_template(NULL, "IndexReport")
+  tpl <- template_retrieve("IndexReport")
   date_vec <- bizseq(first_date, last_date, tpl$calendar)
   date_vec <- date_vec[seq(1, length(date_vec), by = by)]
 
@@ -219,24 +219,6 @@ get_single_indexreport <- function(idx_date,
   } else {
     NULL
   }
-}
-
-index_get_from_file <- function(year) {
-  index_data <- read_excel("./examples/IBOVDIA.XLS",
-    sheet = as.character(year), skip = 1, range = "A3:M33",
-    col_names = c("day", 1:12),
-  )
-
-  pivot_longer(index_data, "1":"12", names_to = "month") |>
-    mutate(
-      month = as.integer(.data$month),
-      year = year,
-      refdate = ISOdate(.data$year, .data$month, .data$day) |> as.Date(),
-      index_name = "IBOV"
-    ) |>
-    filter(!is.na(.data$value)) |>
-    arrange("refdate") |>
-    select("refdate", "index_name", "value")
 }
 
 ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {

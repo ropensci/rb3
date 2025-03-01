@@ -1,5 +1,3 @@
-
-
 Filename <- setRefClass("Filename",
   fields = list(name = "character"),
   methods = list(

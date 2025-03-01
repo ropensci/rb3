@@ -1,7 +1,6 @@
-
 library("httr")
 
-res <- GET("https://www.b3.com.br/json/20220425/Posicoes/Empresa/SI_C_OPCPOSABEMP.json")
+res <- GET("https://www.b3.com.br/json/20250214/Posicoes/Empresa/SI_C_OPCPOSABEMP.json")
 
 txt <- res |> content("text", encoding = "utf8")
 

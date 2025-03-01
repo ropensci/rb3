@@ -11,8 +11,8 @@
 }
 
 .company_supplementary_info_get <- function(code, company_supl,
-                                        cache_folder = cachedir(),
-                                        do_cache = TRUE) {
+                                            cache_folder = cachedir(),
+                                            do_cache = TRUE) {
   template <- "GetDetailsCompany"
   f <- download_marketdata(template,
     code_cvm = company_supl$Info$codeCVM,
@@ -47,8 +47,8 @@
 }
 
 .company_supplementary_stock_dividends_get <- function(code, company_supl,
-                                                   cache_folder = cachedir(),
-                                                   do_cache = TRUE) {
+                                                       cache_folder = cachedir(),
+                                                       do_cache = TRUE) {
   company_info <- .company_supplementary_info_get(code, company_supl,
     cache_folder = cache_folder,
     do_cache = do_cache
@@ -71,8 +71,8 @@
 }
 
 .company_supplementary_subscriptions_get <- function(code, company_supl,
-                                                 cache_folder = cachedir(),
-                                                 do_cache = TRUE) {
+                                                     cache_folder = cachedir(),
+                                                     do_cache = TRUE) {
   company_info <- .company_supplementary_info_get(code, company_supl,
     cache_folder = cache_folder,
     do_cache = do_cache
@@ -92,15 +92,17 @@
       price_unit = "priceUnit",
       subscription_date = "subscriptionDate",
     ) |>
-    select("isin", "approved", "last_date_prior_ex", "description",
-           "percentage", "trading_period", "price_unit", "subscription_date")
+    select(
+      "isin", "approved", "last_date_prior_ex", "description",
+      "percentage", "trading_period", "price_unit", "subscription_date"
+    )
 
   inner_join(company_info$codes[[1]], subs, by = "isin")
 }
 
 .company_supplementary_cash_dividends_get <- function(code, company_supl,
-                                                  cache_folder = cachedir(),
-                                                  do_cache = TRUE) {
+                                                      cache_folder = cachedir(),
+                                                      do_cache = TRUE) {
   # Proventos distribuídos pelo emissor nos últimos 12 meses ou o último,
   # se anterior aos 12 últimos meses.
   if (!is.null(company_supl$CashDividends)) {
@@ -118,9 +120,11 @@
         description = "label",
         value_cash = "rate",
       ) |>
-      select("isin", "description", "approved", "last_date_prior_ex",
-             "value_cash", "ratio")
-    
+      select(
+        "isin", "description", "approved", "last_date_prior_ex",
+        "value_cash", "ratio"
+      )
+
     inner_join(company_info$codes[[1]], divs, by = "isin")
   } else {
     NULL
@@ -163,8 +167,10 @@
         value_cash = "valueCash",
       )
     inner_join(codes, divs, by = c("asset_name", "spec_type")) |>
-      select("symbol", "isin", "asset_name", "description", "approved",
-             "last_date_prior_ex", "value_cash", "ratio")
+      select(
+        "symbol", "isin", "asset_name", "description", "approved",
+        "last_date_prior_ex", "value_cash", "ratio"
+      )
   } else {
     NULL
   }
@@ -364,8 +370,10 @@ cotahist_companies_table_get <- function(ch) {
   codes[["spec_type"]] <- spec_split |> map_chr(\(x) x[1])
   codes[["symbol"]] <- df[["cod_negociacao"]]
   codes |>
-    select("symbol", "asset_name", "spec_type", "isin_spec_type", "isin",
-           "country") |>
+    select(
+      "symbol", "asset_name", "spec_type", "isin_spec_type", "isin",
+      "country"
+    ) |>
     unique() |>
     arrange("symbol")
 }

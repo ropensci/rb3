@@ -1,4 +1,3 @@
-
 test_that("handle filename", {
   fname <- Filename$new(name = "Indic.txt")
   expect_equal(fname$getExt(), ".txt")

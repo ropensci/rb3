@@ -1,4 +1,3 @@
-
 width <- function(x) {
   x <- as.numeric(x)
   class(x) <- c("numeric", "width")
@@ -67,6 +66,24 @@ to_numeric_handler <- function(dec = 0, sign = "") {
 pass_thru_handler <- function() {
   handler <- identity
   attr(handler, "type") <- "character"
+  class(handler) <- c("function", "handler")
+  handler
+}
+
+to_strtime_handler <- function(format = NULL, tz = NULL) {
+  if (is.null(format)) {
+    format <- "%H%M%OS"
+  }
+  if (is.null(tz)) {
+    tz <- "GMT"
+  }
+  handler <- function(x) {
+    z <- str_pad(x, 9, pad = "0") |> str_match("(\\d{6})(\\d{3})")
+    t <- str_c(z[, 2], ".", z[, 3])
+    strptime(t, format = format, tz = tz)
+  }
+  attr(handler, "format") <- format
+  attr(handler, "type") <- "strtime"
   class(handler) <- c("function", "handler")
   handler
 }

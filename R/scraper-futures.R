@@ -1,4 +1,3 @@
-
 flatten_names <- function(nx) {
   for (ix in seq_along(nx)) {
     if (nx[ix] != "") {
@@ -7,7 +6,7 @@ flatten_names <- function(nx) {
     nx[ix] <- last_name
   }
   x <- nx |> str_match("^(\\w+)")
-  as.vector(x[,2])
+  as.vector(x[, 2])
 }
 
 #' Get month from maturity code

@@ -1,4 +1,3 @@
-
 fields <- function(...) {
   that <- list(...)
   class(that) <- "fields"
@@ -17,10 +16,8 @@ as.data.frame.fields <- function(x, ...) {
 }
 
 print.fields <- function(x, ...) {
-  df <- as.data.frame(x)
-  suppressWarnings(
-    print(ascii(df, include.rownames = TRUE), type = "org")
-  )
+  cat(paste(fields_names(x), collapse = ", "), "\n")
+  invisible(x)
 }
 
 fields_names <- function(fields) {

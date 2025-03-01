@@ -30,6 +30,24 @@ View(index_data)
 
 # ----
 
+index_get_from_file <- function(year) {
+  index_data <- read_excel("./examples/IBOVDIA.XLS",
+    sheet = as.character(year), skip = 1, range = "A3:M33",
+    col_names = c("day", 1:12),
+  )
+
+  pivot_longer(index_data, "1":"12", names_to = "month") |>
+    mutate(
+      month = as.integer(.data$month),
+      year = year,
+      refdate = ISOdate(.data$year, .data$month, .data$day) |> as.Date(),
+      index_name = "IBOV"
+    ) |>
+    filter(!is.na(.data$value)) |>
+    arrange("refdate") |>
+    select("refdate", "index_name", "value")
+}
+
 # str_pad(1:12, 2, pad = "0")
 index_get_from_file <- function(year) {
   index_data <- read_excel("./examples/IBOVDIA.XLS",
