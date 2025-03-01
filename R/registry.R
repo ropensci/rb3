@@ -1,19 +1,44 @@
-registry_new <- function() {
-  new.env()
-}
+create_registry <- function() {
+  # Private instance variable
+  instance <- NULL
 
-registry_put <- function(obj, key, value) {
-  if (!is.null(key)) {
-    obj[[key]] <- value
+  # Constructor function
+  create <- function() {
+    # Create a new object if no instance exists
+    if (is.null(instance)) {
+      new_instance <- list(
+        data = list(),
+        created_at = Sys.time(),
+        .p = environment(create)
+      )
+      # Set class for S3 dispatch
+      class(new_instance) <- "registry"
+      # Store instance in enclosing environment
+      instance <<- new_instance
+    }
+    instance
   }
-  invisible(NULL)
+
+  # Return the constructor
+  list(get_instance = create)
 }
 
-registry_get <- function(obj, key) {
-  val <- try(base::get(key, obj), TRUE)
-  if (is(val, "try-error")) NULL else val
+print.registry <- function(x, ...) {
+  cat("registry instance created at:", format(x$created_at), "\n")
+  cat("# elements", length(x$data), "\n")
+  invisible(x)
 }
 
-registry_keys <- function(obj) {
-  names(obj)
+registry_get <- function(x, ...) {
+  x$data
+}
+
+registry_put <- function(x, key, value, ...) {
+  x$data[[key]] <- value
+  x$.p[["instance"]] <- x
+  invisible(x)
+}
+
+registry_keys <- function(x, ...) {
+  names(x$data)
 }

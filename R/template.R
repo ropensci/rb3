@@ -85,22 +85,16 @@ print.template <- function(x, ...) {
   invisible(NULL)
 }
 
-.registry <- registry_new()
-
-get_template_registry <- function() {
-  .registry
-}
+template_registry <- create_registry()
 
 template_register <- function(obj) {
   # if the class is super (i.e has "name") then add to index
-  .reg <- get_template_registry()
-  if (!exists(obj$id, envir = .reg)) {
-    registry_put(.reg, obj$id, obj)
-  }
+  .reg <- template_registry$get_instance()
+  registry_put(.reg, obj$id, obj)
 }
 
 template_retrieve <- function(key) {
-  .reg <- get_template_registry()
+  .reg <- template_registry$get_instance()
   registry_get(.reg, key)
 }
 
@@ -175,7 +169,7 @@ template_detect_lines <- function(obj, .part, lines) {
 }
 
 list_templates <- function() {
-  .reg <- get_template_registry()
+  .reg <- template_registry$get_instance()
   map_dfr(registry_keys(.reg), function(cls) {
     tpl_ <- registry_get(.reg, cls)
     tibble(

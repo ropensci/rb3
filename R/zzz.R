@@ -1,7 +1,8 @@
 .onAttach <- function(libname, pkgname) {
   load_template_files()
-  reg <- get_template_registry()
-  message("rb3: ", length(registry_keys(reg)), " templates registered")
+  reg <- template_registry$get_instance()
+  x <- length(registry_keys(reg))
+  message("rb3: ", x, " templates registered")
   load_builtin_calendars()
 }
 
