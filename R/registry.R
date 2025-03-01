@@ -29,8 +29,12 @@ print.registry <- function(x, ...) {
   invisible(x)
 }
 
-registry_get <- function(x, ...) {
-  x$data
+registry_get <- function(x, key, ...) {
+  if (exists(key, x$data)) {
+    x$data[[key]]
+  } else {
+    stop(key, " not found in registry")
+  }
 }
 
 registry_put <- function(x, key, value, ...) {
