@@ -40,7 +40,6 @@
 #'
 #' @name rb3-package
 #'
-#' @importFrom ascii ascii
 #' @importFrom base64enc base64encode
 #' @importFrom bizdays following preceding load_builtin_calendars
 #' @importFrom bizdays add.bizdays bizdayse bizseq getdate
@@ -51,12 +50,10 @@
 #' @importFrom digest digest
 #' @importFrom dplyr tibble inner_join mutate select filter left_join as_tibble
 #' @importFrom dplyr bind_rows arrange rename group_by summarise
-#' @importFrom tidyr pivot_longer
 #' @importFrom httr GET POST parse_url status_code headers content config
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom purrr map_dfr map_lgl map_chr map_int map
 #' @importFrom readr write_rds read_rds read_csv read_file
-#' @importFrom readxl read_excel
 #' @importFrom rlang .data
 #' @importFrom stringr str_replace_all str_starts str_match str_sub str_split
 #' @importFrom stringr str_to_lower str_detect str_pad str_replace str_trim

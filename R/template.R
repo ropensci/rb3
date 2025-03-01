@@ -64,22 +64,22 @@ load_template_files <- function() {
   }
 }
 
-print.template <- function(.) {
-  cat("Template ID:", .$id, "\n")
-  cat("Expected filename:", .$filename, "\n")
-  cat("File type:", .$filetype, "\n")
-  if (is(.$fields, "fields")) {
-    cat("\n")
-    print.fields(.$fields)
+print.template <- function(x, ...) {
+  cat("Template ID:", x$id, "\n")
+  cat("Expected filename:", x$filename, "\n")
+  cat("File type:", x$filetype, "\n")
+  if (is(x$fields, "fields")) {
+    cat("Fields: ")
+    print.fields(x$fields)
   } else {
-    parts_names <- names(.$parts)
+    parts_names <- names(x$parts)
     ix <- 0
     for (nx in parts_names) {
       ix <- ix + 1
       cat("\n")
       cat(sprintf("Part %d: %s\n", ix, nx))
-      cat("\n")
-      print.fields(.$parts[[nx]]$fields)
+      cat("Fields: ")
+      print.fields(x$parts[[nx]]$fields)
     }
   }
   invisible(NULL)
