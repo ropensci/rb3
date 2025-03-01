@@ -180,7 +180,8 @@ cols_number <- c(
 )
 
 curve_read <- function(., filename, parse_fields = TRUE) {
-  doc <- htmlTreeParse(f, encoding = "UTF8", useInternalNodes = TRUE)
+  text <- read_file(filename)
+  doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   char_vec <- xmlSApply(getNodeSet(doc, "//table/td"), xmlValue)
 
   if (length(char_vec) == 0) {
