@@ -71,7 +71,7 @@ get_single_marketdata <- function(template,
     alert("danger", "Error: no data found for date {refdate}",
       refdate = refdate
     )
-    return(NULL)
+    NULL
   }
 }
 
@@ -138,7 +138,7 @@ alert_fun <- function(x) {
   func <- funcs[[x]]
   if (is.null(func)) {
     warning(paste0("Invalid call to alert function ", x))
-    return(NULL)
+    NULL
   } else {
     func
   }

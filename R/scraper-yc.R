@@ -113,7 +113,7 @@ get_single_yc <- function(idx_date,
     alert("danger", "Error: no data found for date {refdate}",
       refdate = refdate
     )
-    return(NULL)
+    NULL
   }
 }
 
@@ -214,7 +214,7 @@ get_single_yc_ipca <- function(idx_date,
     alert("danger", "Error: no data found for date {refdate}",
       refdate = refdate
     )
-    return(NULL)
+    NULL
   }
 }
 
@@ -317,7 +317,7 @@ get_single_yc_usd <- function(idx_date,
     alert("danger", "Error: no data found for date {refdate}",
       refdate = refdate
     )
-    return(NULL)
+    NULL
   }
 }
 
@@ -351,8 +351,9 @@ get_single_yc_usd <- function(idx_date,
 yc_superset <- function(yc, fut) {
   fut_di1 <- fut |>
     filter(.data$commodity == "DI1") |>
-    mutate(forward_date = maturity2date(.data$maturity_code) |>
-      following("Brazil/ANBIMA")) |>
+    mutate(
+      forward_date = maturity2date(.data$maturity_code) |> following("Brazil/ANBIMA")
+    ) |>
     select("refdate", "forward_date", "symbol")
 
   yc |>
@@ -364,8 +365,9 @@ yc_superset <- function(yc, fut) {
 yc_usd_superset <- function(yc, fut) {
   fut_di1 <- fut |>
     filter(.data$commodity == "DDI") |>
-    mutate(forward_date = maturity2date(.data$maturity_code) |>
-      following("Brazil/ANBIMA")) |>
+    mutate(
+      forward_date = maturity2date(.data$maturity_code) |> following("Brazil/ANBIMA")
+    ) |>
     select("refdate", "forward_date", "symbol")
 
   yc |>
@@ -377,8 +379,9 @@ yc_usd_superset <- function(yc, fut) {
 yc_ipca_superset <- function(yc, fut) {
   fut_di1 <- fut |>
     filter(.data$commodity == "DAP") |>
-    mutate(forward_date = maturity2date(.data$maturity_code, "15th day") |>
-      following("Brazil/ANBIMA")) |>
+    mutate(
+      forward_date = maturity2date(.data$maturity_code, "15th day") |> following("Brazil/ANBIMA")
+    ) |>
     select("refdate", "forward_date", "symbol")
 
   yc |>

@@ -285,30 +285,30 @@ index_get <- function(index_name, first_date,
   if (index_name == "IBOV") {
     if (start_year > 1997) {
       year <- seq(start_year, end_year)
-      map_dfr(year, \(year) single_index_get(
-        index_name, year, cache_folder,
-        do_cache
-      ))
+      map_dfr(
+        year,
+        \(year) single_index_get(index_name, year, cache_folder, do_cache)
+      )
     } else {
       if (end_year <= 1997) {
         df <- ibovespa_index_get(first_date, last_date)
       } else {
         df1 <- ibovespa_index_get(first_date, as.Date("1997-12-31"))
         year <- seq(1998, end_year)
-        df2 <- map_dfr(year, \(year) single_index_get(
-          index_name, year,
-          cache_folder, do_cache
-        )) |>
+        df2 <- map_dfr(
+          year,
+          \(year) single_index_get(index_name, year, cache_folder, do_cache)
+        ) |>
           filter(.data$refdate <= last_date)
         df <- bind_rows(df1, df2) |> arrange("refdate")
       }
     }
   } else {
     year <- seq(start_year, end_year)
-    df <- map_dfr(year, \(year) single_index_get(
-      index_name, year,
-      cache_folder, do_cache
-    ))
+    df <- map_dfr(
+      year,
+      \(year) single_index_get(index_name, year, cache_folder, do_cache)
+    )
     if (any(dim(df) == 0)) {
       return(NULL)
     } else {

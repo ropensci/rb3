@@ -34,8 +34,7 @@ test_that("it should apply a regex_rule with a group", {
   expect_equal(res$value, c(50, NA, 25))
 })
 
-test_that("it should apply a regex_rule
-if at least one element has been matched", {
+test_that("it should apply a regex_rule if at least one element has been matched", {
   rule <- match_regex("\\d+", function(data, match) {
     as.integer(match[, 1])
   }, apply_to = "any")

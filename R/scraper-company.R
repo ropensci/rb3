@@ -189,15 +189,19 @@
       do_cache = do_cache
     )
     res <- if (idx == 0) {
-      try(func(codes_$asset_name,
-        company_supl = company_supl,
-        cache_folder = cache_folder, do_cache = do_cache
-      ), TRUE)
+      try(
+        func(codes_$asset_name,
+          company_supl = company_supl,
+          cache_folder = cache_folder, do_cache = do_cache
+        ), TRUE
+      )
     } else {
-      try(func(codes_$symbols[[1]][idx],
-        company_supl = company_supl,
-        cache_folder = cache_folder, do_cache = do_cache
-      ), TRUE)
+      try(
+        func(codes_$symbols[[1]][idx],
+          company_supl = company_supl,
+          cache_folder = cache_folder, do_cache = do_cache
+        ), TRUE
+      )
     }
     if (is(res, "try-error")) {
       if (length(codes_$symbols[[1]]) >= idx + 1) {

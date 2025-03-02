@@ -6,7 +6,7 @@ test_df <- function(df_in) {
   expect_true(ncol(df_in) > 0)
   expect_true(tibble::is_tibble(df_in))
 
-  return(invisible(TRUE))
+  invisible(TRUE)
 }
 
 test_that("Test of yc_mget function", {

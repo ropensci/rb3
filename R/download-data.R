@@ -53,8 +53,7 @@ download_marketdata <- function(template,
 }
 
 unzip_recursive <- function(fname) {
-  if (length(fname) == 1 &&
-    str_ends(str_to_lower(fname), ".zip")) {
+  if (length(fname) == 1 && str_ends(str_to_lower(fname), ".zip")) {
     exdir <- str_replace(fname, "\\.zip$", "")
     l <- unzip(fname, exdir = exdir)
     unzip_recursive(l)
@@ -86,8 +85,10 @@ just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
 }
 
 save_resource <- function(res, encoding, dest) {
-  if (headers(res)[["content-type"]] == "application/octet-stream" ||
-    headers(res)[["content-type"]] == "application/x-zip-compressed") {
+  if (
+    headers(res)[["content-type"]] == "application/octet-stream" ||
+      headers(res)[["content-type"]] == "application/x-zip-compressed"
+  ) {
     bin <- content(res, as = "raw")
     writeBin(bin, dest)
   } else {

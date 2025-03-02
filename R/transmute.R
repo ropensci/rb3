@@ -15,29 +15,29 @@ rule_result <- function(applied = FALSE, value = NULL) {
 }
 
 match_regex <- function(regex, handler, priority = NA,
-                        apply_to = c("any", "all"), na.rm = TRUE) {
+                        apply_to = c("any", "all"), na_rm = TRUE) {
   apply_to <- .apply_to(match.arg(apply_to))
   structure(
     list(
       regex = regex, handler = handler, priority = priority,
-      apply_to = apply_to, na.rm = na.rm
+      apply_to = apply_to, na_rm = na_rm
     ),
     class = c("match_rule", "regex_rule")
   )
 }
 
-match_class <- function(class, handler, priority = NA, na.rm = TRUE) {
+match_class <- function(class, handler, priority = NA, na_rm = TRUE) {
   structure(
-    list(class = class, handler = handler, priority = priority, na.rm = na.rm),
+    list(class = class, handler = handler, priority = priority, na_rm = na_rm),
     class = c("match_rule", "class_rule")
   )
 }
 
-match_predicate <- function(predicate, handler, priority = NA, na.rm = TRUE) {
+match_predicate <- function(predicate, handler, priority = NA, na_rm = TRUE) {
   structure(
     list(
       predicate = predicate, handler = handler, priority = priority,
-      na.rm = na.rm
+      na_rm = na_rm
     ),
     class = c("match_rule", "predicate_rule")
   )
@@ -69,7 +69,7 @@ apply_rule.regex_rule <- function(rule, .data) {
     return(rule_result())
   }
   detect <- str_detect(.data, rule$regex)
-  apply_to <- rule$apply_to(detect, na.rm = rule$na.rm)
+  apply_to <- rule$apply_to(detect, na_rm = rule$na_rm)
   result <- if (apply_to) {
     rule$handler(
       .data,
