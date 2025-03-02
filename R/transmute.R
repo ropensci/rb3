@@ -69,7 +69,7 @@ apply_rule.regex_rule <- function(rule, .data) {
     return(rule_result())
   }
   detect <- str_detect(.data, rule$regex)
-  apply_to <- rule$apply_to(detect, na_rm = rule$na_rm)
+  apply_to <- rule$apply_to(detect, na.rm = rule$na_rm)
   result <- if (apply_to) {
     rule$handler(
       .data,
