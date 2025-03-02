@@ -3,7 +3,7 @@ Title: Download and Parse Public Data Released by B3 Exchange
 Description: Download and parse public files released by B3 and convert them
     into useful formats and data structures common to data analysis
     practitioners.
-Version: 0.0.12
+Version: 0.0.13
 Authors@R: c(person("Wilson", "Freitas",
                     email = "wilson.freitas@gmail.com",
                     role = c("aut", "cre")),
