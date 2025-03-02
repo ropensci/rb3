@@ -55,8 +55,6 @@ Collate:
     'template.R'
     'marketdata.R'
     'download-data.R'
-    'file.R'
-    'convert_to.R'
     'scraper-futures.R'
     'scraper-yc.R'
     'scraper-cotahist.R'
