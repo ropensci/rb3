@@ -15,6 +15,13 @@ datetime_download <- function(., dest, ...) {
   just_download_data(url, enc, dest, .$verifyssl)
 }
 
+sprintf_download <- function(., dest, ...) {
+  params <- list(...)
+  url <- do.call(sprintf, c(.$downloader$url, params))
+  enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
+  just_download_data(url, enc, dest, .$verifyssl)
+}
+
 settlement_prices_download <- function(., dest, ...) {
   params <- list(...)
   if (is.null(params$refdate)) {
