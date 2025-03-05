@@ -24,29 +24,61 @@
 #' @export
 download_marketdata <- function(template,
                                 cache_folder = cachedir(),
-                                do_cache = TRUE, ...) {
+                                do_cache = FALSE, ...) {
   template <- template_retrieve(template)
-  x <- list(...)
+
+  download_args <- list(...)
+  l_ <- c(id = template$id, download_args)
+  x <- lapply(l_, format)
+  names(x) <- names(l_)
   code_ <- digest(x)
 
-  cache_folder <- file.path(cache_folder, template$id)
-  if (!dir.exists(cache_folder)) {
-    dir.create(cache_folder, recursive = TRUE)
+  raw_folder <- file.path(cache_folder, "raw")
+  if (!dir.exists(raw_folder)) {
+    dir.create(raw_folder, recursive = TRUE)
   }
 
-  dest <- file.path(
-    cache_folder,
-    str_glue("{c}.{template$downloader$format}", c = code_)
-  )
-
-  if (file.exists(dest) && do_cache) {
-    fname <- unzip_recursive(dest)
-    return(fname)
+  meta_folder <- file.path(cache_folder, "meta")
+  if (!dir.exists(meta_folder)) {
+    dir.create(meta_folder, recursive = TRUE)
+  }
+  meta_file <- file.path(meta_folder, str_glue("{code_}.json"))
+  meta <- if (file.exists(meta_file)) {
+    fromJSON(meta_file)
+  } else {
+    list(
+      template = template$id,
+      download_checksum = code_,
+      file_checksum = NULL,
+      download_args = download_args,
+      downloaded = NULL,
+      timestamp = NULL
+    )
   }
 
+  if (!is.null(meta[["downloaded"]]) && !do_cache) {
+    return(meta)
+  }
+
+  dest <- tempfile(fileext = str_glue(".{template$downloader$format}"))
   if (template$download_marketdata(template, dest, ...)) {
     fname <- unzip_recursive(dest)
-    return(fname)
+    md5 <- tools::md5sum(fname)
+    if (!is.null(meta[["file_checksum"]]) && md5 == meta[["file_checksum"]]) {
+      return(meta)
+    }
+    meta[["file_checksum"]] <- md5
+    dest_fname <- file.path(raw_folder, str_glue("{meta$file_checksum}.gz"))
+    downloaded <- R.utils::compressFile(fname, dest_fname, "gz", gzfile,
+      overwrite = TRUE
+    )
+    if (!is.null(meta[["downloaded"]])) {
+      unlink(meta[["downloaded"]])
+    }
+    meta[["downloaded"]] <- downloaded
+    meta[["timestamp"]] <- file.info(meta[["downloaded"]])[["ctime"]]
+    writeLines(toJSON(meta), meta_file)
+    return(meta)
   } else {
     return(NULL)
   }
