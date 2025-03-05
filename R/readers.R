@@ -62,8 +62,10 @@ parse_columns <- function(df, colnames, handlers, parser) {
 
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
   encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
-  df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
-    col_types = fields_cols(.$fields), locale = readr::locale(encoding = encoding)
+  suppressWarnings(
+    df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
+      col_types = fields_cols(.$fields), locale = readr::locale(encoding = encoding)
+    )
   )
   hs <- fields_handlers(.$fields)
   ns <- sapply(hs, \(h) attr(h, "type")) == "numeric"
@@ -158,8 +160,7 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
   doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   refdate_ns <- getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
   if (length(refdate_ns) > 0) {
-    refdate <- str_match(xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")
-    refdate <- as.Date(strptime(refdate, "%d/%m/%Y"))
+    refdate <- str_match(xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")[1, 1]
   }
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
   table <- getNodeSet(doc, xpath)
@@ -167,19 +168,19 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
     tb <- table[[1]]
     vals <- sapply(tb[["tbody"]]["tr"], \(x) sapply(x["td"], xmlValue))
     dm <- matrix(vals, nrow = ncol(vals), byrow = TRUE)
-    df <- as.data.frame(dm)
   } else {
     return(NULL)
   }
-  colnames(df) <- .$colnames
+  dm <- cbind(dm, refdate)
+  colnames(dm) <- .$colnames
+  df <- as_tibble(dm)
+
   loc <- do.call(readr::locale, .$reader$locale)
   cols <- fields_cols(.$fields)
   for (nx in .$colnames) {
     df[[nx]] <- readr::parse_vector(df[[nx]], cols[[nx]], locale = loc)
   }
   df[["commodity"]] <- flatten_names(df[["commodity"]])
-  df[["symbol"]] <- paste0(df[["commodity"]], df[["maturity_code"]])
-  df[["refdate"]] <- refdate
   df
 }
 

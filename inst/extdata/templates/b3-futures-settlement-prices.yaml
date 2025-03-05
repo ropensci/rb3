@@ -40,3 +40,8 @@ fields:
   description: Valor do ajuste por contrato (R$)
   handler:
     type: number
+- name: refdate
+  description: Data de referência
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
