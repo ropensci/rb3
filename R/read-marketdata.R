@@ -35,10 +35,28 @@ read_marketdata <- function(meta, cache_folder = cachedir()) {
   template <- template_retrieve(meta$template)
   db_folder <- file.path(cache_folder, "db", template$id)
   df <- template$read_file(template, filename, TRUE)
-  label <- df[[template$reader$partition]] |> unique() |> na.omit() |> sort() |> format()
+  if (is.null(df)) {
+    alert("warning", str_glue("File could not be read: {filename}"))
+    alert("info", str_glue("Removing file {filename}"))
+    unlink(meta$downloaded)
+    meta_folder <- file.path(cache_folder, "meta")
+    meta_file <- file.path(meta_folder, str_glue("{meta$download_checksum}.json"))
+    alert("info", str_glue("Removing meta {meta_file}"))
+    unlink(meta_file)
+    return(NULL)
+  }
+  tag <- sapply(template$reader$partition, function(x) {
+    x <- df[[x]] |>
+      unique() |>
+      na.omit() |>
+      sort() |>
+      format()
+    x[1]
+  })
+  label <- paste0(tag, collapse = "_")
   ds_file <- file.path(db_folder, str_glue("{label[1]}.parquet"))
   tb <- arrow::arrow_table(df, schema = template_schema(template))
-  arrow::write_dataset(df, ds_file)
+  arrow::write_parquet(df, ds_file, compression = "gzip")
   df
 }
 
