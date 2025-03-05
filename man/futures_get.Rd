@@ -2,20 +2,13 @@
 % Please edit documentation in R/scraper-futures.R
 \name{futures_get}
 \alias{futures_get}
-\alias{futures_mget}
 \title{Get futures prices from trading session settlements page}
 \usage{
-futures_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date(),
-  by = 1,
-  cache_folder = cachedir(),
-  do_cache = TRUE
-)
-
-futures_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
+futures_get(refdate, commodity = NULL)
 }
 \arguments{
+\item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
+
 \item{first_date}{First date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
 
 \item{last_date}{Last date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
@@ -28,8 +21,6 @@ futures_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
 
 \code{futures_get} returns the future contracts for the given date and
 \code{futures_mget} returns future contracts for multiple dates in a given range.}
-
-\item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
 }
 \value{
 \code{data.frame} with futures prices.

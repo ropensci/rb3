@@ -4,7 +4,7 @@
 \alias{download_marketdata}
 \title{Download datasets}
 \usage{
-download_marketdata(template, cache_folder = cachedir(), do_cache = TRUE, ...)
+download_marketdata(template, cache_folder = cachedir(), do_cache = FALSE, ...)
 }
 \arguments{
 \item{template}{the template name}

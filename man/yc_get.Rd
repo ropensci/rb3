@@ -2,55 +2,28 @@
 % Please edit documentation in R/scraper-yc.R
 \name{yc_get}
 \alias{yc_get}
-\alias{yc_mget}
-\alias{yc_ipca_mget}
 \alias{yc_ipca_get}
-\alias{yc_usd_mget}
 \alias{yc_usd_get}
 \title{Fetches Yield Curve Data from B3}
 \usage{
-yc_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date(),
-  by = 1,
-  cache_folder = cachedir(),
-  do_cache = TRUE
-)
+yc_get(refdate)
 
-yc_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
-
-yc_ipca_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date(),
-  by = 1,
-  cache_folder = cachedir(),
-  do_cache = TRUE
-)
-
-yc_ipca_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
-
-yc_usd_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date(),
-  by = 1,
-  cache_folder = cachedir(),
-  do_cache = TRUE
-)
+yc_ipca_get(refdate)
 
 yc_usd_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
 }
 \arguments{
-\item{first_date}{First date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
-
-\item{last_date}{Last date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
-
-\item{by}{Number of days in between fetched dates (default = 1) in \code{yc_mget}}
+\item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
 
 \item{cache_folder}{Location of cache folder (default = cachedir())}
 
 \item{do_cache}{Whether to use cache or not (default = TRUE)}
 
-\item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
+\item{first_date}{First date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
+
+\item{last_date}{Last date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
+
+\item{by}{Number of days in between fetched dates (default = 1) in \code{yc_mget}}
 }
 \value{
 A dataframe/tibble with yield curve data
@@ -71,17 +44,6 @@ for more details.
 
 \code{yc_get} returns the yield curve for the given date and \code{yc_mget} returns
 multiple yield curves for a given range of dates.
-
-\code{yc_ipca_get} returns the yield curve of real interest rates
-for the given date and \code{yc_ipca_mget} returns
-multiple yield curves of real interest rates for a given range of dates.
-These real interest rates consider IPCA as its inflation index.
-
-\code{yc_usd_get} returns the yield curve of nominal interest rates for USD in
-Brazil for the given date and \code{yc_usd_mget} returns
-multiple yield curves of nominal interest rates for USD in Brazil for a
-given range of dates.
-These real interest rates consider IPCA as its inflation index.
 }
 \examples{
 \dontrun{
@@ -93,22 +55,8 @@ df_yc <- yc_get(Sys.Date())
 head(df_yc)
 }
 \dontrun{
-df_yc_ipca <- yc_ipca_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date()
-)
-head(df_yc_ipca)
-}
-\dontrun{
 df_yc_ipca <- yc_ipca_get(Sys.Date())
 head(df_yc_ipca)
-}
-\dontrun{
-df_yc_usd <- yc_usd_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date()
-)
-head(df_yc_usd)
 }
 \dontrun{
 df_yc_usd <- yc_usd_get(Sys.Date())
