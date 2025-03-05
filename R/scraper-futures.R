@@ -112,25 +112,7 @@ maturity2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
 #' df <- futures_get("2022-04-18", "2022-04-22")
 #' }
 #' @export
-futures_mget <- function(first_date = Sys.Date() - 5,
-                         last_date = Sys.Date(),
-                         by = 1,
-                         cache_folder = cachedir(),
-                         do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-  date_vec <- bizseq(first_date, last_date, "Brazil/BMF")
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-  df <- bind_rows(
-    log_map_process_along(date_vec, single_futures_get,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-  return(df)
-}
+NULL
 
 #' @rdname futures_get
 #' @examples
@@ -139,37 +121,30 @@ futures_mget <- function(first_date = Sys.Date() - 5,
 #' head(df_fut)
 #' }
 #' @export
-futures_get <- function(refdate = Sys.Date(),
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  single_futures_get(1, as.Date(refdate), cache_folder, do_cache)
-}
-
-single_futures_get <- function(idx_date,
-                               date_vec,
-                               cache_folder = cachedir(),
-                               do_cache = TRUE) {
-  tpl <- "AjustesDiarios"
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl, cache_folder, do_cache, refdate = refdate)
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = as.Date(refdate),
-        commodity = flatten_names(df$mercadoria),
-        maturity_code = df$vencimento,
-        symbol = paste0(.data$commodity, .data$maturity_code),
-        price_previous = df$pu_anterior,
-        price = df$pu_atual,
-        change = df$variacao,
-        settlement_value = df$ajuste
-      )
-    } else {
-      NULL
-    }
+futures_get <- function(refdate, commodity = NULL) {
+  template <- template_retrieve("b3-futures-settlement-prices")
+  .commodity <- commodity
+  .refdate <- refdate
+  query <- if (is.null(commodity)) {
+    dataset_get(template$id) |>
+      filter(.data$refdate %in% .refdate)
   } else {
-    alert("danger", "Failed download")
-    return(NULL)
+    dataset_get(template$id) |>
+      filter(.data$refdate %in% .refdate, .data$commodity == .commodity)
   }
+  query |>
+    collect() |>
+    mutate(
+      symbol = paste0(.data$commodity, .data$maturity_code),
+    ) |>
+    select(
+      refdate,
+      symbol,
+      commodity,
+      maturity_code,
+      previous_price,
+      price,
+      price_change,
+      settlement_value,
+    )
 }

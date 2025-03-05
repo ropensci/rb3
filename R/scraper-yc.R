@@ -1,3 +1,26 @@
+yield_curve_get <- function(refdate, curve_name) {
+  template <- template_retrieve("b3-reference-rates")
+  .curve_name <- curve_name
+  .refdate <- refdate
+  dataset_get(template$id) |>
+    filter(.data$refdate %in% .refdate, .data$curve_name == .curve_name) |>
+    collect() |>
+    mutate(
+      biz_days = bizdayse(refdate, .data$cur_days, template$calendar),
+      forward_date = .data$refdate + .data$cur_days,
+      r_252 = .data$r_252 / 100,
+      r_360 = .data$r_360 / 100
+    ) |>
+    select(
+      .data$curve_name,
+      .data$refdate,
+      .data$forward_date,
+      .data$biz_days,
+      .data$r_252,
+      .data$cur_days,
+      .data$r_360,
+    )
+}
 #' Fetches Yield Curve Data from B3
 #'
 #' Downloads yield curve data from B3 website
@@ -31,34 +54,7 @@
 #' head(df_yc)
 #' }
 #' @export
-yc_mget <- function(first_date = Sys.Date() - 5,
-                    last_date = Sys.Date(),
-                    by = 1,
-                    cache_folder = cachedir(),
-                    do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-
-  # find biz days in between
-  tpl <- template_retrieve("TaxasReferenciais")
-
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-
-  # use by to separate dates
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  # get data!
-  df_yc <- bind_rows(
-    log_map_process_along(date_vec, get_single_yc,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-
-  return(df_yc)
-}
+NULL
 
 #' @rdname yc_get
 #' @examples
@@ -67,10 +63,8 @@ yc_mget <- function(first_date = Sys.Date() - 5,
 #' head(df_yc)
 #' }
 #' @export
-yc_get <- function(refdate = Sys.Date(),
-                   cache_folder = cachedir(),
-                   do_cache = TRUE) {
-  get_single_yc(1, as.Date(refdate), cache_folder, do_cache)
+yc_get <- function(refdate) {
+  yield_curve_get(refdate, "PRE")
 }
 
 #' Fetches a single data
@@ -81,41 +75,7 @@ yc_get <- function(refdate = Sys.Date(),
 #'
 #' @return A dataframe
 #' @noRd
-get_single_yc <- function(idx_date,
-                          date_vec,
-                          cache_folder,
-                          do_cache) {
-  tpl_name <- "TaxasReferenciais"
-  tpl <- template_retrieve(tpl_name)
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
-    refdate = refdate,
-    curve_name = "PRE"
-  )
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = df$refdate,
-        cur_days = df$cur_days,
-        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = add.bizdays(
-          refdate,
-          .data$biz_days, tpl$calendar
-        ),
-        r_252 = df$col1 / 100,
-        r_360 = df$col2 / 100
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Error: no data found for date {refdate}",
-      refdate = refdate
-    )
-    NULL
-  }
-}
+NULL
 
 #' @details
 #' `yc_ipca_get` returns the yield curve of real interest rates
@@ -133,34 +93,7 @@ get_single_yc <- function(idx_date,
 #' head(df_yc_ipca)
 #' }
 #' @export
-yc_ipca_mget <- function(first_date = Sys.Date() - 5,
-                         last_date = Sys.Date(),
-                         by = 1,
-                         cache_folder = cachedir(),
-                         do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-
-  # find biz days in between
-  tpl <- template_retrieve("TaxasReferenciais")
-
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-
-  # use by to separate dates
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  # get data!
-  df_yc <- bind_rows(
-    log_map_process_along(date_vec, get_single_yc_ipca,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-
-  return(df_yc)
-}
+NULL
 
 #' @rdname yc_get
 #' @examples
@@ -169,10 +102,8 @@ yc_ipca_mget <- function(first_date = Sys.Date() - 5,
 #' head(df_yc_ipca)
 #' }
 #' @export
-yc_ipca_get <- function(refdate = Sys.Date(),
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  get_single_yc_ipca(1, as.Date(refdate), cache_folder, do_cache)
+yc_ipca_get <- function(refdate) {
+  yield_curve_get(refdate, "DIC")
 }
 
 #' Fetches a single data
@@ -183,40 +114,7 @@ yc_ipca_get <- function(refdate = Sys.Date(),
 #'
 #' @return A dataframe
 #' @noRd
-get_single_yc_ipca <- function(idx_date,
-                               date_vec,
-                               cache_folder,
-                               do_cache) {
-  tpl_name <- "TaxasReferenciais"
-  tpl <- template_retrieve(tpl_name)
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
-    refdate = refdate,
-    curve_name = "DIC"
-  )
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = df$refdate,
-        cur_days = df$cur_days,
-        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = add.bizdays(
-          refdate,
-          .data$biz_days, tpl$calendar
-        ),
-        r_252 = df$col1 / 100
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Error: no data found for date {refdate}",
-      refdate = refdate
-    )
-    NULL
-  }
-}
+NULL
 
 #' @rdname yc_get
 #'
@@ -236,34 +134,7 @@ get_single_yc_ipca <- function(idx_date,
 #' head(df_yc_usd)
 #' }
 #' @export
-yc_usd_mget <- function(first_date = Sys.Date() - 5,
-                        last_date = Sys.Date(),
-                        by = 1,
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-
-  # find biz days in between
-  tpl <- template_retrieve("TaxasReferenciais")
-
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-
-  # use by to separate dates
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  # get data!
-  df_yc <- bind_rows(
-    log_map_process_along(date_vec, get_single_yc_usd,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-
-  return(df_yc)
-}
+NULL
 
 #' @rdname yc_get
 #' @examples
@@ -275,7 +146,7 @@ yc_usd_mget <- function(first_date = Sys.Date() - 5,
 yc_usd_get <- function(refdate = Sys.Date(),
                        cache_folder = cachedir(),
                        do_cache = TRUE) {
-  get_single_yc_usd(1, as.Date(refdate), cache_folder, do_cache)
+  yield_curve_get(refdate, "DOC")
 }
 
 #' Fetches a single data
@@ -286,40 +157,7 @@ yc_usd_get <- function(refdate = Sys.Date(),
 #'
 #' @return A dataframe
 #' @noRd
-get_single_yc_usd <- function(idx_date,
-                              date_vec,
-                              cache_folder,
-                              do_cache) {
-  tpl_name <- "TaxasReferenciais"
-  tpl <- template_retrieve(tpl_name)
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
-    refdate = refdate,
-    curve_name = "DOC"
-  )
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = df$refdate,
-        cur_days = df$cur_days,
-        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = add.bizdays(
-          refdate,
-          .data$biz_days, tpl$calendar
-        ),
-        r_360 = df$col1 / 100
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Error: no data found for date {refdate}",
-      refdate = refdate
-    )
-    NULL
-  }
-}
+NULL
 
 #' Creates superset with yield curves and futures
 #'
