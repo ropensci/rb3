@@ -37,6 +37,7 @@ read_marketdata <- function(meta, cache_folder = cachedir()) {
   df <- template$read_file(template, filename, TRUE)
   label <- df[[template$reader$partition]] |> unique() |> na.omit() |> sort() |> format()
   ds_file <- file.path(db_folder, str_glue("{label[1]}.parquet"))
+  tb <- arrow::arrow_table(df, schema = template_schema(template))
   arrow::write_dataset(df, ds_file)
   df
 }

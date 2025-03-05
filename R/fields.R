@@ -44,6 +44,12 @@ fields_cols <- function(fields) {
   handlers
 }
 
+fields_arrow_types <- function(fields) {
+  handlers <- lapply(fields, function(x) attr(x, "arrow"))
+  names(handlers) <- fields_names(fields)
+  handlers
+}
+
 field <- function(name, description, ...) {
   if (missing(description)) {
     attr(name, "description") <- ""
@@ -69,6 +75,8 @@ field <- function(name, description, ...) {
       "handler"
     } else if (is(x, "collector")) {
       "col"
+    } else if (is(x, "DataType") && is(x, "ArrowObject")) {
+      "arrow"
     } else {
       NULL
     }
@@ -90,6 +98,12 @@ field <- function(name, description, ...) {
     attr(name, "col") <- parms[[which(classes == "col")[1]]]
   } else {
     attr(name, "col") <- readr::col_guess()
+  }
+
+  if (any(classes == "arrow")) {
+    attr(name, "arrow") <- parms[[which(classes == "arrow")[1]]]
+  } else {
+    attr(name, "arrow") <- arrow::string()
   }
 
   class(name) <- "field"
