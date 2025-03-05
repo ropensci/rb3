@@ -230,7 +230,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
 
     cur_days <- char_vec[idx1]
     col1 <- char_vec[idx2]
-    col2 <- NA
+    col2 <- NA_character_
   } else {
     idx1 <- seq(1, length(char_vec), by = 3)
     idx2 <- seq(2, length(char_vec), by = 3)
