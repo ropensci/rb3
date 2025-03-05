@@ -12,7 +12,7 @@ downloader:
   encoding: latin1
 reader:
   function: curve_read
-  partition: refdate
+  partition: [curve_name, refdate]
   locale:
     decimal_mark: ','
     grouping_mark: '.'
