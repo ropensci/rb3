@@ -49,7 +49,7 @@
 #' @importFrom cli pb_percent pb_eta_str
 #' @importFrom digest digest
 #' @importFrom dplyr tibble inner_join mutate select filter left_join as_tibble
-#' @importFrom dplyr bind_rows arrange rename group_by summarise
+#' @importFrom dplyr bind_rows arrange rename group_by summarise collect
 #' @importFrom httr GET POST parse_url status_code headers content config
 #' @importFrom jsonlite toJSON fromJSON
 #' @importFrom purrr map_dfr map_lgl map_chr map_int map
