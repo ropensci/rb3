@@ -62,6 +62,7 @@ Collate:
     'scraper-company.R'
     'addin-show-templates.R'
     'addin-display-template.R'
+    'dataset.R'
     'readers.R'
     'downloaders.R'
     'zzz.R'
