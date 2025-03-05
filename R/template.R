@@ -185,20 +185,36 @@ new_field <- function(x) {
   width_ <- if (!is.null(x$width)) width(x$width)
   if (is.null(x$handler$type)) {
     handler_ <- pass_thru_handler()
+    col_ <- readr::col_guess()
+  } else if (x$handler$type == "number") {
+    handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
+    col_ <- readr::col_number()
   } else if (x$handler$type == "numeric") {
     handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
+    col_ <- readr::col_double()
+  } else if (x$handler$type == "integer") {
+    handler_ <- to_numeric_handler(0, "")
+    col_ <- readr::col_integer()
   } else if (x$handler$type == "factor") {
     handler_ <- to_factor_handler(x$handler$levels, x$handler$labels)
+    col_ <- readr::col_factor(x$handler$levels, x$handler$labels)
   } else if (x$handler$type == "Date") {
     handler_ <- to_date_handler(x$handler$format)
+    col_ <- readr::col_date(format = x$handler$format)
   } else if (x$handler$type == "POSIXct") {
     handler_ <- to_time_handler(x$handler$format)
+    col_ <- readr::col_datetime(format = x$handler$format)
   } else if (x$handler$type == "strtime") {
     handler_ <- to_strtime_handler(x$handler$format)
+    col_ <- readr::col_time(format = x$handler$format)
+  } else if (x$handler$type == "character") {
+    handler_ <- pass_thru_handler()
+    col_ <- readr::col_character()
   } else {
     handler_ <- pass_thru_handler()
+    col_ <- readr::col_guess()
   }
-  field(x$name, x$description, width_, handler_)
+  field(x$name, x$description, width_, handler_, col_)
 }
 
 new_part <- function(x) {

@@ -1,14 +1,3 @@
-flatten_names <- function(nx) {
-  for (ix in seq_along(nx)) {
-    if (nx[ix] != "") {
-      last_name <- nx[ix]
-    }
-    nx[ix] <- last_name
-  }
-  x <- nx |> str_match("^(\\w+)")
-  as.vector(x[, 2])
-}
-
 #' Get month from maturity code
 #'
 #' Get the corresponding month for the string that represent maturities of

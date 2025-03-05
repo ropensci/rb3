@@ -38,6 +38,12 @@ fields_handlers <- function(fields) {
   handlers
 }
 
+fields_cols <- function(fields) {
+  handlers <- lapply(fields, function(x) attr(x, "col"))
+  names(handlers) <- fields_names(fields)
+  handlers
+}
+
 field <- function(name, description, ...) {
   if (missing(description)) {
     attr(name, "description") <- ""
@@ -61,6 +67,8 @@ field <- function(name, description, ...) {
       "width"
     } else if (is(x, "handler")) {
       "handler"
+    } else if (is(x, "collector")) {
+      "col"
     } else {
       NULL
     }
@@ -76,6 +84,12 @@ field <- function(name, description, ...) {
     attr(name, "handler") <- parms[[which(classes == "handler")[1]]]
   } else {
     attr(name, "handler") <- pass_thru_handler()
+  }
+
+  if (any(classes == "col")) {
+    attr(name, "col") <- parms[[which(classes == "col")[1]]]
+  } else {
+    attr(name, "col") <- readr::col_guess()
   }
 
   class(name) <- "field"

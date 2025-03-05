@@ -61,12 +61,16 @@ parse_columns <- function(df, colnames, handlers, parser) {
 }
 
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
-  df <- read_fwf(filename, .$widths, colnames = .$colnames)
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
+  encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
+  df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
+    col_types = fields_cols(.$fields), locale = readr::locale(encoding = encoding)
+  )
+  hs <- fields_handlers(.$fields)
+  ns <- sapply(hs, \(h) attr(h, "type")) == "numeric"
+  for (nx in colnames(df)[ns]) {
+    df[[nx]] <- suppressWarnings(hs[[nx]](df[[nx]]))
   }
+  df
 }
 
 csv_read_file <- function(., filename, parse_fields = TRUE) {
@@ -120,7 +124,7 @@ mcsv_read_file <- function(., filename, parse_fields = TRUE) {
 }
 
 mfwf_read_file <- function(., filename, parse_fields = TRUE) {
-  lines <- readLines(filename)
+  lines <- readr::read_lines(filename)
   l <- list()
   for (part_name in names(.$parts)) {
     part <- .$parts[[part_name]]
@@ -139,8 +143,24 @@ mfwf_read_file <- function(., filename, parse_fields = TRUE) {
   l
 }
 
+flatten_names <- function(nx) {
+  for (ix in seq_along(nx)) {
+    if (!is.na(nx[ix])) {
+      last_name <- nx[ix]
+    }
+    nx[ix] <- last_name
+  }
+  x <- nx |> str_match("^(\\w+)")
+  as.vector(x[, 2])
+}
+
 settlement_prices_read <- function(., filename, parse_fields = TRUE) {
   doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
+  refdate_ns <- getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
+  if (length(refdate_ns) > 0) {
+    refdate <- str_match(xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")
+    refdate <- as.Date(strptime(refdate, "%d/%m/%Y"))
+  }
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
   table <- getNodeSet(doc, xpath)
   if (is(table, "XMLNodeSet") && length(table) == 1) {
@@ -152,11 +172,15 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
     return(NULL)
   }
   colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
+  loc <- do.call(readr::locale, .$reader$locale)
+  cols <- fields_cols(.$fields)
+  for (nx in .$colnames) {
+    df[[nx]] <- readr::parse_vector(df[[nx]], cols[[nx]], locale = loc)
   }
+  df[["commodity"]] <- flatten_names(df[["commodity"]])
+  df[["symbol"]] <- paste0(df[["commodity"]], df[["maturity_code"]])
+  df[["refdate"]] <- refdate
+  df
 }
 
 options_open_interest_read <- function(., filename, parse_fields = TRUE) {
