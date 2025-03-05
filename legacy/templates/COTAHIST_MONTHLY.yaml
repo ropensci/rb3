@@ -1,0 +1,170 @@
+id: COTAHIST_MONTHLY
+filename: COTAHIST
+filetype: CUSTOM
+description: Cotações Históricas do Pregão de Ações - Arquivo Mensal
+locale: en
+verifyssl: false
+downloader:
+  function: sprintf_download
+  url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_M%s.ZIP
+  format: zip
+reader:
+  function: fwf_read_file
+  encoding: latin1
+fields:
+- name: tipo_registro
+  description: Tipo de registro
+  handler:
+    type: character
+  width: 2
+- name: data_referencia
+  description: Data do pregão
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: cod_bdi
+  description: Código BDI
+  handler:
+    type: character
+  width: 2
+- name: cod_negociacao
+  description: Código de negociação do papel
+  handler:
+    type: character
+  width: 12
+- name: tipo_mercado
+  description: Tipo de mercado
+  handler:
+    type: character
+  width: 3
+- name: nome_empresa
+  description: Nome resumido da empresa emissora do papel
+  handler:
+    type: character
+  width: 12
+- name: especificacao
+  description: Especificação do papel
+  handler:
+    type: character
+  width: 10
+- name: num_dias_mercado_termo
+  description: Prazo em dias do mercado a termo
+  handler:
+    type: character
+  width: 3
+- name: cod_moeda
+  description: Moeda de referência
+  handler:
+    type: character
+  width: 4
+- name: preco_abertura
+  description: Preço de abertura do papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: preco_max
+  description: Preço máximo do papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: preco_min
+  description: Preço mínimo do papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: preco_med
+  description: Preço médio do papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: preco_ult
+  description: Preço último negócio efetuado com o papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: preco_melhor_oferta_compra
+  description: Preço da melhor oferta de compra do papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: preco_melhor_oferta_venda
+  description: Preço da melhor oferta de venda do papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: qtd_negocios
+  description: Número de negócios efetuados com o papel
+  handler:
+    type: character
+  width: 5
+- name: qtd_titulos_negociados
+  description: Quantidade total de títulos negociados neste papel
+  handler:
+    type: character
+  width: 18
+- name: volume_titulos_negociados
+  description: Volume total de títulos negociados neste papel
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 18
+- name: preco_exercicio
+  description: Preço de exercício para o mercado de opções ou valor do contrato
+    para o mercado de termo secundário
+  handler:
+    type: numeric
+    dec: 2.0
+    sign: ''
+  width: 13
+- name: indicador_correcao_preco_exercicio
+  description: Indicador de correção de preços de exercícios ou valores de contrato
+    para os mercados de opções, termo secundário ou futuro
+  handler:
+    type: character
+  width: 1
+- name: data_vencimento
+  description: Data do vencimento para os mercados de opções, termo secundário
+    ou futuro
+  handler:
+    type: Date
+    format: '%Y%m%d'
+  width: 8
+- name: fator_cot
+  description: Fator de cotação do papel
+  handler:
+    type: character
+  width: 7
+- name: preco_exercicio_pontos
+  description: Preço de exercício em pontos para opções referenciadas em dólar
+    ou valor de contrato em pontos para termo secundário
+  handler:
+    type: numeric
+    dec: 6.0
+    sign: ''
+  width: 13
+- name: cod_isin
+  description: Código do papel no sistema ISIN
+  handler:
+    type: character
+  width: 12
+- name: num_dist
+  description: Número de distribuição do papel
+  handler:
+    type: character
+  width: 3

@@ -1,4 +1,4 @@
-id: AjustesDiarios
+id: b3-futures-settlement-prices
 filename: ~
 filetype: CUSTOM
 description: Preços de Ajustes Diários de Contratos Futuros
@@ -11,16 +11,32 @@ downloader:
   encoding: latin1
 reader:
   function: settlement_prices_read
+  partition: refdate
+  locale:
+    decimal_mark: ','
+    grouping_mark: '.'
 fields:
-- name: mercadoria
+- name: commodity
   description: Nome e código da mercadoria
-- name: vencimento
+  handler:
+    type: character
+- name: maturity_code
   description: Código de vencimento do contrato futuro com 3 caractéres
-- name: pu_anterior
+  handler:
+    type: character
+- name: previous_price
   description: Preço de ajuste do dia anterior
-- name: pu_atual
+  handler:
+    type: number
+- name: price
   description: Preço de ajuste atual
-- name: variacao
+  handler:
+    type: number
+- name: price_change
   description: Variação do preço de ajuste
-- name: ajuste
+  handler:
+    type: number
+- name: settlement_value
   description: Valor do ajuste por contrato (R$)
+  handler:
+    type: number
