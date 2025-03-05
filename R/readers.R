@@ -60,6 +60,15 @@ parse_columns <- function(df, colnames, handlers, parser) {
   parse_text(parser, df) |> as_tibble()
 }
 
+.parse_columns <- function(., df) {
+  loc <- do.call(readr::locale, .$reader$locale)
+  cols <- fields_cols(.$fields)
+  for (nx in .$colnames) {
+    df[[nx]] <- readr::parse_vector(df[[nx]], cols[[nx]], locale = loc)
+  }
+  df
+}
+
 fwf_read_file <- function(., filename, parse_fields = TRUE) {
   encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
   suppressWarnings(
@@ -175,11 +184,7 @@ settlement_prices_read <- function(., filename, parse_fields = TRUE) {
   colnames(dm) <- .$colnames
   df <- as_tibble(dm)
 
-  loc <- do.call(readr::locale, .$reader$locale)
-  cols <- fields_cols(.$fields)
-  for (nx in .$colnames) {
-    df[[nx]] <- readr::parse_vector(df[[nx]], cols[[nx]], locale = loc)
-  }
+  df <- .parse_columns(., df)
   df[["commodity"]] <- flatten_names(df[["commodity"]])
   df
 }
@@ -217,7 +222,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
   curve_name <- ctx[1, 2]
 
   mtx <- str_match(text, "Atualizado em: (\\d{2}/\\d{2}/\\d{4})")
-  refdate <- mtx[1, 2] |> as.Date("%d/%m/%Y")
+  refdate <- mtx[1, 2]
 
   if (cols_number[curve_name] == 2) {
     idx1 <- seq(1, length(char_vec), by = 2)
@@ -238,17 +243,14 @@ curve_read <- function(., filename, parse_fields = TRUE) {
 
   df <- tibble(
     refdate,
+    curve_name,
     cur_days,
     col1,
     col2
   )
-
   colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
+
+  .parse_columns(., df)
 }
 
 stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {

@@ -1,4 +1,4 @@
-id: TaxasReferenciais
+id: b3-reference-rates
 filename: ~
 filetype: CUSTOM
 description: Taxas referenciais
@@ -12,12 +12,29 @@ downloader:
   encoding: latin1
 reader:
   function: curve_read
+  partition: refdate
+  locale:
+    decimal_mark: ','
+    grouping_mark: '.'
 fields:
 - name: refdate
   description: Data de referência
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
+- name: curve_name
+  description: Nome da curva
+  handler:
+    type: character
 - name: cur_days
   description: Dias corridos
-- name: col1
+  handler:
+    type: integer
+- name: r_252
   description: Taxa na base 252 ou taxa na base 360 ou preço futuro
-- name: col2
+  handler:
+    type: number
+- name: r_360
   description: Taxa na base 360 ou NA
+  handler:
+    type: number
