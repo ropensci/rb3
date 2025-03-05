@@ -77,7 +77,7 @@ download_marketdata <- function(template,
     }
     meta[["downloaded"]] <- downloaded
     meta[["timestamp"]] <- file.info(meta[["downloaded"]])[["ctime"]]
-    writeLines(toJSON(meta), meta_file)
+    writeLines(toJSON(meta, auto_unbox = TRUE), meta_file)
     return(meta)
   } else {
     return(NULL)
