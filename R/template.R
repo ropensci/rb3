@@ -64,6 +64,7 @@ load_template_files <- function() {
   }
 }
 
+#' @exportS3Method base::print
 print.template <- function(x, ...) {
   cat("Template ID:", x$id, "\n")
   cat("Expected filename:", x$filename, "\n")
@@ -96,76 +97,6 @@ template_register <- function(obj) {
 template_retrieve <- function(key) {
   .reg <- template_registry$get_instance()
   registry_get(.reg, key)
-}
-
-template_parser <- function(obj) {
-  parser_generic <- transmuter(
-    match_regex("^(-|\\+)?\\d{1,8}$", to_int(), priority = 1, apply_to = "all"),
-    match_regex("^(-|\\+)?\\d{1,8}$", to_int()),
-    match_regex("^\\+|-$", function(text, match) {
-      idx <- text == "-"
-      x <- rep(1, length(text))
-      x[idx] <- -1
-      x
-    }, apply_to = "all"),
-    match_regex("^(S|N)$", function(text, match) {
-      text == "S"
-    }, apply_to = "all")
-  )
-
-  parsers <- list(
-    generic = parser_generic,
-    en = transmuter(
-      match_regex("^(-|\\+)?(\\d+,)*\\d+(\\.\\d+)?$",
-        to_dbl(dec = ".", thousands = ","),
-        apply_to = "all", priority = 2
-      ),
-      match_regex(
-        "^(-|\\+)?(\\d+,)*\\d+(\\.\\d+)?$",
-        to_dbl(dec = ".", thousands = ",")
-      ), parser_generic
-    ),
-    pt = transmuter(
-      match_regex("^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
-        to_dbl(dec = ",", thousands = "."),
-        apply_to = "all", priority = 2
-      ),
-      match_regex(
-        "^(-|\\+)?(\\d+\\.)*\\d+(,\\d+)?$",
-        to_dbl(dec = ",", thousands = ".")
-      ), parser_generic
-    )
-  )
-
-  locale <- try(base::get("locale", obj), TRUE)
-  if (is(locale, "try-error") || !is(locale, "character")) {
-    parsers[["generic"]]
-  } else {
-    parsers[[locale]]
-  }
-}
-
-template_separator <- function(obj, .part = NULL) {
-  if (is.null(.part)) {
-    obj$separator
-  } else {
-    sep <- try(base::get("separator", .part), TRUE)
-    if (is(sep, "try-error") || is.null(sep)) {
-      obj$separator
-    } else {
-      sep
-    }
-  }
-}
-
-template_detect_lines <- function(obj, .part, lines) {
-  if (!is.null(.part$pattern)) {
-    str_detect(lines, .part$pattern)
-  } else if (!is.null(.part$index)) {
-    .part$index
-  } else {
-    stop("MultiPart file with no index defined")
-  }
 }
 
 list_templates <- function() {

@@ -4,6 +4,7 @@ fields <- function(...) {
   that
 }
 
+#' @exportS3Method base::as.data.frame
 as.data.frame.fields <- function(x, ...) {
   data.frame(
     `Field name` = fields_names(x),
@@ -15,6 +16,7 @@ as.data.frame.fields <- function(x, ...) {
   )
 }
 
+#' @exportS3Method base::print
 print.fields <- function(x, ...) {
   cat(paste(fields_names(x), collapse = ", "), "\n")
   invisible(x)
@@ -110,6 +112,7 @@ field <- function(name, description, ...) {
   name
 }
 
+#' @exportS3Method base::print
 print.parts <- function(x, ...) {
   nx <- names(x)
   for (ix in seq_along(nx)) {

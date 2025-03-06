@@ -23,6 +23,7 @@ create_registry <- function() {
   list(get_instance = create)
 }
 
+#' @exportS3Method base::print
 print.registry <- function(x, ...) {
   cat("registry instance created at:", format(x$created_at), "\n")
   cat("# elements", length(x$data), "\n")
