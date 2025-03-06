@@ -40,7 +40,7 @@ read_marketdata(f)
 # ), skip = 1, col_types = "c")
 
 
-for (year in 1990:2025) {
+for (year in 1994:2025) {
   cat(year, "\n")
   m <- download_marketdata("b3-cotahist-yearly", year = year)
   read_marketdata(m)
@@ -58,9 +58,10 @@ sc <- arrow::schema(
 )
 
 arrow::open_dataset(file.path(cachedir(), "meta"), schema = sc, format = "json") |>
-  filter(template == "b3-cotahist-yearly") |>
-  select(timestamp, downloaded) |>
+  filter(template == "b3-cotahist-yearly", download_checksum == "0cdac43ffd5ad3ab87d54ca31b822187") |>
   collect()
+
+arrow::open_dataset(file.path(cachedir(), "meta"), format = "json")
 
 ds |>
   ggplot(aes(x = refdate, y = close)) +
