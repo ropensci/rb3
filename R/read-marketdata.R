@@ -46,6 +46,9 @@ read_marketdata <- function(meta, cache_folder = cachedir()) {
   }
   template <- template_retrieve(meta$template)
   db_folder <- file.path(cache_folder, "db", template$id)
+  if (!dir.exists(db_folder)) {
+    dir.create(db_folder, recursive = TRUE)
+  }
   df <- template$read_file(template, filename, TRUE)
   if (is.null(df)) {
     alert("warning", str_glue("File could not be read: {filename}"))
