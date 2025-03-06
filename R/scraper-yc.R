@@ -77,24 +77,6 @@ yc_get <- function(refdate) {
 #' @noRd
 NULL
 
-#' @details
-#' `yc_ipca_get` returns the yield curve of real interest rates
-#' for the given date and `yc_ipca_mget` returns
-#' multiple yield curves of real interest rates for a given range of dates.
-#' These real interest rates consider IPCA as its inflation index.
-#'
-#' @rdname yc_get
-#' @examples
-#' \dontrun{
-#' df_yc_ipca <- yc_ipca_mget(
-#'   first_date = Sys.Date() - 5,
-#'   last_date = Sys.Date()
-#' )
-#' head(df_yc_ipca)
-#' }
-#' @export
-NULL
-
 #' @rdname yc_get
 #' @examples
 #' \dontrun{
@@ -105,36 +87,6 @@ NULL
 yc_ipca_get <- function(refdate) {
   yield_curve_get(refdate, "DIC")
 }
-
-#' Fetches a single data
-#'
-#' @param idx_date index of data (1.. n_dates)
-#' @param date_vec Vector of dates
-#' @inheritParams yc_get
-#'
-#' @return A dataframe
-#' @noRd
-NULL
-
-#' @rdname yc_get
-#'
-#' @details
-#' `yc_usd_get` returns the yield curve of nominal interest rates for USD in
-#' Brazil for the given date and `yc_usd_mget` returns
-#' multiple yield curves of nominal interest rates for USD in Brazil for a
-#' given range of dates.
-#' These real interest rates consider IPCA as its inflation index.
-#'
-#' @examples
-#' \dontrun{
-#' df_yc_usd <- yc_usd_mget(
-#'   first_date = Sys.Date() - 5,
-#'   last_date = Sys.Date()
-#' )
-#' head(df_yc_usd)
-#' }
-#' @export
-NULL
 
 #' @rdname yc_get
 #' @examples
@@ -148,16 +100,6 @@ yc_usd_get <- function(refdate = Sys.Date(),
                        do_cache = TRUE) {
   yield_curve_get(refdate, "DOC")
 }
-
-#' Fetches a single data
-#'
-#' @param idx_date index of data (1.. n_dates)
-#' @param date_vec Vector of dates
-#' @inheritParams yc_get
-#'
-#' @return A dataframe
-#' @noRd
-NULL
 
 #' Creates superset with yield curves and futures
 #'
