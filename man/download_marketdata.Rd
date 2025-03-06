@@ -9,28 +9,63 @@ download_marketdata(template, cache_folder = cachedir(), do_cache = FALSE, ...)
 \arguments{
 \item{template}{the template name}
 
-\item{cache_folder}{Location of cache folder (default = cachedir())}
+\item{cache_folder}{location of cache folder (default = cachedir())}
 
-\item{do_cache}{a logical indicating if the existing file (previously
-downloaded) should be used or replaced.}
+\item{do_cache}{a logical indicating if the file should be downloaded again}
 
 \item{...}{additional arguments}
 }
 \value{
-a string with the file path of downloaded file or \code{NULL} if download
-fails.
+a list with the metadata of the downloaded file (see details).
 
-This function downloads data sets for those templates that specifies a
-\code{downloader} attribute.
-If \code{dest} is not provided, \code{cache_folder} is used and a file with template
-id is saved inside it.
+The function returns a list containing the metadata of the
+downloaded file, including the following information:
+\itemize{
+\item \code{template}: Template name
+\item \code{download_checksum}: Download hash code,
+generated from the template name and the arguments passed in the ellipsis (\code{...})
+\item \code{file_checksum}: File hash code
+\item \code{download_args}: Arguments passed in the ellipsis (\code{...})
+\item \code{downloaded}: Path to the downloaded file
+\item \code{timestamp}: Timestamp of when the file was saved
+}
+
+A metadata file is saved in the \code{meta} directory inside \code{rb3.cachedir}.
+This metadata file is in JSON format, and its filename is the download hash code (\code{download_checksum}).
+It ensures the uniqueness of the download.
+
+All downloaded files are compressed using Gzip and named with their file checksum (\code{file_checksum}),
+also to ensure uniqueness.
+The downloaded files are stored in the \code{raw} directory, which is located inside \code{rb3.cachedir}.
 }
 \description{
 Download datasets for a given template.
 }
+\details{
+This function downloads a file based on a template.
+The template is a YAML document that defines a dataset.
+It specifies how the file is downloaded, how it is read,
+and the structure of the dataset, including column names
+and data types.
+
+The \code{do_cache} argument is \code{FALSE} by default, indicating that if the file already exists in the cache,
+it will not be downloaded again.
+First, it checks if the metadata file exists; if it does, it is returned.
+If \code{do_cache} is \code{TRUE}, the file is downloaded again, and the metadata is updated.
+If the downloaded file is identical to the cached file, verified using \code{file_checksum},
+the metadata is returned.
+
+The additional arguments in the ellipsis (\code{...}) are passed to the template function that handles data downloads.
+}
 \examples{
 \dontrun{
-fname <- download_marketdata("CDIIDI")
+download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
+
+m <- download_marketdata("b3-reference-rates", refdate = as.Date("2024-04-05"), curve_name = "PRE")
+read_marketdata(m)
 }
 
+}
+\seealso{
+cachedir rb3.cachedir
 }

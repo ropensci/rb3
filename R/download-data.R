@@ -3,22 +3,54 @@
 #' Download datasets for a given template.
 #'
 #' @param template the template name
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache a logical indicating if the existing file (previously
-#'        downloaded) should be used or replaced.
+#' @param cache_folder location of cache folder (default = cachedir())
+#' @param do_cache a logical indicating if the file should be downloaded again
 #' @param ... additional arguments
 #'
-#' @return a string with the file path of downloaded file or `NULL` if download
-#'        fails.
+#' @return a list with the metadata of the downloaded file (see details).
 #'
-#' This function downloads data sets for those templates that specifies a
-#' `downloader` attribute.
-#' If `dest` is not provided, `cache_folder` is used and a file with template
-#' id is saved inside it.
+#' The function returns a list containing the metadata of the
+#' downloaded file, including the following information:  
+#' - `template`: Template name
+#' - `download_checksum`: Download hash code,
+#'    generated from the template name and the arguments passed in the ellipsis (`...`)  
+#' - `file_checksum`: File hash code
+#' - `download_args`: Arguments passed in the ellipsis (`...`)  
+#' - `downloaded`: Path to the downloaded file  
+#' - `timestamp`: Timestamp of when the file was saved
+#' 
+#' A metadata file is saved in the `meta` directory inside `rb3.cachedir`.
+#' This metadata file is in JSON format, and its filename is the download hash code (`download_checksum`).
+#' It ensures the uniqueness of the download.
+#'
+#' All downloaded files are compressed using Gzip and named with their file checksum (`file_checksum`),
+#' also to ensure uniqueness.
+#' The downloaded files are stored in the `raw` directory, which is located inside `rb3.cachedir`.
+#' 
+#' @details
+#' This function downloads a file based on a template.
+#' The template is a YAML document that defines a dataset.
+#' It specifies how the file is downloaded, how it is read,
+#' and the structure of the dataset, including column names
+#' and data types.
+#' 
+#' The `do_cache` argument is `FALSE` by default, indicating that if the file already exists in the cache,
+#' it will not be downloaded again.
+#' First, it checks if the metadata file exists; if it does, it is returned.
+#' If `do_cache` is `TRUE`, the file is downloaded again, and the metadata is updated.
+#' If the downloaded file is identical to the cached file, verified using `file_checksum`,
+#' the metadata is returned.
+#' 
+#' The additional arguments in the ellipsis (`...`) are passed to the template function that handles data downloads.
+#' 
+#' @seealso cachedir rb3.cachedir
 #'
 #' @examples
 #' \dontrun{
-#' fname <- download_marketdata("CDIIDI")
+#' download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
+#' 
+#' m <- download_marketdata("b3-reference-rates", refdate = as.Date("2024-04-05"), curve_name = "PRE")
+#' read_marketdata(m)
 #' }
 #'
 #' @export
