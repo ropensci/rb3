@@ -203,6 +203,37 @@ indexreport_get <- function(refdate = Sys.Date(),
   get_single_indexreport(1, as.Date(refdate), cache_folder, do_cache)
 }
 
+#' Fetches a single marketdata
+#'
+#' @param idx_date index of data (1.. n_dates)
+#' @param date_vec Vector of dates
+#' @param cache_folder Location of cache folder (default = cachedir())
+#' @param do_cache Whether to use cache or not (default = TRUE)
+#' @param ... orther arguments
+#'
+#' @return
+#' A dataframe or `NULL`
+#'
+#' @noRd
+get_single_marketdata <- function(template,
+                                  idx_date,
+                                  date_vec,
+                                  cache_folder,
+                                  do_cache, ...) {
+  refdate <- date_vec[idx_date]
+  fname <- download_marketdata(template, cache_folder, do_cache,
+    refdate = refdate, ...
+  )
+  if (!is.null(fname)) {
+    read_marketdata(fname, template, TRUE, do_cache)
+  } else {
+    alert("danger", "Error: no data found for date {refdate}",
+      refdate = refdate
+    )
+    NULL
+  }
+}
+
 get_single_indexreport <- function(idx_date,
                                    date_vec,
                                    cache_folder,
