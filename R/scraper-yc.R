@@ -2,7 +2,7 @@ yield_curve_get <- function(refdate, curve_name) {
   template <- template_retrieve("b3-reference-rates")
   .curve_name <- curve_name
   .refdate <- refdate
-  dataset_get(template$id) |>
+  template_dataset(template) |>
     filter(.data$refdate %in% .refdate, .data$curve_name == .curve_name) |>
     collect() |>
     mutate(

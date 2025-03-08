@@ -125,15 +125,14 @@ futures_get <- function(refdate, commodity = NULL) {
   template <- template_retrieve("b3-futures-settlement-prices")
   .commodity <- commodity
   .refdate <- refdate
-  query <- if (is.null(commodity)) {
-    dataset_get(template$id) |>
-      filter(.data$refdate %in% .refdate)
-  } else {
-    dataset_get(template$id) |>
+  query <- if (!is.null(commodity)) {
+    template_dataset(template) |>
       filter(.data$refdate %in% .refdate, .data$commodity == .commodity)
+  } else {
+    template_dataset(template) |>
+      filter(.data$refdate %in% .refdate)
   }
   query |>
-    collect() |>
     mutate(
       symbol = paste0(.data$commodity, .data$maturity_code),
     ) |>
@@ -146,5 +145,6 @@ futures_get <- function(refdate, commodity = NULL) {
       price,
       price_change,
       settlement_value,
-    )
+    ) |>
+    collect()
 }
