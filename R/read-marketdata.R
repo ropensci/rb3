@@ -67,7 +67,7 @@ read_marketdata <- function(meta, cache_folder = cachedir()) {
   ds_file <- file.path(db_folder, str_glue("{label[1]}.parquet"))
   tb <- arrow::arrow_table(df, schema = template_schema(template))
   arrow::write_parquet(df, ds_file, compression = "gzip")
-  df
+  invisible(df)
 }
 
 clean_meta <- function(meta, cache_folder) {
