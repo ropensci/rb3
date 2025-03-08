@@ -29,7 +29,8 @@ Imports:
     yaml,
     digest,
     base64enc,
-    XML
+    XML,
+    R.utils
 Suggests:
     testthat,
     knitr,
