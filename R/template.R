@@ -117,6 +117,12 @@ template_schema <- function(template) {
   do.call(arrow::schema, arrow_types)
 }
 
+template_dataset <- function(template) {
+  schema <- template_schema(template)
+  path <- file.path(dbdir(), template$id)
+  arrow::open_dataset(path, schema)
+}
+
 new_field <- function(x) {
   width_ <- if (!is.null(x$width)) width(x$width)
   if (is.null(x$handler$type)) {
