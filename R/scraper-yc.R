@@ -12,13 +12,13 @@ yield_curve_get <- function(refdate, curve_name) {
       r_360 = .data$r_360 / 100
     ) |>
     select(
-      .data$curve_name,
-      .data$refdate,
-      .data$forward_date,
-      .data$biz_days,
-      .data$r_252,
-      .data$cur_days,
-      .data$r_360,
+      curve_name,
+      refdate,
+      forward_date,
+      biz_days,
+      r_252,
+      cur_days,
+      r_360,
     )
 }
 #' Fetches Yield Curve Data from B3
