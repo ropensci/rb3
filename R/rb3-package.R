@@ -41,6 +41,7 @@
 #' @name rb3-package
 #'
 #' @importFrom base64enc base64encode
+#' @importFrom stats na.omit
 #' @importFrom bizdays following preceding load_builtin_calendars
 #' @importFrom bizdays add.bizdays bizdayse bizseq getdate
 #' @importFrom cli cli_alert_info cli_alert_danger cli_alert_success

@@ -2,7 +2,7 @@
   load_template_files()
   reg <- template_registry$get_instance()
   x <- length(registry_keys(reg))
-  message("rb3: ", x, " templates registered")
+  packageStartupMessage("rb3: ", x, " templates registered")
   load_builtin_calendars()
 }
 

@@ -3,10 +3,16 @@
 \name{cotahist-options-superset}
 \alias{cotahist-options-superset}
 \alias{cotahist_equity_options_superset}
+\alias{cotahist_funds_options_superset}
+\alias{cotahist_index_options_superset}
 \alias{cotahist_options_by_symbol_superset}
 \title{Extracts equity option superset of data}
 \usage{
 cotahist_equity_options_superset(ch, yc)
+
+cotahist_funds_options_superset(ch, yc)
+
+cotahist_index_options_superset(ch, yc)
 
 cotahist_options_by_symbol_superset(symbol, ch, yc)
 }

@@ -137,14 +137,14 @@ futures_get <- function(refdate, commodity = NULL) {
       symbol = paste0(.data$commodity, .data$maturity_code),
     ) |>
     select(
-      refdate,
-      symbol,
-      commodity,
-      maturity_code,
-      previous_price,
-      price,
-      price_change,
-      settlement_value,
+      "refdate",
+      "symbol",
+      "commodity",
+      "maturity_code",
+      "previous_price",
+      "price",
+      "price_change",
+      "settlement_value",
     ) |>
     collect()
 }

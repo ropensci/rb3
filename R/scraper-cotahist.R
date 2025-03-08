@@ -40,16 +40,16 @@ cotahist_get <- function(type = c("yearly", "monthly", "daily")) {
 
 .select_equity <- function(x) {
   x |> select(
-    refdate, symbol, open, high, low, close, volume,
-    traded_contracts, trade_quantity, distribution_id, isin
+    "refdate", "symbol", "open", "high", "low", "close", "volume",
+    "traded_contracts", "trade_quantity", "distribution_id", "isin"
   )
 }
 
 .select_options <- function(x) {
   x |> select(
-    refdate, symbol, type, strike_price, maturity_date,
-    open, high, low, close, volume, traded_contracts,
-    trade_quantity, isin
+    "refdate", "symbol", "type", "strike_price", "maturity_date",
+    "open", "high", "low", "close", "volume", "traded_contracts",
+    "trade_quantity", "isin",
   )
 }
 
