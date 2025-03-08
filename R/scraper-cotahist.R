@@ -32,80 +32,41 @@
 #' }
 #'
 #' @export
-cotahist_get <- function(refdate,
-                         type = c("yearly", "monthly", "daily"),
-                         cache_folder = cachedir(),
-                         do_cache = TRUE) {
+cotahist_get <- function(type = c("yearly", "monthly", "daily")) {
   type <- match.arg(type)
-  tpl <- switch(type,
-    yearly = "COTAHIST_YEARLY",
-    monthly = "COTAHIST_MONTHLY",
-    daily = "COTAHIST_DAILY"
+  template <- template_retrieve(str_glue("b3-cotahist-{type}"))
+  template_dataset(template)
+}
+
+.select_equity <- function(x) {
+  x |> select(
+    refdate, symbol, open, high, low, close, volume,
+    traded_contracts, trade_quantity, distribution_id, isin
   )
-  refdate <- as.Date(refdate)
-  fname <- download_marketdata(tpl, cache_folder, do_cache, refdate = refdate)
-  if (!is.null(fname)) {
-    read_marketdata(fname, tpl)
-  } else {
-    alert("danger", "Failed {tpl} download for reference date {refdate}",
-      tpl = tpl, refdate = refdate
+}
+
+.select_options <- function(x) {
+  x |> select(
+    refdate, symbol, type, strike_price, maturity_date,
+    open, high, low, close, volume, traded_contracts,
+    trade_quantity, isin
+  )
+}
+
+.cotahist_options_get <- function(x, .security_category) {
+  x |>
+    .filter_instrument_data(c(70, 80), .security_category) |>
+    collect() |>
+    mutate(
+      type = factor(.data$instrument_market, c(70, 80), c("call", "put"))
     )
-    NULL
-  }
 }
 
-format_equity <- function(df, with_isin = FALSE) {
-  df[["refdate"]] <- df[["data_referencia"]]
-  df[["symbol"]] <- df[["cod_negociacao"]]
-  df[["open"]] <- df[["preco_abertura"]]
-  df[["high"]] <- df[["preco_max"]]
-  df[["low"]] <- df[["preco_min"]]
-  df[["close"]] <- df[["preco_ult"]]
-  df[["average"]] <- df[["preco_med"]]
-  df[["best_bid"]] <- df[["preco_melhor_oferta_compra"]]
-  df[["best_ask"]] <- df[["preco_melhor_oferta_venda"]]
-  df[["volume"]] <- df[["volume_titulos_negociados"]]
-  df[["traded_contracts"]] <- df[["qtd_titulos_negociados"]]
-  df[["transactions_quantity"]] <- df[["qtd_negocios"]]
-  df[["distribution_id"]] <- df[["num_dist"]]
-  isin <- if (with_isin) "cod_isin" else NULL
-  cols <- c(
-    "refdate", "symbol", "open", "high", "low", "close", "average",
-    "best_bid", "best_ask", "volume", "traded_contracts",
-    "transactions_quantity", "distribution_id", isin
-  )
-  df[, cols]
-}
-
-format_options <- function(df, with_isin = FALSE) {
-  df[["refdate"]] <- df[["data_referencia"]]
-  df[["symbol"]] <- df[["cod_negociacao"]]
-  df[["open"]] <- df[["preco_abertura"]]
-  df[["high"]] <- df[["preco_max"]]
-  df[["low"]] <- df[["preco_min"]]
-  df[["close"]] <- df[["preco_ult"]]
-  df[["average"]] <- df[["preco_med"]]
-  df[["type"]] <- factor(df[["tipo_mercado"]], c(70, 80), c("Call", "Put"))
-  df[["strike"]] <- df[["preco_exercicio"]]
-  df[["maturity_date"]] <- df[["data_vencimento"]]
-  df[["volume"]] <- df[["volume_titulos_negociados"]]
-  df[["traded_contracts"]] <- df[["qtd_titulos_negociados"]]
-  df[["transactions_quantity"]] <- df[["qtd_negocios"]]
-  df[["distribution_id"]] <- df[["num_dist"]]
-  isin <- if (with_isin) "cod_isin" else NULL
-  cols <- c(
-    "refdate", "symbol", "type", "strike", "maturity_date",
-    "open", "high", "low", "close", "average", "volume", "traded_contracts",
-    "transactions_quantity", "distribution_id", isin
-  )
-  df[, cols]
-}
-
-filter_equity_data <- function(x, instrument_market, security_category) {
-  x[["HistoricalPrices"]] |>
+.filter_instrument_data <- function(x, .instrument_market, .security_category) {
+  x |>
     filter(
-      .data$tipo_mercado %in% instrument_market,
-      str_sub(.data$cod_isin, 7, 9) %in% security_category
+      .data$instrument_market %in% .instrument_market,
+      str_sub(.data$isin, 7, 9) %in% .security_category,
     )
 }
 
@@ -125,7 +86,9 @@ filter_equity_data <- function(x, instrument_market, security_category) {
 #' }
 #' @export
 cotahist_equity_get <- function(x) {
-  filter_equity_data(x, 10, c("UNT", "CDA", "ACN")) |> format_equity()
+  .filter_instrument_data(x, 10, c("UNT", "CDA", "ACN")) |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -135,7 +98,9 @@ cotahist_equity_get <- function(x) {
 #' }
 #' @export
 cotahist_bdrs_get <- function(x) {
-  filter_equity_data(x, 10, "BDR") |> format_equity()
+  .filter_instrument_data(x, 10, "BDR") |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -145,7 +110,9 @@ cotahist_bdrs_get <- function(x) {
 #' }
 #' @export
 cotahist_units_get <- function(x) {
-  filter_equity_data(x, 10, c("UNT", "CDA")) |> format_equity()
+  .filter_instrument_data(x, 10, c("UNT", "CDA")) |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -155,9 +122,11 @@ cotahist_units_get <- function(x) {
 #' }
 #' @export
 cotahist_etfs_get <- function(x) {
-  filter_equity_data(x, 10, "CTF") |>
-    filter(.data$cod_bdi == 14, str_starts(.data$especificacao, "CI")) |>
-    format_equity()
+  x |>
+    filter(.data$bdi_code == 14, str_starts(.data$specification_code, "CI")) |>
+    .filter_instrument_data(10, "CTF") |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -167,9 +136,11 @@ cotahist_etfs_get <- function(x) {
 #' }
 #' @export
 cotahist_fiis_get <- function(x) {
-  filter_equity_data(x, 10, "CTF") |>
-    filter(.data$cod_bdi %in% c(5, 12)) |>
-    format_equity()
+  x |>
+    filter(.data$bdi_code %in% c(5, 12)) |>
+    .filter_instrument_data(10, "CTF") |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -179,11 +150,13 @@ cotahist_fiis_get <- function(x) {
 #' }
 #' @export
 cotahist_fidcs_get <- function(x) {
-  filter_equity_data(x, 10, "CTF") |>
+  x |>
     filter(
-      .data$cod_bdi == 14, str_starts(.data$especificacao, "FIDC")
+      .data$bdi_code == 14, str_starts(.data$specification_code, "FIDC")
     ) |>
-    format_equity()
+    .filter_instrument_data(10, "CTF") |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -193,9 +166,11 @@ cotahist_fidcs_get <- function(x) {
 #' }
 #' @export
 cotahist_fiagros_get <- function(x) {
-  filter_equity_data(x, 10, "CTF") |>
-    filter(.data$cod_bdi == 13) |>
-    format_equity()
+  x |>
+    filter(.data$bdi_code == 13) |>
+    .filter_instrument_data(10, "CTF") |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -205,7 +180,9 @@ cotahist_fiagros_get <- function(x) {
 #' }
 #' @export
 cotahist_indexes_get <- function(x) {
-  filter_equity_data(x, 10, "IND") |> format_equity()
+  .filter_instrument_data(x, 10, "IND") |>
+    .select_equity() |>
+    collect()
 }
 
 #' @rdname cotahist-extracts
@@ -215,7 +192,9 @@ cotahist_indexes_get <- function(x) {
 #' }
 #' @export
 cotahist_equity_options_get <- function(x) {
-  filter_equity_data(x, c(70, 80), c("ACN", "UNT", "CDA")) |> format_options()
+  x |>
+    .cotahist_options_get(c("ACN", "UNT", "CDA")) |>
+    .select_options()
 }
 
 #' @rdname cotahist-extracts
@@ -225,7 +204,9 @@ cotahist_equity_options_get <- function(x) {
 #' }
 #' @export
 cotahist_index_options_get <- function(x) {
-  filter_equity_data(x, c(70, 80), "IND") |> format_options()
+  x |>
+    .cotahist_options_get("IND") |>
+    .select_options()
 }
 
 #' @rdname cotahist-extracts
@@ -235,7 +216,9 @@ cotahist_index_options_get <- function(x) {
 #' }
 #' @export
 cotahist_funds_options_get <- function(x) {
-  filter_equity_data(x, c(70, 80), "CTF") |> format_options()
+  x |>
+    .cotahist_options_get("CTF") |>
+    .select_options()
 }
 
 #' @rdname cotahist-extracts
@@ -248,9 +231,9 @@ cotahist_funds_options_get <- function(x) {
 #' }
 #' @export
 cotahist_get_symbols <- function(x, symbols) {
-  x[["HistoricalPrices"]] |>
-    filter(.data$cod_negociacao %in% symbols) |>
-    format_equity()
+  x |>
+    filter(.data$symbol %in% symbols) |>
+    collect()
 }
 
 #' Extracts equity option superset of data
@@ -280,42 +263,69 @@ cotahist_get_symbols <- function(x, symbols) {
 #'
 NULL
 
-#' @rdname cotahist-options-superset
-#' @export
-cotahist_equity_options_superset <- function(ch, yc) {
-  eqs <- filter_equity_data(ch, 10, c("UNT", "CDA", "ACN")) |>
-    format_equity(TRUE)
-  eqs_opts <- filter_equity_data(ch, c(70, 80), c("UNT", "CDA", "ACN")) |>
-    format_options(TRUE)
-  inner_join(eqs_opts, eqs, by = "cod_isin", suffix = c("", ".underlying")) |>
-    select(-c("refdate.underlying", "cod_isin")) |>
+.cotahist_options_superset <- function(ch, yc, .security_category = NULL, .symbol = NULL) {
+  if (!is.null(.security_category)) {
+    eqs <- .filter_instrument_data(ch, 10, .security_category) |> collect()
+    eqs_opts <- .cotahist_options_get(ch, .security_category)
+  } else if (!is.null(.symbol)) {
+    eqs <- ch |>
+      filter(.data$symbol == .symbol) |>
+      collect()
+    eqs_opts <- ch |>
+      filter(.data$isin == eqs$isin[1]) |>
+      collect() |>
+      mutate(
+        type = factor(.data$instrument_market, c(70, 80), c("call", "put"))
+      )
+  } else {
+    stop("You must provide either a security category or a symbol.")
+  }
+  yc_df <- yc |>
+    select("refdate", "forward_date", "r_252") |>
+    collect()
+  inner_join(eqs_opts, eqs, by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one") |>
     mutate(
       fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
     ) |>
     inner_join(yc |> select("refdate", "forward_date", "r_252"),
       by = c("refdate", "fixing_maturity_date" = "forward_date")
+    ) |>
+    select(
+      "refdate",
+      "symbol",
+      "type",
+      "symbol_underlying",
+      "strike_price",
+      "maturity_date",
+      "r_252",
+      "close",
+      "close_underlying",
+      "volume",
+      "trade_quantity",
+      "traded_contracts",
     )
 }
 
 #' @rdname cotahist-options-superset
 #' @export
+cotahist_equity_options_superset <- function(ch, yc) {
+  .cotahist_options_superset(ch, yc, .security_category = c("UNT", "CDA", "ACN"))
+}
+
+#' @rdname cotahist-options-superset
+#' @export
+cotahist_funds_options_superset <- function(ch, yc) {
+  .cotahist_options_superset(ch, yc, .security_category = "CTF")
+}
+
+#' @rdname cotahist-options-superset
+#' @export
+cotahist_index_options_superset <- function(ch, yc) {
+  .cotahist_options_superset(ch, yc, .security_category = "IND")
+}
+
+#' @rdname cotahist-options-superset
+#' @export
 cotahist_options_by_symbol_superset <- function(symbol, ch, yc) {
-  eqs <- ch[["HistoricalPrices"]] |>
-    filter(.data$cod_negociacao == symbol) |>
-    format_equity(TRUE)
-  eqs_opts <- ch[["HistoricalPrices"]] |>
-    filter(.data$tipo_mercado %in% c(70, 80)) |>
-    format_options(TRUE) |>
-    filter(.data$cod_isin == eqs$cod_isin[1])
-  inner_join(eqs_opts, eqs,
-    by = c("refdate", "cod_isin"),
-    suffix = c("", ".underlying")
-  ) |>
-    select(-c("cod_isin")) |>
-    mutate(
-      fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
-    ) |>
-    inner_join(yc |> select("refdate", "forward_date", "r_252"),
-      by = c("refdate", "fixing_maturity_date" = "forward_date")
-    )
+  .cotahist_options_superset(ch, yc, .symbol = symbol)
 }
