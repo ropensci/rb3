@@ -30,7 +30,8 @@ Imports:
     digest,
     base64enc,
     XML,
-    R.utils
+    R.utils,
+    lubridate
 Suggests:
     testthat,
     knitr,
@@ -57,8 +58,8 @@ Collate:
     'read-marketdata.R'
     'download-data.R'
     'scraper-futures.R'
-    'scraper-yc.R'
     'scraper-cotahist.R'
+    'scraper-yc.R'
     'addin-show-templates.R'
     'addin-display-template.R'
     'readers.R'

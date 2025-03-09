@@ -140,7 +140,7 @@ test_that("it should use cotahist_equity_options_superset", {
   .meta <- download_marketdata("b3-reference-rates", refdate = .date, curve_name = "PRE")
   read_marketdata(.meta)
 
-  yc <- yc_get(.date)
+  yc <- yc_brl_get() |> filter(refdate == .date)
   ch <- cotahist_get("daily")
 
   df <- cotahist_equity_options_superset(ch, yc)

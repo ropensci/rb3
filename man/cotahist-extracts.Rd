@@ -14,7 +14,7 @@
 \alias{cotahist_index_options_get}
 \alias{cotahist_funds_options_get}
 \alias{cotahist_get_symbols}
-\title{Extract data from COTAHIST dataset}
+\title{Extraction of data from COTAHIST datasets}
 \usage{
 cotahist_equity_get(x)
 
@@ -41,52 +41,82 @@ cotahist_funds_options_get(x)
 cotahist_get_symbols(x, symbols)
 }
 \arguments{
-\item{x}{COTAHIST dataset returned from \code{cotahist_get}.}
+\item{x}{A cotahist dataset}
 
-\item{symbols}{list of symbols to extract market data from cotahist}
+\item{symbols}{list of symbols to extract market data from the COTAHIST dataset.}
 }
 \value{
-a data.frame with prices, volume, traded quantities informations
+A dataframe containing the requested market data.
 }
 \description{
-Extracts specific data from COTAHIST dataset: stocks, funds, BDRs, ETFs,
-UNITs, options on stocks, options on indexes, ...
+A set of functions that implement filters to obtain organized and useful
+data from the COTAHIST datasets.
+}
+\details{
+The functions \code{cotahist_equity_get()}, \code{cotahist_etfs_get()}, \code{cotahist_bdrs_get()},
+\code{cotahist_units_get()}, \code{cotahist_fiis_get()}, \code{cotahist_fidcs_get()},
+\code{cotahist_fiagros_get()}, and \code{cotahist_indexes_get()} return dataframes with
+the following columns: "refdate", "symbol", "open", "high", "low",
+"close", "volume", "traded_contracts", "trade_quantity",
+"distribution_id", "isin".
+\itemize{
+\item \code{cotahist_equity_get()} returns data for stocks and UNITs.
+\item \code{cotahist_etfs_get()} returns data for ETFs.
+\item \code{cotahist_bdrs_get()} returns data for BDRs.
+\item \code{cotahist_units_get()} returns data exclusively for UNITs.
+\item \code{cotahist_indexes_get()} returns data for indices. The index data returned by \code{cotahist_indexes_get()}
+corresponds to option expiration days, meaning there is only one index quote per month.
+\item \code{cotahist_fiis_get()}, \code{cotahist_fidcs_get()}, and \code{cotahist_fiagros_get()} return data for funds.
+}
+
+The functions \code{cotahist_equity_options_get()}, \code{cotahist_index_options_get()},
+and \code{cotahist_funds_options_get()} return dataframes with the following columns:
+"refdate", "symbol", "type", "strike_price", "maturity_date",
+"open", "high", "low", "close", "volume", "traded_contracts",
+"trade_quantity", "isin".
+\itemize{
+\item \code{cotahist_equity_options_get()} returns data for stock options.
+\item \code{cotahist_index_options_get()} returns data for index options, currently only for IBOVESPA.
+\item \code{cotahist_funds_options_get()} returns data for fund options, currently only for ETFs.
+}
+
+The function \code{cotahist_get_symbols()} returns data related to the provided symbols.
 }
 \examples{
 \dontrun{
-df <- cotahist_equity_get(x)
+df <- cotahist_get() |> cotahist_equity_get()
 }
 \dontrun{
-df <- cotahist_brds_get(x)
+df <- cotahist_get() |> cotahist_brds_get()
 }
 \dontrun{
-df <- cotahist_units_get(x)
+df <- cotahist_get() |> cotahist_units_get()
 }
 \dontrun{
-df <- cotahist_etfs_get(x)
+df <- cotahist_get() |> cotahist_etfs_get()
 }
 \dontrun{
-df <- cotahist_fiis_get(x)
+df <- cotahist_get() |> cotahist_fiis_get()
 }
 \dontrun{
-df <- cotahist_fidcs_get(x)
+df <- cotahist_get() |> cotahist_fidcs_get()
 }
 \dontrun{
-df <- cotahist_fiagros_get(x)
+df <- cotahist_get() |> cotahist_fiagros_get()
 }
 \dontrun{
-df <- cotahist_indexes_get(x)
+df <- cotahist_get() |> cotahist_indexes_get()
 }
 \dontrun{
-df <- cotahist_equity_options_get(x)
+df <- cotahist_get() |> cotahist_equity_options_get()
 }
 \dontrun{
-df <- cotahist_index_options_get(x)
+df <- cotahist_get() |> cotahist_index_options_get()
 }
 \dontrun{
-df <- cotahist_funds_options_get(x)
+df <- cotahist_get() |> cotahist_funds_options_get()
 }
 \dontrun{
-df <- cotahist_get_symbols(x, c("BBDC4", "ITSA4", "JHSF3"))
+df <- cotahist_get() |> cotahist_get_symbols(c("BBDC4", "ITSA4", "JHSF3"))
 }
 }

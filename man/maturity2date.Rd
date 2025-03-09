@@ -2,7 +2,7 @@
 % Please edit documentation in R/scraper-futures.R
 \name{maturity2date}
 \alias{maturity2date}
-\title{Get maturity date from maturity code}
+\title{Convert Maturity Code to Date}
 \usage{
 maturity2date(x, expr = "first day", refdate = NULL)
 }
@@ -10,8 +10,8 @@ maturity2date(x, expr = "first day", refdate = NULL)
 \item{x}{a character vector with three letters string that represent
 maturity of futures contracts.}
 
-\item{expr}{a string which indicates the day to use in maturity date.
-See \code{bizdays::getdate} for more details on this argument.}
+\item{expr}{a string which indicates the day to use in maturity date, default is "first day".
+See \code{bizdays::getdate} for more details on this argument}
 
 \item{refdate}{reference date to be passed. It is necessary to convert old
 maturities like JAN0, that can be Jan/2000 or Jan/2010. If \code{refdate}
@@ -19,11 +19,17 @@ is greater that 2001-01-01 JAN0 is converted to Jan/2010, otherwise,
 Jan/2000.}
 }
 \value{
+A vector of dates corresponding to the input maturity codes.
+Convert Maturity Code to Date
+
+This function converts a vector of maturity codes into actual dates.
+Get the corresponding maturity date for the three characters string
+that represent maturity of futures contracts.
+
 a Date vector with maturity dates
 }
 \description{
-Get the corresponding maturity date for the three characters string
-that represent maturity of futures contracts.
+This function converts a vector of maturity codes into actual dates.
 }
 \examples{
 maturity2date(c("F22", "F23", "G23", "H23", "F45"), "first day")

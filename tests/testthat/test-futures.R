@@ -2,11 +2,14 @@ test_that("it should get futures data with futures_get", {
   skip_on_cran()
   skip_if_offline()
 
-  refdate <- bizdays::offset(Sys.Date(), -1, "Brazil/ANBIMA")
-  .meta <- download_marketdata("b3-futures-settlement-prices", refdate = refdate)
+  .refdate <- bizdays::offset(Sys.Date(), -1, "Brazil/ANBIMA")
+  .meta <- download_marketdata("b3-futures-settlement-prices", refdate = .refdate)
   read_marketdata(.meta)
   
-  df <- futures_get(refdate)
+  df <- futures_get() |> filter(refdate == .refdate)
+  expect_true(is(df, "arrow_dplyr_query"))
+  
+  df <- df |> collect()
 
   expect_true(nrow(df) > 0)
   expect_true(ncol(df) > 0)

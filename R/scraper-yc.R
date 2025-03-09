@@ -1,13 +1,43 @@
-yield_curve_get <- function(refdate, curve_name) {
+#' Add Business Days Column to a DataFrame or Arrow Query
+#'
+#' This function adds a `biz_days` column to the input dataset by calculating 
+#' business days using the `bizdays::bizdayse` function. It supports both 
+#' standard data frames and `arrow_dplyr_query` objects.
+#'
+#' @param x A `data.frame` or an `arrow_dplyr_query` object containing 
+#'          at least the columns `refdate` and `cur_days`.
+#' 
+#' @return A `tibble` with an additional `biz_days` column, which represents 
+#'         business days computed based on a predefined calendar.
+#' 
+#' @examples
+#' \dontrun{
+#'   df_yc_1 <- yc_brl_get() 
+#'   df <- df_yc_1 |> yc_add_bizdays_column()
+#' }
+#' @export
+yc_add_bizdays_column <- function(x) {
   template <- template_retrieve("b3-reference-rates")
-  .curve_name <- curve_name
-  .refdate <- refdate
-  template_dataset(template) |>
-    filter(.data$refdate %in% .refdate, .data$curve_name == .curve_name) |>
+  x |>
     collect() |>
     mutate(
-      biz_days = bizdayse(refdate, .data$cur_days, template$calendar),
-      forward_date = .data$refdate + .data$cur_days,
+      biz_days = bizdays::bizdayse(.data$refdate, .data$cur_days, template$calendar)
+    )
+}
+
+.yield_curve_get <- function(.curve_name = NULL) {
+  template <- template_retrieve("b3-reference-rates")
+  ds <- template_dataset(template)
+  query <- if (!is.null(.curve_name)) {
+    ds |>
+      filter(.data$curve_name == .curve_name)
+  } else {
+    ds
+  }
+  ds |>
+    mutate(
+      dur = lubridate::ddays(.data$cur_days),
+      forward_date = lubridate::as_date(.data$refdate + .data$dur),
       r_252 = .data$r_252 / 100,
       r_360 = .data$r_360 / 100
     ) |>
@@ -15,155 +45,134 @@ yield_curve_get <- function(refdate, curve_name) {
       "curve_name",
       "refdate",
       "forward_date",
-      "biz_days",
-      "r_252",
       "cur_days",
+      "r_252",
       "r_360",
     )
 }
-#' Fetches Yield Curve Data from B3
+
+#' @title Retrieve Yield Curve Data
 #'
-#' Downloads yield curve data from B3 website
+#' @description
+#' These functions retrieve yield curve data, either for all available curves (`yc_get`) or
+#' specifically for:
+#' - the nominal rates curve (`yc_brl_get`).
+#' - the nominal rates curve for USD in Brazil - Cupom Cambial Limpo (`yc_usd_get`).
+#' - the real rates curve (`yc_ipca_get`).
+#'
+#' @details 
+#' The yield curve data is downloaded from the B3 website
 #' <https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp>.
-#' Particularly, we import data for
-#' - DI X Pre (`yc_get`)
-#' - Cupom limpo (`yc_usd_get`)
-#' - DI x IPCA (`yc_ipca_get`)
-#'
-#' See <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
+#' See the Curve Manual in this link
+#' <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
 #'
-#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
-#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
+#' @return An `arrow_dplyr_query` object. This object does not eagerly evaluate the query on the data. To run the query
+#' and retrieve the data, use `collect()`, which returns a dataframe (R `tibble`). The returned data includes
+#' `curve_name`, `refdate`, `forward_date`, `cur_days`, `r_252`, and `r_360` columns.
 #'
-#' @details
-#' `yc_get` returns the yield curve for the given date and `yc_mget` returns
-#' multiple yield curves for a given range of dates.
-#'
-#' @return A dataframe/tibble with yield curve data
-#'
-#' @name yc_get
-#'
-#' @examples
-#' \dontrun{
-#' df_yc <- yc_mget(first_date = Sys.Date() - 5, last_date = Sys.Date())
-#' head(df_yc)
-#' }
-#' @export
+#' @name yc_xxx_get
 NULL
 
-#' @rdname yc_get
 #' @examples
 #' \dontrun{
-#' df_yc <- yc_get(Sys.Date())
-#' head(df_yc)
+#' df <- yc_get() |>
+#'   filter(curve_name == "PRE") |>
+#'   collect()
 #' }
-#' @export
-yc_get <- function(refdate) {
-  yield_curve_get(refdate, "PRE")
+#' @rdname yc_xxx_get
+#' @export 
+yc_get <- function() {
+  .yield_curve_get()
 }
 
-#' Fetches a single data
-#'
-#' @param idx_date index of data (1.. n_dates)
-#' @param date_vec Vector of dates
-#' @inheritParams yc_get
-#'
-#' @return A dataframe
-#' @noRd
-NULL
-
-#' @rdname yc_get
+#' @rdname yc_xxx_get
 #' @examples
 #' \dontrun{
-#' df_yc_ipca <- yc_ipca_get(Sys.Date())
+#' df_yc <- yc_brl_get() |>
+#'   filter(refdate == Sys.Date()) |>
+#'   collect()
+#' head(df_yc)
+#' }
+#' @export
+yc_brl_get <- function() {
+  .yield_curve_get("PRE")
+}
+
+#' @rdname yc_xxx_get
+#' @examples
+#' \dontrun{
+#' df_yc_ipca <- yc_ipca_get() |>
+#'   filter(refdate == Sys.Date()) |>
+#'   collect()
 #' head(df_yc_ipca)
 #' }
 #' @export
-yc_ipca_get <- function(refdate) {
-  yield_curve_get(refdate, "DIC")
+yc_ipca_get <- function() {
+  .yield_curve_get("DIC")
 }
 
-#' @rdname yc_get
+#' @rdname yc_xxx_get
 #' @examples
 #' \dontrun{
-#' df_yc_usd <- yc_usd_get(Sys.Date())
+#' df_yc_usd <- yc_usd_get() |>
+#'   filter(refdate == Sys.Date()) |>
+#'   collect()
 #' head(df_yc_usd)
 #' }
 #' @export
-yc_usd_get <- function(refdate = Sys.Date(),
-                       cache_folder = cachedir(),
-                       do_cache = TRUE) {
-  yield_curve_get(refdate, "DOC")
+yc_usd_get <- function() {
+  .yield_curve_get("DOC")
 }
 
-#' Creates superset with yield curves and futures
+.yc_superset <- function(yc, fut, .commodity, .expr) {
+  template <- template_retrieve("b3-reference-rates")
+  fut_di1 <- fut |>
+    filter(.data$commodity == .commodity) |>
+    collect() |>
+    mutate(
+      forward_date = maturity2date(.data$maturity_code, .expr) |> following(template$calendar)
+    ) |>
+    select("refdate", "forward_date", "symbol")
+
+  yc |>
+    left_join(fut_di1, by = c("refdate", "forward_date")) |>
+    collect() |>
+    arrange(.data$forward_date)
+}
+
+#' @rdname superdataset
 #'
-#' Creates superset with yield curves and future contracts indicating the
-#' terms that match with futures contracts maturities.
-#'
-#' @param yc yield curve dataset
 #' @param fut futures dataset
 #'
-#' @return
-#' A dataframe with yield curve flagged with futures maturities.
-#'
-#' @name yc_superset
+#' @details
+#' `yc_brl_superset()`, `yc_usd_superset()`, and `yc_ipca_superset()` utilize information
+#' from Reference Rates (`b3-reference-rates`) and Futures Settlement Prices
+#' (`b3-futures-settlement-prices`) datasets to construct a yield curve dataset. This dataset
+#' highlights key vertices and their corresponding underlying futures contracts, providing a
+#' detailed view of the term structure of interest rate.
 #'
 #' @examples
 #' \dontrun{
-#' fut <- futures_get(Sys.Date() - 1)
-#'
-#' yc <- yc_get(Sys.Date() - 1)
+#' date_ <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
+#' fut <- futures_get() |> filter(refdate == date_)
+#' yc <- yc_brl_get() |> filter(refdate == date_)
 #' yc_superset(yc, fut)
-#'
-#' yc_usd <- yc_usd_get(Sys.Date() - 1)
-#' yc_usd_superset(yc_usd, fut)
-#'
-#' yc_ipca <- yc_ipca_get(Sys.Date() - 1)
-#' yc_ipca_superset(yc_ipca, fut)
 #' }
+#'
 #' @export
-yc_superset <- function(yc, fut) {
-  fut_di1 <- fut |>
-    filter(.data$commodity == "DI1") |>
-    mutate(
-      forward_date = maturity2date(.data$maturity_code) |> following("Brazil/ANBIMA")
-    ) |>
-    select("refdate", "forward_date", "symbol")
-
-  yc |>
-    left_join(fut_di1, by = c("refdate", "forward_date"))
+yc_brl_superset <- function(yc, fut) {
+  .yc_superset(yc, fut, "DI1", "first day")
 }
 
-#' @rdname yc_superset
+#' @rdname superdataset
 #' @export
 yc_usd_superset <- function(yc, fut) {
-  fut_di1 <- fut |>
-    filter(.data$commodity == "DDI") |>
-    mutate(
-      forward_date = maturity2date(.data$maturity_code) |> following("Brazil/ANBIMA")
-    ) |>
-    select("refdate", "forward_date", "symbol")
-
-  yc |>
-    left_join(fut_di1, by = c("refdate", "forward_date"))
+  .yc_superset(yc, fut, "DDI", "first day")
 }
 
-#' @rdname yc_superset
+#' @rdname superdataset
 #' @export
 yc_ipca_superset <- function(yc, fut) {
-  fut_di1 <- fut |>
-    filter(.data$commodity == "DAP") |>
-    mutate(
-      forward_date = maturity2date(.data$maturity_code, "15th day") |> following("Brazil/ANBIMA")
-    ) |>
-    select("refdate", "forward_date", "symbol")
-
-  yc |>
-    left_join(fut_di1, by = c("refdate", "forward_date"))
+  .yc_superset(yc, fut, "DAP", "15th day")
 }
