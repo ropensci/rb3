@@ -117,10 +117,19 @@ template_schema <- function(template) {
   do.call(arrow::schema, arrow_types)
 }
 
+template_db_folder <- function(template) {
+  reg <- rb3_registry$get_instance()
+  db_folder <- file.path(registry_get(reg, "db_folder"), template$id)
+  if (!dir.exists(db_folder)) {
+    dir.create(db_folder, recursive = TRUE)
+  }
+  db_folder
+}
+
 template_dataset <- function(template) {
   schema <- template_schema(template)
-  path <- file.path(dbdir(), template$id)
-  arrow::open_dataset(path, schema)
+  dir <- template_db_folder(template)
+  arrow::open_dataset(dir, schema)
 }
 
 new_field <- function(x) {
