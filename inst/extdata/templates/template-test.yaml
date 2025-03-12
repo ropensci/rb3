@@ -1,0 +1,9 @@
+id: template-test
+filename: ~
+filetype: FWF
+description: Test template
+fields:
+- name: test
+  description: Test field
+  handler:
+    type: character

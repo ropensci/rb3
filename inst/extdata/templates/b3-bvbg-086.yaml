@@ -1,13 +1,14 @@
-id: PriceReport
+id: b3-bvbg-086
 filename: ~
 filetype: CUSTOM
-description: Arquivo de Preços de Mercado
+description: Arquivo de Preços de Mercado - BVBG-086
 calendar: Brazil/B3
 locale: en
 downloader:
   function: datetime_download
   url: https://www.b3.com.br/pesquisapregao/download?filelist=PR%y%m%d.zip
   format: zip
+  if-has-multiple-files-use: newer
 reader:
   function: pricereport_reader
 fields:

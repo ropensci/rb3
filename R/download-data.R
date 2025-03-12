@@ -135,6 +135,16 @@ unzip_recursive <- function(fname) {
   }
 }
 
+select_file_if_multiple <- function(files, tag) {
+  if (length(files) == 1) {
+    return(files[[1]])
+  } else if (is.null(tag)) {
+    return(files[[1]])
+  } else if (tag == "newer") {
+    return(sort(files, decreasing = TRUE)[[1]])
+  }
+}
+
 just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
   res <- if (!is.null(verifyssl) && !verifyssl) {
     GET(url, config(ssl_verifypeer = FALSE))
