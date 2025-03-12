@@ -67,3 +67,33 @@
 #' @importFrom XML htmlTreeParse xmlSApply
 #' @keywords internal
 "_PACKAGE"
+
+rb3_registry <- create_registry()
+
+rb3_bootstrap <- function(cache_folder = cachedir()) {
+  if (!dir.exists(cache_folder)) {
+    dir.create(cache_folder, recursive = TRUE)
+  }
+
+  raw_folder <- file.path(cache_folder, "raw")
+  if (!dir.exists(raw_folder)) {
+    dir.create(raw_folder, recursive = TRUE)
+  }
+
+  meta_folder <- file.path(cache_folder, "meta")
+  if (!dir.exists(meta_folder)) {
+    dir.create(meta_folder, recursive = TRUE)
+  }
+
+  db_folder <- file.path(cache_folder, "db")
+  if (!dir.exists(db_folder)) {
+    dir.create(db_folder, recursive = TRUE)
+  }
+
+  .reg <- rb3_registry$get_instance()
+  .reg <- registry_put(.reg, "rb3_folder", cache_folder)
+  .reg <- registry_put(.reg, "raw_folder", raw_folder)
+  .reg <- registry_put(.reg, "meta_folder", meta_folder)
+  .reg <- registry_put(.reg, "db_folder", db_folder)
+  invisible(NULL)
+}
