@@ -37,23 +37,14 @@
 #' read_marketdata(meta)
 #' }
 #' @export
-read_marketdata <- function(meta, cache_folder = cachedir()) {
-  filename <- meta$downloaded
-  if (file.size(filename) <= 2) {
-    alert("warning", str_glue("File is empty: {filename}"))
-    clean_meta(meta, cache_folder)
-    return(NULL)
-  }
+read_marketdata <- function(meta) {
+  filename <- meta$downloaded[[1]]
   template <- template_retrieve(meta$template)
-  db_folder <- file.path(cache_folder, "db", template$id)
-  if (!dir.exists(db_folder)) {
-    dir.create(db_folder, recursive = TRUE)
-  }
   df <- template$read_file(template, filename, TRUE)
   if (is.null(df)) {
-    alert("warning", str_glue("File could not be read: {filename}"))
-    clean_meta(meta, cache_folder)
-    return(NULL)
+    cli_alert_warning("File could not be read: {.file {filename}}")
+    meta_clean(meta)
+    return(invisible(NULL))
   }
   tag <- sapply(template$reader$partition, function(x) {
     x <- df[[x]] |>
@@ -64,18 +55,48 @@ read_marketdata <- function(meta, cache_folder = cachedir()) {
     x[1]
   })
   label <- paste0(tag, collapse = "_")
+  db_folder <- template_db_folder(template)
   ds_file <- file.path(db_folder, str_glue("{label[1]}.parquet"))
+  meta_add_processed_file(meta) <- ds_file
+  meta_save(meta)
   tb <- arrow::arrow_table(df, schema = template_schema(template))
-  arrow::write_parquet(df, ds_file, compression = "gzip")
-  invisible(df)
+  arrow::write_parquet(tb, ds_file, compression = "gzip")
+  invisible(meta)
 }
 
-clean_meta <- function(meta, cache_folder) {
-  alert("info", str_glue("Removing file {meta$downloaded}"))
-  unlink(meta$downloaded)
-  meta_file <- file.path(cache_folder, "meta", str_glue("{meta$download_checksum}.json"))
-  alert("info", str_glue("Removing meta {meta_file}"))
-  unlink(meta_file)
+fetch_marketdata <- function(template, ...) {
+  df <- expand.grid(...)
+  cli::cli_h1("Fetching market data for {.var {template}}")
+  # ----
+  pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
+  ms <- purrr::pmap(df, function(...) {
+    cli::cli_progress_update(id = pb)
+    row <- list(...)
+    m <- do.call(download_marketdata, c(template, row))
+    if (is.null(m)) {
+      msg <- paste(names(row), row, sep = " = ", collapse = ", ")
+      cli::cli_alert_warning("No data downloaded for args {.val {msg}}")
+    }
+    m
+  })
+  cli::cli_process_done(id = pb)
+  # ----
+  pb <- cli::cli_progress_step("Reading data into DB", spinner = TRUE)
+  purrr::map(ms, function(m) {
+    cli::cli_progress_update(id = pb)
+    if (!is.null(m)) {
+      x <- suppressMessages(read_marketdata(m))
+      if (is.null(x)) {
+        row <- m$download_args
+        msg <- paste(names(row), map(row, format), sep = " = ", collapse = ", ")
+        cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
+      }
+    }
+    NULL
+  })
+  cli::cli_process_done(id = pb)
+  cli::cli_alert_info("{length(ms)} files downloaded")
+  invisible(NULL)
 }
 
 empty_file_error <- function(message) {

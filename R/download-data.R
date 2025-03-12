@@ -3,22 +3,21 @@
 #' Download datasets for a given template.
 #'
 #' @param template the template name
-#' @param cache_folder location of cache folder (default = cachedir())
 #' @param do_cache a logical indicating if the file should be downloaded again
 #' @param ... additional arguments
 #'
 #' @return a list with the metadata of the downloaded file (see details).
 #'
 #' The function returns a list containing the metadata of the
-#' downloaded file, including the following information:  
+#' downloaded file, including the following information:
 #' - `template`: Template name
 #' - `download_checksum`: Download hash code,
-#'    generated from the template name and the arguments passed in the ellipsis (`...`)  
+#'    generated from the template name and the arguments passed in the ellipsis (`...`)
 #' - `file_checksum`: File hash code
-#' - `download_args`: Arguments passed in the ellipsis (`...`)  
-#' - `downloaded`: Path to the downloaded file  
+#' - `download_args`: Arguments passed in the ellipsis (`...`)
+#' - `downloaded`: Path to the downloaded file
 #' - `timestamp`: Timestamp of when the file was saved
-#' 
+#'
 #' A metadata file is saved in the `meta` directory inside `rb3.cachedir`.
 #' This metadata file is in JSON format, and its filename is the download hash code (`download_checksum`).
 #' It ensures the uniqueness of the download.
@@ -26,90 +25,67 @@
 #' All downloaded files are compressed using Gzip and named with their file checksum (`file_checksum`),
 #' also to ensure uniqueness.
 #' The downloaded files are stored in the `raw` directory, which is located inside `rb3.cachedir`.
-#' 
+#'
 #' @details
 #' This function downloads a file based on a template.
 #' The template is a YAML document that defines a dataset.
 #' It specifies how the file is downloaded, how it is read,
 #' and the structure of the dataset, including column names
 #' and data types.
-#' 
+#'
 #' The `do_cache` argument is `FALSE` by default, indicating that if the file already exists in the cache,
 #' it will not be downloaded again.
 #' First, it checks if the metadata file exists; if it does, it is returned.
 #' If `do_cache` is `TRUE`, the file is downloaded again, and the metadata is updated.
 #' If the downloaded file is identical to the cached file, verified using `file_checksum`,
 #' the metadata is returned.
-#' 
+#'
 #' The additional arguments in the ellipsis (`...`) are passed to the template function that handles data downloads.
-#' 
+#'
 #' @seealso cachedir rb3.cachedir
 #'
 #' @examples
 #' \dontrun{
 #' download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
-#' 
+#'
 #' m <- download_marketdata("b3-reference-rates", refdate = as.Date("2024-04-05"), curve_name = "PRE")
 #' read_marketdata(m)
 #' }
 #'
 #' @export
-download_marketdata <- function(template,
-                                cache_folder = cachedir(),
-                                do_cache = FALSE, ...) {
+download_marketdata <- function(template, do_cache = FALSE, ...) {
   template <- template_retrieve(template)
+  meta <- template_meta_create(template, ...)
 
-  download_args <- list(...)
-  l_ <- c(id = template$id, download_args)
-  x <- lapply(l_, format)
-  names(x) <- names(l_)
-  code_ <- digest(x)
-
-  raw_folder <- file.path(cache_folder, "raw")
-  if (!dir.exists(raw_folder)) {
-    dir.create(raw_folder, recursive = TRUE)
-  }
-
-  meta_folder <- file.path(cache_folder, "meta")
-  if (!dir.exists(meta_folder)) {
-    dir.create(meta_folder, recursive = TRUE)
-  }
-  meta_file <- file.path(meta_folder, str_glue("{code_}.json"))
-  meta <- if (file.exists(meta_file)) {
-    fromJSON(meta_file)
-  } else {
-    list(
-      template = template$id,
-      download_checksum = code_,
-      file_checksum = NULL,
-      download_args = download_args,
-      downloaded = NULL,
-      timestamp = NULL
-    )
-  }
-
-  if (!is.null(meta[["downloaded"]]) && !do_cache) {
+  if (length(meta[["downloaded"]]) > 0 && !do_cache) {
+    cli_alert_info("Meta {.strong {meta$download_checksum}} already exists. Use {.code do_cache = TRUE} to download again.")
     return(meta)
   }
 
   dest <- tempfile(fileext = str_glue(".{template$downloader$format}"))
   if (template$download_marketdata(template, dest, ...)) {
-    fname <- unzip_recursive(dest)
-    md5 <- tools::md5sum(fname)
-    if (!is.null(meta[["file_checksum"]]) && md5 == meta[["file_checksum"]]) {
+    filename <- unzip_recursive(dest)
+    filename <- select_file_if_multiple(filename, template$downloader[["if-has-multiple-files-use"]])
+    if (file.size(filename) <= 2) {
+      cli_alert_warning("File is empty: {.file {filename}}")
+      return(NULL)
+    }
+    md5 <- tools::md5sum(filename)
+    ext <- "gz"
+    dest_fname <- meta_dest_file(meta, md5, ext)
+    if (file.exists(dest_fname)) {
+      cli_alert_info("File {.file {dest_fname}} already exists for meta {.strong {meta$download_checksum}}")
       return(meta)
     }
-    meta[["file_checksum"]] <- md5
-    dest_fname <- file.path(raw_folder, str_glue("{meta$file_checksum}.gz"))
-    downloaded <- R.utils::compressFile(fname, dest_fname, "gz", gzfile,
-      overwrite = TRUE
-    )
-    if (!is.null(meta[["downloaded"]])) {
+    downloaded <- R.utils::compressFile(filename, dest_fname, ext, gzfile, overwrite = TRUE)
+    if (length(meta[["downloaded"]]) > 0) {
+      cli_alert_info("Replacing downloaded file {.file {meta$downloaded}}")
+      cli_alert_info("                     with {.file {downloaded}}")
       unlink(meta[["downloaded"]])
+      meta[["downloaded"]] <- list()
     }
-    meta[["downloaded"]] <- downloaded
-    meta[["timestamp"]] <- file.info(meta[["downloaded"]])[["ctime"]]
-    writeLines(toJSON(meta, auto_unbox = TRUE), meta_file)
+    meta_add_download(meta) <- downloaded
+    meta_save(meta)
     return(meta)
   } else {
     return(NULL)
