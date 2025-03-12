@@ -1,0 +1,13 @@
+id: template-test-small-file
+filename: ~
+filetype: FWF
+description: Test template with a small file
+downloader:
+  function: sprintf_download
+  url: https://httpbin.org/bytes/%d
+  format: html
+fields:
+- name: test
+  description: Test field
+  handler:
+    type: character

@@ -1,3 +1,18 @@
+test_that("it should access an URL that returns 500 error", {
+  .meta <- download_marketdata("template-test")
+  expect_true(is.null(.meta))
+})
+
+test_that("it should download an empty file", {
+  .meta <- download_marketdata("template-test-small-file", size = 0)
+  expect_true(is.null(.meta))
+})
+
+test_that("it should download an small file", {
+  .meta <- download_marketdata("template-test-small-file", size = 2)
+  expect_true(is.null(.meta))
+})
+
 test_that("it should clean meta and its dependencies", {
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
   .meta <- read_marketdata(.meta)
