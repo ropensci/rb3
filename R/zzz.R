@@ -4,6 +4,7 @@
   x <- length(registry_keys(reg))
   packageStartupMessage("rb3: ", x, " templates registered")
   load_builtin_calendars()
+  rb3_bootstrap()
 }
 
 .onLoad <- function(libname, pkgname) {
