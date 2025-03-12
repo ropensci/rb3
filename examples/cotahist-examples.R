@@ -1,9 +1,16 @@
 library(rb3)
 library(tidyverse)
+library(lubridate)
 
-ch <- cotahist_get(Sys.Date(), "yearly")
+for (year in 1994:2025) {
+  cat(year, "\n")
+  .m <- download_marketdata("b3-cotahist-yearly", do_cache = TRUE, year = year)
+  read_marketdata(.m)
+}
 
-fii <- cotahist_fiis_get(ch)
+ch <- cotahist_get("yearly")
+
+fii <- ch |> filter(year(refdate) == 2024) |> cotahist_fiis_get()
 
 symbols <- fii |>
   group_by(symbol) |>
@@ -15,9 +22,9 @@ fii |>
   filter(symbol %in% symbols) |>
   ggplot(aes(x = refdate, y = volume, group = symbol, colour = symbol)) +
   geom_line() +
-  scale_y_continuous(labels = scales::label_number_si())
+  scale_y_continuous(labels = scales::label_number())
 
-eq <- cotahist_equity_get(ch)
+eq <- ch |> filter(year(refdate) == 2024) |> cotahist_equity_get()
 
 symbols_eq <- eq |>
   group_by(symbol) |>
@@ -29,9 +36,9 @@ eq |>
   filter(symbol %in% symbols_eq) |>
   ggplot(aes(x = refdate, y = volume, group = symbol, colour = symbol)) +
   geom_line() +
-  scale_y_continuous(labels = scales::label_number_si())
+  scale_y_continuous(labels = scales::label_number())
 
-etfs <- cotahist_etfs_get(ch)
+etfs <- ch |> filter(year(refdate) == 2024) |> cotahist_etfs_get()
 
 symbols_etfs <- etfs |>
   group_by(symbol) |>
@@ -43,16 +50,14 @@ etfs |>
   filter(symbol %in% symbols_etfs) |>
   ggplot(aes(x = refdate, y = volume, group = symbol, colour = symbol)) +
   geom_line() +
-  scale_y_continuous(labels = scales::label_number_si())
+  scale_y_continuous(labels = scales::label_number())
 
 # ----
 
 library(rb3)
 library(tidyverse)
 
-ch <- cotahist_get(Sys.Date(), "yearly")
-
-etfs <- cotahist_etfs_get(ch)
+etfs <- ch |> filter(year(refdate) == 2024) |> cotahist_etfs_get()
 
 total_volume <- etfs |>
   summarise(volume = sum(volume)) |>
@@ -79,6 +84,40 @@ etfs |>
     subtitle = "Percentual Volume Financeiro Negociado nas 10 Maiores ETFs em 2022",
     caption = "Dados obtidos com \U0001F4E6 rb3 - wilsonfreitas"
   )
+
+symbols_etfs <- etfs |>
+  group_by(symbol) |>
+  summarise(volume = sum(volume)) |>
+  slice_max(volume, n = 5) |>
+  pull(symbol)
+
+total_volume <- etfs |>
+  group_by(month = strftime(refdate, "%Y-%m")) |>
+  summarise(volume = sum(volume)) |>
+  pull(volume)
+
+etfs |>
+  filter(symbol %in% symbols_etfs) |>
+  group_by(symbol, month = strftime(refdate, "%Y-%m")) |>
+  summarise(volume = sum(volume)) |>
+  mutate(
+    volume_ratio = volume / total_volume,
+    volume_ratio_acc = cumsum(volume_ratio)
+  ) |>
+  ggplot(aes(
+    x = month, y = volume_ratio, group = symbol, fill = symbol,
+    label = fmt(volume_ratio)
+  )) +
+  geom_bar(stat = "identity", position = "stack") +
+  geom_text(position = "stack") +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0, 1), n.breaks = 6) +
+  labs(
+    x = NULL, y = NULL,
+    title = "Volume Financeiro das 10 Maiores ETFs",
+    subtitle = "Percentual Volume Financeiro no mês Negociado nas 10 Maiores ETFs em 2024",
+    caption = "Dados obtidos com \U0001F4E6 rb3 - wilsonfreitas"
+  )
+
 
 # ----
 

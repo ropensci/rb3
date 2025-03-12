@@ -1,6 +1,35 @@
+arrow_bizdayse <- function(context, refdate, cur_days, calendar) {
+  bizdays::bizdayse(refdate, cur_days, calendar)
+}
+
+arrow::register_scalar_function(
+  name = "arrow_bizdayse",
+  fun = bizdayse_arrow,
+  in_type = arrow::schema(
+    refdate = arrow::date32(),
+    cur_days = arrow::int64(),
+    calendar = arrow::string()
+  ),
+  out_type = arrow::int64(),
+  auto_convert = TRUE
+)
+
+template <- template_retrieve("b3-reference-rates")
+.curve_name <- "PRE"
+df <- template_dataset(template) |>
+  filter(.data$curve_name == .curve_name) |>
+  mutate(
+    dur = lubridate::ddays(.data$cur_days),
+    forward_date = lubridate::as_date(.data$refdate + .data$dur),
+    biz_days = arrow_bizdayse(.data$refdate, .data$cur_days, template$calendar),
+    r_252 = .data$r_252 / 100,
+    r_360 = .data$r_360 / 100
+  ) |>
+  collect() |> arrange()
+df
 yc_superset(yc_get("2025-02-28"), futures_get("2025-02-28", "DI1")) |> View()
 
-f <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2025-03-01"))
+f <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2025-03-06"))
 df <- read_marketdata(f)
 
 f <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-01"), curve_name = "PRE")
