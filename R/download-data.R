@@ -128,6 +128,7 @@ just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
     GET(url)
   }
   if (status_code(res) != 200 || !.safecontent(res)) {
+    cli_alert_danger("Failed to download file: {.url {url}}, status code = {status_code(res)}")
     return(FALSE)
   }
   save_resource(res, encoding, dest)
