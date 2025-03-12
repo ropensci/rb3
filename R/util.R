@@ -44,10 +44,6 @@ clearcache <- function() {
   unlink(cache_folder, recursive = TRUE)
 }
 
-dbdir <- function() {
-  file.path(cachedir(), "db")
-}
-
 #' cli_progress_along wrapper
 #'
 #' @param x data to iterate through
