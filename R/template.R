@@ -189,3 +189,29 @@ new_part <- function(x) {
   }
   part
 }
+
+template_create_meta_code <- function(template, ...) {
+  l_ <- c(id = template$id, list(...))
+  x <- lapply(l_, format)
+  names(x) <- names(l_)
+  digest(x)
+}
+
+template_meta_create <- function(template, ...) {
+  .code <- template_create_meta_code(template, ...)
+  reg <- rb3_registry$get_instance()
+  meta_file <- file.path(registry_get(reg, "meta_folder"), str_glue("{.code}.json"))
+  meta <- if (file.exists(meta_file)) {
+    structure(fromJSON(meta_file), class = "meta")
+  } else {
+    args <- list(...) |> lapply(format)
+    structure(list(
+      template = template$id,
+      download_checksum = .code,
+      download_args = toJSON(args, auto_unbox = TRUE),
+      downloaded = list(),
+      processed_files = list(),
+      created = Sys.time()
+    ), class = "meta")
+  }
+}
