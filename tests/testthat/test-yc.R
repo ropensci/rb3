@@ -27,6 +27,14 @@ test_that("Test of yc_get function", {
   expect_equal(df$curve_name |> unique() |> sort(), c("DIC", "DOC", "PRE"))
 })
 
+test_that("it should check if curve name is correct", {
+  cn <- yc_brl_get() |>
+    distinct(curve_name) |>
+    collect()
+  expect_true(cn == "PRE")
+})
+
+
 test_that("Test of yc_add_bizdays_column function", {
   df_yc_1 <- yc_brl_get()
   df <- df_yc_1 |> yc_add_bizdays_column()

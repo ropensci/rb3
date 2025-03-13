@@ -34,7 +34,7 @@ yc_add_bizdays_column <- function(x) {
   } else {
     ds
   }
-  ds |>
+  query |>
     mutate(
       dur = lubridate::ddays(.data$cur_days),
       forward_date = lubridate::as_date(.data$refdate + .data$dur),
