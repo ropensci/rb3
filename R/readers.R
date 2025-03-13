@@ -153,5 +153,5 @@ pricereport_reader <- function(., filename) {
   })
 
   colnames(df) <- .$colnames
-  df
+  .parse_columns(., df)
 }
