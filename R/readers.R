@@ -1,5 +1,9 @@
 .parse_columns <- function(., df) {
-  loc <- do.call(readr::locale, .$reader$locale)
+  loc <- if (is.null(.$reader$locale)) {
+    readr::locale()
+  } else {
+    do.call(readr::locale, .$reader$locale)
+  }
   cols <- fields_cols(.$fields)
   for (nx in .$colnames) {
     df[[nx]] <- readr::parse_vector(df[[nx]], cols[[nx]], locale = loc)
