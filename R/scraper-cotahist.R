@@ -343,11 +343,11 @@ NULL
   yc_df <- yc |>
     select("refdate", "forward_date", "r_252") |>
     collect()
-  inner_join(eqs_opts, eqs, by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one") |>
+  eq <- inner_join(eqs_opts, eqs, by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one") |>
     mutate(
       fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
-    ) |>
-    inner_join(yc_df |> select("refdate", "forward_date", "r_252"),
+    )
+  inner_join(eq, yc_df |> select("refdate", "forward_date", "r_252"),
       by = c("refdate", "fixing_maturity_date" = "forward_date")
     ) |>
     select(
