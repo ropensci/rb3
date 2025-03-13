@@ -8,7 +8,7 @@ meta_load <- function(template, ...) {
     processed_files = arrow::list_of(arrow::string()),
     created = arrow::timestamp()
   )
-  ds <- arrow::open_dataset(registry_get(reg, "meta_folder"), schema = sc, format = "json")
+  ds <- arrow::open_dataset(reg[["meta_folder"]], schema = sc, format = "json")
   code <- template_create_meta_code(template, ...)
   ds |>
     filter(download_checksum == code) |>
@@ -18,12 +18,12 @@ meta_load <- function(template, ...) {
 
 meta_dest_file <- function(meta, checksum, ext = "gz") {
   reg <- rb3_registry$get_instance()
-  file.path(registry_get(reg, "raw_folder"), str_glue("{checksum}.{ext}"))
+  file.path(reg[["raw_folder"]], str_glue("{checksum}.{ext}"))
 }
 
 meta_file <- function(meta) {
   reg <- rb3_registry$get_instance()
-  file.path(registry_get(reg, "meta_folder"), str_glue("{meta$download_checksum}.json"))
+  file.path(reg[["meta_folder"]], str_glue("{meta$download_checksum}.json"))
 }
 
 meta_save <- function(meta) {

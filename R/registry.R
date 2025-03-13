@@ -44,6 +44,22 @@ registry_put <- function(x, key, value, ...) {
   invisible(x)
 }
 
+`[[.registry` <- function(x, key, ...) {
+  registry_get(x, key)
+}
+
+`[[<-.registry` <- function(x, key, value, ...) {
+  registry_put(x, key, value)
+}
+
+names.registry <- function(x, ...) {
+  registry_keys(x)
+}
+
 registry_keys <- function(x, ...) {
-  names(x$data)
+  if (length(x$data) == 0) {
+    character(0)
+  } else {
+    names(x$data)
+  }
 }

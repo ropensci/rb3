@@ -91,18 +91,18 @@ template_registry <- create_registry()
 template_register <- function(obj) {
   # if the class is super (i.e has "name") then add to index
   .reg <- template_registry$get_instance()
-  registry_put(.reg, obj$id, obj)
+  .reg[[obj$id]] <- obj
 }
 
 template_retrieve <- function(key) {
   .reg <- template_registry$get_instance()
-  registry_get(.reg, key)
+  .reg[[key]]
 }
 
 list_templates <- function() {
   .reg <- template_registry$get_instance()
   map_dfr(registry_keys(.reg), function(cls) {
-    tpl_ <- registry_get(.reg, cls)
+    tpl_ <- .reg[[cls]]
     tibble(
       "Description" = tpl_$description,
       "Template" = tpl_$id,
@@ -119,7 +119,7 @@ template_schema <- function(template) {
 
 template_db_folder <- function(template) {
   reg <- rb3_registry$get_instance()
-  db_folder <- file.path(registry_get(reg, "db_folder"), template$id)
+  db_folder <- file.path(reg[["db_folder"]], template$id)
   if (!dir.exists(db_folder)) {
     dir.create(db_folder, recursive = TRUE)
   }
@@ -200,7 +200,7 @@ template_create_meta_code <- function(template, ...) {
 template_meta_create <- function(template, ...) {
   .code <- template_create_meta_code(template, ...)
   reg <- rb3_registry$get_instance()
-  meta_file <- file.path(registry_get(reg, "meta_folder"), str_glue("{.code}.json"))
+  meta_file <- file.path(reg[["meta_folder"]], str_glue("{.code}.json"))
   meta <- if (file.exists(meta_file)) {
     structure(fromJSON(meta_file), class = "meta")
   } else {

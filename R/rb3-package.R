@@ -91,9 +91,9 @@ rb3_bootstrap <- function(cache_folder = cachedir()) {
   }
 
   .reg <- rb3_registry$get_instance()
-  .reg <- registry_put(.reg, "rb3_folder", cache_folder)
-  .reg <- registry_put(.reg, "raw_folder", raw_folder)
-  .reg <- registry_put(.reg, "meta_folder", meta_folder)
-  .reg <- registry_put(.reg, "db_folder", db_folder)
+  .reg[["rb3_folder"]] <- cache_folder
+  .reg[["raw_folder"]] <- raw_folder
+  .reg[["meta_folder"]] <- meta_folder
+  .reg[["db_folder"]] <- db_folder
   invisible(NULL)
 }
