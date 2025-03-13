@@ -7,7 +7,7 @@ datetime_download <- function(., dest, ...) {
   params <- list(...)
   if (is.null(params$refdate)) {
     msg <- "refdate argument not provided - download can't be done"
-    alert("danger", msg)
+    cli_alert_danger(msg)
     return(FALSE)
   }
   url <- strftime(params$refdate, .$downloader$url)
@@ -26,7 +26,7 @@ settlement_prices_download <- function(., dest, ...) {
   params <- list(...)
   if (is.null(params$refdate)) {
     msg <- "refdate argument not provided - download can't be done"
-    alert("danger", msg)
+    cli_alert_danger(msg)
     return(FALSE)
   }
   strdate <- format(as.Date(params$refdate), "%d/%m/%Y")
@@ -54,7 +54,7 @@ curve_download <- function(., dest, ...) {
   params <- list(...)
   if (is.null(params$refdate)) {
     msg <- "refdate argument not provided - download can't be done"
-    alert("danger", msg)
+    cli_alert_danger(msg)
     return(FALSE)
   }
   curve_name <- if (is.null(params$curve_name)) {
@@ -170,7 +170,7 @@ company_cash_dividends_download <- function(., dest, ...) {
 check_parameters <- function(..., arg_name) {
   args <- list(...)
   if (!hasName(args, arg_name)) {
-    alert("danger", "{arg_name} argument not provided", arg_name = arg_name)
+    cli_alert_danger("{arg_name} argument not provided")
     FALSE
   } else {
     TRUE
