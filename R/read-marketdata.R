@@ -57,9 +57,9 @@ read_marketdata <- function(meta) {
   db_folder <- template_db_folder(template)
   ds_file <- file.path(db_folder, str_glue("{label[1]}.parquet"))
   meta_add_processed_file(meta) <- ds_file
-  meta_save(meta)
   tb <- arrow::arrow_table(df, schema = template_schema(template))
   arrow::write_parquet(tb, ds_file, compression = "gzip")
+  meta_save(meta)
   invisible(meta)
 }
 
