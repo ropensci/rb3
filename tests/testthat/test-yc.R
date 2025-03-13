@@ -29,7 +29,7 @@ test_that("Test of yc_get function", {
 
 test_that("it should check if curve name is correct", {
   cn <- yc_brl_get() |>
-    distinct(curve_name) |>
+    dplyr::distinct(curve_name) |>
     collect()
   expect_true(cn == "PRE")
 })
