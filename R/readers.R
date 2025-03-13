@@ -7,7 +7,7 @@
   df
 }
 
-fwf_read_file <- function(., filename, parse_fields = TRUE) {
+fwf_read_file <- function(., filename) {
   encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
   suppressWarnings(
     df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
@@ -33,7 +33,7 @@ flatten_names <- function(nx) {
   as.vector(x[, 2])
 }
 
-settlement_prices_read <- function(., filename, parse_fields = TRUE) {
+settlement_prices_read <- function(., filename) {
   doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   refdate_ns <- getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
   if (length(refdate_ns) > 0) {
@@ -63,7 +63,7 @@ cols_number <- c(
   DP = 3, PRE = 3, TFP = 3, TP = 3, TR = 3
 )
 
-curve_read <- function(., filename, parse_fields = TRUE) {
+curve_read <- function(., filename) {
   text <- read_file(filename)
   doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   char_vec <- xmlSApply(getNodeSet(doc, "//table/td"), xmlValue)
@@ -107,7 +107,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
   .parse_columns(., df)
 }
 
-pricereport_reader <- function(., filename, parse_fields = TRUE) {
+pricereport_reader <- function(., filename) {
   doc <- xmlInternalTreeParse(filename)
   negs <- getNodeSet(doc, "//d:PricRpt", c(d = "urn:bvmf.217.01.xsd"))
 
@@ -153,9 +153,5 @@ pricereport_reader <- function(., filename, parse_fields = TRUE) {
   })
 
   colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
+  df
 }

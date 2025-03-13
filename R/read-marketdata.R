@@ -9,7 +9,6 @@
 #' defined in the template.
 #'
 #' @param meta a list with the metadata of the downloaded file.
-#' @param cache_folder location of cache folder (default = cachedir())
 #'
 #' @details
 #' This function reads the downloaded file according to the specifications
@@ -40,7 +39,7 @@
 read_marketdata <- function(meta) {
   filename <- meta$downloaded[[1]]
   template <- template_retrieve(meta$template)
-  df <- template$read_file(template, filename, TRUE)
+  df <- template$read_file(template, filename)
   if (is.null(df)) {
     cli_alert_warning("File could not be read: {.file {filename}}")
     meta_clean(meta)
