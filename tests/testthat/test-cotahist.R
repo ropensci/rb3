@@ -7,8 +7,8 @@ if (Sys.info()["sysname"] == "Linux") {
 
 test_that("it should download cotahist file", {
   meta <- download_marketdata("b3-cotahist-yearly", year = 2000)
-  expect_true(file.exists(meta$downloaded))
-  expect_true(file.size(meta$downloaded) > 1e6)
+  expect_true(file.exists(meta$downloaded[[1]]))
+  expect_true(file.size(meta$downloaded[[1]]) > 1e6)
 })
 
 test_that("it should fail the download for cotahist file", {
