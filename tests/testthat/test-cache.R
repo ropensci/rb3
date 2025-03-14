@@ -5,4 +5,5 @@ test_that("cache fcts", {
 
   clearcache()
   expect_false(dir.exists(this_cachedir))
+  rb3_bootstrap()
 })

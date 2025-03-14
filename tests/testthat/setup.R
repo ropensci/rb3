@@ -7,4 +7,12 @@ op <- options(
   cli.default_handler = function(...) { }
 )
 
-withr::defer(options(op), teardown_env())
+rb3_bootstrap()
+
+withr::defer(
+  {
+    options(op)
+    rb3_bootstrap()
+  },
+  teardown_env()
+)
