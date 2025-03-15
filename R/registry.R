@@ -44,14 +44,17 @@ registry_put <- function(x, key, value, ...) {
   invisible(x)
 }
 
+#' @export
 `[[.registry` <- function(x, key, ...) {
   registry_get(x, key)
 }
 
+#' @export
 `[[<-.registry` <- function(x, key, value, ...) {
   registry_put(x, key, value)
 }
 
+#' @exportS3Method base::names
 names.registry <- function(x, ...) {
   registry_keys(x)
 }
