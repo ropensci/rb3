@@ -6,7 +6,7 @@ meta_new <- function(template, ...) {
     download_args = toJSON(args, auto_unbox = TRUE),
     downloaded = list(),
     processed_files = list(),
-    created = Sys.time()
+    created = as.POSIXct(Sys.time(), tz = "UTC")
   ), class = "meta")
 }
 
@@ -15,7 +15,7 @@ meta_load <- function(template, ...) {
   filename <- .meta_file(checksum)
   if (file.exists(filename)) {
     meta <- structure(fromJSON(filename), class = "meta")
-    meta$created <- as.POSIXct(meta$created)
+    meta$created <- as.POSIXct(meta$created, tz = "UTC")
     meta
   } else {
     l <- list(...)
