@@ -38,7 +38,24 @@ test_that("it should clean meta", {
 
 test_that("it should add download to meta", {
   meta <- meta_new("template-test", var1 = 1, var2 = 2)
-  meta_file <- meta_file(meta)
-  meta_clean(meta)
-  expect_false(file.exists(meta_file))
+  filename <- tempfile()
+  meta_add_download(meta) <- filename
+  expect_equal(meta$downloaded[[1]], filename)
+  filename <- tempfile()
+  meta_add_download(meta) <- filename
+  expect_equal(meta$downloaded[[2]], filename)
+  meta_add_download(meta) <- filename
+  expect_true(length(meta$downloaded) == 2)
+})
+
+test_that("it should add processed files to meta", {
+  meta <- meta_new("template-test", var1 = 1, var2 = 2)
+  filename <- tempfile()
+  meta_add_processed_file(meta) <- filename
+  expect_equal(meta$processed_files[[1]], filename)
+  filename <- tempfile()
+  meta_add_processed_file(meta) <- filename
+  expect_equal(meta$processed_files[[2]], filename)
+  meta_add_processed_file(meta) <- filename
+  expect_true(length(meta$processed_files) == 2)
 })
