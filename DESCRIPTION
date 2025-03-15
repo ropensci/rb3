@@ -36,10 +36,6 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    DT,
-    miniUI,
-    shiny,
-    xtable,
     rmarkdown,
     ggplot2,
     covr,
@@ -50,7 +46,6 @@ Suggests:
     tidyr,
     vcr (>= 0.6.0)
 Collate:
-    'util.R'
     'fields.R'
     'handlers.R'
     'registry.R'
@@ -61,8 +56,6 @@ Collate:
     'scraper-futures.R'
     'scraper-cotahist.R'
     'scraper-yc.R'
-    'addin-show-templates.R'
-    'addin-display-template.R'
     'readers.R'
     'downloaders.R'
     'rb3-package.R'
