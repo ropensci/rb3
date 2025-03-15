@@ -7,12 +7,12 @@ op <- options(
   cli.default_handler = function(...) { }
 )
 
-rb3_bootstrap()
+suppressMessages(rb3_bootstrap())
 
 withr::defer(
   {
     options(op)
-    rb3_bootstrap()
+    suppressMessages(rb3_bootstrap())
   },
   teardown_env()
 )
