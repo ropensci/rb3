@@ -70,6 +70,7 @@
 
 rb3_registry <- create_registry()
 
+#' @export
 rb3_bootstrap <- function() {
   cache_folder <- getOption("rb3.cachedir")
   cache_folder <- if (is.null(cache_folder)) {
@@ -105,4 +106,16 @@ rb3_bootstrap <- function() {
   .reg[["meta_folder"]] <- meta_folder
   .reg[["db_folder"]] <- db_folder
   invisible(NULL)
+}
+
+#' @export
+rb3_db_connection <- function() {
+  reg <- rb3_registry$get_instance()
+  if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
+    reg$duck_db_connection
+  } else {
+    con <- duckdb::dbConnect(duckdb::duckdb(), file.path(reg$db_folder, "duckdb.db"))
+    reg$duck_db_connection <- con
+    con
+  }
 }

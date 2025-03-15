@@ -31,7 +31,8 @@ Imports:
     base64enc,
     XML,
     R.utils,
-    lubridate
+    lubridate,
+    duckdb
 Suggests:
     testthat,
     knitr,
