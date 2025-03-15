@@ -1,4 +1,3 @@
-created <- NULL
 test_that("it should create a new meta object", {
   template <- template_retrieve("template-test")
   meta <- template_meta_create(template, var1 = 1, var2 = 2)
@@ -14,7 +13,6 @@ test_that("it should create a new meta object", {
   expect_equal(meta$download_checksum, checksum)
   expect_true(length(meta$downloaded) == 0)
   expect_true(length(meta$processed_files) == 0)
-  created <<- meta$created |> format()
 })
 
 test_that("it should save meta", {
@@ -27,8 +25,11 @@ test_that("it should save meta", {
 
 test_that("it should load existing meta", {
   template <- template_retrieve("template-test")
-  meta <- template_meta_create(template, var1 = 1, var2 = 2)
-  expect_equal(meta$created, created)
+  meta0 <- template_meta_create(template, var1 = 1, var2 = 2)
+  meta_save(meta0)
+
+  meta1 <- meta_load(template$id, var1 = 1, var2 = 2)
+  expect_equal(meta0$created, meta1$created)
 })
 
 test_that("it should clean meta", {

@@ -1,18 +1,34 @@
+meta_new <- function(template, ...) {
+  args <- list(...) |> lapply(format)
+  structure(list(
+    template = template,
+    download_checksum = meta_checksum(template, ...),
+    download_args = toJSON(args, auto_unbox = TRUE),
+    downloaded = list(),
+    processed_files = list(),
+    created = Sys.time()
+  ), class = "meta")
+}
+
 meta_load <- function(template, ...) {
-  template <- template_retrieve(template)
-  checksum <- template_create_meta_code(template, ...)
+  checksum <- meta_checksum(template, ...)
   filename <- .meta_file(checksum)
   if (file.exists(filename)) {
-    meta_read_from_file(filename)
+    meta <- structure(fromJSON(filename), class = "meta")
+    meta$created <- as.POSIXct(meta$created)
+    meta
   } else {
     l <- list(...)
     args <- paste(names(l), lapply(l, format), sep = " = ", collapse = ", ")
-    stop(str_glue("Can't find meta for given arguments: template = {template$id}, {args}"))
+    stop(str_glue("Can't find meta for given arguments: template = {template}, {args}"))
   }
 }
 
-meta_read_from_file <- function(filename) {
-  structure(fromJSON(filename), class = "meta")
+meta_checksum <- function(template, ...) {
+  l_ <- c(id = template, list(...))
+  x <- lapply(l_, format)
+  names(x) <- names(l_)
+  digest(x)
 }
 
 meta_dest_file <- function(meta, checksum, ext = "gz") {
