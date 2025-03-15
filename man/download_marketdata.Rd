@@ -4,12 +4,10 @@
 \alias{download_marketdata}
 \title{Download datasets}
 \usage{
-download_marketdata(template, cache_folder = cachedir(), do_cache = FALSE, ...)
+download_marketdata(template, do_cache = FALSE, ...)
 }
 \arguments{
 \item{template}{the template name}
-
-\item{cache_folder}{location of cache folder (default = cachedir())}
 
 \item{do_cache}{a logical indicating if the file should be downloaded again}
 

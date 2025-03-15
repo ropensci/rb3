@@ -4,12 +4,10 @@
 \alias{read_marketdata}
 \title{Read and parses files downloaded from B3 website.}
 \usage{
-read_marketdata(meta, cache_folder = cachedir())
+read_marketdata(meta)
 }
 \arguments{
 \item{meta}{a list with the metadata of the downloaded file.}
-
-\item{cache_folder}{location of cache folder (default = cachedir())}
 }
 \value{
 This function returns a \code{data.frame} with the parsed file data.
