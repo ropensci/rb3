@@ -1,19 +1,18 @@
 meta_load <- function(template, ...) {
-  reg <- rb3_registry$get_instance()
-  sc <- arrow::schema(
-    template = arrow::string(),
-    download_checksum = arrow::string(),
-    download_args = arrow::string(),
-    downloaded = arrow::list_of(arrow::string()),
-    processed_files = arrow::list_of(arrow::string()),
-    created = arrow::timestamp()
-  )
-  ds <- arrow::open_dataset(reg[["meta_folder"]], schema = sc, format = "json")
-  code <- template_create_meta_code(template, ...)
-  ds |>
-    filter(download_checksum == code) |>
-    collect() |>
-    as.list()
+  template <- template_retrieve(template)
+  checksum <- template_create_meta_code(template, ...)
+  filename <- .meta_file(checksum)
+  if (file.exists(filename)) {
+    meta_read_from_file(filename)
+  } else {
+    l <- list(...)
+    args <- paste(names(l), lapply(l, format), sep = " = ", collapse = ", ")
+    stop(str_glue("Can't find meta for given arguments: template = {template$id}, {args}"))
+  }
+}
+
+meta_read_from_file <- function(filename) {
+  structure(fromJSON(filename), class = "meta")
 }
 
 meta_dest_file <- function(meta, checksum, ext = "gz") {
@@ -21,9 +20,13 @@ meta_dest_file <- function(meta, checksum, ext = "gz") {
   file.path(reg[["raw_folder"]], str_glue("{checksum}.{ext}"))
 }
 
-meta_file <- function(meta) {
+.meta_file <- function(checksum) {
   reg <- rb3_registry$get_instance()
-  file.path(reg[["meta_folder"]], str_glue("{meta$download_checksum}.json"))
+  file.path(reg$meta_folder, str_glue("{checksum}.json"))
+}
+
+meta_file <- function(meta) {
+  .meta_file(meta$download_checksum)
 }
 
 meta_save <- function(meta) {

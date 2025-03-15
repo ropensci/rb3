@@ -202,7 +202,7 @@ template_meta_create <- function(template, ...) {
   reg <- rb3_registry$get_instance()
   meta_file <- file.path(reg[["meta_folder"]], str_glue("{.code}.json"))
   meta <- if (file.exists(meta_file)) {
-    structure(fromJSON(meta_file), class = "meta")
+    meta_read_from_file(meta_file)
   } else {
     args <- list(...) |> lapply(format)
     structure(list(
