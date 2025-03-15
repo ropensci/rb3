@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_offline()
+
 test_that("it should access an URL that returns 500 error", {
   .meta <- download_marketdata("template-test")
   expect_true(is.null(.meta))
@@ -28,11 +31,11 @@ test_that("it should clean meta and its dependencies", {
 })
 
 test_that("it should download again and identifies that the file has changed", {
-  .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
+  .meta <- download_marketdata("template-test-small-file", size = 1024)
   expect_true(file.exists(meta_file(.meta)))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  .meta2 <- download_marketdata("b3-futures-settlement-prices", do_cache = TRUE, refdate = as.Date("2023-01-02"))
+  .meta2 <- download_marketdata("template-test-small-file", do_cache = TRUE, size = 1024)
   expect_true(file.exists(.meta2$downloaded[[1]]))
   expect_false(.meta2$downloaded[[1]] == .meta$downloaded[[1]])
   meta_clean(.meta)
