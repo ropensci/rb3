@@ -132,6 +132,11 @@ template_dataset <- function(template) {
   arrow::open_dataset(dir, schema)
 }
 
+template_duckdb_dataset <- function(template) {
+  dir <- template_db_folder(template)
+  duckplyr::read_parquet_duckdb(list.files(dir, full.names = TRUE))
+}
+
 new_field <- function(x) {
   width_ <- if (!is.null(x$width)) width(x$width)
   if (is.null(x$handler$type)) {
