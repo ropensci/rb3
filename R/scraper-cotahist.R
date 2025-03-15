@@ -332,7 +332,7 @@ NULL
       filter(.data$symbol == .symbol) |>
       collect()
     eqs_opts <- ch |>
-      filter(.data$isin == eqs$isin[1]) |>
+      filter(.data$isin == eqs$isin[1], .data$instrument_market %in% c(70, 80)) |>
       collect() |>
       mutate(
         type = factor(.data$instrument_market, c(70, 80), c("call", "put"))
