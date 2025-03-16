@@ -1,3 +1,43 @@
+.safecontent <- function(x) {
+  cl <- headers(x)[["content-length"]]
+  if (is.null(cl)) {
+    TRUE
+  } else {
+    cl != 0
+  }
+}
+
+just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
+  res <- if (!is.null(verifyssl) && !verifyssl) {
+    GET(url, config(ssl_verifypeer = FALSE))
+  } else {
+    GET(url)
+  }
+  handle_response(res, encoding, dest)
+}
+
+handle_response <- function(res, encoding, dest) {
+  if (status_code(res) != 200 || !.safecontent(res)) {
+    cli_alert_danger("Failed to download file: {.url {url}}, status code = {status_code(res)}")
+    return(FALSE)
+  }
+  save_resource(res, encoding, dest)
+  TRUE
+}
+
+save_resource <- function(res, encoding, dest) {
+  if (
+    headers(res)[["content-type"]] == "application/octet-stream" ||
+      headers(res)[["content-type"]] == "application/x-zip-compressed"
+  ) {
+    bin <- content(res, as = "raw")
+    writeBin(bin, dest)
+  } else {
+    text <- content(res, as = "text", encoding = encoding)
+    writeLines(text, dest, useBytes = TRUE)
+  }
+}
+
 simple_download <- function(., dest, ...) {
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
   just_download_data(.$downloader$url, enc, dest, .$verifyssl)
@@ -42,12 +82,8 @@ settlement_prices_download <- function(., dest, ...) {
       encode = "form", config(ssl_verifypeer = FALSE)
     )
   }
-  if (status_code(res) != 200) {
-    return(FALSE)
-  }
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
-  save_resource(res, enc, dest)
-  TRUE
+  handle_response(res, enc, dest)
 }
 
 curve_download <- function(., dest, ...) {
@@ -57,29 +93,19 @@ curve_download <- function(., dest, ...) {
     cli_alert_danger(msg)
     return(FALSE)
   }
-  curve_name <- if (is.null(params$curve_name)) {
-    "PRE"
-  } else {
-    params$curve_name
+  if (is.null(params$curve_name)) {
+    msg <- "curve_name argument not provided - download can't be done"
+    cli_alert_danger(msg)
+    return(FALSE)
   }
   url <- parse_url(.$downloader$url)
   url$query <- list(
     Data = format(as.Date(params$refdate), "%d/%m/%Y"),
     Data1 = format(as.Date(params$refdate), "%Y%m%d"),
-    slcTaxa = curve_name
+    slcTaxa = params$curve_name
   )
-  verifyssl <- if (!is.null(.$verifyssl)) .$verifyssl else TRUE
-  if (verifyssl) {
-    res <- GET(url)
-  } else {
-    res <- GET(url, config(ssl_verifypeer = FALSE))
-  }
-  if (status_code(res) != 200) {
-    return(FALSE)
-  }
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
-  save_resource(res, enc, dest)
-  TRUE
+  just_download_data(url, enc, dest, .$verifyssl)
 }
 
 stock_indexes_composition_download <- function(., dest, ...) {
