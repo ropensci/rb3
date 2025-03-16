@@ -136,7 +136,7 @@ test_that("it should extract options data from cotahist dataset", {
   expect_true(nrow(df) > 0)
 })
 
-test_that("it should use cotahist_equity_options_superset", {
+test_that("it should use *_superset functions", {
   .meta <- download_marketdata("b3-reference-rates", refdate = .date, curve_name = "PRE")
   read_marketdata(.meta)
 
@@ -145,6 +145,10 @@ test_that("it should use cotahist_equity_options_superset", {
 
   df <- cotahist_equity_options_superset(ch, yc)
   expect_true(!anyNA(df))
+  df <- cotahist_funds_options_superset(ch, yc)
+  expect_true(!anyNA(df))
   df <- cotahist_options_by_symbol_superset("PETR4", ch, yc)
   expect_true(!anyNA(df))
+  # df <- cotahist_index_options_superset(ch, yc)
+  expect_error(.cotahist_options_superset(ch, yc), "You must provide either a security category or a symbol.")
 })

@@ -59,3 +59,9 @@ test_that("it should add and retrieve elements with $ operator", {
   expect_equal(reg$a, 1)
   expect_equal(reg$b, 2)
 })
+
+test_that("it should try to retrieve an element that does not exist", {
+  registry <- create_registry()
+  reg <- registry$get_instance()
+  expect_error(reg$a, "a not found in registry")
+})

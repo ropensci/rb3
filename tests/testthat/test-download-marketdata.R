@@ -71,3 +71,47 @@ test_that("it should download file with multiple files but it picks only one", {
   expect_true(length(.meta$processed_files) == 0)
   meta_clean(.meta)
 })
+
+test_that("it should download and read b3-futures-settlement-prices", {
+  .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
+  .meta <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+  expect_true(length(.meta$processed_files) == 1)
+  expect_true(file.exists(.meta$processed_files[[1]]))
+})
+
+test_that("it should download and read b3-cotahist-daily", {
+  .meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2018-01-02"))
+  .meta <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+  expect_true(length(.meta$processed_files) == 1)
+  expect_true(file.exists(.meta$processed_files[[1]]))
+})
+
+test_that("it should download and read b3-reference-rates", {
+  .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2018-01-02"), curve_name = "PRE")
+  .meta <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+  expect_true(length(.meta$processed_files) == 1)
+  expect_true(file.exists(.meta$processed_files[[1]]))
+  .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"))
+  .meta <- read_marketdata(.meta)
+  expect_true(is.null(.meta))
+})
+
+# This test takes too long
+# test_that("it should download and read b3-bvbg-086", {
+#   .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
+#   .meta <- read_marketdata(.meta)
+#   expect_true(file.exists(meta_file(.meta)))
+#   expect_true(length(.meta$downloaded) == 1)
+#   expect_true(file.exists(.meta$downloaded[[1]]))
+#   expect_true(length(.meta$processed_files) == 1)
+#   expect_true(file.exists(.meta$processed_files[[1]]))
+# })
