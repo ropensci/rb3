@@ -63,6 +63,7 @@ read_marketdata <- function(meta) {
   invisible(meta)
 }
 
+#' @export
 fetch_marketdata <- function(template, ...) {
   df <- expand.grid(...)
   cli::cli_h1("Fetching market data for {.var {template}}")
