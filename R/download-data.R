@@ -102,46 +102,10 @@ unzip_recursive <- function(fname) {
   }
 }
 
-.safecontent <- function(x) {
-  cl <- headers(x)[["content-length"]]
-  if (is.null(cl)) {
-    TRUE
-  } else {
-    cl != 0
-  }
-}
-
 select_file_if_multiple <- function(files, tag) {
   if (length(files) == 1 || is.null(tag)) {
     return(files[[1]])
   } else if (tag == "newer") {
     return(sort(files, decreasing = TRUE)[[1]])
-  }
-}
-
-just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
-  res <- if (!is.null(verifyssl) && !verifyssl) {
-    GET(url, config(ssl_verifypeer = FALSE))
-  } else {
-    GET(url)
-  }
-  if (status_code(res) != 200 || !.safecontent(res)) {
-    cli_alert_danger("Failed to download file: {.url {url}}, status code = {status_code(res)}")
-    return(FALSE)
-  }
-  save_resource(res, encoding, dest)
-  TRUE
-}
-
-save_resource <- function(res, encoding, dest) {
-  if (
-    headers(res)[["content-type"]] == "application/octet-stream" ||
-      headers(res)[["content-type"]] == "application/x-zip-compressed"
-  ) {
-    bin <- content(res, as = "raw")
-    writeBin(bin, dest)
-  } else {
-    text <- content(res, as = "text", encoding = encoding)
-    writeLines(text, dest, useBytes = TRUE)
   }
 }
