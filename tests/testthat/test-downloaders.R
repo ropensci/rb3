@@ -34,7 +34,7 @@ test_that("it should fail to curve_download", {
 
 test_that("it should defaults to PRE in curve_download", {
   tpl <- template_retrieve("b3-reference-rates")
-  f <- curve_download(tpl, tempfile(), refdate = as.Date("2022-05-10"))
+  f <- curve_download(tpl, tempfile(), refdate = as.Date("2022-05-10"), curve_name = "PRE")
   expect_true(f)
 })
 
