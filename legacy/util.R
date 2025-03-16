@@ -27,3 +27,10 @@ log_map_process_along <- function(x, func, msg, ...) {
     map(cli_progress_along(x, format = f_), func, ...)
   }
 }
+
+empty_file_error <- function(message) {
+  structure(
+    class = c("empty_file_error", "condition"),
+    list(message = message, call = sys.call(-1))
+  )
+}

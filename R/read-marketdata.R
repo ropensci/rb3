@@ -97,10 +97,3 @@ fetch_marketdata <- function(template, ...) {
   cli::cli_alert_info("{length(ms)} files downloaded")
   invisible(NULL)
 }
-
-empty_file_error <- function(message) {
-  structure(
-    class = c("empty_file_error", "condition"),
-    list(message = message, call = sys.call(-1))
-  )
-}
