@@ -8,11 +8,8 @@
 }
 
 just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
-  res <- if (!is.null(verifyssl) && !verifyssl) {
-    GET(url, config(ssl_verifypeer = FALSE))
-  } else {
-    GET(url)
-  }
+  verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
+  res <- GET(url, config(ssl_verifypeer = verifyssl))
   handle_response(res, encoding, dest)
 }
 
@@ -70,18 +67,11 @@ settlement_prices_download <- function(., dest, ...) {
     return(FALSE)
   }
   strdate <- format(as.Date(params$refdate), "%d/%m/%Y")
-  verifyssl <- if (!is.null(.$verifyssl)) .$verifyssl else TRUE
-  if (verifyssl) {
-    res <- POST(.$downloader$url,
-      body = list(dData1 = strdate),
-      encode = "form"
-    )
-  } else {
-    res <- POST(.$downloader$url,
-      body = list(dData1 = strdate),
-      encode = "form", config(ssl_verifypeer = FALSE)
-    )
-  }
+  verifyssl <- if (is.null(.$verifyssl)) TRUE else .$verifyssl
+  res <- POST(.$downloader$url,
+    body = list(dData1 = strdate),
+    encode = "form", config(ssl_verifypeer = verifyssl)
+  )
   enc <- if (is.null(.$downloader$encoding)) "utf8" else .$downloader$encoding
   handle_response(res, enc, dest)
 }
