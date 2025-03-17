@@ -45,22 +45,9 @@ read_marketdata <- function(meta) {
     meta_clean(meta)
     return(invisible(NULL))
   }
-  tag <- sapply(template$reader$partition, function(x) {
-    x <- df[[x]] |>
-      unique() |>
-      na.omit() |>
-      sort() |>
-      format()
-    x[1]
-  })
-  label <- paste0(tag, collapse = "_")
-  db_folder <- template_db_folder(template)
-  ds_file <- file.path(db_folder, str_glue("{label[1]}.parquet"))
-  meta_add_processed_file(meta) <- ds_file
   tb <- arrow::arrow_table(df, schema = template_schema(template))
-  arrow::write_parquet(tb, ds_file, compression = "gzip")
-  meta_save(meta)
-  invisible(meta)
+  arrow::write_dataset(tb, template_db_folder(template), partitioning = template$reader$partition)
+  invisible(df)
 }
 
 #' @export
