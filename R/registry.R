@@ -64,31 +64,31 @@ registry_keys <- function(x, ...) {
 }
 
 #' @export
-`$.registry` <- function(x, key, ...) {
-  registry_get(x, key)
+`$.registry` <- function(x, name) {
+  registry_get(x, name)
 }
 
 #' @export
-`$<-.registry` <- function(x, key, value, ...) {
-  registry_put(x, key, value)
+`$<-.registry` <- function(x, name, value) {
+  registry_put(x, name, value)
 }
 
 #' @export
-`[[.registry` <- function(x, key, ...) {
-  registry_get(x, key)
+`[[.registry` <- function(x, name) {
+  registry_get(x, name)
 }
 
 #' @export
-`[[<-.registry` <- function(x, key, value, ...) {
-  registry_put(x, key, value)
+`[[<-.registry` <- function(x, name, value) {
+  registry_put(x, name, value)
 }
 
 #' @exportS3Method base::names
-names.registry <- function(x, ...) {
+names.registry <- function(x) {
   registry_keys(x)
 }
 
 #' @exportS3Method base::length
-length.registry <- function(x, ...) {
+length.registry <- function(x) {
   length(attr(x, "data"))
 }
