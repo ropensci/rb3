@@ -18,16 +18,13 @@ test_that("it should download an small file", {
 
 test_that("it should clean meta and its dependencies", {
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
-  .meta <- read_marketdata(.meta)
+  read_marketdata(.meta)
   expect_true(file.exists(meta_file(.meta)))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_true(length(.meta$processed_files) == 1)
-  expect_true(file.exists(.meta$processed_files[[1]]))
   meta_clean(.meta)
   expect_false(file.exists(meta_file(.meta)))
   expect_false(file.exists(.meta$downloaded[[1]]))
-  expect_false(file.exists(.meta$processed_files[[1]]))
 })
 
 test_that("it should download again and identifies that the file has changed", {
@@ -54,11 +51,10 @@ test_that("it should download again and identifies that the file is the same", {
   meta_clean(.meta2)
 })
 
-test_that("it should fail downloading invalid file", {
+test_that("it should clean meta when reading invalid file", {
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-01"))
   expect_true(file.exists(meta_file(.meta)))
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_true(length(.meta$processed_files) == 0)
   read_marketdata(.meta)
   expect_false(file.exists(meta_file(.meta)))
   expect_false(file.exists(.meta$downloaded[[1]]))
@@ -66,41 +62,37 @@ test_that("it should fail downloading invalid file", {
 
 test_that("it should download and read b3-futures-settlement-prices", {
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
-  .meta <- read_marketdata(.meta)
+  .df <- read_marketdata(.meta)
   expect_true(file.exists(meta_file(.meta)))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_true(length(.meta$processed_files) == 1)
-  expect_true(file.exists(.meta$processed_files[[1]]))
+  expect_s3_class(.df, "data.frame")
 })
 
 test_that("it should download and read b3-cotahist-daily", {
   .meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2018-01-02"))
-  .meta <- read_marketdata(.meta)
+  .df <- read_marketdata(.meta)
   expect_true(file.exists(meta_file(.meta)))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_true(length(.meta$processed_files) == 1)
-  expect_true(file.exists(.meta$processed_files[[1]]))
+  expect_s3_class(.df, "data.frame")
 })
 
 test_that("it should download and read b3-reference-rates", {
   .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2018-01-02"), curve_name = "PRE")
-  .meta <- read_marketdata(.meta)
+  .df <- read_marketdata(.meta)
   expect_true(file.exists(meta_file(.meta)))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_true(length(.meta$processed_files) == 1)
-  expect_true(file.exists(.meta$processed_files[[1]]))
-  .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE")
-  .meta <- read_marketdata(.meta)
-  expect_true(is.null(.meta))
+  expect_s3_class(.df, "data.frame")
 })
 
 test_that("it should download and read b3-reference-rates for an invalid date", {
   .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE")
-  .meta <- read_marketdata(.meta)
-  expect_true(is.null(.meta))
+  .df <- read_marketdata(.meta)
+  expect_true(is.null(.df))
+  expect_false(file.exists(meta_file(.meta)))
+  expect_false(file.exists(.meta$downloaded[[1]]))
 })
 
 test_that("it should fail to download b3-reference-rates with no curve name", {
@@ -134,16 +126,13 @@ test_that("it should fetch b3-reference-rates with fails", {
 #   .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
 #   expect_true(file.exists(meta_file(.meta)))
 #   expect_true(file.exists(.meta$downloaded[[1]]))
-#   expect_true(length(.meta$processed_files) == 0)
 #   meta_clean(.meta)
 # })
 
 # test_that("it should download and read b3-bvbg-086", {
 #   .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
-#   .meta <- read_marketdata(.meta)
+#   .df <- read_marketdata(.meta)
 #   expect_true(file.exists(meta_file(.meta)))
 #   expect_true(length(.meta$downloaded) == 1)
 #   expect_true(file.exists(.meta$downloaded[[1]]))
-#   expect_true(length(.meta$processed_files) == 1)
-#   expect_true(file.exists(.meta$processed_files[[1]]))
 # })

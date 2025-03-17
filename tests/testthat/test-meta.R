@@ -11,7 +11,6 @@ test_that("it should create a new meta object", {
     digest()
   expect_equal(meta$download_checksum, checksum)
   expect_true(length(meta$downloaded) == 0)
-  expect_true(length(meta$processed_files) == 0)
 })
 
 test_that("it should save meta", {
@@ -46,16 +45,4 @@ test_that("it should add download to meta", {
   expect_equal(meta$downloaded[[2]], filename)
   meta_add_download(meta) <- filename
   expect_true(length(meta$downloaded) == 2)
-})
-
-test_that("it should add processed files to meta", {
-  meta <- meta_new("template-test", var1 = 1, var2 = 2)
-  filename <- tempfile()
-  meta_add_processed_file(meta) <- filename
-  expect_equal(meta$processed_files[[1]], filename)
-  filename <- tempfile()
-  meta_add_processed_file(meta) <- filename
-  expect_equal(meta$processed_files[[2]], filename)
-  meta_add_processed_file(meta) <- filename
-  expect_true(length(meta$processed_files) == 2)
 })

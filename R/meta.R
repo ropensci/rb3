@@ -5,7 +5,6 @@ meta_new <- function(template, ...) {
     download_checksum = meta_checksum(template, ...),
     download_args = toJSON(args, auto_unbox = TRUE),
     downloaded = list(),
-    processed_files = list(),
     created = as.POSIXct(Sys.time(), tz = "UTC")
   ), class = "meta")
 }
@@ -57,12 +56,6 @@ meta_clean <- function(meta) {
       unlink(file)
     }
   }
-  if (length(meta$processed_files) > 0) {
-    for (file in meta$processed_files) {
-      cli_alert_info("Removing DB file {.file {file}}")
-      unlink(file)
-    }
-  }
   meta_file <- meta_file(meta)
   unlink(meta_file)
 }
@@ -72,13 +65,5 @@ meta_clean <- function(meta) {
     return(meta)
   }
   meta$downloaded <- append(meta$downloaded, value)
-  meta
-}
-
-`meta_add_processed_file<-` <- function(meta, value) {
-  if (value %in% meta$processed_files) {
-    return(meta)
-  }
-  meta$processed_files <- append(meta$processed_files, value)
   meta
 }
