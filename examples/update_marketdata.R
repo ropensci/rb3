@@ -1,6 +1,10 @@
 
-f <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2025-01-03"))
-df <- read_marketdata(f)
+f <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-01-02"), curve_name = "PRE")
+f <- read_marketdata(f)
+
+fetch_marketdata("b3-cotahist-yearly",
+  year = c(2024, 2023)
+)
 
 fetch_marketdata("b3-cotahist-daily",
   refdate = bizseq("2018-01-01", "2025-03-10", "Brazil/B3")
