@@ -11,7 +11,7 @@ downloader:
 reader:
   function: fwf_read_file
   encoding: latin1
-  partition: refdate
+  partition: [refdate, instrument_market]
 fields:
 - name: regtype
   description: Tipo de registro
