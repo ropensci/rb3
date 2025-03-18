@@ -52,6 +52,12 @@ fields_arrow_types <- function(fields) {
   handlers
 }
 
+fields_tags <- function(fields) {
+  handlers <- lapply(fields, function(x) attr(x, "tag"))
+  names(handlers) <- fields_names(fields)
+  handlers
+}
+
 field <- function(name, description, ...) {
   if (missing(description)) {
     attr(name, "description") <- ""
@@ -73,6 +79,8 @@ field <- function(name, description, ...) {
   classes <- lapply(parms, function(x) {
     if (is(x, "width")) {
       "width"
+    } else if (is(x, "tag")) {
+      "tag"
     } else if (is(x, "handler")) {
       "handler"
     } else if (is(x, "collector")) {
@@ -88,6 +96,10 @@ field <- function(name, description, ...) {
     attr(name, "width") <- parms[[which(classes == "width")[1]]]
   } else {
     attr(name, "width") <- 0
+  }
+
+  if (any(classes == "tag")) {
+    attr(name, "tag") <- parms[[which(classes == "tag")[1]]]
   }
 
   if (any(classes == "handler")) {

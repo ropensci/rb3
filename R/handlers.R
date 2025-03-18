@@ -1,3 +1,8 @@
+tag <- function(x) {
+  class(x) <- c("character", "tag")
+  x
+}
+
 width <- function(x) {
   x <- as.numeric(x)
   class(x) <- c("numeric", "width")

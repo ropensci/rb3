@@ -138,6 +138,7 @@ template_duckdb_dataset <- function(template) {
 }
 
 new_field <- function(x) {
+  tag_ <- if (!is.null(x$tag)) tag(x$tag)
   width_ <- if (!is.null(x$width)) width(x$width)
   if (is.null(x$handler$type)) {
     handler_ <- pass_thru_handler()
@@ -180,7 +181,7 @@ new_field <- function(x) {
     col_ <- readr::col_guess()
     arrow_type_ <- arrow::string()
   }
-  field(x$name, x$description, width_, handler_, col_, arrow_type_)
+  field(x$name, x$description, width_, tag_, handler_, col_, arrow_type_)
 }
 
 new_part <- function(x) {
