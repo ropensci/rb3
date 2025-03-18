@@ -120,19 +120,11 @@ test_that("it should fetch b3-reference-rates with fails", {
   expect_error(meta_load("b3-reference-rates", , refdate = as.Date("2025-03-15"), curve_name = "PRE"))
 })
 
-# These tests take too long
-
-# test_that("it should download file with multiple files but it picks only one", {
-#   .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
-#   expect_true(file.exists(meta_file(.meta)))
-#   expect_true(file.exists(.meta$downloaded[[1]]))
-#   meta_clean(.meta)
-# })
-
-# test_that("it should download and read b3-bvbg-086", {
-#   .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
-#   .df <- read_marketdata(.meta)
-#   expect_true(file.exists(meta_file(.meta)))
-#   expect_true(length(.meta$downloaded) == 1)
-#   expect_true(file.exists(.meta$downloaded[[1]]))
-# })
+test_that("it should download and read b3-bvbg-086", {
+  # it has multiple files but it picks only one
+  .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
+  .df <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+})
