@@ -79,7 +79,7 @@ rb3_bootstrap <- function() {
   } else {
     cache_folder
   }
-  cli_alert_info("rb3 cache folder: {.dir {cache_folder}}")
+  cli_alert_info("rb3 cache folder: {.file {cache_folder}}")
   
   if (!dir.exists(cache_folder)) {
     dir.create(cache_folder, recursive = TRUE)

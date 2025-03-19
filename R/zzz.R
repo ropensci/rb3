@@ -1,9 +1,15 @@
 .onAttach <- function(libname, pkgname) {
   load_template_files()
   reg <- template_registry$get_instance()
-  cli_alert_info("rb3: {length(reg)} templates registered")
+  msg <- cli::format_message("{cli::col_blue('\u2139')} {.pkg rb3}: {length(reg)} templates registered")
+  packageStartupMessage(msg)
+
   load_builtin_calendars()
-  rb3_bootstrap()
+
+  suppressMessages(rb3_bootstrap())
+  reg <- rb3_registry$get_instance()
+  msg <- cli::format_message("{cli::col_blue('\u2139')} {.pkg rb3} cache folder: {.file {reg$rb3_folder}}")
+  packageStartupMessage(msg)
 }
 
 .onLoad <- function(libname, pkgname) {
