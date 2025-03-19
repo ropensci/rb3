@@ -161,6 +161,6 @@ fields:
     type: integer
 - name: traded_quantity
   description: Quantidade negociada
-  tag: DaysToSttlm
+  tag: TradQty
   handler:
     type: integer
