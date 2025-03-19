@@ -121,7 +121,7 @@ pricereport_reader <- function(., filename) {
 
   fin_instrm_id_names <- c(Id = "security_id", Prtry = "security_proprietary", MktIdrCd = "security_market")
   .tags <- Filter(\(x) !x %in% names(fin_instrm_id_names), fields_tags(.$fields))
-  fin_instrm_names <- setNames(names(.tags), .tags)
+  fin_instrm_names <- stats::setNames(names(.tags), .tags)
 
   start_handler <- function(name, attrs, .state) {
     if (name == "PricRpt") {
