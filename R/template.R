@@ -1,5 +1,5 @@
-new_template <- function() {
-  obj <- list(description = "")
+new_template <- function(id, description = "") {
+  obj <- list(id = id, description = description)
 
   obj[["has_reader"]] <- FALSE
   obj[["has_downloader"]] <- FALSE
@@ -10,7 +10,7 @@ new_template <- function() {
 
 load_template_from_file <- function(fname) {
   tpl <- yaml.load_file(fname)
-  obj <- new_template()
+  obj <- new_template(tpl$id)
   for (n in names(tpl)) {
     if (n == "fields") {
       obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
