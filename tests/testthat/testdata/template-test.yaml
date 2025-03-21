@@ -1,0 +1,27 @@
+id: template-test
+filename: ~
+filetype: FWF
+description: Test template
+downloader:
+  function: simple_download
+  url: https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv
+  format: csv
+reader:
+  function: csv_read_file
+  partition: species
+fields:
+- name: sepal_length
+  handler:
+    type: numeric
+- name: sepal_width
+  handler:
+    type: numeric
+- name: petal_width
+  handler:
+    type: numeric
+- name: petal_width
+  handler:
+    type: numeric
+- name: species
+  handler:
+    type: character
