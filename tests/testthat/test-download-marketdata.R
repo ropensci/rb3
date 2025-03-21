@@ -16,6 +16,15 @@ test_that("it should download an small file", {
   expect_true(is.null(.meta))
 })
 
+test_that("it should download and read template-test", {
+  .meta <- download_marketdata("template-test")
+  .df <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+  expect_s3_class(.df, "data.frame")
+})
+
 test_that("it should clean meta and its dependencies", {
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
   read_marketdata(.meta)

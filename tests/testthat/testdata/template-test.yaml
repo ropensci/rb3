@@ -9,6 +9,7 @@ downloader:
 reader:
   function: csv_read_file
   partition: species
+  skip: 1
 fields:
 - name: sepal_length
   handler:
@@ -16,7 +17,7 @@ fields:
 - name: sepal_width
   handler:
     type: numeric
-- name: petal_width
+- name: petal_length
   handler:
     type: numeric
 - name: petal_width

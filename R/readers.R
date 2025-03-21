@@ -11,6 +11,14 @@
   df
 }
 
+csv_read_file <- function(., filename) {
+  df <- readr::read_csv(filename,
+    col_names = .$colnames, col_types = fields_cols(.$fields),
+    locale = readr::locale(), skip = .$reader$skip
+  )
+  df
+}
+
 fwf_read_file <- function(., filename) {
   encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
   suppressWarnings(

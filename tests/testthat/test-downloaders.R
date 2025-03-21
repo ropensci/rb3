@@ -5,6 +5,14 @@ if (Sys.info()["sysname"] == "Linux") {
   httr::set_config(httr::config(ssl_verifypeer = FALSE))
 }
 
+test_that("it should download a file directly by its URL", {
+  tpl <- template_retrieve("template-test")
+  dest <- tempfile()
+  x <- tpl$download_marketdata(tpl, dest)
+  expect_true(x)
+  expect_true(file.exists(dest))
+})
+
 test_that("it should download a file with a datetime downloader", {
   tpl <- template_retrieve("b3-cotahist-daily")
   dest <- tempfile()
