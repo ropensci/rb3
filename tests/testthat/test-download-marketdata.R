@@ -2,7 +2,7 @@ skip_on_cran()
 skip_if_offline()
 
 test_that("it should access an URL that returns 500 error", {
-  .meta <- download_marketdata("template-test")
+  .meta <- download_marketdata("template-test-error")
   expect_true(is.null(.meta))
 })
 
