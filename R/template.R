@@ -135,6 +135,7 @@ template_dataset <- function(template) {
 new_field <- function(x) {
   tag_ <- if (!is.null(x$tag)) tag(x$tag)
   width_ <- if (!is.null(x$width)) width(x$width)
+  x$description <- if (is.null(x$description)) "" else x$description
   if (is.null(x$handler$type)) {
     handler_ <- pass_thru_handler()
     col_ <- readr::col_guess()
