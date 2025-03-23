@@ -52,23 +52,18 @@ test_that("Test of yc_usd_get function", {
   test_df(df_yc_2 |> collect())
 })
 
-test_that("Test of yc_superset function", {
-  fut <- futures_get() |> filter(refdate == .refdate)
-  
-  yc <- yc_brl_get() |> filter(refdate == .refdate)
-  df <- yc_brl_superset(yc, fut)
+test_that("Test of yc_with_futures function", {
+  df <- yc_brl_with_futures(.refdate)
   expect_true(exists("symbol", df))
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))
   
-  yc <- yc_usd_get() |> filter(refdate == .refdate)
-  df <- yc_usd_superset(yc, fut)
+  df <- yc_usd_with_futures(.refdate)
   expect_true(exists("symbol", df))
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))
   
-  yc <- yc_ipca_get() |> filter(refdate == .refdate)
-  df <- yc_ipca_superset(yc, fut)
+  df <- yc_ipca_with_futures(.refdate)
   expect_true(exists("symbol", df))
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))

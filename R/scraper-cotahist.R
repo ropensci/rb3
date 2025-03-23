@@ -23,7 +23,11 @@
 #' using the \code{\link{download_marketdata}} function and create the datasets
 #' with the \code{\link{read_marketdata}} function.
 #'
-#' @return An arrow Dataset class that can be used with dplyr to filter the data of interest.
+#' @return
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
 #'
 #' @examples
 #' \dontrun{
@@ -235,6 +239,7 @@ cotahist_filter_fund_options <- function(x) {
 #'
 #' @param symbols list of symbols to extract market data from the COTAHIST dataset.
 #'
+#' @details
 #' The functions `cotahist_equity_options_superset()`, `cotahist_funds_options_superset()`,
 #' `cotahist_index_options_superset()`, and `cotahist_options_by_symbol_superset()` use
 #' information from the COTAHIST datasets (`b3-cotahist-yearly`, `b3-cotahist-monthly`,
@@ -247,11 +252,19 @@ cotahist_filter_fund_options <- function(x) {
 #'
 #' `cotahist_options_by_symbol_superset()` returns the same dataset but filtered for the specified asset ticker.
 #'
-#' @return A dataframe with the super-dataset.
+#' Returned objects preserve lazy evaluation whenever possible and avoid being
+#' collected until the last possible moment. Exceptions occur when operations
+#' cannot be performed using Arrow's operators — in such cases, data will be
+#' collected and `data.frame`s will be returned. Please refer to the documentation
+#' to identify the situations where this behavior applies.
+#' 
+#' @return
+#' The function `cotahist_options_by_symbol_superset()` return an object that inherits from a `arrow_dplyr_query`
+#' since it tries to preserve the lazy evaluation and avoids collecting the data before its return.
 #'
 #' @examples
 #' \dontrun{
-#' date <- Sys.Date() - 1
+#' date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
 #' bova_options <- cotahist_get_options_by_symbols("BOVA11") |> filter(refdate == date)
 #' petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(refdate == date)
 #' }

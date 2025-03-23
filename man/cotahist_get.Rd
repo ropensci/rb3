@@ -11,7 +11,10 @@ cotahist_get(type = c("yearly", "monthly", "daily"))
 \code{"daily"}, \code{"monthly"}, or \code{"yearly"}.}
 }
 \value{
-An arrow Dataset class that can be used with dplyr to filter the data of interest.
+An \code{arrow_dplyr_query} or \code{ArrowObject}, representing a lazily evaluated query. The underlying data is not
+collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+memory usage.
+To trigger evaluation and return the results as an R \code{tibble}, use \code{collect()}.
 }
 \description{
 The COTAHIST files are available with daily, monthly, and yearly data.

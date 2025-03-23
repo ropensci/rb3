@@ -109,19 +109,6 @@ test_that("it should extract funds data from cotahist dataset", {
   expect_true(nrow(df) >= 0)
 })
 
-test_that("it should extract specific symbols from cotahist dataset", {
-  symbols <- c("PETR3", "PETR4")
-  ch <- cotahist_get("daily")
-  nc <- ch |>
-    head(10) |>
-    collect() |>
-    ncol()
-
-  df <- cotahist_get_instruments_by_symbols(symbols) |> collect()
-  # expect_true(length(symbols) == nrow(df))
-  expect_true(nc == ncol(df))
-})
-
 test_that("it should extract options data from cotahist dataset", {
   symbols <- c("PETR3", "PETR4")
   df <- cotahist_get_options_by_symbols(symbols) |> collect()

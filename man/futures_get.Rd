@@ -10,9 +10,12 @@
 futures_get()
 }
 \value{
-An \code{arrow_dplyr_query} object. This object does not eagerly evaluate the query on the data. To run the query
-and retrieve the data, use \code{collect()}, which returns a dataframe (R \code{tibble}). The returned data includes the
-following columns:
+An \code{arrow_dplyr_query} or \code{ArrowObject}, representing a lazily evaluated query. The underlying data is not
+collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+memory usage.
+To trigger evaluation and return the results as an R \code{tibble}, use \code{collect()}.
+
+The returned data includes the following columns:
 \itemize{
 \item \code{refdate}: Reference date for the prices.
 \item \code{symbol}: Futures contract symbol, created by concatenating the commodity code and the maturity code.

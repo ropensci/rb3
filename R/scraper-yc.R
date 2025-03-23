@@ -48,9 +48,20 @@ process_yc <- function(ds) {
 #' <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
 #'
-#' @return An `arrow_dplyr_query` object. This object does not eagerly evaluate the query on the data. To run the query
-#' and retrieve the data, use `collect()`, which returns a dataframe (R `tibble`). The returned data includes
-#' `curve_name`, `refdate`, `forward_date`, `cur_days`, `r_252`, and `r_360` columns.
+#' @return
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
+#' 
+#' The returned data includes the following columns:
+#' - `curve_name`: Identifier of the yield curve (e.g., "PRE", "DOC", "DIC").
+#' - `refdate`: Reference date of the curve.
+#' - `forward_date`: Maturity date associated with the interest rate.
+#' - `biz_days`: Number of business days between `refdate` and `forward_date`.
+#' - `cur_days`: Number of calendar days between `refdate` and `forward_date`.
+#' - `r_252`: Annualized interest rate based on 252 business days.
+#' - `r_360`: Annualized interest rate based on 360 calendar days.
 #'
 #' @name yc_xxx_get
 NULL
@@ -106,10 +117,11 @@ yc_usd_get <- function() {
   .yield_curve_get("DOC")
 }
 
-.yc_superset <- function(yc, fut, .commodity, .expr) {
+.yc_with_futures <- function(yc, .refdate, .commodity, .expr) {
   template <- template_retrieve("b3-reference-rates")
+  fut <- futures_get()
   fut_di1 <- fut |>
-    filter(.data$commodity == .commodity) |>
+    filter(.data$commodity == .commodity, .data$refdate == .refdate) |>
     collect() |>
     mutate(
       forward_date = maturity2date(.data$maturity_code, .expr) |> following(template$calendar)
@@ -117,6 +129,7 @@ yc_usd_get <- function() {
     select("refdate", "forward_date", "symbol")
 
   yc |>
+    filter(.data$refdate == .refdate) |>
     left_join(fut_di1, by = c("refdate", "forward_date")) |>
     collect() |>
     arrange(.data$forward_date)
@@ -124,36 +137,41 @@ yc_usd_get <- function() {
 
 #' @rdname superdataset
 #'
-#' @param fut futures dataset
-#'
 #' @details
-#' `yc_brl_superset()`, `yc_usd_superset()`, and `yc_ipca_superset()` utilize information
+#' `yc_brl_with_futures()`, `yc_usd_with_futures()`, and `yc_ipca_with_futures()` utilize information
 #' from Reference Rates (`b3-reference-rates`) and Futures Settlement Prices
 #' (`b3-futures-settlement-prices`) datasets to construct a yield curve dataset. This dataset
 #' highlights key vertices and their corresponding underlying futures contracts, providing a
 #' detailed view of the term structure of interest rate.
+#' To prevent excessive memory usage and potential performance issues, these functions include a `refdate`
+#' argument that allows filtering the data at the source.
+#' 
+#' @return
+#' The functions `yc_brl_with_futures()`, `yc_usd_with_futures()`, and `yc_ipca_with_futures()` return an object
+#' that inherits from the `data.frame` class. In cases where certain operations cannot be executed using Arrow
+#' operators, the data must be collected before being returned.
 #'
 #' @examples
 #' \dontrun{
-#' date_ <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
-#' fut <- futures_get() |> filter(refdate == date_)
-#' yc <- yc_brl_get() |> filter(refdate == date_)
-#' yc_superset(yc, fut)
+#' date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
+#' yc_brl_with_futures(date)
+#' yc_usd_with_futures(date)
+#' yc_ipca_with_futures(date)
 #' }
 #'
 #' @export
-yc_brl_superset <- function(yc, fut) {
-  .yc_superset(yc, fut, "DI1", "first day")
+yc_brl_with_futures <- function(refdate) {
+  .yc_with_futures(yc_brl_get(), refdate, "DI1", "first day")
 }
 
 #' @rdname superdataset
 #' @export
-yc_usd_superset <- function(yc, fut) {
-  .yc_superset(yc, fut, "DDI", "first day")
+yc_usd_with_futures <- function(refdate) {
+  .yc_with_futures(yc_usd_get(), refdate, "DDI", "first day")
 }
 
 #' @rdname superdataset
 #' @export
-yc_ipca_superset <- function(yc, fut) {
-  .yc_superset(yc, fut, "DAP", "15th day")
+yc_ipca_with_futures <- function(refdate) {
+  .yc_with_futures(yc_ipca_get(), refdate, "DAP", "15th day")
 }

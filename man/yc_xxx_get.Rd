@@ -17,9 +17,21 @@ yc_ipca_get()
 yc_usd_get()
 }
 \value{
-An \code{arrow_dplyr_query} object. This object does not eagerly evaluate the query on the data. To run the query
-and retrieve the data, use \code{collect()}, which returns a dataframe (R \code{tibble}). The returned data includes
-\code{curve_name}, \code{refdate}, \code{forward_date}, \code{cur_days}, \code{r_252}, and \code{r_360} columns.
+An \code{arrow_dplyr_query} or \code{ArrowObject}, representing a lazily evaluated query. The underlying data is not
+collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+memory usage.
+To trigger evaluation and return the results as an R \code{tibble}, use \code{collect()}.
+
+The returned data includes the following columns:
+\itemize{
+\item \code{curve_name}: Identifier of the yield curve (e.g., "PRE", "DOC", "DIC").
+\item \code{refdate}: Reference date of the curve.
+\item \code{forward_date}: Maturity date associated with the interest rate.
+\item \code{biz_days}: Number of business days between \code{refdate} and \code{forward_date}.
+\item \code{cur_days}: Number of calendar days between \code{refdate} and \code{forward_date}.
+\item \code{r_252}: Annualized interest rate based on 252 business days.
+\item \code{r_360}: Annualized interest rate based on 360 calendar days.
+}
 }
 \description{
 These functions retrieve yield curve data, either for all available curves (\code{yc_get}) or
