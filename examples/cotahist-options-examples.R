@@ -82,3 +82,70 @@ m1 |>
 m1 |>
   ggplot(aes(x = delta, y = sigma, size = volume, color = type)) +
   geom_point(alpha = 0.5)
+
+
+
+cotahist_get_options_by_symbols <- function(symbols) {
+  ch <- cotahist_get()
+  yc <- yc_brl_get() |> select("refdate", "forward_date", "r_252")
+
+  eqs <- ch |>
+    filter(.data$symbol %in% symbols) |>
+    select("refdate", "symbol", "close", "isin")
+
+  eqs_opts <- ch |>
+    filter(.data$instrument_market %in% c(70, 80)) |>
+    select("refdate", "symbol", "strike_price", "maturity_date", "close", "volume", "isin", "instrument_market")
+
+  eq <- inner_join(eqs_opts, eqs,
+    by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one"
+  )
+  ds <- inner_join(eq, yc, by = c("refdate" = "refdate", "maturity_date" = "forward_date"))
+
+  ds |>
+    mutate(type = ifelse(.data$instrument_market == 80, "call", "put")) |>
+    select(
+      "refdate",
+      "symbol_underlying",
+      "close_underlying",
+      "symbol",
+      "type",
+      "strike_price",
+      "maturity_date",
+      "close",
+      "volume",
+      "r_252",
+    )
+}
+
+cotahist_get_options_by_symbols("PETR4") |>
+  filter(refdate == "2024-01-02") |>
+  collect()
+
+cotahist_get_instrument_by_symbol <- function(symbol) {
+  .symbol <- symbol
+  ch <- cotahist_get()
+
+  im <- ch |>
+    filter(.data$symbol == .symbol) |>
+    dplyr::distinct(instrument_market) |>
+    collect() |>
+    dplyr::pull()
+
+  if (length(im) == 0) {
+    stop("Can't find given instrument")
+  }
+  ds <- if (im %in% c(70, 80)) {
+    ch |>
+      filter(.data$symbol == .symbol) |>
+      mutate(type = ifelse(.data$instrument_market == 80, "call", "put")) |>
+      select("refdate", "symbol", "type", "strike_price", "maturity_date", "close", "volume", "isin")
+  } else {
+    ch |>
+      filter(.data$symbol == .symbol) |>
+      select("refdate", "symbol", "close", "isin")
+  }
+  ds |> arrange(.data$refdate)
+}
+
+cotahist_get_instrument_by_symbol("PETRM217") |> collect()

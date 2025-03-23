@@ -95,3 +95,50 @@ arrow::open_dataset(file.path(cachedir(), "meta"), format = "json")
 ds |>
   ggplot(aes(x = refdate, y = close)) +
   geom_line()
+
+
+l <- yaml::yaml.load("
+columns:
+  refdate: Date
+  curve_name: character
+  forward_date: Date
+  cur_days: integer
+  biz_days: integer
+  r_252: numeric
+  r_360: numeric
+")
+
+l <- yaml::yaml.load("
+fields:
+- name: refdate
+  description: Data de referência
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
+- name: curve_name
+  description: Nome da curva
+  handler:
+    type: character
+- name: cur_days
+  description: Dias corridos
+  handler:
+    type: integer
+- name: r_252
+  description: Taxa na base 252 ou taxa na base 360 ou preço futuro
+  handler:
+    type: number
+- name: r_360
+  description: Taxa na base 360 ou NA
+  handler:
+    type: number
+")
+
+
+# Extract schemas from objects
+df <- data.frame(col1 = 2:4, col2 = c(0.1, 0.3, 0.5))
+(tab1 <- arrow::arrow_table(df))
+arrow::schema(tab1)
+(tab2 <- arrow::arrow_table(df, schema = arrow::schema(col1 = arrow::int8(), col2 = arrow::float32())))
+arrow::schema(tab2)
+(tab3 <- arrow::arrow_table(df, schema = arrow::schema(col2 = arrow::float32(), col1 = arrow::int8())))
+arrow::schema(tab2)
