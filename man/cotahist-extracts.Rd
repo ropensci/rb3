@@ -2,48 +2,43 @@
 % Please edit documentation in R/scraper-cotahist.R
 \name{cotahist-extracts}
 \alias{cotahist-extracts}
-\alias{cotahist_equity_get}
-\alias{cotahist_bdrs_get}
-\alias{cotahist_units_get}
-\alias{cotahist_etfs_get}
-\alias{cotahist_fiis_get}
-\alias{cotahist_fidcs_get}
-\alias{cotahist_fiagros_get}
-\alias{cotahist_indexes_get}
-\alias{cotahist_equity_options_get}
-\alias{cotahist_index_options_get}
-\alias{cotahist_funds_options_get}
-\alias{cotahist_get_symbols}
-\title{Extraction of data from COTAHIST datasets}
+\alias{cotahist_filter_equity}
+\alias{cotahist_filter_etf}
+\alias{cotahist_filter_bdr}
+\alias{cotahist_filter_unit}
+\alias{cotahist_filter_fii}
+\alias{cotahist_filter_fidc}
+\alias{cotahist_filter_fiagro}
+\alias{cotahist_filter_index}
+\alias{cotahist_filter_equity_options}
+\alias{cotahist_filter_index_options}
+\alias{cotahist_filter_fund_options}
+\title{Filtering data from COTAHIST datasets}
 \usage{
-cotahist_equity_get(x)
+cotahist_filter_equity(x)
 
-cotahist_bdrs_get(x)
+cotahist_filter_etf(x)
 
-cotahist_units_get(x)
+cotahist_filter_bdr(x)
 
-cotahist_etfs_get(x)
+cotahist_filter_unit(x)
 
-cotahist_fiis_get(x)
+cotahist_filter_fii(x)
 
-cotahist_fidcs_get(x)
+cotahist_filter_fidc(x)
 
-cotahist_fiagros_get(x)
+cotahist_filter_fiagro(x)
 
-cotahist_indexes_get(x)
+cotahist_filter_index(x)
 
-cotahist_equity_options_get(x)
+cotahist_filter_equity_options(x)
 
-cotahist_index_options_get(x)
+cotahist_filter_index_options(x)
 
-cotahist_funds_options_get(x)
-
-cotahist_get_symbols(x, symbols)
+cotahist_filter_fund_options(x)
 }
 \arguments{
 \item{x}{A cotahist dataset}
-
-\item{symbols}{list of symbols to extract market data from the COTAHIST dataset.}
 }
 \value{
 A dataframe containing the requested market data.
@@ -53,70 +48,59 @@ A set of functions that implement filters to obtain organized and useful
 data from the COTAHIST datasets.
 }
 \details{
-The functions \code{cotahist_equity_get()}, \code{cotahist_etfs_get()}, \code{cotahist_bdrs_get()},
-\code{cotahist_units_get()}, \code{cotahist_fiis_get()}, \code{cotahist_fidcs_get()},
-\code{cotahist_fiagros_get()}, and \code{cotahist_indexes_get()} return dataframes with
-the following columns: "refdate", "symbol", "open", "high", "low",
-"close", "volume", "traded_contracts", "trade_quantity",
-"distribution_id", "isin".
+The functions bellow return data from plain instruments, stocks, funds and indexes.
 \itemize{
-\item \code{cotahist_equity_get()} returns data for stocks and UNITs.
-\item \code{cotahist_etfs_get()} returns data for ETFs.
-\item \code{cotahist_bdrs_get()} returns data for BDRs.
-\item \code{cotahist_units_get()} returns data exclusively for UNITs.
-\item \code{cotahist_indexes_get()} returns data for indices. The index data returned by \code{cotahist_indexes_get()}
+\item \code{cotahist_filter_equity()} returns data for stocks and UNITs.
+\item \code{cotahist_filter_etf()} returns data for ETFs.
+\item \code{cotahist_filter_bdr()} returns data for BDRs.
+\item \code{cotahist_filter_unit()} returns data exclusively for UNITs.
+\item \code{cotahist_filter_index()} returns data for indices. The index data returned by \code{cotahist_filter_index()}
 corresponds to option expiration days, meaning there is only one index quote per month.
-\item \code{cotahist_fiis_get()}, \code{cotahist_fidcs_get()}, and \code{cotahist_fiagros_get()} return data for funds.
+\item \code{cotahist_filter_fii()}, \code{cotahist_filter_fidc()}, and \code{cotahist_filter_fiagro()} return data for funds.
 }
 
-The functions \code{cotahist_equity_options_get()}, \code{cotahist_index_options_get()},
-and \code{cotahist_funds_options_get()} return dataframes with the following columns:
-"refdate", "symbol", "type", "strike_price", "maturity_date",
-"open", "high", "low", "close", "volume", "traded_contracts",
-"trade_quantity", "isin".
+The functions bellow return data related to options, from equities, indexes and funds (ETFs).
 \itemize{
-\item \code{cotahist_equity_options_get()} returns data for stock options.
-\item \code{cotahist_index_options_get()} returns data for index options, currently only for IBOVESPA.
-\item \code{cotahist_funds_options_get()} returns data for fund options, currently only for ETFs.
+\item \code{cotahist_filter_equity_options()} returns data for stock options.
+\item \code{cotahist_filter_index_options()} returns data for index options, currently only for IBOVESPA.
+\item \code{cotahist_filter_funds_options()} returns data for fund options, currently only for ETFs.
 }
 
-The function \code{cotahist_get_symbols()} returns data related to the provided symbols.
+The dataset provided must have at least the columns \code{isin}, \code{instrument_market}, \code{bdi_code} and \code{specification_code}.
+A combination of these columns is used to filter the desired data.
 }
 \examples{
 \dontrun{
-df <- cotahist_get() |> cotahist_equity_get()
+df <- cotahist_get() |> cotahist_filter_equity()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_brds_get()
+df <- cotahist_get() |> cotahist_filter_etf()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_units_get()
+df <- cotahist_get() |> cotahist_filter_bdr()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_etfs_get()
+df <- cotahist_get() |> cotahist_filter_unit()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_fiis_get()
+df <- cotahist_get() |> cotahist_filter_fii()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_fidcs_get()
+df <- cotahist_get() |> cotahist_filter_fidc()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_fiagros_get()
+df <- cotahist_get() |> cotahist_filter_fiagro()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_indexes_get()
+df <- cotahist_get() |> cotahist_filter_index()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_equity_options_get()
+df <- cotahist_get() |> cotahist_filter_equity_options()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_index_options_get()
+df <- cotahist_get() |> cotahist_filter_index_options()
 }
 \dontrun{
-df <- cotahist_get() |> cotahist_funds_options_get()
-}
-\dontrun{
-df <- cotahist_get() |> cotahist_get_symbols(c("BBDC4", "ITSA4", "JHSF3"))
+df <- cotahist_get() |> cotahist_filter_fund_options()
 }
 }

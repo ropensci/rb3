@@ -50,7 +50,9 @@ test_that("it should extract equity data from cotahist dataset", {
     collect() |>
     ncol()
 
-  df <- cotahist_equity_get(ch)
+  df <- cotahist_filter_equity(ch)
+  expect_s3_class(df, "arrow_dplyr_query")
+  df <- collect(df)
   expect_type(df$close, "double")
   expect_type(df$trade_quantity, "integer")
   expect_type(df$traded_contracts, "integer")
@@ -58,34 +60,32 @@ test_that("it should extract equity data from cotahist dataset", {
   expect_false("AAPL34" %in% df$symbol)
   expect_true("TAEE11" %in% df$symbol)
   expect_true(nrow(df) < n)
-  expect_true(ncol(df) == 11)
-  expect_true(ncol(df) < nc)
 
-  df <- cotahist_bdrs_get(ch)
+  df <- cotahist_filter_bdr(ch)
+  expect_s3_class(df, "arrow_dplyr_query")
+  df <- collect(df)
   expect_type(df$close, "double")
   expect_type(df$trade_quantity, "integer")
   expect_false("PETR4" %in% df$symbol)
   expect_true("AAPL34" %in% df$symbol)
   expect_false("TAEE11" %in% df$symbol)
   expect_true(nrow(df) < n)
-  expect_true(ncol(df) == 11)
-  expect_true(ncol(df) < nc)
 
-  df <- cotahist_units_get(ch)
+  df <- cotahist_filter_unit(ch)
+  expect_s3_class(df, "arrow_dplyr_query")
+  df <- collect(df)
   expect_type(df$close, "double")
   expect_type(df$trade_quantity, "integer")
   expect_false("PETR4" %in% df$symbol)
   expect_false("AAPL34" %in% df$symbol)
   expect_true("TAEE11" %in% df$symbol)
   expect_true(nrow(df) < n)
-  expect_true(ncol(df) == 11)
-  expect_true(ncol(df) < nc)
 })
 
 test_that("it should extract indexes data from cotahist dataset", {
   ch <- cotahist_get("daily")
 
-  df <- cotahist_indexes_get(ch)
+  df <- cotahist_filter_index(ch) |> collect()
   if (nrow(df) > 0) {
     expect_false("PETR4" %in% df$symbol)
     expect_false("AAPL34" %in% df$symbol)
@@ -96,16 +96,16 @@ test_that("it should extract indexes data from cotahist dataset", {
 
 test_that("it should extract funds data from cotahist dataset", {
   ch <- cotahist_get("daily")
-  df <- cotahist_etfs_get(ch)
+  df <- cotahist_filter_etf(ch) |> collect()
   expect_true(nrow(df) > 0)
 
-  df <- cotahist_fiis_get(ch)
+  df <- cotahist_filter_fii(ch) |> collect()
   expect_true(nrow(df) > 0)
 
-  df <- cotahist_fidcs_get(ch)
+  df <- cotahist_filter_fidc(ch) |> collect()
   expect_true(nrow(df) >= 0)
 
-  df <- cotahist_fiagros_get(ch)
+  df <- cotahist_filter_fiagro(ch) |> collect()
   expect_true(nrow(df) >= 0)
 })
 
@@ -117,38 +117,23 @@ test_that("it should extract specific symbols from cotahist dataset", {
     collect() |>
     ncol()
 
-  df <- cotahist_get_symbols(ch, symbols)
-  expect_true(length(symbols) == nrow(df))
+  df <- cotahist_get_instruments_by_symbols(symbols) |> collect()
+  # expect_true(length(symbols) == nrow(df))
   expect_true(nc == ncol(df))
 })
 
 test_that("it should extract options data from cotahist dataset", {
-  ch <- cotahist_get("daily")
-  
-  df <- cotahist_equity_options_get(ch)
-  expect_s3_class(df$type, "factor")
+  symbols <- c("PETR3", "PETR4")
+  df <- cotahist_get_options_by_symbols(symbols) |> collect()
+  expect_type(df$type, "character")
   expect_s3_class(df$maturity_date, "Date")
   expect_type(df$strike_price, "double")
-  
-  df <- cotahist_funds_options_get(ch)
-  expect_true(nrow(df) > 0)
-  df <- cotahist_index_options_get(ch)
-  expect_true(nrow(df) > 0)
-})
 
-test_that("it should use *_superset functions", {
-  .meta <- download_marketdata("b3-reference-rates", refdate = .date, curve_name = "PRE")
-  read_marketdata(.meta)
-
-  yc <- yc_brl_get() |> filter(refdate == .date)
   ch <- cotahist_get("daily")
-
-  df <- cotahist_equity_options_superset(ch, yc)
-  expect_true(!anyNA(df))
-  df <- cotahist_funds_options_superset(ch, yc)
-  expect_true(!anyNA(df))
-  df <- cotahist_options_by_symbol_superset("PETR4", ch, yc)
-  expect_true(!anyNA(df))
-  # df <- cotahist_index_options_superset(ch, yc)
-  expect_error(.cotahist_options_superset(ch, yc), "You must provide either a security category or a symbol.")
+  df <- cotahist_filter_equity_options(ch) |> collect()
+  expect_true(nrow(df) > 0)
+  df <- cotahist_filter_fund_options(ch) |> collect()
+  expect_true(nrow(df) > 0)
+  df <- cotahist_filter_index_options(ch) |> collect()
+  expect_true(nrow(df) > 0)
 })

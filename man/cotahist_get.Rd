@@ -56,7 +56,9 @@ ds_daily <- cotahist_get("daily")
 # any date you want.
 meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2014-01-03"))
 read_marketdata(meta)
-df_daily <- cotahist_get("daily") |> filter(refdate == "2014-01-03") |> collect()
+df_daily <- cotahist_get("daily") |>
+  filter(refdate == "2014-01-03") |>
+  collect()
 }
 
 }

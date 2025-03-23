@@ -2,22 +2,13 @@
 % Please edit documentation in R/scraper-cotahist.R, R/scraper-yc.R
 \name{superdataset}
 \alias{superdataset}
-\alias{cotahist_equity_options_superset}
-\alias{cotahist_funds_options_superset}
-\alias{cotahist_index_options_superset}
-\alias{cotahist_options_by_symbol_superset}
+\alias{cotahist_get_options_by_symbols}
 \alias{yc_brl_superset}
 \alias{yc_usd_superset}
 \alias{yc_ipca_superset}
 \title{Enhanced Dataset Creation}
 \usage{
-cotahist_equity_options_superset(ch, yc)
-
-cotahist_funds_options_superset(ch, yc)
-
-cotahist_index_options_superset(ch, yc)
-
-cotahist_options_by_symbol_superset(symbol, ch, yc)
+cotahist_get_options_by_symbols(symbols)
 
 yc_brl_superset(yc, fut)
 
@@ -26,11 +17,7 @@ yc_usd_superset(yc, fut)
 yc_ipca_superset(yc, fut)
 }
 \arguments{
-\item{ch}{A cotahist dataset}
-
-\item{yc}{An yield curve dataset}
-
-\item{symbol}{A string with the name of the stock
+\item{symbols}{list of symbols to extract market data from the COTAHIST dataset.
 
 The functions \code{cotahist_equity_options_superset()}, \code{cotahist_funds_options_superset()},
 \code{cotahist_index_options_superset()}, and \code{cotahist_options_by_symbol_superset()} use
@@ -68,11 +55,9 @@ detailed view of the term structure of interest rate.
 }
 \examples{
 \dontrun{
-date_ <- Sys.Date() - 1
-ch <- cotahist_get() |> filter(refdate == date_)
-yc <- yc_brl_get() |> filter(refdate == date_)
-ch_ss <- cotahist_equity_options_superset(ch, yc)
-petr4_ch_ss <- cotahist_options_by_symbol_superset("PETR4", ch, yc)
+date <- Sys.Date() - 1
+bova_options <- cotahist_get_options_by_symbols("BOVA11") |> filter(refdate == date)
+petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(refdate == date)
 }
 
 \dontrun{

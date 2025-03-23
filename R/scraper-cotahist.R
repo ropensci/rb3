@@ -2,25 +2,25 @@
 #'
 #' The COTAHIST files are available with daily, monthly, and yearly data.
 #' Therefore, the datasets correspond to these periods (`daily`, `monthly`, `yearly`).
-#' See \code{\link{download_marketdata}} and \code{\link{read_marketdata}} for 
+#' See \code{\link{download_marketdata}} and \code{\link{read_marketdata}} for
 #' instructions on how to download the files and create the datasets.
 #'
-#' The COTAHIST files contain historical quotation data (\emph{Cotações Históricas}) 
-#' for stocks, stock options, stock forward contracts, ETFs, ETF options, 
+#' The COTAHIST files contain historical quotation data (\emph{Cotações Históricas})
+#' for stocks, stock options, stock forward contracts, ETFs, ETF options,
 #' BDRs, UNITs, REITs (FIIs - \emph{Fundos Imobiliários}), FIAGROs (\emph{Fundos da Agroindústria}),
-#' and FIDCs (\emph{Fundos de Direitos Creditórios}). These files from B3 hold 
+#' and FIDCs (\emph{Fundos de Direitos Creditórios}). These files from B3 hold
 #' the oldest available information. The earliest annual file available dates back to 1986.
-#' However, it is not recommended to use data prior to 1995 due to the monetary 
+#' However, it is not recommended to use data prior to 1995 due to the monetary
 #' stabilization process in 1994 (Plano Real).
 #'
 #' Note that the prices in the files are not adjusted for corporate actions.
 #' As a result, only ETF series can be used without issues.
-#' 
+#'
 #' @param type A string specifying the dataset to be used:
 #'             `"daily"`, `"monthly"`, or `"yearly"`.
 #'
-#' @details Before using the dataset, it is necessary to download the files 
-#' using the \code{\link{download_marketdata}} function and create the datasets 
+#' @details Before using the dataset, it is necessary to download the files
+#' using the \code{\link{download_marketdata}} function and create the datasets
 #' with the \code{\link{read_marketdata}} function.
 #'
 #' @return An arrow Dataset class that can be used with dplyr to filter the data of interest.
@@ -31,7 +31,7 @@
 #' meta <- download_marketdata("b3-cotahist-yearly", year = 2001)
 #' read_marketdata(meta)
 #' ds_yearly <- cotahist_get()
-#' 
+#'
 #' # Earliest available annual file: 1986
 #' # Recommended starting point: 1995 (after Plano Real)
 #' }
@@ -46,7 +46,9 @@
 #' # any date you want.
 #' meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2014-01-03"))
 #' read_marketdata(meta)
-#' df_daily <- cotahist_get("daily") |> filter(refdate == "2014-01-03") |> collect()
+#' df_daily <- cotahist_get("daily") |>
+#'   filter(refdate == "2014-01-03") |>
+#'   collect()
 #' }
 #'
 #' @export
@@ -56,28 +58,40 @@ cotahist_get <- function(type = c("yearly", "monthly", "daily")) {
   template_dataset(template, layer = 2)
 }
 
-.select_instrument <- function(x) {
-  x |> select(
-    "refdate", "symbol", "open", "high", "low", "close", "volume",
-    "traded_contracts", "trade_quantity", "distribution_id", "isin"
-  )
-}
+#' Filtering data from COTAHIST datasets
+#'
+#' A set of functions that implement filters to obtain organized and useful
+#' data from the COTAHIST datasets.
+#'
+#' The functions bellow return data from plain instruments, stocks, funds and indexes.
+#'
+#' - `cotahist_filter_equity()` returns data for stocks and UNITs.
+#' - `cotahist_filter_etf()` returns data for ETFs.
+#' - `cotahist_filter_bdr()` returns data for BDRs.
+#' - `cotahist_filter_unit()` returns data exclusively for UNITs.
+#' - `cotahist_filter_index()` returns data for indices. The index data returned by `cotahist_filter_index()`
+#'   corresponds to option expiration days, meaning there is only one index quote per month.
+#' - `cotahist_filter_fii()`, `cotahist_filter_fidc()`, and `cotahist_filter_fiagro()` return data for funds.
+#'
+#' The functions bellow return data related to options, from equities, indexes and funds (ETFs).
+#'
+#' - `cotahist_filter_equity_options()` returns data for stock options.
+#' - `cotahist_filter_index_options()` returns data for index options, currently only for IBOVESPA.
+#' - `cotahist_filter_funds_options()` returns data for fund options, currently only for ETFs.
+#'
+#' @param x A cotahist dataset
+#' 
+#' @details
+#' The dataset provided must have at least the columns `isin`, `instrument_market`, `bdi_code` and `specification_code`.
+#' A combination of these columns is used to filter the desired data.
+#'
+#' @return A dataframe containing the requested market data.
+#'
+#' @name cotahist-extracts
+NULL
 
-.select_options <- function(x) {
-  x |> select(
-    "refdate", "symbol", "type", "strike_price", "maturity_date",
-    "open", "high", "low", "close", "volume", "traded_contracts",
-    "trade_quantity", "isin",
-  )
-}
-
-.cotahist_options_get <- function(x, .security_category) {
-  x |>
-    .filter_instrument_data(c(70, 80), .security_category) |>
-    collect() |>
-    mutate(
-      type = factor(.data$instrument_market, c(70, 80), c("call", "put"))
-    )
+.filter_option_data <- function(x, .security_category) {
+  .filter_instrument_data(x, c(70, 80), .security_category)
 }
 
 .filter_instrument_data <- function(x, .instrument_market, .security_category) {
@@ -88,307 +102,196 @@ cotahist_get <- function(type = c("yearly", "monthly", "daily")) {
     )
 }
 
-#' Extraction of data from COTAHIST datasets
-#'
-#' A set of functions that implement filters to obtain organized and useful 
-#' data from the COTAHIST datasets.
-#'
-#' The functions `cotahist_equity_get()`, `cotahist_etfs_get()`, `cotahist_bdrs_get()`, 
-#' `cotahist_units_get()`, `cotahist_fiis_get()`, `cotahist_fidcs_get()`, 
-#' `cotahist_fiagros_get()`, and `cotahist_indexes_get()` return dataframes with 
-#' the following columns: "refdate", "symbol", "open", "high", "low", 
-#' "close", "volume", "traded_contracts", "trade_quantity", 
-#' "distribution_id", "isin".
-#'
-#' - `cotahist_equity_get()` returns data for stocks and UNITs.  
-#' - `cotahist_etfs_get()` returns data for ETFs.  
-#' - `cotahist_bdrs_get()` returns data for BDRs.  
-#' - `cotahist_units_get()` returns data exclusively for UNITs.  
-#' - `cotahist_indexes_get()` returns data for indices. The index data returned by `cotahist_indexes_get()`
-#'   corresponds to option expiration days, meaning there is only one index quote per month.  
-#' - `cotahist_fiis_get()`, `cotahist_fidcs_get()`, and `cotahist_fiagros_get()` return data for funds.  
-#'
-#' The functions `cotahist_equity_options_get()`, `cotahist_index_options_get()`, 
-#' and `cotahist_funds_options_get()` return dataframes with the following columns: 
-#' "refdate", "symbol", "type", "strike_price", "maturity_date", 
-#' "open", "high", "low", "close", "volume", "traded_contracts", 
-#' "trade_quantity", "isin".
-#'
-#' - `cotahist_equity_options_get()` returns data for stock options.  
-#' - `cotahist_index_options_get()` returns data for index options, currently only for IBOVESPA.  
-#' - `cotahist_funds_options_get()` returns data for fund options, currently only for ETFs.  
-#'
-#' The function `cotahist_get_symbols()` returns data related to the provided symbols.
-#'
-#' @param x A cotahist dataset
-#' 
-#' @return A dataframe containing the requested market data.
-#'
-#' @name cotahist-extracts
+#' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_equity_get()
+#' df <- cotahist_get() |> cotahist_filter_equity()
 #' }
 #' @export
-cotahist_equity_get <- function(x) {
-  .filter_instrument_data(x, 10, c("UNT", "CDA", "ACN")) |>
-    .select_instrument() |>
-    collect()
+cotahist_filter_equity <- function(x) {
+  .filter_instrument_data(x, 10, c("UNT", "CDA", "ACN"))
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_brds_get()
+#' df <- cotahist_get() |> cotahist_filter_etf()
 #' }
 #' @export
-cotahist_bdrs_get <- function(x) {
-  .filter_instrument_data(x, 10, "BDR") |>
-    .select_instrument() |>
-    collect()
-}
-
-#' @rdname cotahist-extracts
-#' @examples
-#' \dontrun{
-#' df <- cotahist_get() |> cotahist_units_get()
-#' }
-#' @export
-cotahist_units_get <- function(x) {
-  .filter_instrument_data(x, 10, c("UNT", "CDA")) |>
-    .select_instrument() |>
-    collect()
-}
-
-#' @rdname cotahist-extracts
-#' @examples
-#' \dontrun{
-#' df <- cotahist_get() |> cotahist_etfs_get()
-#' }
-#' @export
-cotahist_etfs_get <- function(x) {
+cotahist_filter_etf <- function(x) {
   x |>
     filter(.data$bdi_code == 14, str_starts(.data$specification_code, "CI")) |>
-    .filter_instrument_data(10, "CTF") |>
-    .select_instrument() |>
-    collect()
+    .filter_instrument_data(10, "CTF")
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_fiis_get()
+#' df <- cotahist_get() |> cotahist_filter_bdr()
 #' }
 #' @export
-cotahist_fiis_get <- function(x) {
+cotahist_filter_bdr <- function(x) {
+  .filter_instrument_data(x, 10, "BDR")
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_get() |> cotahist_filter_unit()
+#' }
+#' @export
+cotahist_filter_unit <- function(x) {
+  .filter_instrument_data(x, 10, c("UNT", "CDA"))
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
+#' df <- cotahist_get() |> cotahist_filter_fii()
+#' }
+#' @export
+cotahist_filter_fii <- function(x) {
   x |>
     filter(.data$bdi_code %in% c(5, 12)) |>
-    .filter_instrument_data(10, "CTF") |>
-    .select_instrument() |>
-    collect()
+    .filter_instrument_data(10, "CTF")
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_fidcs_get()
+#' df <- cotahist_get() |> cotahist_filter_fidc()
 #' }
 #' @export
-cotahist_fidcs_get <- function(x) {
+cotahist_filter_fidc <- function(x) {
   x |>
     filter(
       .data$bdi_code == 14, str_starts(.data$specification_code, "FIDC")
     ) |>
-    .filter_instrument_data(10, "CTF") |>
-    .select_instrument() |>
-    collect()
+    .filter_instrument_data(10, "CTF")
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_fiagros_get()
+#' df <- cotahist_get() |> cotahist_filter_fiagro()
 #' }
 #' @export
-cotahist_fiagros_get <- function(x) {
+cotahist_filter_fiagro <- function(x) {
   x |>
     filter(.data$bdi_code == 13) |>
-    .filter_instrument_data(10, "CTF") |>
-    .select_instrument() |>
-    collect()
+    .filter_instrument_data(10, "CTF")
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_indexes_get()
+#' df <- cotahist_get() |> cotahist_filter_index()
 #' }
 #' @export
-cotahist_indexes_get <- function(x) {
-  .filter_instrument_data(x, 10, "IND") |>
-    .select_instrument() |>
-    collect()
+cotahist_filter_index <- function(x) {
+  .filter_instrument_data(x, 10, "IND")
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_equity_options_get()
+#' df <- cotahist_get() |> cotahist_filter_equity_options()
 #' }
 #' @export
-cotahist_equity_options_get <- function(x) {
-  x |>
-    .cotahist_options_get(c("ACN", "UNT", "CDA")) |>
-    .select_options()
+cotahist_filter_equity_options <- function(x) {
+  .filter_option_data(x, c("ACN", "UNT", "CDA"))
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_index_options_get()
+#' df <- cotahist_get() |> cotahist_filter_index_options()
 #' }
 #' @export
-cotahist_index_options_get <- function(x) {
-  x |>
-    .cotahist_options_get("IND") |>
-    .select_options()
+cotahist_filter_index_options <- function(x) {
+  .filter_option_data(x, "IND")
 }
 
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
-#' df <- cotahist_get() |> cotahist_funds_options_get()
+#' df <- cotahist_get() |> cotahist_filter_fund_options()
 #' }
 #' @export
-cotahist_funds_options_get <- function(x) {
-  x |>
-    .cotahist_options_get("CTF") |>
-    .select_options()
-}
-
-#' @rdname cotahist-extracts
-#'
-#' @param symbols list of symbols to extract market data from the COTAHIST dataset.
-#'
-#' @examples
-#' \dontrun{
-#' df <- cotahist_get() |> cotahist_get_symbols(c("BBDC4", "ITSA4", "JHSF3"))
-#' }
-#' @export
-cotahist_get_symbols <- function(x, symbols) {
-  x |>
-    filter(.data$symbol %in% symbols) |>
-    .select_instrument() |>
-    collect()
+cotahist_filter_fund_options <- function(x) {
+  .filter_option_data(x, "CTF")
 }
 
 #' Enhanced Dataset Creation
 #'
-#' To maximize the utility of B3's existing datasets, several functions integrate data from multiple 
-#' sources to generate specialized datasets for specific analytical needs. For instance, 
-#' `cotahist_equity_options_superset()` combines data from COTAHIST datasets 
-#' (`b3-cotahist-yearly`, `b3-cotahist-monthly`, and `b3-cotahist-daily`) and Reference Rates 
-#' (`b3-reference-rates`) to construct a dataset containing stock options data. This dataset 
-#' includes details such as the closing price of the underlying stock, its ticker symbol, and the 
-#' applicable interest rate at option expiration. This comprehensive data enables users to perform 
+#' To maximize the utility of B3's existing datasets, several functions integrate data from multiple
+#' sources to generate specialized datasets for specific analytical needs. For instance,
+#' `cotahist_equity_options_superset()` combines data from COTAHIST datasets
+#' (`b3-cotahist-yearly`, `b3-cotahist-monthly`, and `b3-cotahist-daily`) and Reference Rates
+#' (`b3-reference-rates`) to construct a dataset containing stock options data. This dataset
+#' includes details such as the closing price of the underlying stock, its ticker symbol, and the
+#' applicable interest rate at option expiration. This comprehensive data enables users to perform
 #' option pricing and calculate implied volatility.
 #'
-#' @param ch A cotahist dataset
-#' @param yc An yield curve dataset
-#' @param fut futures dataset
-#' @param symbol A string with the name of the stock
+#' @param symbols list of symbols to extract market data from the COTAHIST dataset.
 #'
-#' The functions `cotahist_equity_options_superset()`, `cotahist_funds_options_superset()`, 
-#' `cotahist_index_options_superset()`, and `cotahist_options_by_symbol_superset()` use 
-#' information from the COTAHIST datasets (`b3-cotahist-yearly`, `b3-cotahist-monthly`, 
-#' and `b3-cotahist-daily`) and Reference Rates (`b3-reference-rates`) and return a dataframe 
-#' containing stock option data, including the closing price of the underlying stocks, the ticker 
-#' of the underlying asset, and the interest rate at the option's expiration. The returned dataframe 
-#' contains the following columns: "refdate", "symbol", "type", "symbol_underlying", 
-#' "strike_price", "maturity_date", "r_252", "close", "close_underlying", "volume", 
+#' The functions `cotahist_equity_options_superset()`, `cotahist_funds_options_superset()`,
+#' `cotahist_index_options_superset()`, and `cotahist_options_by_symbol_superset()` use
+#' information from the COTAHIST datasets (`b3-cotahist-yearly`, `b3-cotahist-monthly`,
+#' and `b3-cotahist-daily`) and Reference Rates (`b3-reference-rates`) and return a dataframe
+#' containing stock option data, including the closing price of the underlying stocks, the ticker
+#' of the underlying asset, and the interest rate at the option's expiration. The returned dataframe
+#' contains the following columns: "refdate", "symbol", "type", "symbol_underlying",
+#' "strike_price", "maturity_date", "r_252", "close", "close_underlying", "volume",
 #' "trade_quantity", and "traded_contracts".
 #'
 #' `cotahist_options_by_symbol_superset()` returns the same dataset but filtered for the specified asset ticker.
-#' 
+#'
 #' @return A dataframe with the super-dataset.
 #'
 #' @examples
 #' \dontrun{
-#' date_ <- Sys.Date() - 1
-#' ch <- cotahist_get() |> filter(refdate == date_)
-#' yc <- yc_brl_get() |> filter(refdate == date_)
-#' ch_ss <- cotahist_equity_options_superset(ch, yc)
-#' petr4_ch_ss <- cotahist_options_by_symbol_superset("PETR4", ch, yc)
+#' date <- Sys.Date() - 1
+#' bova_options <- cotahist_get_options_by_symbols("BOVA11") |> filter(refdate == date)
+#' petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(refdate == date)
 #' }
-#' 
+#'
 #' @name superdataset
 NULL
 
-.cotahist_options_superset <- function(ch, yc, .security_category = NULL, .symbol = NULL) {
-  if (!is.null(.security_category)) {
-    eqs <- .filter_instrument_data(ch, 10, .security_category) |> collect()
-    eqs_opts <- .cotahist_options_get(ch, .security_category)
-  } else if (!is.null(.symbol)) {
-    eqs <- ch |>
-      filter(.data$symbol == .symbol) |>
-      collect()
-    eqs_opts <- ch |>
-      filter(.data$isin == eqs$isin[1], .data$instrument_market %in% c(70, 80)) |>
-      collect() |>
-      mutate(
-        type = factor(.data$instrument_market, c(70, 80), c("call", "put"))
-      )
-  } else {
-    stop("You must provide either a security category or a symbol.")
-  }
-  yc_df <- yc |>
-    select("refdate", "forward_date", "r_252") |>
-    collect()
-  eq <- inner_join(eqs_opts, eqs, by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one") |>
-    mutate(
-      fixing_maturity_date = following(.data$maturity_date, "Brazil/ANBIMA")
-    )
-  inner_join(eq, yc_df |> select("refdate", "forward_date", "r_252"),
-      by = c("refdate", "fixing_maturity_date" = "forward_date")
-    ) |>
+#' @rdname superdataset
+#' @export
+cotahist_get_options_by_symbols <- function(symbols) {
+  ch <- cotahist_get()
+  yc <- yc_brl_get() |> select("refdate", "forward_date", "r_252")
+
+  eqs <- ch |>
+    filter(.data$symbol %in% symbols) |>
+    select("refdate", "symbol", "close", "isin")
+
+  eqs_opts <- ch |>
+    filter(.data$instrument_market %in% c(70, 80)) |>
+    select("refdate", "symbol", "strike_price", "maturity_date", "close", "volume", "isin", "instrument_market")
+
+  eq <- inner_join(eqs_opts, eqs,
+    by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one"
+  )
+  ds <- inner_join(eq, yc, by = c("refdate" = "refdate", "maturity_date" = "forward_date"))
+
+  ds |>
+    mutate(type = ifelse(.data$instrument_market == 80, "call", "put")) |>
     select(
       "refdate",
+      "symbol_underlying",
+      "close_underlying",
       "symbol",
       "type",
-      "symbol_underlying",
       "strike_price",
       "maturity_date",
-      "r_252",
       "close",
-      "close_underlying",
       "volume",
-      "trade_quantity",
-      "traded_contracts",
+      "r_252",
     )
-}
-
-#' @rdname superdataset
-#' @export
-cotahist_equity_options_superset <- function(ch, yc) {
-  .cotahist_options_superset(ch, yc, .security_category = c("UNT", "CDA", "ACN"))
-}
-
-#' @rdname superdataset
-#' @export
-cotahist_funds_options_superset <- function(ch, yc) {
-  .cotahist_options_superset(ch, yc, .security_category = "CTF")
-}
-
-#' @rdname superdataset
-#' @export
-cotahist_index_options_superset <- function(ch, yc) {
-  .cotahist_options_superset(ch, yc, .security_category = "IND")
-}
-
-#' @rdname superdataset
-#' @export
-cotahist_options_by_symbol_superset <- function(symbol, ch, yc) {
-  .cotahist_options_superset(ch, yc, .symbol = symbol)
 }
 
 process_cotahist <- function(ds) {
