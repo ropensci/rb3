@@ -278,6 +278,7 @@ cotahist_funds_options_get <- function(x) {
 cotahist_get_symbols <- function(x, symbols) {
   x |>
     filter(.data$symbol %in% symbols) |>
+    .select_instrument() |>
     collect()
 }
 
