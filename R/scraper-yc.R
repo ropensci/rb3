@@ -1,54 +1,35 @@
-#' Add Business Days Column to a DataFrame or Arrow Query
-#'
-#' This function adds a `biz_days` column to the input dataset by calculating 
-#' business days using the `bizdays::bizdayse` function. It supports both 
-#' standard data frames and `arrow_dplyr_query` objects.
-#'
-#' @param x A `data.frame` or an `arrow_dplyr_query` object containing 
-#'          at least the columns `refdate` and `cur_days`.
-#' 
-#' @return A `tibble` with an additional `biz_days` column, which represents 
-#'         business days computed based on a predefined calendar.
-#' 
-#' @examples
-#' \dontrun{
-#'   df_yc_1 <- yc_brl_get() 
-#'   df <- df_yc_1 |> yc_add_bizdays_column()
-#' }
-#' @export
-yc_add_bizdays_column <- function(x) {
+process_yc <- function(ds) {
   template <- template_retrieve("b3-reference-rates")
-  x |>
-    collect() |>
-    mutate(
-      biz_days = bizdays::bizdayse(.data$refdate, .data$cur_days, template$calendar)
-    )
-}
-
-.yield_curve_get <- function(.curve_name = NULL) {
-  template <- template_retrieve("b3-reference-rates")
-  ds <- template_dataset(template)
-  query <- if (!is.null(.curve_name)) {
-    ds |>
-      filter(.data$curve_name == .curve_name)
-  } else {
-    ds
-  }
-  query |>
+  ds <- ds |>
     mutate(
       dur = lubridate::ddays(.data$cur_days),
       forward_date = lubridate::as_date(.data$refdate + .data$dur),
       r_252 = .data$r_252 / 100,
       r_360 = .data$r_360 / 100
     ) |>
+    collect() |>
+    mutate(
+      biz_days = bizdays::bizdayse(.data$refdate, .data$cur_days, template$calendar)
+    ) |>
     select(
       "curve_name",
       "refdate",
       "forward_date",
       "cur_days",
+      "biz_days",
       "r_252",
       "r_360",
     )
+  ds
+}
+
+.yield_curve_get <- function(.curve_name = NULL) {
+  template <- template_retrieve("b3-reference-rates")
+  if (is.null(.curve_name)) {
+    template_dataset(template, layer = 2)
+  } else {
+    template_dataset(template, layer = 2) |> filter(curve_name == .curve_name)
+  }
 }
 
 #' @title Retrieve Yield Curve Data

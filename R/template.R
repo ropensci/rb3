@@ -21,6 +21,33 @@ load_template_from_file <- function(fname) {
       obj[["reader"]] <- tpl$reader
       func_name <- tpl$reader[["function"]]
       obj[["read_file"]] <- getFromNamespace(func_name, "rb3")
+    } else if (n == "writers") {
+      writers_names <- names(tpl$writers)
+      writers <- lapply(writers_names, function(n) {
+        w <- tpl$writers[[n]]
+        w$layer <- n
+        if (!is.null(w[["function"]])) {
+          w$process_marketdata <- getFromNamespace(w[["function"]], "rb3")
+        } else {
+          w$process_marketdata <- identity
+        }
+        if (!is.null(w[["columns"]])) {
+          fields_ <- lapply(names(w$columns), function(name) {
+            arrow_type <- switch(w$columns[[name]],
+              numeric = arrow::float64(),
+              integer = arrow::int64(),
+              character = arrow::string(),
+              Date = arrow::date32(),
+              POSIXct = arrow::timestamp(),
+              strtime = arrow::time64(),
+            )
+            field(name, "", arrow_type)
+          })
+          w$columns <- do.call(fields, fields_)
+        }
+        w
+      })
+      obj[["writers"]] <- setNames(writers, writers_names)
     } else if (n == "downloader") {
       obj[["has_downloader"]] <- TRUE
       obj[["downloader"]] <- tpl$downloader
@@ -112,23 +139,28 @@ list_templates <- function() {
   })
 }
 
-template_schema <- function(template) {
-  arrow_types <- fields_arrow_types(template$fields)
-  do.call(arrow::schema, arrow_types)
+template_schema <- function(template, layer = NULL) {
+  layer <- if (is.null(layer)) template$writers[[1]]$layer else template$writers[[layer]]$layer
+  stopifnot(!is.null(layer))
+  writer <- template$writers[[layer]]
+  flds <- if (is.null(writer[["columns"]])) template$fields else writer$columns
+  do.call(arrow::schema, fields_arrow_types(flds))
 }
 
-template_db_folder <- function(template) {
+template_db_folder <- function(template, layer = NULL) {
   reg <- rb3_registry$get_instance()
-  db_folder <- file.path(reg[["db_folder"]], template$id)
+  layer <- if (is.null(layer)) template$writers[[1]]$layer else template$writers[[layer]]$layer
+  stopifnot(!is.null(layer))
+  db_folder <- file.path(reg$db_folder, layer, template$id)
   if (!dir.exists(db_folder)) {
     dir.create(db_folder, recursive = TRUE)
   }
   db_folder
 }
 
-template_dataset <- function(template) {
-  schema <- template_schema(template)
-  dir <- template_db_folder(template)
+template_dataset <- function(template, layer = NULL) {
+  schema <- template_schema(template, layer)
+  dir <- template_db_folder(template, layer)
   arrow::open_dataset(dir, schema)
 }
 

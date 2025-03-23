@@ -141,7 +141,11 @@ maturity2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
 #' @export
 futures_get <- function() {
   template <- template_retrieve("b3-futures-settlement-prices")
-  template_dataset(template) |>
+  template_dataset(template, layer = 2)
+}
+
+process_futures <- function(ds) {
+  ds |>
     mutate(
       symbol = paste0(.data$commodity, .data$maturity_code),
     ) |>

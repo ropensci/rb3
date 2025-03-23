@@ -21,7 +21,7 @@ read_marketdata(.meta)
 
 test_that("Test of yc_get function", {
   df_yc_1 <- yc_get()
-  expect_true(is(df_yc_1, "arrow_dplyr_query"))
+  expect_true(is(df_yc_1, "arrow_dplyr_query") || is(df_yc_1, "ArrowObject"))
   df <- df_yc_1 |> collect()
   test_df(df)
   expect_equal(df$curve_name |> unique() |> sort(), c("DIC", "DOC", "PRE"))
@@ -34,17 +34,9 @@ test_that("it should check if curve name is correct", {
   expect_true(cn == "PRE")
 })
 
-
-test_that("Test of yc_add_bizdays_column function", {
-  df_yc_1 <- yc_brl_get()
-  df <- df_yc_1 |> yc_add_bizdays_column()
-  test_df(df)
-  expect_equal(df$biz_days, bizdays::bizdays(df$refdate, df$forward_date, "Brazil/ANBIMA"))
-})
-
 test_that("Test of yc_brl_get function", {
   df_yc_1 <- yc_brl_get()
-  expect_true(is(df_yc_1, "arrow_dplyr_query"))
+  expect_true(is(df_yc_1, "arrow_dplyr_query") || is(df_yc_1, "ArrowObject"))
   df <- df_yc_1 |> collect()
   test_df(df)
   expect_equal(df$refdate + df$cur_days, df$forward_date)

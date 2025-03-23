@@ -46,7 +46,14 @@ read_marketdata <- function(meta) {
     return(invisible(NULL))
   }
   tb <- arrow::arrow_table(df, schema = template_schema(template))
-  arrow::write_dataset(tb, template_db_folder(template), partitioning = template$reader$partition)
+  for (writer in template$writers) {
+    ds <- writer$process_marketdata(tb)
+    path <- template_db_folder(template, layer = writer$layer)
+    if (is(ds, "data.frame")) {
+      ds <- arrow::arrow_table(ds, schema = template_schema(template, writer$layer))
+    }
+    arrow::write_dataset(ds, path, partitioning = writer$partition)
+  }
   invisible(df)
 }
 

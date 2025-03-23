@@ -28,8 +28,8 @@ test_that("it should get cotahist data", {
   expect_s3_class(ch_df, "data.frame")
   expect_true(nrow(ch_df) == 1000)
   template <- template_retrieve("b3-cotahist-daily")
-  expect_true(all(colnames(ch_df) == template$colnames))
-  expect_true(ncol(ch_df) == length(template$colnames))
+  expect_equal(sort(colnames(ch_df)), sort(template$colnames))
+  expect_equal(ncol(ch_df), length(template$colnames))
   expect_true(ch_df$refdate[1] == .date)
 })
 

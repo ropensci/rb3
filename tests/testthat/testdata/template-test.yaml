@@ -8,8 +8,10 @@ downloader:
   format: csv
 reader:
   function: csv_read_file
-  partition: species
   skip: 1
+writers:
+  input:
+    partition: species
 fields:
 - name: sepal_length
   handler:

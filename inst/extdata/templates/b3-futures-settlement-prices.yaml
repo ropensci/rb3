@@ -11,10 +11,24 @@ downloader:
   encoding: latin1
 reader:
   function: settlement_prices_read
-  partition: refdate
   locale:
     decimal_mark: ','
     grouping_mark: '.'
+writers:
+  input:
+    partition: refdate
+  staging:
+    function: process_futures
+    partition: [refdate, commodity]
+    columns:
+      refdate: Date
+      symbol: character
+      commodity: character
+      maturity_code: character
+      previous_price: numeric
+      price: numeric
+      price_change: numeric
+      settlement_value: numeric
 fields:
 - name: commodity
   description: Nome e código da mercadoria

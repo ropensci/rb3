@@ -12,10 +12,23 @@ downloader:
   encoding: latin1
 reader:
   function: curve_read
-  partition: [curve_name, refdate]
   locale:
     decimal_mark: ','
     grouping_mark: '.'
+writers:
+  input:
+    partition: [curve_name, refdate]
+  staging:
+    function: process_yc
+    partition: [curve_name, refdate]
+    columns:
+      curve_name: character
+      refdate: Date
+      forward_date: Date
+      cur_days: integer
+      biz_days: integer
+      r_252: numeric
+      r_360: numeric
 fields:
 - name: refdate
   description: Data de referência

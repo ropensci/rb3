@@ -53,7 +53,7 @@
 cotahist_get <- function(type = c("yearly", "monthly", "daily")) {
   type <- match.arg(type)
   template <- template_retrieve(str_glue("b3-cotahist-{type}"))
-  template_dataset(template)
+  template_dataset(template, layer = 2)
 }
 
 .select_instrument <- function(x) {
@@ -388,4 +388,8 @@ cotahist_index_options_superset <- function(ch, yc) {
 #' @export
 cotahist_options_by_symbol_superset <- function(symbol, ch, yc) {
   .cotahist_options_superset(ch, yc, .symbol = symbol)
+}
+
+process_cotahist <- function(ds) {
+  ds |> filter(.data$regtype == 1)
 }

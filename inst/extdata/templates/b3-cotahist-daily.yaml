@@ -11,7 +11,12 @@ downloader:
 reader:
   function: fwf_read_file
   encoding: latin1
-  partition: [refdate, instrument_market]
+writers:
+  input:
+    partition: [refdate, instrument_market]
+  staging:
+    function: process_cotahist
+    partition: [refdate, instrument_market]
 fields:
 - name: regtype
   description: Tipo de registro

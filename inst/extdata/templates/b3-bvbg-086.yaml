@@ -11,7 +11,9 @@ downloader:
   if-has-multiple-files-use: newer
 reader:
   function: pricereport_reader
-  partition: refdate
+writers:
+  input:
+    partition: refdate
 fields:
 - name: refdate
   description: Data de referência
