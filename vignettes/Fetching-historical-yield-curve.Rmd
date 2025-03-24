@@ -237,7 +237,7 @@ p <- ggplot(
   df_yc |> filter(biz_days > 21, biz_days < 2520),
   aes(
     x = forward_date,
-    y = r_252,
+    y = r_360,
     group = refdate,
     color = factor(refdate)
   )
