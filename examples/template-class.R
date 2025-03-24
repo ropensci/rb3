@@ -1,6 +1,6 @@
 
-ifnull <- function(x, value) {
-  if (!is.null(x)) x else value
+ifnull <- function(x, value, ifnot = identity) {
+  if (!is.null(x)) ifnot(x) else value
 }
 
 new_template <- function(id, description = "") {
@@ -32,7 +32,7 @@ new_reader <- function(reader) {
   # - encoding
   obj$function <- getFromNamespace(reader$function, "rb3")
   obj$partition <- reader$partition
-  obj$locale <- if (!is.null(reader$locale)) do.call(readr::locale, reader$locale) else readr::locale()
+  obj$locale <- ifnull(reader$locale, readr::locale(), \(x) do.call(readr::locale, x))
   obj$encoding <- ifnull(reader$encoding, "UTF-8")
   structure(obj, class = "reader")
 }
