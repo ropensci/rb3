@@ -47,7 +47,7 @@ load_template_from_file <- function(fname) {
         }
         w
       })
-      obj[["writers"]] <- setNames(writers, writers_names)
+      obj[["writers"]] <- stats::setNames(writers, writers_names)
     } else if (n == "downloader") {
       obj[["has_downloader"]] <- TRUE
       obj[["downloader"]] <- tpl$downloader

@@ -28,7 +28,7 @@ process_yc <- function(ds) {
   if (is.null(.curve_name)) {
     template_dataset(template, layer = 2)
   } else {
-    template_dataset(template, layer = 2) |> filter(curve_name == .curve_name)
+    template_dataset(template, layer = 2) |> filter(.data$curve_name == .curve_name)
   }
 }
 
@@ -89,7 +89,7 @@ yc_get <- function() {
 #' @export
 yc_brl_get <- function() {
   .yield_curve_get("PRE") |>
-    rename(r_252 = col1, r_360 = col2) |>
+    rename(r_252 = .data$col1, r_360 = .data$col2) |>
     select(
       "curve_name",
       "refdate",
@@ -112,7 +112,7 @@ yc_brl_get <- function() {
 #' @export
 yc_ipca_get <- function() {
   .yield_curve_get("DIC") |>
-    rename(r_252 = col1) |>
+    rename(r_252 = .data$col1) |>
     select(
       "curve_name",
       "refdate",
@@ -134,7 +134,7 @@ yc_ipca_get <- function() {
 #' @export
 yc_usd_get <- function() {
   .yield_curve_get("DOC") |>
-    rename(r_360 = col1) |>
+    rename(r_360 = .data$col1) |>
     select(
       "curve_name",
       "refdate",
