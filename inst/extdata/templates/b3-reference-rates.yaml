@@ -27,8 +27,8 @@ writers:
       forward_date: Date
       cur_days: integer
       biz_days: integer
-      r_252: numeric
-      r_360: numeric
+      col1: numeric
+      col2: numeric
 fields:
 - name: refdate
   description: Data de referência
@@ -43,11 +43,11 @@ fields:
   description: Dias corridos
   handler:
     type: integer
-- name: r_252
+- name: col1
   description: Taxa na base 252 ou taxa na base 360 ou preço futuro
   handler:
     type: number
-- name: r_360
+- name: col2
   description: Taxa na base 360 ou NA
   handler:
     type: number

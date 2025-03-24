@@ -4,8 +4,8 @@ process_yc <- function(ds) {
     mutate(
       dur = lubridate::ddays(.data$cur_days),
       forward_date = lubridate::as_date(.data$refdate + .data$dur),
-      r_252 = .data$r_252 / 100,
-      r_360 = .data$r_360 / 100
+      col1 = .data$col1 / 100,
+      col2 = .data$col2 / 100
     ) |>
     collect() |>
     mutate(
@@ -17,8 +17,8 @@ process_yc <- function(ds) {
       "forward_date",
       "cur_days",
       "biz_days",
-      "r_252",
-      "r_360",
+      "col1",
+      "col2",
     )
   ds
 }
@@ -88,7 +88,17 @@ yc_get <- function() {
 #' }
 #' @export
 yc_brl_get <- function() {
-  .yield_curve_get("PRE")
+  .yield_curve_get("PRE") |>
+    rename(r_252 = col1, r_360 = col2) |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "r_252",
+      "r_360",
+    )
 }
 
 #' @rdname yc_xxx_get
@@ -101,7 +111,16 @@ yc_brl_get <- function() {
 #' }
 #' @export
 yc_ipca_get <- function() {
-  .yield_curve_get("DIC")
+  .yield_curve_get("DIC") |>
+    rename(r_252 = col1) |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "r_252"
+    )
 }
 
 #' @rdname yc_xxx_get
@@ -114,7 +133,16 @@ yc_ipca_get <- function() {
 #' }
 #' @export
 yc_usd_get <- function() {
-  .yield_curve_get("DOC")
+  .yield_curve_get("DOC") |>
+    rename(r_360 = col1) |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "r_360"
+    )
 }
 
 .yc_with_futures <- function(yc, .refdate, .commodity, .expr) {
