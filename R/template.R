@@ -93,11 +93,11 @@ load_template_files <- function() {
 
 #' @exportS3Method base::print
 print.template <- function(x, ...) {
-  cat("Template ID:", x$id, "\n")
-  cat("Expected filename:", x$filename, "\n")
-  cat("File type:", x$filetype, "\n")
+  cli::cli_text("{.strong Template}: {.emph {x$id}}")
+  cli::cli_text("{.strong Description}: {.emph {x$description}}")
+  # cat("Template:", x$id, "\n")
   if (is(x$fields, "fields")) {
-    cat("Fields: ")
+    cli::cli_text("{.strong Fields}: ")
     print.fields(x$fields)
   } else {
     parts_names <- names(x$parts)
@@ -121,11 +121,37 @@ template_register <- function(obj) {
   .reg[[obj$id]] <- obj
 }
 
-template_retrieve <- function(key) {
+#' Retrieve a template by its name
+#'
+#' This function retrieves a template identified by its name.
+#'
+#' @param template_name The name identifying the template to retrieve.
+#' 
+#' @return The template associated with the given name.
+#' 
+#' @export
+template_retrieve <- function(template_name) {
   .reg <- template_registry$get_instance()
-  .reg[[key]]
+  .reg[[template_name]]
 }
 
+#' List Available Templates
+#'
+#' Retrieves all templates registered in the template registry and returns their properties
+#' as a tibble.
+#'
+#' @return A tibble with the following columns:
+#' \describe{
+#'   \item{Description}{The description of the template}
+#'   \item{Template}{The template identifier}
+#'   \item{Reader}{Indicates if the template has a reader (✅ or ❌)}
+#'   \item{Downloader}{Indicates if the template has a downloader (✅ or ❌)}
+#' }
+#'
+#' @examples
+#' list_templates()
+#'
+#' @export
 list_templates <- function() {
   .reg <- template_registry$get_instance()
   map_dfr(registry_keys(.reg), function(cls) {

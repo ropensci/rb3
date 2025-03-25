@@ -1,55 +1,63 @@
-#' Download datasets
+#' Download Raw Market Data Files from B3
 #'
-#' Download datasets for a given template.
+#' @description
+#' Downloads and caches financial market datasets from B3 (Brazilian Stock Exchange)
+#' based on predefined templates. Handles file downloading and caching.
 #'
-#' @param template the template name
-#' @param do_cache a logical indicating if the file should be downloaded again
-#' @param ... additional arguments
+#' @param template character string specifying the template name
+#' @param do_cache logical; if TRUE forces a new download even if cached file exists (default: FALSE)
+#' @param ... additional arguments passed to template-specific download functions
 #'
-#' @return a list with the metadata of the downloaded file (see details).
-#'
-#' The function returns a list containing the metadata of the
-#' downloaded file, including the following information:
-#' - `template`: Template name
-#' - `download_checksum`: Download hash code,
-#'    generated from the template name and the arguments passed in the ellipsis (`...`)
-#' - `file_checksum`: File hash code
-#' - `download_args`: Arguments passed in the ellipsis (`...`)
-#' - `downloaded`: Path to the downloaded file
-#' - `timestamp`: Timestamp of when the file was saved
-#'
-#' A metadata file is saved in the `meta` directory inside `rb3.cachedir`.
-#' This metadata file is in JSON format, and its filename is the download hash code (`download_checksum`).
-#' It ensures the uniqueness of the download.
-#'
-#' All downloaded files are compressed using Gzip and named with their file checksum (`file_checksum`),
-#' also to ensure uniqueness.
-#' The downloaded files are stored in the `raw` directory, which is located inside `rb3.cachedir`.
+#' @return
+#' Returns a meta object containing the downloaded file's metadata:
+#' \itemize{
+#'   \item template - Name of the template used
+#'   \item download_checksum - Unique hash code for the download
+#'   \item download_args - Arguments passed via ...
+#'   \item downloaded - Path to the downloaded file
+#'   \item created - Timestamp of file creation
+#' }
 #'
 #' @details
-#' This function downloads a file based on a template.
-#' The template is a YAML document that defines a dataset.
-#' It specifies how the file is downloaded, how it is read,
-#' and the structure of the dataset, including column names
-#' and data types.
+#' The function follows this workflow:
+#' 1. Checks if requested data exists in cache
+#' 2. Downloads data if needed (based on template specifications)
+#' 3. Manages file compression and storage
+#' 4. Maintains metadata for tracking and verification
 #'
-#' The `do_cache` argument is `FALSE` by default, indicating that if the file already exists in the cache,
-#' it will not be downloaded again.
-#' First, it checks if the metadata file exists; if it does, it is returned.
-#' If `do_cache` is `TRUE`, the file is downloaded again, and the metadata is updated.
-#' If the downloaded file is identical to the cached file, verified using `file_checksum`,
-#' the metadata is returned.
+#' Files are organized in the `rb3.cachedir` as follows:
+#' - Metadata: JSON files in 'meta/' directory, named by download_checksum
+#' - Data: Gzipped files in 'raw/' directory, named by file's checksum
 #'
-#' The additional arguments in the ellipsis (`...`) are passed to the template function that handles data downloads.
+#' Templates are YAML documents that define:
+#' - Download parameters and methods
+#' - Data reading instructions
+#' - Dataset structure (columns, types)
+#' 
+#' Templates can be found using `list_templates()` and retrieved with `template_retrieve()`.
+#' 
+#' @return A meta object containing the downloaded file's metadata.
+#' This meta object is used with the `read_marketdata` function to read the downloaded file.
 #'
-#' @seealso cachedir rb3.cachedir
-#'
+#' @seealso 
+#' * \code{\link{list_templates}} for listing available data templates
+#' * \code{\link{template_retrieve}} for retrieving specific template details
+#' 
+#' @seealso
+#' \code{\link{read_marketdata}}, \code{\link{rb3.cachedir}}
+#' 
 #' @examples
 #' \dontrun{
-#' download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
-#'
-#' m <- download_marketdata("b3-reference-rates", refdate = as.Date("2024-04-05"), curve_name = "PRE")
-#' read_marketdata(m)
+#' # Download daily market data
+#' meta <- download_marketdata("b3-cotahist-daily", 
+#'                             refdate = as.Date("2024-04-05"))
+#' read_marketdata(meta)
+#' 
+#' # Download reference rates
+#' meta <- download_marketdata("b3-reference-rates",
+#'                             refdate = as.Date("2024-04-05"),
+#'                             curve_name = "PRE")
+#' read_marketdata(meta)
 #' }
 #'
 #' @export

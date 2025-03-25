@@ -2,47 +2,49 @@
 % Please edit documentation in R/read-marketdata.R
 \name{read_marketdata}
 \alias{read_marketdata}
-\title{Read and parses files downloaded from B3 website.}
+\title{Read and parse raw market data files downloaded from the B3 website.}
 \usage{
 read_marketdata(meta)
 }
 \arguments{
-\item{meta}{a list with the metadata of the downloaded file.}
+\item{meta}{A list containing the downloaded file's metadata, typically returned by \code{\link{download_marketdata}}.}
 }
 \value{
-This function returns a \code{data.frame} with the parsed file data.
+This function invisibly returns the parsed \code{data.frame} if successful, or \code{NULL} if an error occurred.
 }
 \description{
-B3 provides various files containing useful information about
+B3 provides various files containing valuable information about
 traded assets on the exchange and over-the-counter (OTC) market.
-These files include market data, trading data, and asset registration
-data (stocks, derivatives, and indices). This function reads these
+These files include historical market data, trading data, and asset registration
+data for stocks, derivatives, and indices. This function reads these
 files and parses their content according to the specifications
-defined in the template.
+defined in a template.
 }
 \details{
-This function reads the downloaded file according to the specifications
-and schema defined in the template.
-The schema is located in the \code{fields} field of the template and defines the
-type of each column in the created dataset.
+This function reads the downloaded file and parses its content according
+to the specifications and schema defined in the template associated with the \code{meta} object.
+The template specifies the file format, column definitions, and data types.
 
-The generated datasets are saved in a directory named after the
-template and are located within the \code{db} directory, which is
-inside the \code{cachedir} directory.
-The datasets are saved in the Parquet format.
-This way, it is possible to use datasets with the template
-directories and perform queries using the \code{arrow} package.
+The parsed data is then written to a partitioned dataset in Parquet format,
+stored in a directory structure based on the template name and data layer.
+This directory is located within the \code{db} subdirectory of the \code{rb3.cachedir} directory.
+The partitioning scheme is also defined in the template, allowing for efficient
+querying of the data using the \code{arrow} package.
 
-If an error occurs while processing a downloaded file, the file and its metadata are removed.
+If an error occurs during file processing, the function issues a warning,
+removes the downloaded file and its metadata, and returns \code{NULL}.
 }
 \examples{
 \dontrun{
 meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
 read_marketdata(meta)
 }
+
 }
 \seealso{
-show_templates display_template
+\code{\link{list_templates}}
 
-cachedir rb3.cachedir
+\code{\link{rb3.cachedir}}
+
+\code{\link{download_marketdata}}
 }

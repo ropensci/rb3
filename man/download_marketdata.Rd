@@ -2,68 +2,78 @@
 % Please edit documentation in R/download-data.R
 \name{download_marketdata}
 \alias{download_marketdata}
-\title{Download datasets}
+\title{Download Raw Market Data Files from B3}
 \usage{
 download_marketdata(template, do_cache = FALSE, ...)
 }
 \arguments{
-\item{template}{the template name}
+\item{template}{character string specifying the template name}
 
-\item{do_cache}{a logical indicating if the file should be downloaded again}
+\item{do_cache}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
 
-\item{...}{additional arguments}
+\item{...}{additional arguments passed to template-specific download functions}
 }
 \value{
-a list with the metadata of the downloaded file (see details).
-
-The function returns a list containing the metadata of the
-downloaded file, including the following information:
+Returns a meta object containing the downloaded file's metadata:
 \itemize{
-\item \code{template}: Template name
-\item \code{download_checksum}: Download hash code,
-generated from the template name and the arguments passed in the ellipsis (\code{...})
-\item \code{file_checksum}: File hash code
-\item \code{download_args}: Arguments passed in the ellipsis (\code{...})
-\item \code{downloaded}: Path to the downloaded file
-\item \code{timestamp}: Timestamp of when the file was saved
+\item template - Name of the template used
+\item download_checksum - Unique hash code for the download
+\item download_args - Arguments passed via ...
+\item downloaded - Path to the downloaded file
+\item created - Timestamp of file creation
 }
 
-A metadata file is saved in the \code{meta} directory inside \code{rb3.cachedir}.
-This metadata file is in JSON format, and its filename is the download hash code (\code{download_checksum}).
-It ensures the uniqueness of the download.
-
-All downloaded files are compressed using Gzip and named with their file checksum (\code{file_checksum}),
-also to ensure uniqueness.
-The downloaded files are stored in the \code{raw} directory, which is located inside \code{rb3.cachedir}.
+A meta object containing the downloaded file's metadata.
+This meta object is used with the \code{read_marketdata} function to read the downloaded file.
 }
 \description{
-Download datasets for a given template.
+Downloads and caches financial market datasets from B3 (Brazilian Stock Exchange)
+based on predefined templates. Handles file downloading and caching.
 }
 \details{
-This function downloads a file based on a template.
-The template is a YAML document that defines a dataset.
-It specifies how the file is downloaded, how it is read,
-and the structure of the dataset, including column names
-and data types.
+The function follows this workflow:
+\enumerate{
+\item Checks if requested data exists in cache
+\item Downloads data if needed (based on template specifications)
+\item Manages file compression and storage
+\item Maintains metadata for tracking and verification
+}
 
-The \code{do_cache} argument is \code{FALSE} by default, indicating that if the file already exists in the cache,
-it will not be downloaded again.
-First, it checks if the metadata file exists; if it does, it is returned.
-If \code{do_cache} is \code{TRUE}, the file is downloaded again, and the metadata is updated.
-If the downloaded file is identical to the cached file, verified using \code{file_checksum},
-the metadata is returned.
+Files are organized in the \code{rb3.cachedir} as follows:
+\itemize{
+\item Metadata: JSON files in 'meta/' directory, named by download_checksum
+\item Data: Gzipped files in 'raw/' directory, named by file's checksum
+}
 
-The additional arguments in the ellipsis (\code{...}) are passed to the template function that handles data downloads.
+Templates are YAML documents that define:
+\itemize{
+\item Download parameters and methods
+\item Data reading instructions
+\item Dataset structure (columns, types)
+}
+
+Templates can be found using \code{list_templates()} and retrieved with \code{template_retrieve()}.
 }
 \examples{
 \dontrun{
-download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
+# Download daily market data
+meta <- download_marketdata("b3-cotahist-daily", 
+                            refdate = as.Date("2024-04-05"))
+read_marketdata(meta)
 
-m <- download_marketdata("b3-reference-rates", refdate = as.Date("2024-04-05"), curve_name = "PRE")
-read_marketdata(m)
+# Download reference rates
+meta <- download_marketdata("b3-reference-rates",
+                            refdate = as.Date("2024-04-05"),
+                            curve_name = "PRE")
+read_marketdata(meta)
 }
 
 }
 \seealso{
-cachedir rb3.cachedir
+\itemize{
+\item \code{\link{list_templates}} for listing available data templates
+\item \code{\link{template_retrieve}} for retrieving specific template details
+}
+
+\code{\link{read_marketdata}}, \code{\link{rb3.cachedir}}
 }

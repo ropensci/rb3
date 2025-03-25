@@ -18,14 +18,17 @@ yc_ipca_with_futures(refdate)
 }
 \arguments{
 \item{symbols}{list of symbols to extract market data from the COTAHIST dataset.}
+
+\item{refdate}{A Date object specifying the reference date for which to retrieve data}
 }
 \value{
 The function \code{cotahist_options_by_symbol_superset()} return an object that inherits from a \code{arrow_dplyr_query}
 since it tries to preserve the lazy evaluation and avoids collecting the data before its return.
 
-The functions \code{yc_brl_with_futures()}, \code{yc_usd_with_futures()}, and \code{yc_ipca_with_futures()} return an object
-that inherits from the \code{data.frame} class. In cases where certain operations cannot be executed using Arrow
-operators, the data must be collected before being returned.
+The functions \code{yc_brl_with_futures()}, \code{yc_usd_with_futures()} and \code{yc_ipca_with_futures()} return
+a \code{data.frame} containing the yield curve data merged with futures contract information.
+The data is pre-collected (not lazy) and includes all columns from the respective yield curve
+function plus a \code{symbol} column identifying the corresponding futures contract.
 }
 \description{
 To maximize the utility of B3's existing datasets, several functions integrate data from multiple
@@ -56,13 +59,20 @@ cannot be performed using Arrow's operators — in such cases, data will be
 collected and \code{data.frame}s will be returned. Please refer to the documentation
 to identify the situations where this behavior applies.
 
-\code{yc_brl_with_futures()}, \code{yc_usd_with_futures()}, and \code{yc_ipca_with_futures()} utilize information
-from Reference Rates (\code{b3-reference-rates}) and Futures Settlement Prices
-(\code{b3-futures-settlement-prices}) datasets to construct a yield curve dataset. This dataset
-highlights key vertices and their corresponding underlying futures contracts, providing a
-detailed view of the term structure of interest rate.
-To prevent excessive memory usage and potential performance issues, these functions include a \code{refdate}
-argument that allows filtering the data at the source.
+These functions retrieve yield curve data merged with corresponding futures contract information:
+\itemize{
+\item \code{yc_brl_with_futures()}: BRL nominal rates with DI1 futures contracts
+\item \code{yc_usd_with_futures()}: USD rates (Cupom Cambial) with DDI futures contracts
+\item \code{yc_ipca_with_futures()}: Real (inflation-indexed) rates with DAP futures contracts
+}
+
+These functions combine data from B3 Reference Rates (\code{b3-reference-rates}) and
+Futures Settlement Prices (\code{b3-futures-settlement-prices}) to create comprehensive yield curve datasets.
+The resulting data highlights key vertices along the curve with their corresponding futures contracts,
+providing insight into the term structure of interest rates.
+
+Each function requires a specific reference date to prevent excessive memory usage and
+ensure optimal performance.
 }
 \examples{
 \dontrun{
@@ -72,10 +82,18 @@ petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(r
 }
 
 \dontrun{
+# Get data for the last business day
 date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
-yc_brl_with_futures(date)
-yc_usd_with_futures(date)
-yc_ipca_with_futures(date)
+
+# Retrieve BRL yield curve with DI1 futures
+brl_curve <- yc_brl_with_futures(date)
+head(brl_curve)
+
+# Retrieve USD yield curve with DDI futures
+usd_curve <- yc_usd_with_futures(date)
+
+# Retrieve inflation-indexed yield curve with DAP futures
+ipca_curve <- yc_ipca_with_futures(date)
 }
 
 }

@@ -18,7 +18,14 @@ as.data.frame.fields <- function(x, ...) {
 
 #' @exportS3Method base::print
 print.fields <- function(x, ...) {
-  cat(paste(fields_names(x), collapse = ", "), "\n")
+  ulid <- cli::cli_ul()
+  names <- fields_names(x)
+  types <- sapply(fields_handlers(x), \(x) attr(x, "type"))
+  desc <- fields_description(x)
+  for (ix in seq_along(names)) {
+    cli::cli_li("{.strong {names[ix]}} ({types[ix]}): {desc[ix]}")
+  }
+  cli::cli_end(ulid)
   invisible(x)
 }
 
