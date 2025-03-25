@@ -37,9 +37,8 @@ We focus on three main curves:
 For further details on how B3 constructs these curves,
 see [B3's reference rate documentation (PDF)](https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf).
 
-```{r setup-rb3, echo=FALSE}
-# This is optional and intended for documentation purposes.
-options(rb3.cachedir = "/home/wilson/dev/rb3/vignettes/rb3-data")
+```{r load-used-data, echo=FALSE}
+load("yc.RData")
 ```
 
 ```{r packages, message=FALSE}
@@ -97,7 +96,7 @@ The `curve_name` argument allows us to specify which of these three curves we wa
 By passing a vector like `c("DIC", "DOC", "PRE")`, we are telling the function to retrieve data
 for all three curves for the selected reference dates.
 
-```{r fetch-data, message=FALSE}
+```{r fetch-data, message=FALSE, eval=FALSE}
 dates <- getdate("first bizday", 2021:2025, "Brazil/B3")
 fetch_marketdata("b3-reference-rates", refdate = dates, curve_name = c("DIC", "DOC", "PRE"))
 ```
@@ -124,8 +123,8 @@ These contracts reflect the market's expectations for the cumulative interbank i
 The PRE curve is essential for understanding nominal yield dynamics in Brazil's fixed income
 market, and it's commonly used for pricing public and private debt instruments.
 
-```{r}
-df_yc <- yc_brl_get() |>
+```{r, eval=FALSE}
+df_yc_brl <- yc_brl_get() |>
   filter(forward_date < "2035-01-01") |>
   collect()
 ```
@@ -139,7 +138,7 @@ precision beyond what the market actually supports.
 
 ```{r, fig.width=9, fig.height=6}
 p <- ggplot(
-  df_yc,
+  df_yc_brl,
   aes(
     x = forward_date,
     y = r_252,
@@ -178,15 +177,14 @@ It reflects market expectations for **inflation-adjusted (real) returns**.
 The DIC curve is especially relevant for pricing inflation-linked bonds
 (such as NTN-Bs) and for analyzing the market's perception of long-term inflation dynamics.
 
-```{r}
-df_yc <- yc_ipca_get() |>
-  collect() |>
-  arrange(refdate)
+```{r, eval=FALSE}
+df_yc_ipca <- yc_ipca_get() |>
+  collect()
 ```
 
 ```{r, fig.width=9, fig.height=6}
 p <- ggplot(
-  df_yc |> filter(biz_days > 21, biz_days < 1008),
+  df_yc_ipca |> filter(biz_days > 21, biz_days < 1008),
   aes(
     x = forward_date,
     y = r_252,
@@ -223,7 +221,7 @@ BRL interest and the other is tied to the USD.
 It reflects **market expectations for exchange rate and interest rate spreads**.
 
 ```{r, eval=FALSE}
-df_yc <- yc_usd_get() |>
+df_yc_usd <- yc_usd_get() |>
   filter(forward_date < "2035-01-01") |>
   collect()
 ```
@@ -232,9 +230,9 @@ As with other curves, we filter out maturities beyond 2035.
 This is because FX futures contracts tend to be illiquid at longer horizons,
 and extrapolated values beyond that point may not reflect reliable market pricing.
 
-```{r, fig.width=9, fig.height=6}
+```{r plot-cupom-limpo, fig.width=9, fig.height=6}
 p <- ggplot(
-  df_yc |> filter(biz_days > 21, biz_days < 2520),
+  df_yc_usd |> filter(biz_days > 21, biz_days < 2520),
   aes(
     x = forward_date,
     y = r_360,
@@ -282,17 +280,14 @@ Where \( r_{\text{nominal}} \) comes from the PRE curve and \( r_{\text{real}} \
 
 ```{r}
 # Load and prepare PRE and DIC curves
-pre <- yc_brl_get() |>
-  filter(forward_date < "2035-01-01") |>
-  collect() |>
+pre <- df_yc_brl |>
   select(refdate, forward_date, r_nominal = r_252)
 
-dic <- yc_ipca_get() |>
-  collect() |>
+ipca <- df_yc_ipca |>
   select(refdate, forward_date, r_real = r_252)
 
 # Join both curves by refdate and forward_date
-df_be <- inner_join(pre, dic, by = c("refdate", "forward_date")) |>
+df_be <- inner_join(pre, ipca, by = c("refdate", "forward_date")) |>
   mutate(break_even = r_nominal - r_real)
 ```
 

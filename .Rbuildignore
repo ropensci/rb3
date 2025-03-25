@@ -24,3 +24,4 @@ examples
 ^\.vscode$
 .Renviron
 rb3-cache
+vignettes/rb3-data
