@@ -150,7 +150,7 @@ p <- ggplot(
   labs(
     title = "Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",
-    caption = "Data imported using package rb3",
+    caption = "Source B3 - package rb3",
     x = "Forward Date",
     y = "Annual Interest Rate",
     color = "Reference Date"
@@ -196,7 +196,7 @@ p <- ggplot(
   labs(
     title = "DIxIPCA Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",
-    caption = "Data imported using package rb3",
+    caption = "Source B3 - package rb3",
     x = "Forward Date",
     y = "Annual Interest Rate",
     color = "Reference Date"
@@ -244,7 +244,7 @@ p <- ggplot(
   labs(
     title = "Cupom Limpo (USD) Yield Curves for Brazil",
     subtitle = "Built using interest rates future contracts",
-    caption = "Data imported using package rb3",
+    caption = "Source B3 - package rb3",
     x = "Forward Date",
     y = "Annual Interest Rate",
     color = "Reference Date"
@@ -305,7 +305,7 @@ p <- ggplot(
   labs(
     title = "Implied Inflation (Break-even) from Yield Curves",
     subtitle = "Calculated as PRE (nominal) minus DIC (real)",
-    caption = "Data imported using package rb3",
+    caption = "Source B3 - package rb3",
     x = "Forward Date",
     y = "Annual Implied Inflation Rate",
     color = "Reference Date"

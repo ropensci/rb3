@@ -1,0 +1,206 @@
+---
+title: "Fetching Market Data with rb3"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fetching Market Data with rb3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Introduction
+
+The `rb3` package provides tools for downloading, processing, and analyzing market data from B3 (the Brazilian stock exchange). One of the key functions in the package is `fetch_marketdata()`, which simplifies the process of downloading and storing market data in a structured format.
+
+This vignette demonstrates how to use the `fetch_marketdata()` function to retrieve various types of market data from B3.
+
+```{r setup}
+library(rb3)
+library(dplyr)
+library(ggplot2)
+library(bizdays)
+```
+
+## Understanding `fetch_marketdata()`
+
+The `fetch_marketdata()` function performs two main steps:
+
+1. Downloads market data files by creating all combinations of the provided parameters and calling `download_marketdata()` for each combination
+2. Processes the downloaded files by reading them into a database using `read_marketdata()`
+
+The function has the following signature:
+
+```r
+fetch_marketdata(template, ...)
+```
+
+Where:
+- `template`: A character string specifying the market data template to use
+- `...`: Named arguments that will be expanded into a grid of all combinations to fetch data for
+
+## Available Templates
+
+You can view all available templates using the `list_templates()` function:
+
+```{r}
+list_templates()
+```
+
+The most commonly used templates include:
+
+- `b3-cotahist-daily`: Daily stock market historical quotes
+- `b3-cotahist-yearly`: Yearly stock market historical quotes
+- `b3-futures-settlement-prices`: Settlement prices for futures contracts
+- `b3-reference-rates`: Reference interest rates
+
+## Examples
+
+### Fetching Daily Historical Data
+
+To download daily historical data for a specific date range:
+
+```{r}
+# Download daily historical data for a date range
+fetch_marketdata(
+  "b3-cotahist-daily", 
+  refdate = bizseq("2023-01-01", "2023-01-31", "Brazil/B3")
+)
+
+# Now the data is available in the database
+stocks <- cotahist_get(
+  refdate = as.Date("2023-01-15"),
+  type_market = "VISTA"
+) |> 
+  collect()
+
+# Display the top 10 stocks by trading volume
+stocks |>
+  filter(type_stock == "ON") |>
+  arrange(desc(volume)) |>
+  head(10) |>
+  select(symbol, name, price_close, volume)
+```
+
+### Fetching Yearly Historical Data
+
+For accessing historical data for multiple years:
+
+```{r}
+# Download yearly historical data for 2020-2023
+fetch_marketdata("b3-cotahist-yearly", year = 2020:2023)
+
+# Analyze market data from 2020
+yearly_data <- cotahist_get(
+  year = 2020,
+  type_market = "VISTA"
+) |> 
+  collect()
+
+# Calculate monthly returns for a specific stock
+monthly_returns <- yearly_data |>
+  filter(symbol == "PETR4") |>
+  mutate(month = format(refdate, "%Y-%m")) |>
+  group_by(month) |>
+  summarize(
+    open = first(price_open),
+    close = last(price_close),
+    return = (close / open) - 1
+  )
+```
+
+### Fetching Futures Settlement Prices
+
+To download futures settlement prices for a specific time period:
+
+```{r}
+# Download futures settlement prices for mondays in January 2023
+mondays <- getdate("monday", as.Date("2023-01-01") + 0:30, "Brazil/B3")
+fetch_marketdata("b3-futures-settlement-prices", refdate = mondays)
+
+# Access futures data
+futures_data <- futures_get() |> 
+  filter(commodity == "DI1") |>
+  collect()
+
+# Plot futures prices
+futures_data |>
+  filter(symbol %in% c("DI1F24", "DI1F25")) |>
+  ggplot(aes(x = refdate, y = price, color = symbol)) +
+  geom_line() +
+  labs(
+    title = "DI1 Futures Prices",
+    x = "Date",
+    y = "Price",
+    color = "Contract"
+  )
+```
+
+### Fetching Reference Rates
+
+To download reference interest rates for various curves:
+
+```{r}
+# Download reference rates for multiple curves and dates
+fetch_marketdata(
+  "b3-reference-rates", 
+  refdate = bizseq("2023-01-01", "2023-03-31", "Brazil/B3"),
+  curve_name = c("DIC", "DOC", "PRE")
+)
+
+# Access PRE curve data (nominal interest rates)
+pre_curve <- yc_brl_get() |>
+  filter(refdate >= as.Date("2023-01-01"), refdate <= as.Date("2023-03-31")) |>
+  collect()
+
+# Plot yield curves for different dates
+pre_curve |>
+  filter(forward_date < as.Date("2030-01-01")) |>
+  mutate(ref_month = format(refdate, "%Y-%m")) |>
+  filter(ref_month %in% c("2023-01", "2023-02", "2023-03")) |>
+  ggplot(aes(x = forward_date, y = r_252, color = factor(refdate))) +
+  geom_line() +
+  labs(
+    title = "PRE Yield Curves",
+    x = "Forward Date",
+    y = "Annual Interest Rate",
+    color = "Reference Date"
+  ) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+## Combining Multiple Parameter Sets
+
+One of the powerful features of `fetch_marketdata()` is its ability to handle multiple parameter combinations. The function automatically creates a grid of all possible combinations and processes each one:
+
+```{r}
+# Download data for multiple dates and curves simultaneously
+fetch_marketdata(
+  "b3-reference-rates",
+  refdate = c(as.Date("2023-01-15"), as.Date("2023-06-15")),
+  curve_name = c("DIC", "PRE")
+)
+```
+
+This will download 4 different datasets (2 dates × 2 curves).
+
+## Performance Considerations
+
+When fetching large amounts of data, keep in mind:
+
+1. The function shows progress indicators for both downloading and processing steps
+2. Data is cached locally, so subsequent queries for the same data are faster
+3. The database storage uses efficient Parquet format for optimal query performance
+4. For very large datasets, consider fetching data in smaller batches
+
+## Conclusion
+
+The `fetch_marketdata()` function provides a convenient way to download, process, and store market data from B3. By combining it with the other query functions in the `rb3` package, you can easily access and analyze Brazilian market data for research, trading strategies, or risk management.
+
+Remember that all downloaded data is stored in a local database managed by the `rb3` package, making it readily available for queries without needing to download it again.
