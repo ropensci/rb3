@@ -2,31 +2,40 @@
 library(rb3)
 library(tidyverse)
 
-dates <- seq(as.Date("2018-01-01"), Sys.Date(), by = "years")
+fetch_marketdata("b3-cotahist-yearly", year = 2018:2024)
 
-chs <- map(dates, cotahist_get)
+# BDRs ----
 
-bdrs <- map_dfr(chs, cotahist_bdrs_get)
+bdrs <- cotahist_get() |>
+  cotahist_filter_bdr()
 
 bdrs |>
   group_by(symbol) |>
   count(sort = TRUE) |>
-  head(20) |>
-  View()
+  head(15) |>
+  collect()
 
 bdrs |>
   filter(symbol == "AAPL34") |>
   arrange(refdate) |>
-  ggplot(aes(x = refdate, y = transactions_quantity, colour = factor(distribution_id))) +
+  collect() |> 
+  ggplot(aes(x = refdate, y = trade_quantity, colour = factor(distribution_id))) +
   geom_line()
 
 bdrs |>
   filter(symbol == "DISB34") |>
   arrange(refdate) |>
+  collect() |>
   ggplot(aes(x = refdate, y = distribution_id)) +
   geom_line()
 
-chck_dts <- bizseq(min(bdrs$refdate), max(bdrs$refdate), "Brazil/B3")
+## check for missing points ----
+
+date_range <- bdrs |>
+  summarise(min = min(refdate), max = max(refdate)) |>
+  collect()
+
+chck_dts <- bizseq(date_range$min, date_range$max, "Brazil/B3")
 
 chck_dts <- tibble(refdate = chck_dts)
 
@@ -34,32 +43,43 @@ bdrs |>
   filter(symbol == "AAPL34") |>
   full_join(chck_dts) |>
   arrange(refdate) |>
-  pull(close)
+  pull(close, as_vector = TRUE) |>
+  anyNA()
 
+# Equities ----
 
-equities <- map_dfr(chs, cotahist_equity_get)
+equities <- cotahist_get() |>
+  cotahist_filter_equity()
 
 equities |>
   group_by(symbol) |>
   count(sort = TRUE) |>
-  head(20) |>
-  View()
+  head(15) |>
+  collect()
 
 symbol_ <- "ABEV3"
 
 equities |>
   filter(symbol == symbol_) |>
   arrange(refdate) |>
+  collect() |>
   ggplot(aes(x = refdate, y = distribution_id)) +
   geom_line()
 
 equities |>
   filter(symbol == symbol_) |>
   arrange(refdate) |>
+  collect() |>
   ggplot(aes(x = refdate, y = close, colour = factor(distribution_id))) +
   geom_line()
 
-chck_dts <- bizseq(min(equities$refdate), max(equities$refdate), "Brazil/B3")
+## check for missing points ----
+
+date_range <- equities |>
+  summarise(min = min(refdate), max = max(refdate)) |>
+  collect()
+
+chck_dts <- bizseq(date_range$min, date_range$max, "Brazil/B3")
 
 chck_dts <- tibble(refdate = chck_dts)
 
@@ -67,4 +87,5 @@ equities |>
   filter(symbol == symbol_) |>
   full_join(chck_dts) |>
   arrange(refdate) |>
-  pull(close)
+  pull(close, as_vector = TRUE) |>
+  anyNA()
