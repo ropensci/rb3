@@ -95,6 +95,14 @@ load_template_files <- function() {
 print.template <- function(x, ...) {
   cli::cli_text("{.strong Template}: {.emph {x$id}}")
   cli::cli_text("{.strong Description}: {.emph {x$description}}")
+  if (!is.null(x$downloader$args)) {
+    cli::cli_text("{.strong Required arguments}:")
+    ulid <- cli::cli_ul()
+    for (arg in names(x$downloader$args)) {
+      cli::cli_li("{.strong {arg}}: {x$downloader$args[[arg]]}")
+    }
+    cli::cli_end(ulid)
+  }
   # cat("Template:", x$id, "\n")
   if (is(x$fields, "fields")) {
     cli::cli_text("{.strong Fields}: ")

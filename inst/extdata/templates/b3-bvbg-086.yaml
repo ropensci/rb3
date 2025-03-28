@@ -9,6 +9,8 @@ downloader:
   url: https://www.b3.com.br/pesquisapregao/download?filelist=PR%y%m%d.zip
   format: zip
   if-has-multiple-files-use: newer
+  args:
+    refdate: Data de referência
 reader:
   function: pricereport_reader
 writers:

@@ -8,6 +8,8 @@ downloader:
   function: datetime_download
   url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_D%d%m%Y.ZIP
   format: zip
+  args:
+    refdate: Data de referência
 reader:
   function: fwf_read_file
   encoding: latin1

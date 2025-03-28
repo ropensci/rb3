@@ -9,6 +9,8 @@ downloader:
   url: https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp
   format: html
   encoding: latin1
+  args:
+    refdate: Data de referência
 reader:
   function: settlement_prices_read
   locale:
