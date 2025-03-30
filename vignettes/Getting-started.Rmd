@@ -1,0 +1,185 @@
+---
+title: "Getting Started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitr-setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Introduction
+
+The `rb3` package provides tools for downloading, processing, and analyzing market data from B3
+(the Brazilian stock exchange). This vignette will guide you through the basics of using the
+package to download various types of market data and perform common analyses.
+
+```{r setup}
+library(rb3)
+library(tidyverse)
+library(bizdays)
+```
+
+## Downloading Market Data
+
+The main function for fetching market data is `fetch_marketdata()`.
+This function downloads data based on a template and parameter combinations, then processes
+the data into a structured database format.
+
+### Templates
+
+Templates are predefined configurations that specify the type of data to download and how to
+process it.
+Each template corresponds to a specific dataset or file type available from B3.
+For example:
+
+- `"b3-cotahist-yearly"`: Downloads and reads COTAHIST file that are available by year.
+- `"b3-futures-settlement-prices"`: Downloads and reads settlement prices web page.
+- `"b3-reference-rates"`: Downloads and reades the web page of reference interest rates.
+- `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading instruments information.
+
+```{r list-templates}
+# List available templates
+list_templates()
+```
+
+Additional information about templates can be obtained by calling the `template_retrieve()`
+function:
+
+```{r template-retrieve}
+# Get a specific template
+template_retrieve("b3-cotahist-yearly")
+```
+
+Once you know the template you want to use, you can download the data by calling
+`fetch_marketdata()`.
+The function takes the template name and additional parameters as arguments.
+
+### Fetching market data
+
+The `fetch_marketdata()` function downloads and processes market data based on the specified
+template and parameters.
+The data is stored in a local database, which can be queried using specialized functions.
+The code below shows an example on how to download and process data using the `fetch_marketdata()`.
+
+```{r fetch-reference-rates, eval=FALSE}
+# Download daily historical data for a specific date range
+fetch_marketdata("b3-reference-rates",
+  refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"),
+  curve_name = c("PRE", "DIC")
+)
+```
+
+```text
+✔ Downloading data [53s]
+ℹ 44 files downloaded
+✔ Reading data into DB [6s]
+```
+
+The total time taken to download and process the data is shown in the console output,
+and also the number of downloaded files is shown.
+This code downloads 44 files containing reference rates for the PRE and DIC curves for January 2024.
+The files are read and stored as parquet files forming a local database inside the `rb3.cachedir`
+folder.
+
+### `rb3.cachedir` folder
+
+The `rb3.cachedir` folder is where the downloaded data is stored.
+It is set as an option in R, and you can check its current value using:
+
+```{r view-rb3-cachedir}
+getOption("rb3.cachedir")
+```
+
+Inside this folder it has the 3 folders:
+
+- raw: for raw downloaded files
+- meta: with the metadata that represets each download made
+- db: where the processed files are stored as datasets (parquet files)
+
+The folder structure looks like this:
+
+```text
+rb3.cachedir
+├── raw
+├── meta
+└── db
+```
+
+The raw files are initially downloaded and stored in the `raw` folder.
+These files are then processed and saved as parquet files in the `db` folder,
+forming structured datasets that can be queried using the `rb3` package functions.
+The data processing occurs in two stages: first, the raw files are transformed and
+stored in the `input` layer within the `db` folder.
+Next, the data undergoes further refinement and is saved in the `staging` layer,
+also within the `db` folder.
+The dataset cam be accessed using the function `rb3::template_dataset()`.
+
+```{r template-dataset}
+# Get the dataset for the template "b3-reference-rates"
+template_dataset("b3-reference-rates")
+```
+
+This function defaults to the `staging` layer, but you can specify the `layer` argument
+to access the `input` layer if needed.
+
+```{r template-dataset-input}
+# Get the dataset for the template "b3-reference-rates" in the input layer
+template_dataset("b3-reference-rates", layer = "input")
+```
+
+## Accessing the data
+
+In the previous sections we have seen how to download and process data using the
+`fetch_marketdata()` function and how to access the downloaded data using the `template_dataset()`
+function.
+Each template has custom functions to access the data.
+These functions have the suffix `_get()`.
+
+- `cotahist_get()`: Retrieves historical stock market data.
+- `futures_get()`: Retrieves futures settlement prices.
+- `yc_brl_get()`: Retrieves the Brazilian nominal yield curve (PRE).
+- `yc_ipca_get()`: Retrieves the Brazilian real interest rate curve (DIC).
+- `yc_usd_get()`: Retrieves the FX-linked yield curve (DOC).
+
+and many others.
+For example, to access the data downloaded using the `b3-reference-rates` template,
+you can use the `yc_brl_get()` function:
+
+```{r yc-brazil-get}
+# Get the Brazilian nominal yield curve (PRE)
+yc_brl_get() |>
+  filter(refdate == "2024-01-31") |>
+  collect()
+```
+
+## Conclusion
+
+The `rb3` package provides a comprehensive and efficient framework for accessing, processing,
+and analyzing market data from B3 (the Brazilian stock exchange).
+In this vignette, we explored the key functionalities of the package, including:
+
+1.  **Downloading Market Data**: Using templates and the `fetch_marketdata()` function,
+    we demonstrated how to download and process various types of market data, such as
+    reference rates and futures settlement prices.
+2.  **Data Storage and Organization**: We reviewed the structure of the `rb3.cachedir` folder,
+    which organizes raw files, metadata, and processed datasets for efficient access and management.
+3.  **Accessing Processed Data**: We showcased how to query the processed datasets using
+    template-specific functions like `template_dataset()` and custom access functions such as
+    `yc_brl_get()` and `futures_get()`.
+
+By combining the power of templates, efficient data storage, and specialized query functions,
+the `rb3` package simplifies the process of working with B3 market data.
+Whether you are analyzing yield curves, futures prices, or other financial datasets, `rb3`
+provides the tools needed to streamline your workflow and focus on generating insights.
+
+We encourage you to explore the package further and adapt its functionalities to your specific
+use cases in financial analysis.
+
