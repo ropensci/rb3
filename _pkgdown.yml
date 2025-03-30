@@ -1,7 +1,7 @@
 url: https://ropensci.github.io/rb3/
 template:
-  params:
-    bootswatch: yeti
+  bootstrap: 5
+  bootswatch: yeti
 
 navbar:
   structure:
@@ -25,8 +25,9 @@ reference:
     desc: >
       Package overview and core functionality
     contents:
-      - rb3-package
+      - rb3
       - rb3_bootstrap
+      - rb3.cachedir
       - rb3_db_connection
 
   - title: Marketdata Access
