@@ -62,7 +62,7 @@ Collate:
     'zzz.R'
 BugReports: https://github.com/ropensci/rb3/issues
 URL: https://github.com/ropensci/rb3,
-    http://ropensci.github.io/rb3/
+    https://ropensci.github.io/rb3/
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
