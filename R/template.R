@@ -152,8 +152,6 @@ template_retrieve <- function(template_name) {
 #' \describe{
 #'   \item{Description}{The description of the template}
 #'   \item{Template}{The template identifier}
-#'   \item{Reader}{Indicates if the template has a reader (✅ or ❌)}
-#'   \item{Downloader}{Indicates if the template has a downloader (✅ or ❌)}
 #' }
 #'
 #' @examples
@@ -167,8 +165,6 @@ list_templates <- function() {
     tibble(
       "Description" = tpl_$description,
       "Template" = tpl_$id,
-      "Reader" = ifelse(tpl_$has_reader, "\U2705", "\U274C"),
-      "Downloader" = ifelse(tpl_$has_downloader, "\U2705", "\U274C")
     )
   })
 }

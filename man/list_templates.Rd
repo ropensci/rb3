@@ -11,8 +11,6 @@ A tibble with the following columns:
 \describe{
 \item{Description}{The description of the template}
 \item{Template}{The template identifier}
-\item{Reader}{Indicates if the template has a reader (✅ or ❌)}
-\item{Downloader}{Indicates if the template has a downloader (✅ or ❌)}
 }
 }
 \description{

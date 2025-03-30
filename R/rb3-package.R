@@ -1,32 +1,72 @@
-#' @title Read files from Brazilian Financial Market
+#' @title `rb3.cachedir` Option
 #'
 #' @description
-#' Read the many files used in Brazilian Financial Market and
-#' convert them into useful formats and data structures.
+#' The `rb3.cachedir` option is used to specify the directory where cached data 
+#' will be stored when using the `rb3` package. This option allows users to 
+#' define a custom directory for caching, which can improve performance by 
+#' avoiding repeated downloads or computations.
 #'
 #' @details
-#' ## rb3 options
-#'
-#' rb3 uses `base::options` to allow user set global options that affect the
-#' way the package works and display its alerts.
-#'
-#' \describe{
-#'   \item{rb3.cachedir}{
-#'     rb3 cache folder is named `rb3-cache` and it is created inside the
-#'     directory returned by `base::tempdir`.
-#'     Since it is changed for every new session it is interesting to use the
-#'     same directory for cache across sessions.
-#'     Once the option `rb3.cachedir` is set the files are always cached in
-#'     the same directory.
-#'     This is very useful to build a historical data.
-#'     Historical time series can be loaded directly from cached files.
-#'   }
-#' }
 #' 
-#' @aliases rb3.cachedir
-#' 
-#' @name rb3-package
+#' ### Setting the `rb3.cachedir` Option
 #'
+#' To set the `rb3.cachedir` option, use the `options()` function and provide 
+#' the desired directory path as a string. For example:
+#'
+#' ```r
+#' # Set the cache directory to a custom path
+#' options(rb3.cachedir = "/path/to/your/cache/directory")
+#' ```
+#'
+#' Replace `"/path/to/your/cache/directory"` with the actual path where you want 
+#' the cached data to be stored.
+#'
+#' ### Viewing the Current Value of `rb3.cachedir`
+#'
+#' To check the current value of the `rb3.cachedir` option, use the `getOption()` 
+#' function:
+#'
+#' ```r
+#' # View the current cache directory
+#' getOption("rb3.cachedir")
+#' ```
+#'
+#' This will return the path to the directory currently set for caching, or 
+#' `NULL` if the option has not been set.
+#'
+#' ### Notes
+#'
+#' - Ensure that the specified directory exists and is writable.
+#' - If the `rb3.cachedir` option is not set, the package use a temporary directory (`base::tempdir()`).
+#' 
+#' @examples
+#' # Set the cache directory
+#' options(rb3.cachedir = "~/rb3_cache")
+#'
+#' # Verify the cache directory
+#' cache_dir <- getOption("rb3.cachedir")
+#' print(cache_dir)
+#'
+#' # In this example, the cache directory is set to `~/rb3_cache`, and the value 
+#' # is then retrieved and printed to confirm the setting.
+#'
+#' @name rb3.cachedir
+NULL
+
+#' @title Access and Process B3 Data
+#'
+#' @description
+#' The `rb3` package provides tools for accessing, processing, and analyzing 
+#' public files from B3, the Brazilian Stock Exchange. It facilitates the 
+#' handling of various datasets published by B3, including financial market 
+#' data, metadata, and auxiliary files.
+#' 
+#' The package supports efficient data 
+#' storage and querying through Arrow datasets and offers utilities 
+#' for managing datasets to optimize workflows. With `rb3`, users can 
+#' streamline the process of transforming raw B3 data into actionable insights 
+#' for analysis and reporting.
+#' 
 #' @importFrom base64enc base64encode
 #' @importFrom stats na.omit
 #' @importFrom bizdays following preceding load_builtin_calendars

@@ -4,37 +4,24 @@
 \name{rb3-package}
 \alias{rb3}
 \alias{rb3-package}
-\alias{rb3.cachedir}
-\title{Read files from Brazilian Financial Market}
+\title{Access and Process B3 Data}
 \description{
-Read the many files used in Brazilian Financial Market and
-convert them into useful formats and data structures.
-}
-\details{
-\subsection{rb3 options}{
+The \code{rb3} package provides tools for accessing, processing, and analyzing
+public files from B3, the Brazilian Stock Exchange. It facilitates the
+handling of various datasets published by B3, including financial market
+data, metadata, and auxiliary files.
 
-rb3 uses \code{base::options} to allow user set global options that affect the
-way the package works and display its alerts.
-
-\describe{
-\item{rb3.cachedir}{
-rb3 cache folder is named \code{rb3-cache} and it is created inside the
-directory returned by \code{base::tempdir}.
-Since it is changed for every new session it is interesting to use the
-same directory for cache across sessions.
-Once the option \code{rb3.cachedir} is set the files are always cached in
-the same directory.
-This is very useful to build a historical data.
-Historical time series can be loaded directly from cached files.
-}
-}
-}
+The package supports efficient data
+storage and querying through Arrow datasets and offers utilities
+for managing datasets to optimize workflows. With \code{rb3}, users can
+streamline the process of transforming raw B3 data into actionable insights
+for analysis and reporting.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/ropensci/rb3}
-  \item \url{http://ropensci.github.io/rb3/}
+  \item \url{https://ropensci.github.io/rb3/}
   \item Report bugs at \url{https://github.com/ropensci/rb3/issues}
 }
 
