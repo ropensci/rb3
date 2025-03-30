@@ -13,14 +13,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rb3 <img src="man/figures/logo.png" align="right" width="120" />
+# rb3 <img src="man/figures/logo.png" align="right" width="120" alt="rb3" />
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wilsonfreitas/rb3?branch=main)
 [![R build (rcmdcheck)](https://github.com/ropensci/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rb3/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/rb3)](https://CRAN.R-project.org/package=rb3)
-[![](https://cranlogs.r-pkg.org/badges/rb3)](https://cran.r-project.org/package=rb3)
+[![rb3 downloads](https://cranlogs.r-pkg.org/badges/rb3)](https://cran.r-project.org/package=rb3)
 [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/534_status.svg)](https://github.com/ropensci/software-review/issues/534)
 <!-- badges: end -->
 
@@ -55,7 +55,7 @@ devtools::install_github("ropensci/rb3")
 
 The `rb3` package uses a template system to standardize the downloading and processing of different data types. To see available templates:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(rb3)
 
 # List available templates
@@ -85,8 +85,8 @@ fetch_marketdata("b3-cotahist-yearly", year = 2023)
 ch <- cotahist_get("yearly")
 
 # Filter for stocks
-eq <- ch |> 
-  filter(year(refdate) == 2023) |> 
+eq <- ch |>
+  filter(year(refdate) == 2023) |>
   cotahist_filter_equity()
 
 # Get top 10 most traded stocks

@@ -1,6 +1,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rb3 <img src="man/figures/logo.png" align="right" width="120" />
+# rb3 <img src="man/figures/logo.png" align="right" width="120" alt="rb3" />
 
 <!-- badges: start -->
 
@@ -13,7 +13,8 @@ coverage](https://codecov.io/gh/wilsonfreitas/rb3/branch/main/graph/badge.svg)](
 (rcmdcheck)](https://github.com/ropensci/rb3/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/rb3/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rb3)](https://CRAN.R-project.org/package=rb3)
-[![](https://cranlogs.r-pkg.org/badges/rb3)](https://cran.r-project.org/package=rb3)
+[![rb3
+downloads](https://cranlogs.r-pkg.org/badges/rb3)](https://cran.r-project.org/package=rb3)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/534_status.svg)](https://github.com/ropensci/software-review/issues/534)
 <!-- badges: end -->
@@ -60,6 +61,14 @@ and processing of different data types. To see available templates:
 
     # List available templates
     list_templates()
+    #> # A tibble: 5 × 4
+    #>   Description                                         Template Reader Downloader
+    #>   <chr>                                               <chr>    <chr>  <chr>     
+    #> 1 Arquivo de Preços de Mercado - BVBG-086             b3-bvbg… ✅     ✅        
+    #> 2 Cotações Históricas do Pregão de Ações - Arquivo D… b3-cota… ✅     ✅        
+    #> 3 Cotações Históricas do Pregão de Ações - Arquivo A… b3-cota… ✅     ✅        
+    #> 4 Preços de Ajustes Diários de Contratos Futuros      b3-futu… ✅     ✅        
+    #> 5 Taxas referenciais                                  b3-refe… ✅     ✅
 
 ### Downloading Market Data
 
@@ -82,8 +91,8 @@ downloads data based on a template and parameters:
     ch <- cotahist_get("yearly")
 
     # Filter for stocks
-    eq <- ch |> 
-      filter(year(refdate) == 2023) |> 
+    eq <- ch |>
+      filter(year(refdate) == 2023) |>
       cotahist_filter_equity()
 
     # Get top 10 most traded stocks
