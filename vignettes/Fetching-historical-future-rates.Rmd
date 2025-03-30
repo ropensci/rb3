@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -133,7 +133,7 @@ In the graph below we see the dynamics of the nominal interest rates
 of the contracts DI1F23 and DI1F33.
 These contracts are exactly 10 years distant from each other.
 
-```{r di1-futures-plot, fig.width=7, fig.height=5}
+```{r di1-futures-plot, fig.width=7, fig.height=5, fig.cap="DI1 Future Rates - Nominal Interest Rates"}
 di1_futures |>
   filter(symbol %in% c("DI1F23", "DI1F33")) |>
   ggplot(aes(x = refdate, y = adjusted_tax, color = symbol, group = symbol)) +
@@ -174,7 +174,7 @@ These contracts are exactly 12 years distant from each other.
 Since we don't have a 10-year contract, we use the 12-year contract as a reference to observe
 the dynamics of short and long term real interest rates.
 
-```{r dap-futures-plot, fig.width=7, fig.height=5}
+```{r dap-futures-plot, fig.width=7, fig.height=5, fig.cap="DAP Future Rates - Real Interest Rates"}
 dap_futures |>
   filter(symbol %in% c("DAPF23", "DAPK35")) |>
   ggplot(aes(x = refdate, y = adjusted_tax, group = symbol, color = symbol)) +
@@ -212,7 +212,7 @@ infl_expec <- infl_futures |>
   mutate(inflation = DAPF23 / DI1F23 - 1)
 ```
 
-```{r implied-inflation-plot, warning=FALSE, fig.width=7, fig.height=5}
+```{r implied-inflation-plot, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Implied Inflation from futures"}
 infl_expec |>
   ggplot(aes(x = refdate, y = inflation)) +
   geom_line() +
@@ -227,7 +227,7 @@ infl_expec |>
 We can observe that, as the contracts approach maturity, the implied inflation converges to zero, as expected.
 To overcome this bias, let's redo the graph for the F24 maturity.
 
-```{r implied-inflation-F24, warning=FALSE, fig.width=7, fig.height=5}
+```{r implied-inflation-F24, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Implied Inflation from futures"}
 df |>
   filter(symbol %in% c("DI1F24", "DAPF24")) |>
   select(symbol, price, refdate) |>
@@ -257,7 +257,7 @@ Here it follows the steps to calculate the forward rates.
     either "DI1F23" or "DI1F33".
     Save this filtered dataframe in a new dataframe called `df_fut`.
 
-```{r}
+```{r filter-data}
 df_fut <- df |>
   filter(symbol %in% c("DI1F23", "DI1F33"))
 ```
@@ -267,7 +267,7 @@ df_fut <- df |>
     Calculate the number of business days between the reference date (refdate) and the
     maturity date.
 
-```{r, warning=FALSE}
+```{r enrich-data, warning=FALSE}
 df_fut <- df_fut |>
   mutate(
     maturity_date = maturity2date(maturity_code) |>
@@ -280,7 +280,7 @@ df_fut <- df_fut |>
     between the DI1F23 and DI1F33 contracts.
     Save this information in a new dataframe called `df_du`.
 
-```{r}
+```{r calculate-business-days}
 df_du <- df_fut |>
   select(refdate, symbol, business_days) |>
   tidyr::pivot_wider(names_from = symbol, values_from = business_days) |>
@@ -296,7 +296,7 @@ df_du <- df_fut |>
     Now we have the prices of the futures and the business days between them, for each date,
     in the same row.
 
-```{r}
+```{r join-dataframes}
 df_fut <- df_fut |>
   select(refdate, symbol, price) |>
   tidyr::pivot_wider(names_from = symbol, values_from = price) |>
@@ -309,7 +309,7 @@ $$
 \text{Forward Rate} = \left(\frac{\text{DI1F23}}{\text{DI1F33}}\right)^{\frac{252}{\text{Business Days}}} - 1
 $$
 
-```{r}
+```{r calculate-forward-rates}
 df_fwd <- df_fut |>
   mutate(
     fwd = (DI1F23 / DI1F33)^(252 / du) - 1
@@ -320,7 +320,7 @@ df_fwd <- df_fut |>
 
 Make a graph showing the dynamics of the 10-year forward rates from January 2023 to January 2033.
 
-```{r, warning=FALSE, fig.width=7, fig.height=5}
+```{r plot-forward-rates, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Forward Rates"}
 df_fwd |>
   ggplot(aes(x = refdate, y = fwd)) +
   geom_line() +

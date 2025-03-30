@@ -21,7 +21,7 @@ The `rb3` package provides tools for downloading, processing, and analyzing mark
 (the Brazilian stock exchange). This vignette will guide you through the basics of using the
 package to download various types of market data and perform common analyses.
 
-```{r setup}
+```{r setup, eval=TRUE, message=FALSE}
 library(rb3)
 library(tidyverse)
 library(bizdays)
@@ -45,17 +45,9 @@ For example:
 - `"b3-reference-rates"`: Downloads and reades the web page of reference interest rates.
 - `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading instruments information.
 
-```{r list-templates, eval=FALSE}
+```{r list-templates, eval=TRUE}
 # List available templates
 list_templates()
-#> # A tibble: 5 × 4
-#>   Description                                             Template                     Reader Downloader
-#>   <chr>                                                   <chr>                        <chr>  <chr>
-#> 1 Arquivo de Preços de Mercado - BVBG-086                 b3-bvbg-086                  ✅     ✅
-#> 2 Cotações Históricas do Pregão de Ações - Arquivo Diário b3-cotahist-daily            ✅     ✅
-#> 3 Cotações Históricas do Pregão de Ações - Arquivo Anual  b3-cotahist-yearly           ✅     ✅
-#> 4 Preços de Ajustes Diários de Contratos Futuros          b3-futures-settlement-prices ✅     ✅
-#> 5 Taxas referenciais                                      b3-reference-rates           ✅     ✅
 ```
 
 Additional information about templates can be obtained by calling the `template_retrieve()`

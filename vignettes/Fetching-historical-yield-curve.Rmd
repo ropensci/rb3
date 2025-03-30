@@ -129,7 +129,7 @@ These contracts reflect the market's expectations for the cumulative interbank i
 The PRE curve is essential for understanding nominal yield dynamics in Brazil's fixed income
 market, and it's commonly used for pricing public and private debt instruments.
 
-```{r, eval=FALSE}
+```{r yc-brl-get, eval=FALSE}
 df_yc_brl <- yc_brl_get() |>
   filter(forward_date < "2035-01-01") |>
   collect()
@@ -142,7 +142,7 @@ market data.
 Including such long maturities could introduce distortions or give a false sense of
 precision beyond what the market actually supports.
 
-```{r, fig.width=9, fig.height=6}
+```{r yc-brl-plot, fig.width=9, fig.height=6, fig.cap="Yield Curves for Brazil"}
 p <- ggplot(
   df_yc_brl,
   aes(
@@ -183,12 +183,12 @@ It reflects market expectations for **inflation-adjusted (real) returns**.
 The DIC curve is especially relevant for pricing inflation-linked bonds
 (such as NTN-Bs) and for analyzing the market's perception of long-term inflation dynamics.
 
-```{r, eval=FALSE}
+```{r yc-ipca-get, eval=FALSE}
 df_yc_ipca <- yc_ipca_get() |>
   collect()
 ```
 
-```{r, fig.width=9, fig.height=6}
+```{r yc-ipca-plot, fig.width=9, fig.height=6, fig.cap="DIxIPCA Yield Curves for Brazil"}
 p <- ggplot(
   df_yc_ipca |> filter(biz_days > 21, biz_days < 1008),
   aes(
@@ -226,7 +226,7 @@ The DOC curve is constructed using the pricing of contracts where one leg pays f
 BRL interest and the other is tied to the USD.
 It reflects **market expectations for exchange rate and interest rate spreads**.
 
-```{r, eval=FALSE}
+```{r yc-usd-get, eval=FALSE}
 df_yc_usd <- yc_usd_get() |>
   filter(forward_date < "2035-01-01") |>
   collect()
@@ -236,7 +236,7 @@ As with other curves, we filter out maturities beyond 2035.
 This is because FX futures contracts tend to be illiquid at longer horizons,
 and extrapolated values beyond that point may not reflect reliable market pricing.
 
-```{r plot-cupom-limpo, fig.width=9, fig.height=6}
+```{r plot-cupom-limpo, fig.width=9, fig.height=6, fig.cap="Cupom Limpo (USD) Yield Curves for Brazil"}
 p <- ggplot(
   df_yc_usd |> filter(biz_days > 21, biz_days < 2520),
   aes(
@@ -284,7 +284,7 @@ Where \( r_{\text{nominal}} \) comes from the PRE curve and \( r_{\text{real}} \
 \text{Implied Inflation} \approx r_{\text{nominal}} - r_{\text{real}}
 \]
 
-```{r}
+```{r break-even-inflation}
 # Load and prepare PRE and DIC curves
 pre <- df_yc_brl |>
   select(refdate, forward_date, r_nominal = r_252)
@@ -297,7 +297,7 @@ df_be <- inner_join(pre, ipca, by = c("refdate", "forward_date")) |>
   mutate(break_even = r_nominal - r_real)
 ```
 
-```{r break-even-inflation-plot, fig.width=9, fig.height=6}
+```{r break-even-inflation-plot, fig.width=9, fig.height=6, fig.cap="Break-even Inflation"}
 p <- ggplot(
   df_be,
   aes(

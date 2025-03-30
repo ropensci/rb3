@@ -177,7 +177,7 @@ eq_monthly <- eq |>
   collect()
 ```
 
-```{r equity-volume-plot, echo=FALSE, fig.width=7, fig.height=5.5}
+```{r equity-volume-plot, echo=FALSE, fig.width=7, fig.height=5.5, fig.cap="Monthly Trading Volume for Top 10 Brazilian Stocks"}
 # Using pre-loaded data to create the plot without fetching data
 ggplot(eq_monthly, aes(x = month, y = volume, group = symbol, colour = symbol)) +
   geom_line() +
@@ -210,7 +210,7 @@ etf_shares <- etfs |>
   mutate(volume_ratio_acc = cumsum(volume_ratio))
 ```
 
-```{r etf-share-plot, echo=FALSE, fig.width=7, fig.height=5.5}
+```{r etf-share-plot, echo=FALSE, fig.width=7, fig.height=5.5, fig.cap="Volume Share of Top 10 ETFs"}
 # Using pre-loaded data to create the plot
 fmt <- scales::label_percent(accuracy = 0.1)
 
@@ -245,7 +245,7 @@ stock_data <- equities |>
   collect()
 ```
 
-```{r distribution-id-plot, echo=FALSE, fig.width=7, fig.height=5}
+```{r distribution-id-plot, echo=FALSE, fig.width=7, fig.height=5, fig.cap="Distribution ID Changes for ITUB4"}
 # Using pre-loaded data to create the plot
 ggplot(stock_data, aes(x = refdate, y = distribution_id)) +
   geom_line() +
@@ -257,7 +257,7 @@ ggplot(stock_data, aes(x = refdate, y = distribution_id)) +
   )
 ```
 
-```{r price-by-distribution-plot, echo=FALSE, fig.width=7, fig.height=5}
+```{r price-by-distribution-plot, echo=FALSE, fig.width=7, fig.height=5, fig.cap="Price History for ITUB4 by Distribution ID"}
 # Using pre-loaded data to create the plot
 ggplot(stock_data, aes(x = refdate, y = close, colour = factor(distribution_id))) +
   geom_line() +
@@ -289,7 +289,7 @@ bdr_data <- bdrs |>
   collect()
 ```
 
-```{r bdr-volume-plot, echo=FALSE, fig.width=7, fig.height=5}
+```{r bdr-volume-plot, echo=FALSE, fig.width=7, fig.height=5, fig.cap="Trading Volume for AAPL34 (Apple BDR)"}
 # Using pre-loaded data to create the plot
 ggplot(bdr_data, aes(x = refdate, y = trade_quantity, colour = factor(distribution_id))) +
   geom_line() +
@@ -322,6 +322,7 @@ This workflow enables a wide range of analyses, from studying trading volumes an
 tracking price movements and identifying corporate actions through distribution IDs.
 
 For more advanced analyses, you might consider:
+
 - Adjusting prices for corporate actions
 - Building portfolios and calculating returns
 - Analyzing liquidity patterns
