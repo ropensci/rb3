@@ -17,6 +17,11 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
+The template `b3-reference-rates` allows you to fetch historical yield curves from B3,
+the Brazilian stock exchange.
+This vignette provides a step-by-step guide on how to retrieve and visualize these curves
+using the `rb3` package.
+
 The yield curve is a key tool in financial markets, offering insights into interest rate
 expectations, inflation outlook, and economic sentiment.
 In Brazil, the local exchange (B3) publishes a set of reference yield curves built from
@@ -57,14 +62,15 @@ To obtain the data, we follow these two main steps:
 ### Selecting Reference Dates
 
 We begin by selecting the first business day of each year between 2021 and 2025 using the
-getdate() function.
+`getdate()` function.
 This provides a set of consistent reference points, free from seasonal distortions or holiday
 effects, which are ideal for comparing yield curves over time.
 
 ### 2. Fetching and Storing Market Data
 
 The `fetch_marketdata()` function is used to download the yield curve data for the selected
-reference dates.
+reference dates using the template `b3-reference-rates`.
+This template is designed to fetch the reference rates from B3's systems.
 This function fetches data directly from B3's systems and stores it in a
 structured format within the rb3 package database.
 The data is stored locally in an optimized structure,

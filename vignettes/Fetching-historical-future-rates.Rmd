@@ -20,10 +20,15 @@ load("futures.RData")
 
 ## Introduction
 
+The template `b3-futures-settlement-prices` allows you to fetch historical settlement prices for
+future contracts from B3 (Brasil, Bolsa, Balcão), the Brazilian stock exchange and derivatives
+market.
+This vignette provides a step-by-step guide on how to retrieve, process, and analyze this data
+using the `rb3` package.
+
 [settlement_prices]: <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/> "Trading session settlements"
 
-In this analysis, we will work with futures contract settlement prices published daily by
-B3 (Brasil, Bolsa, Balcão) - the Brazilian stock exchange and derivatives market.
+The futures contract settlement prices are published daily by B3.
 These settlement prices represent the official daily closing values used for marking
 positions to market and calculating margin requirements.
 
