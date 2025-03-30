@@ -45,9 +45,17 @@ For example:
 - `"b3-reference-rates"`: Downloads and reades the web page of reference interest rates.
 - `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading instruments information.
 
-```{r list-templates}
+```{r list-templates, eval=FALSE}
 # List available templates
 list_templates()
+#> # A tibble: 5 × 4
+#>   Description                                             Template                     Reader Downloader
+#>   <chr>                                                   <chr>                        <chr>  <chr>
+#> 1 Arquivo de Preços de Mercado - BVBG-086                 b3-bvbg-086                  ✅     ✅
+#> 2 Cotações Históricas do Pregão de Ações - Arquivo Diário b3-cotahist-daily            ✅     ✅
+#> 3 Cotações Históricas do Pregão de Ações - Arquivo Anual  b3-cotahist-yearly           ✅     ✅
+#> 4 Preços de Ajustes Diários de Contratos Futuros          b3-futures-settlement-prices ✅     ✅
+#> 5 Taxas referenciais                                      b3-reference-rates           ✅     ✅
 ```
 
 Additional information about templates can be obtained by calling the `template_retrieve()`
@@ -56,6 +64,43 @@ function:
 ```{r template-retrieve}
 # Get a specific template
 template_retrieve("b3-cotahist-yearly")
+#> Template: b3-cotahist-yearly
+#> Description: Cotações Históricas do Pregão de Ações - Arquivo Anual
+#> Required arguments:
+#> • year: Ano de referência
+#> Fields:
+#> • regtype (numeric): Tipo de registro
+#> • refdate (Date): Data do pregão
+#> • bdi_code (numeric): Código BDI
+#> • symbol (character): Código de negociação do papel
+#> • instrument_market (numeric): Tipo de mercado
+#> • corporation_name (character): Nome resumido da empresa emissora do papel
+#> • specification_code (character): Especificação do papel
+#> • days_to_settlement (numeric): Prazo em dias do mercado a termo
+#> • trading_currency (character): Moeda de referência
+#> • open (numeric): Preço de abertura do papel
+#> • high (numeric): Preço máximo do papel
+#> • low (numeric): Preço mínimo do papel
+#> • average (numeric): Preço médio do papel
+#> • close (numeric): Preço último negócio efetuado com o papel
+#> • best_bid (numeric): Preço da melhor oferta de compra do papel
+#> • best_ask (numeric): Preço da melhor oferta de venda do papel
+#> • trade_quantity (numeric): Número de negócios efetuados com o papel
+#> • traded_contracts (numeric): Quantidade total de títulos negociados neste
+#> papel
+#> • volume (numeric): Volume total de títulos negociados neste papel
+#> • strike_price (numeric): Preço de exercício para o mercado de opções ou valor
+#> do contrato para o mercado de termo secundário
+#> • strike_price_adjustment_indicator (character): Indicador de correção de
+#> preços de exercícios ou valores de contrato para os mercados de opções, termo
+#> secundário ou futuro
+#> • maturity_date (Date): Data do vencimento para os mercados de opções, termo
+#> secundário ou futuro
+#> • allocation_lot_size (numeric): Fator de cotação do papel
+#> • strike_price_in_points (numeric): Preço de exercício em pontos para opções
+#> referenciadas em dólar ou valor de contrato em pontos para termo secundário
+#> • isin (character): Código do papel no sistema ISIN
+#> • distribution_id (numeric): Número de distribuição do papel
 ```
 
 Once you know the template you want to use, you can download the data by calling
@@ -75,12 +120,9 @@ fetch_marketdata("b3-reference-rates",
   refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"),
   curve_name = c("PRE", "DIC")
 )
-```
-
-```text
-✔ Downloading data [53s]
-ℹ 44 files downloaded
-✔ Reading data into DB [6s]
+#> ✔ Downloading data [53s]
+#> ℹ 44 files downloaded
+#> ✔ Reading data into DB [6s]
 ```
 
 The total time taken to download and process the data is shown in the console output,
@@ -96,6 +138,7 @@ It is set as an option in R, and you can check its current value using:
 
 ```{r view-rb3-cachedir}
 getOption("rb3.cachedir")
+#> [1] "/home/wilson/dev/rb3/rb3-cache"
 ```
 
 Inside this folder it has the 3 folders:
@@ -125,15 +168,36 @@ The dataset cam be accessed using the function `rb3::template_dataset()`.
 ```{r template-dataset}
 # Get the dataset for the template "b3-reference-rates"
 template_dataset("b3-reference-rates")
+#> FileSystemDataset with 47 Parquet files
+#> 5 columns
+#> refdate: date32[day]
+#> curve_name: string
+#> cur_days: int64
+#> col1: double
+#> col2: double
 ```
 
-This function defaults to the `staging` layer, but you can specify the `layer` argument
-to access the `input` layer if needed.
+This function defaults to the `input` layer, but you can specify the `layer` argument
+to access the `staging` layer if needed.
 
 ```{r template-dataset-input}
 # Get the dataset for the template "b3-reference-rates" in the input layer
-template_dataset("b3-reference-rates", layer = "input")
+template_dataset("b3-reference-rates", layer = "staging")
+#> FileSystemDataset with 47 Parquet files
+#> 7 columns
+#> curve_name: string
+#> refdate: date32[day]
+#> forward_date: date32[day]
+#> cur_days: int64
+#> biz_days: int64
+#> col1: double
+#> col2: double
 ```
+
+We can observe that the dataset in the `input` layer has 5 columns, while the dataset
+in the `staging` layer has 7 columns.
+The datasets in the `staging` layer are enriched with formatted columns and additional
+data.
 
 ## Accessing the data
 
@@ -158,7 +222,27 @@ you can use the `yc_brl_get()` function:
 yc_brl_get() |>
   filter(refdate == "2024-01-31") |>
   collect()
+#> # A tibble: 257 × 7
+#>    curve_name refdate    forward_date cur_days biz_days r_252  r_360
+#>    <chr>      <date>     <date>          <int>    <int> <dbl>  <dbl>
+#>  1 PRE        2024-01-31 2024-02-01          1        1 0.116 0
+#>  2 PRE        2024-01-31 2024-02-07          7        5 0.112 0.115
+#>  3 PRE        2024-01-31 2024-02-14         14        8 0.112 0.0906
+#>  4 PRE        2024-01-31 2024-02-15         15        9 0.112 0.0953
+#>  5 PRE        2024-01-31 2024-02-16         16       10 0.112 0.0994
+#>  6 PRE        2024-01-31 2024-02-21         21       13 0.112 0.0983
+#>  7 PRE        2024-01-31 2024-02-28         28       18 0.112 0.102
+#>  8 PRE        2024-01-31 2024-02-29         29       19 0.112 0.104
+#>  9 PRE        2024-01-31 2024-03-01         30       20 0.112 0.106
+#> 10 PRE        2024-01-31 2024-03-04         33       21 0.112 0.101
+#> # ℹ 247 more rows
 ```
+
+The columns `r_252` and `r_360` have been renamed in the function `yc_brl_get()`.
+This happens because the dataset `b3-reference-rates` attends to the three curves
+PRE, DIC, and DOC, but the columns `col1` and `col2` have different meanings for each curve.
+For this reason we strongly recommend using the custom functions to access the data instead of
+using the `template_dataset()` function directly.
 
 ## Conclusion
 
