@@ -85,7 +85,7 @@ m1 |>
 
 
 
-cotahist_get_options_by_symbols <- function(symbols) {
+cotahist_options_by_symbols_get <- function(symbols) {
   ch <- cotahist_get()
   yc <- yc_brl_get() |> select("refdate", "forward_date", "r_252")
 
@@ -118,7 +118,7 @@ cotahist_get_options_by_symbols <- function(symbols) {
     )
 }
 
-cotahist_get_options_by_symbols("PETR4") |>
+cotahist_options_by_symbols_get("PETR4") |>
   filter(refdate == "2024-01-02") |>
   collect()
 

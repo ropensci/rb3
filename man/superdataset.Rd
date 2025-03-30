@@ -2,19 +2,19 @@
 % Please edit documentation in R/scraper-cotahist.R, R/scraper-yc.R
 \name{superdataset}
 \alias{superdataset}
-\alias{cotahist_get_options_by_symbols}
-\alias{yc_brl_with_futures}
-\alias{yc_usd_with_futures}
-\alias{yc_ipca_with_futures}
+\alias{cotahist_options_by_symbols_get}
+\alias{yc_brl_with_futures_get}
+\alias{yc_usd_with_futures_get}
+\alias{yc_ipca_with_futures_get}
 \title{Enhanced Dataset Creation}
 \usage{
-cotahist_get_options_by_symbols(symbols)
+cotahist_options_by_symbols_get(symbols)
 
-yc_brl_with_futures(refdate)
+yc_brl_with_futures_get(refdate)
 
-yc_usd_with_futures(refdate)
+yc_usd_with_futures_get(refdate)
 
-yc_ipca_with_futures(refdate)
+yc_ipca_with_futures_get(refdate)
 }
 \arguments{
 \item{symbols}{list of symbols to extract market data from the COTAHIST dataset.}
@@ -25,7 +25,7 @@ yc_ipca_with_futures(refdate)
 The function \code{cotahist_options_by_symbol_superset()} return an object that inherits from a \code{arrow_dplyr_query}
 since it tries to preserve the lazy evaluation and avoids collecting the data before its return.
 
-The functions \code{yc_brl_with_futures()}, \code{yc_usd_with_futures()} and \code{yc_ipca_with_futures()} return
+The functions \code{yc_brl_with_futures_get()}, \code{yc_usd_with_futures_get()} and \code{yc_ipca_with_futures_get()} return
 a \code{data.frame} containing the yield curve data merged with futures contract information.
 The data is pre-collected (not lazy) and includes all columns from the respective yield curve
 function plus a \code{symbol} column identifying the corresponding futures contract.
@@ -61,9 +61,9 @@ to identify the situations where this behavior applies.
 
 These functions retrieve yield curve data merged with corresponding futures contract information:
 \itemize{
-\item \code{yc_brl_with_futures()}: BRL nominal rates with DI1 futures contracts
-\item \code{yc_usd_with_futures()}: USD rates (Cupom Cambial) with DDI futures contracts
-\item \code{yc_ipca_with_futures()}: Real (inflation-indexed) rates with DAP futures contracts
+\item \code{yc_brl_with_futures_get()}: BRL nominal rates with DI1 futures contracts
+\item \code{yc_usd_with_futures_get()}: USD rates (Cupom Cambial) with DDI futures contracts
+\item \code{yc_ipca_with_futures_get()}: Real (inflation-indexed) rates with DAP futures contracts
 }
 
 These functions combine data from B3 Reference Rates (\code{b3-reference-rates}) and
@@ -77,8 +77,8 @@ ensure optimal performance.
 \examples{
 \dontrun{
 date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
-bova_options <- cotahist_get_options_by_symbols("BOVA11") |> filter(refdate == date)
-petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(refdate == date)
+bova_options <- cotahist_options_by_symbols_get("BOVA11") |> filter(refdate == date)
+petr_options <- cotahist_options_by_symbols_get(c("PETR4", "PETR3")) |> filter(refdate == date)
 }
 
 \dontrun{
@@ -86,14 +86,14 @@ petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(r
 date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
 
 # Retrieve BRL yield curve with DI1 futures
-brl_curve <- yc_brl_with_futures(date)
+brl_curve <- yc_brl_with_futures_get(date)
 head(brl_curve)
 
 # Retrieve USD yield curve with DDI futures
-usd_curve <- yc_usd_with_futures(date)
+usd_curve <- yc_usd_with_futures_get(date)
 
 # Retrieve inflation-indexed yield curve with DAP futures
-ipca_curve <- yc_ipca_with_futures(date)
+ipca_curve <- yc_ipca_with_futures_get(date)
 }
 
 }

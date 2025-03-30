@@ -265,8 +265,8 @@ cotahist_filter_fund_options <- function(x) {
 #' @examples
 #' \dontrun{
 #' date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
-#' bova_options <- cotahist_get_options_by_symbols("BOVA11") |> filter(refdate == date)
-#' petr_options <- cotahist_get_options_by_symbols(c("PETR4", "PETR3")) |> filter(refdate == date)
+#' bova_options <- cotahist_options_by_symbols_get("BOVA11") |> filter(refdate == date)
+#' petr_options <- cotahist_options_by_symbols_get(c("PETR4", "PETR3")) |> filter(refdate == date)
 #' }
 #'
 #' @name superdataset
@@ -274,7 +274,7 @@ NULL
 
 #' @rdname superdataset
 #' @export
-cotahist_get_options_by_symbols <- function(symbols) {
+cotahist_options_by_symbols_get <- function(symbols) {
   ch <- cotahist_get()
   yc <- yc_brl_get() |> select("refdate", "forward_date", "r_252")
 

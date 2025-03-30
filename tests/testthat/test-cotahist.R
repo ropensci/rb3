@@ -111,7 +111,7 @@ test_that("it should extract funds data from cotahist dataset", {
 
 test_that("it should extract options data from cotahist dataset", {
   symbols <- c("PETR3", "PETR4")
-  df <- cotahist_get_options_by_symbols(symbols) |> collect()
+  df <- cotahist_options_by_symbols_get(symbols) |> collect()
   expect_type(df$type, "character")
   expect_s3_class(df$maturity_date, "Date")
   expect_type(df$strike_price, "double")

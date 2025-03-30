@@ -53,17 +53,17 @@ test_that("Test of yc_usd_get function", {
 })
 
 test_that("Test of yc_with_futures function", {
-  df <- yc_brl_with_futures(.refdate)
+  df <- yc_brl_with_futures_get(.refdate)
   expect_true(exists("symbol", df))
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))
   
-  df <- yc_usd_with_futures(.refdate)
+  df <- yc_usd_with_futures_get(.refdate)
   expect_true(exists("symbol", df))
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))
   
-  df <- yc_ipca_with_futures(.refdate)
+  df <- yc_ipca_with_futures_get(.refdate)
   expect_true(exists("symbol", df))
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))

@@ -89,7 +89,7 @@ yc_get <- function() {
 #' @export
 yc_brl_get <- function() {
   .yield_curve_get("PRE") |>
-    rename(r_252 = .data$col1, r_360 = .data$col2) |>
+    rename(r_252 = "col1", r_360 = "col2") |>
     select(
       "curve_name",
       "refdate",
@@ -112,7 +112,7 @@ yc_brl_get <- function() {
 #' @export
 yc_ipca_get <- function() {
   .yield_curve_get("DIC") |>
-    rename(r_252 = .data$col1) |>
+    rename(r_252 = "col1") |>
     select(
       "curve_name",
       "refdate",
@@ -134,7 +134,7 @@ yc_ipca_get <- function() {
 #' @export
 yc_usd_get <- function() {
   .yield_curve_get("DOC") |>
-    rename(r_360 = .data$col1) |>
+    rename(r_360 = "col1") |>
     select(
       "curve_name",
       "refdate",
@@ -165,9 +165,9 @@ yc_usd_get <- function() {
 
 #' @details
 #' These functions retrieve yield curve data merged with corresponding futures contract information:
-#' - `yc_brl_with_futures()`: BRL nominal rates with DI1 futures contracts
-#' - `yc_usd_with_futures()`: USD rates (Cupom Cambial) with DDI futures contracts
-#' - `yc_ipca_with_futures()`: Real (inflation-indexed) rates with DAP futures contracts
+#' - `yc_brl_with_futures_get()`: BRL nominal rates with DI1 futures contracts
+#' - `yc_usd_with_futures_get()`: USD rates (Cupom Cambial) with DDI futures contracts
+#' - `yc_ipca_with_futures_get()`: Real (inflation-indexed) rates with DAP futures contracts
 #'
 #' These functions combine data from B3 Reference Rates (`b3-reference-rates`) and
 #' Futures Settlement Prices (`b3-futures-settlement-prices`) to create comprehensive yield curve datasets.
@@ -180,7 +180,7 @@ yc_usd_get <- function() {
 #' @param refdate A Date object specifying the reference date for which to retrieve data
 #'
 #' @return
-#' The functions `yc_brl_with_futures()`, `yc_usd_with_futures()` and `yc_ipca_with_futures()` return
+#' The functions `yc_brl_with_futures_get()`, `yc_usd_with_futures_get()` and `yc_ipca_with_futures_get()` return
 #' a `data.frame` containing the yield curve data merged with futures contract information.
 #' The data is pre-collected (not lazy) and includes all columns from the respective yield curve
 #' function plus a `symbol` column identifying the corresponding futures contract.
@@ -191,30 +191,30 @@ yc_usd_get <- function() {
 #' date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
 #' 
 #' # Retrieve BRL yield curve with DI1 futures
-#' brl_curve <- yc_brl_with_futures(date)
+#' brl_curve <- yc_brl_with_futures_get(date)
 #' head(brl_curve)
 #' 
 #' # Retrieve USD yield curve with DDI futures
-#' usd_curve <- yc_usd_with_futures(date)
+#' usd_curve <- yc_usd_with_futures_get(date)
 #' 
 #' # Retrieve inflation-indexed yield curve with DAP futures
-#' ipca_curve <- yc_ipca_with_futures(date)
+#' ipca_curve <- yc_ipca_with_futures_get(date)
 #' }
 #'
 #' @rdname superdataset
 #' @export
-yc_brl_with_futures <- function(refdate) {
+yc_brl_with_futures_get <- function(refdate) {
   .yc_with_futures(yc_brl_get(), refdate, "DI1", "first day")
 }
 
 #' @rdname superdataset
 #' @export
-yc_usd_with_futures <- function(refdate) {
+yc_usd_with_futures_get <- function(refdate) {
   .yc_with_futures(yc_usd_get(), refdate, "DDI", "first day")
 }
 
 #' @rdname superdataset
 #' @export
-yc_ipca_with_futures <- function(refdate) {
+yc_ipca_with_futures_get <- function(refdate) {
   .yc_with_futures(yc_ipca_get(), refdate, "DAP", "15th day")
 }
