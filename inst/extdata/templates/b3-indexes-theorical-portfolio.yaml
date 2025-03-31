@@ -1,0 +1,58 @@
+id: b3-indexes-theorical-portfolio
+filetype: CUSTOM
+description: Carteira Teórica dos índices da B3 com pesos e posições
+locale: pt
+downloader:
+  function: stock_indexes_theo_portfolio_download
+  verifyssl: false
+  url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetTheoricalPortfolio
+  format: json
+  encoding: latin1
+  args:
+    index: Nome do índice
+reader:
+  function: stock_indexes_json_reader
+writers:
+  input:
+    partition: index
+fields:
+- name: symbol
+  description: Código da ação
+  handler:
+    type: character
+- name: corporation_name
+  description: Nome da companhia
+  handler:
+    type: character
+- name: specification_code
+  description: Código de especificação da ação
+  handler:
+    type: character
+- name: theorical_quantity
+  description: Quantidade teórica no índice
+  handler:
+    type: number
+- name: asset_part
+  description: Participação % no índice
+  handler:
+    type: number
+- name: id_asset
+  description: Contagem
+  handler:
+    type: integer
+- name: total_part
+  description: Participação % no índice
+  handler:
+    type: number
+- name: total_theorical_quantity
+  description: Quantidade teórica total do índice
+  handler:
+    type: number
+- name: reductor
+  description: Redutor
+  handler:
+    type: number
+- name: index
+  description: Nome do índice
+  handler:
+    type: character
