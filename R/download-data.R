@@ -71,7 +71,7 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
   }
 
   dest <- tempfile(fileext = str_glue(".{template$downloader$format}"))
-  if (template$download_marketdata(template, dest, ...)) {
+  if (download_marketdata_wrapper(template, dest, ...)) {
     filename <- unzip_recursive(dest)
     filename <- select_file_if_multiple(filename, template$downloader[["if-has-multiple-files-use"]])
     if (file.size(filename) <= 2) {
