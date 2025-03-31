@@ -3,10 +3,10 @@ filename: COTAHIST
 filetype: CUSTOM
 description: Cotações Históricas do Pregão de Ações - Arquivo Diário
 locale: en
-verifyssl: false
 downloader:
   function: datetime_download
   url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_D%d%m%Y.ZIP
+  verifyssl: false
   format: zip
   args:
     refdate: Data de referência

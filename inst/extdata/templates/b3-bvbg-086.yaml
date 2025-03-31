@@ -7,6 +7,7 @@ locale: en
 downloader:
   function: datetime_download
   url: https://www.b3.com.br/pesquisapregao/download?filelist=PR%y%m%d.zip
+  verifyssl: true
   format: zip
   if-has-multiple-files-use: newer
   args:
