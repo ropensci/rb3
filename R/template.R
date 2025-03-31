@@ -1,10 +1,5 @@
 new_template <- function(id, description = "") {
   obj <- list(id = id, description = description)
-
-  obj[["has_reader"]] <- FALSE
-  obj[["has_downloader"]] <- FALSE
-  obj[["verifyssl"]] <- TRUE
-
   structure(obj, class = "template")
 }
 
@@ -17,7 +12,6 @@ load_template_from_file <- function(fname) {
     } else if (n == "parts") {
       obj[["parts"]] <- lapply(tpl$parts, new_part)
     } else if (n == "reader") {
-      obj[["has_reader"]] <- TRUE
       obj[["reader"]] <- tpl$reader
       func_name <- tpl$reader[["function"]]
       obj[["read_file"]] <- getFromNamespace(func_name, "rb3")
@@ -49,7 +43,6 @@ load_template_from_file <- function(fname) {
       })
       obj[["writers"]] <- stats::setNames(writers, writers_names)
     } else if (n == "downloader") {
-      obj[["has_downloader"]] <- TRUE
       obj[["downloader"]] <- tpl$downloader
       func_name <- tpl$downloader[["function"]]
       obj[["download_marketdata"]] <- getFromNamespace(func_name, "rb3")

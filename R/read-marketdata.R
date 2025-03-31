@@ -40,7 +40,7 @@
 read_marketdata <- function(meta) {
   filename <- meta$downloaded[[1]]
   template <- template_retrieve(meta$template)
-  df <- template$read_file(template, filename)
+  df <- read_file_wrapper(template, filename, meta)
   if (is.null(df)) {
     cli_alert_warning("File could not be read: {.file {filename}}")
     meta_clean(meta)

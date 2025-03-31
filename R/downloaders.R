@@ -114,8 +114,8 @@ stock_indexes_theo_portfolio_download <- function(., dest, ...) {
   url <- url_encode(.$downloader$url,
     pageNumber = 1,
     pageSize = 9999,
-    language = "pt-br",
-    index = args$index_name
+    language = "en-us",
+    index = args$index
   )
   just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }

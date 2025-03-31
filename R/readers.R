@@ -6,12 +6,12 @@
   }
   cols <- fields_cols(.$fields)
   for (nx in .$colnames) {
-    df[[nx]] <- readr::parse_vector(df[[nx]], cols[[nx]], locale = loc)
+    df[[nx]] <- readr::parse_vector(as.character(df[[nx]]), cols[[nx]], locale = loc)
   }
   df
 }
 
-csv_read_file <- function(., filename) {
+csv_read_file <- function(., filename, ...) {
   df <- readr::read_csv(filename,
     col_names = .$colnames, col_types = fields_cols(.$fields),
     locale = readr::locale(), skip = .$reader$skip
@@ -19,7 +19,7 @@ csv_read_file <- function(., filename) {
   df
 }
 
-fwf_read_file <- function(., filename) {
+fwf_read_file <- function(., filename, ...) {
   encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
   suppressWarnings(
     df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
@@ -45,7 +45,7 @@ flatten_names <- function(nx) {
   as.vector(x[, 2])
 }
 
-settlement_prices_read <- function(., filename) {
+settlement_prices_read <- function(., filename, ...) {
   doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   refdate_ns <- getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
   if (length(refdate_ns) > 0) {
@@ -75,7 +75,7 @@ cols_number <- c(
   DP = 3, PRE = 3, TFP = 3, TP = 3, TR = 3
 )
 
-curve_read <- function(., filename) {
+curve_read <- function(., filename, ...) {
   text <- read_file(filename)
   doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
   char_vec <- xmlSApply(getNodeSet(doc, "//table/td"), xmlValue)
@@ -119,7 +119,7 @@ curve_read <- function(., filename) {
   .parse_columns(., df)
 }
 
-pricereport_reader <- function(., filename) {
+pricereport_reader <- function(., filename, ...) {
   count_handler <- \(name, attrs, .state) (.state <- .state + 1)
   n_rows <- XML::xmlEventParse(
     filename,
@@ -176,5 +176,27 @@ pricereport_reader <- function(., filename) {
 
   df <- as_tibble(envir$data)
   df <- df[, fields_names(.$fields)]
+  .parse_columns(., df)
+}
+
+read_file_wrapper <- function(., filename, meta) {
+  download_args <- jsonlite::fromJSON(meta$download_args)
+  if (length(download_args) > 0) {
+    do.call(.$read_file, append(list(., filename), download_args))
+  } else {
+    .$read_file(., filename)
+  }
+}
+
+stock_indexes_json_reader <- function(., filename, ...) {
+  download_args <- list(...)
+  jason <- fromJSON(filename)
+  df <- tibble::as_tibble(jason$results)
+  df$header_part <- jason$header$part
+  df$header_theoricalQty <- jason$header$theoricalQty
+  df$header_reductor <- jason$header$reductor
+  df$index <- download_args$index
+
+  colnames(df) <- .$colnames
   .parse_columns(., df)
 }
