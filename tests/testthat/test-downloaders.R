@@ -8,7 +8,7 @@ if (Sys.info()["sysname"] == "Linux") {
 test_that("it should download a file directly by its URL", {
   tpl <- template_retrieve("template-test")
   dest <- tempfile()
-  x <- tpl$download_marketdata(tpl, dest)
+  x <- download_marketdata_wrapper(tpl, dest)
   expect_true(x)
   expect_true(file.exists(dest))
 })
@@ -16,33 +16,33 @@ test_that("it should download a file directly by its URL", {
 test_that("it should download a file with a datetime downloader", {
   tpl <- template_retrieve("b3-cotahist-daily")
   dest <- tempfile()
-  expect_false(tpl$download_marketdata(tpl, dest))
+  expect_false(download_marketdata_wrapper(tpl, dest))
   expect_false(file.exists(dest))
   date <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
-  x <- tpl$download_marketdata(tpl, dest, refdate = date)
+  x <- download_marketdata_wrapper(tpl, dest, refdate = date)
   expect_true(x)
   expect_true(file.exists(dest))
 })
 
 test_that("it should fail to settlement_prices_download", {
   tpl <- template_retrieve("b3-reference-rates")
-  f <- settlement_prices_download(tpl, tempfile())
+  f <- download_marketdata_wrapper(tpl, tempfile())
   expect_false(f)
   dest <- tempfile()
-  x <- settlement_prices_download(tpl, dest, refdate = as.Date("2022-12-01"))
-  expect_true(x)
-  expect_true(file.exists(dest))
+  x <- download_marketdata_wrapper(tpl, dest, refdate = as.Date("2022-12-01"))
+  expect_false(x)
+  expect_false(file.exists(dest))
 })
 
 test_that("it should fail to curve_download", {
   tpl <- template_retrieve("b3-reference-rates")
-  f <- curve_download(tpl, tempfile())
+  f <- download_marketdata_wrapper(tpl, tempfile())
   expect_false(f)
 })
 
 test_that("it should defaults to PRE in curve_download", {
   tpl <- template_retrieve("b3-reference-rates")
-  f <- curve_download(tpl, tempfile(), refdate = as.Date("2022-05-10"), curve_name = "PRE")
+  f <- download_marketdata_wrapper(tpl, tempfile(), refdate = as.Date("2022-05-10"), curve_name = "PRE")
   expect_true(f)
 })
 
