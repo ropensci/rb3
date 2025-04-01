@@ -1,16 +1,17 @@
-meta_new <- function(template, ...) {
+meta_new <- function(template, ..., extra_arg = NULL) {
   args <- list(...) |> lapply(format)
   structure(list(
     template = template,
-    download_checksum = meta_checksum(template, ...),
+    download_checksum = meta_checksum(template, ..., extra_arg = extra_arg),
     download_args = toJSON(args, auto_unbox = TRUE),
     downloaded = list(),
-    created = as.POSIXct(Sys.time(), tz = "UTC")
+    created = as.POSIXct(Sys.time(), tz = "UTC"),
+    extra_arg = extra_arg
   ), class = "meta")
 }
 
-meta_load <- function(template, ...) {
-  checksum <- meta_checksum(template, ...)
+meta_load <- function(template, ..., extra_arg = NULL) {
+  checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
   filename <- .meta_file(checksum)
   if (file.exists(filename)) {
     meta <- structure(fromJSON(filename), class = "meta")
@@ -23,8 +24,12 @@ meta_load <- function(template, ...) {
   }
 }
 
-meta_checksum <- function(template, ...) {
-  l_ <- c(id = template, list(...))
+meta_checksum <- function(template, ..., extra_arg = NULL) {
+  l_ <- if (!is.null(extra_arg)) {
+    c(id = template, list(...), extra_arg = extra_arg)
+  } else {
+    c(id = template, list(...))
+  }
   x <- lapply(l_, format)
   names(x) <- names(l_)
   digest(x)

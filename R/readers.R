@@ -182,6 +182,7 @@ pricereport_reader <- function(., filename, ...) {
 read_file_wrapper <- function(., filename, meta) {
   download_args <- jsonlite::fromJSON(meta$download_args)
   if (length(download_args) > 0) {
+    download_args[["extra_arg"]] <- meta$extra_arg
     do.call(.$read_file, append(list(., filename), download_args))
   } else {
     .$read_file(., filename)
@@ -189,13 +190,14 @@ read_file_wrapper <- function(., filename, meta) {
 }
 
 stock_indexes_json_reader <- function(., filename, ...) {
-  download_args <- list(...)
+  args_ <- list(...)
   jason <- fromJSON(filename)
   df <- tibble::as_tibble(jason$results)
   df$header_part <- jason$header$part
   df$header_theoricalQty <- jason$header$theoricalQty
   df$header_reductor <- jason$header$reductor
-  df$index <- download_args$index
+  df$index <- args_$index
+  df$refdate <- args_$extra_arg
 
   colnames(df) <- .$colnames
   .parse_columns(., df)

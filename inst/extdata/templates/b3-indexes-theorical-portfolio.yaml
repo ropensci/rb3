@@ -8,13 +8,14 @@ downloader:
   url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetTheoricalPortfolio
   format: json
   encoding: latin1
+  extra-arg: Sys.Date()
   args:
     index: Nome do índice
 reader:
   function: stock_indexes_json_reader
 writers:
   input:
-    partition: index
+    partition: [refdate, index]
 fields:
 - name: symbol
   description: Código da ação
@@ -56,3 +57,7 @@ fields:
   description: Nome do índice
   handler:
     type: character
+- name: refdate
+  description: Data de referência do download - argumento extra
+  handler:
+    type: Date

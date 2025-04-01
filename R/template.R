@@ -289,11 +289,20 @@ new_part <- function(x) {
   part
 }
 
-template_meta_create <- function(template, ...) {
-  meta <- try(meta_load(template$id, ...), silent = TRUE)
+template_meta_create <- function(template, ..., extra_arg = NULL) {
+  meta <- try(meta_load(template$id, ..., extra_arg = extra_arg), silent = TRUE)
   if (!is(meta, "try-error")) {
     meta
   } else {
-    meta_new(template$id, ...)
+    meta_new(template$id, ..., extra_arg = extra_arg)
+  }
+}
+
+template_extra_arg <- function(template) {
+  if (is.null(template$downloader[["extra-arg"]])) {
+    NULL
+  } else {
+    v <- eval(parse(text = template$downloader[["extra-arg"]]))
+    format(v)
   }
 }
