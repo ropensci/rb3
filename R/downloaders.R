@@ -137,8 +137,8 @@ stock_indexes_current_portfolio_download <- function(., dest, ...) {
 stock_indexes_statistics_download <- function(., dest, ...) {
   args <- list(...)
   url <- url_encode(.$downloader$url,
-    language = "pt-br",
-    index = args$index_name,
+    language = "en-us",
+    index = args$index,
     year = args$year
   )
   just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)

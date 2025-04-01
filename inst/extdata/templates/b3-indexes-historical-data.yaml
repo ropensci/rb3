@@ -1,0 +1,79 @@
+id: b3-indexes-historical-data
+filetype: CUSTOM
+description: Dados históricos e estatísticas dos índices da Bolsa
+locale: pt
+downloader:
+  function: stock_indexes_statistics_download
+  verifyssl: false
+  url: https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetPortfolioDay
+  format: json
+  encoding: utf8
+  args:
+    index: Nome do índice
+    year: Ano
+reader:
+  function: stock_indexes_json_reader
+writers:
+  input:
+    partition: [index, year]
+fields:
+- name: day
+  description: Dia do mês
+  handler:
+    type: integer
+- name: month01
+  description: Coluna do mês de janeiro
+  handler:
+    type: number
+- name: month02
+  description: Coluna do mês de fevereiro
+  handler:
+    type: number
+- name: month03
+  description: Coluna do mês de março
+  handler:
+    type: number
+- name: month04
+  description: Coluna do mês de abril
+  handler:
+    type: number
+- name: month05
+  description: Coluna do mês de maio
+  handler:
+    type: number
+- name: month06
+  description: Coluna do mês de junho
+  handler:
+    type: number
+- name: month07
+  description: Coluna do mês de julho
+  handler:
+    type: number
+- name: month08
+  description: Coluna do mês de agosto
+  handler:
+    type: number
+- name: month09
+  description: Coluna do mês de setembro
+  handler:
+    type: number
+- name: month10
+  description: Coluna do mês de outubro
+  handler:
+    type: number
+- name: month11
+  description: Coluna do mês de novembro
+  handler:
+    type: number
+- name: month12
+  description: Coluna do mês de dezembro
+  handler:
+    type: number
+- name: year
+  description: Ano
+  handler:
+    type: integer
+- name: index
+  description: Nome do índice
+  handler:
+    type: character
