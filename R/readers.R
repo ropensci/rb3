@@ -193,11 +193,22 @@ stock_indexes_json_reader <- function(., filename, ...) {
   args_ <- list(...)
   jason <- fromJSON(filename)
   df <- tibble::as_tibble(jason$results)
-  df$header_part <- jason$header$part
-  df$header_theoricalQty <- jason$header$theoricalQty
-  df$header_reductor <- jason$header$reductor
-  df$index <- args_$index
-  df$refdate <- args_$extra_arg
+  if (.$id %in% c("b3-indexes-theorical-portfolio", "b3-indexes-current-portfolio")) {
+    df$header_part <- jason$header$part
+    df$header_theoricalQty <- jason$header$theoricalQty
+    df$header_reductor <- jason$header$reductor
+    df$index <- args_$index
+    if (hasName(jason$header, "date")) {
+      df$refdate <- strptime(jason$header$date, "%d/%m/%y")
+    } else {
+      df$refdate <- args_$extra_arg
+    }
+  } else if (.$id == "b3-indexes-historical-data") {
+    df$year <- args_$year
+    df$index <- args_$index
+  } else {
+    stop("Invalid template ", .$id)
+  }
 
   colnames(df) <- .$colnames
   .parse_columns(., df)
