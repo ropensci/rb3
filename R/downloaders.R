@@ -122,16 +122,14 @@ stock_indexes_theo_portfolio_download <- function(., dest, ...) {
 
 stock_indexes_current_portfolio_download <- function(., dest, ...) {
   args <- list(...)
-  segment <- 2
-  if (hasName(args, "segment")) {
-    segment <- args$segment
-  }
+  # segment = 2 equals segment = 1 in terms of content, the difference is that segment = 1
+  # doesn't have segment information
   url <- url_encode(.$downloader$url,
     pageNumber = 1,
     pageSize = 9999,
-    language = "pt-br",
-    index = args$index_name,
-    segment = segment
+    language = "en-us",
+    index = args$index,
+    segment = 2
   )
   just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }

@@ -1,0 +1,66 @@
+id: b3-indexes-current-portfolio
+filetype: CUSTOM
+description: Carteira teórica corrente dos índices da B3 com pesos e posições
+locale: pt
+downloader:
+  function: stock_indexes_current_portfolio_download
+  verifyssl: false
+  url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay
+  format: json
+  encoding: utf8
+  args:
+    index: Nome do índice
+reader:
+  function: stock_indexes_json_reader
+writers:
+  input:
+    partition: [refdate, index]
+fields:
+- name: segment
+  description: Código da ação
+  handler:
+    type: character
+- name: symbol
+  description: Código da ação
+  handler:
+    type: character
+- name: corporation_name
+  description: Nome da companhia
+  handler:
+    type: character
+- name: specification_code
+  description: Código de especificação da ação
+  handler:
+    type: character
+- name: asset_part
+  description: Participação % no índice
+  handler:
+    type: number
+- name: accum_part
+  description: Participação % acumulada
+  handler:
+    type: number
+- name: theorical_quantity
+  description: Quantidade teórica no índice
+  handler:
+    type: number
+- name: total_part
+  description: Participação % no índice
+  handler:
+    type: number
+- name: total_theorical_quantity
+  description: Quantidade teórica total do índice
+  handler:
+    type: number
+- name: reductor
+  description: Redutor
+  handler:
+    type: number
+- name: index
+  description: Nome do índice
+  handler:
+    type: character
+- name: refdate
+  description: Data de referência do download - argumento extra
+  handler:
+    type: Date
