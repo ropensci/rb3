@@ -56,6 +56,7 @@ Collate:
     'scraper-futures.R'
     'scraper-cotahist.R'
     'scraper-yc.R'
+    'scraper-indexes.R'
     'readers.R'
     'downloaders.R'
     'rb3-package.R'
