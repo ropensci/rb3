@@ -181,12 +181,10 @@ pricereport_reader <- function(., filename, ...) {
 
 read_file_wrapper <- function(., filename, meta) {
   download_args <- jsonlite::fromJSON(meta$download_args)
-  if (length(download_args) > 0) {
+  if (!is.null(meta$extra_arg)) {
     download_args[["extra_arg"]] <- meta$extra_arg
-    do.call(.$read_file, append(list(., filename), download_args))
-  } else {
-    .$read_file(., filename)
   }
+  do.call(.$read_file, append(list(., filename), download_args))
 }
 
 stock_indexes_json_reader <- function(., filename, ...) {
@@ -206,6 +204,12 @@ stock_indexes_json_reader <- function(., filename, ...) {
   } else if (.$id == "b3-indexes-historical-data") {
     df$year <- args_$year
     df$index <- args_$index
+  } else if (.$id == "b3-indexes-composition") {
+    df$refdate <- args_$extra_arg
+    df$update_date <- jason$header$update
+    df$start_month <- jason$header$startMonth
+    df$end_month <- jason$header$endMonth
+    df$year <- jason$header$year
   } else {
     stop("Invalid template ", .$id)
   }
