@@ -81,7 +81,7 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
     md5 <- tools::md5sum(filename)
     ext <- "gz"
     dest_fname <- meta_dest_file(meta, md5, ext)
-    if (file.exists(dest_fname)) {
+    if (file.exists(dest_fname) && length(meta$downloaded) > 0) {
       cli_alert_info("File {.file {dest_fname}} already exists for meta {.strong {meta$download_checksum}}")
       return(meta)
     }

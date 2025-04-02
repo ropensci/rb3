@@ -38,10 +38,14 @@
 #' 
 #' @export
 read_marketdata <- function(meta) {
-  filename <- meta$downloaded[[1]]
+  filename <- try(meta$downloaded[[1]], silent = TRUE)
+  if (inherits(filename, "try-error")) {
+    cli_alert_warning("File could not be read for meta {.strong {meta$download_checksum}}")
+    return(invisible(NULL))
+  }
   template <- template_retrieve(meta$template)
   df <- read_file_wrapper(template, filename, meta)
-  if (is.null(df)) {
+  if (is.null(df) || nrow(df) == 0) {
     cli_alert_warning("File could not be read: {.file {filename}}")
     meta_clean(meta)
     return(invisible(NULL))
@@ -105,7 +109,8 @@ fetch_marketdata <- function(template, ...) {
   purrr::map(ms, function(m) {
     cli::cli_progress_update(id = pb)
     if (!is.null(m)) {
-      x <- suppressMessages(read_marketdata(m))
+      # x <- suppressMessages(read_marketdata(m))
+      x <- read_marketdata(m)
       if (is.null(x)) {
         row <- m$download_args
         msg <- paste(names(row), map(row, format), sep = " = ", collapse = ", ")
