@@ -189,7 +189,10 @@ read_file_wrapper <- function(., filename, meta) {
 
 stock_indexes_json_reader <- function(., filename, ...) {
   args_ <- list(...)
-  jason <- fromJSON(filename)
+  jason <- try(fromJSON(filename), silent = TRUE)
+  if (inherits(jason, "try-error")) {
+    return(NULL)
+  }
   df <- tibble::as_tibble(jason$results)
   if (.$id %in% c("b3-indexes-theorical-portfolio", "b3-indexes-current-portfolio")) {
     df$header_part <- jason$header$part
