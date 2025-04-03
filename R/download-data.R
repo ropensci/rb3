@@ -66,7 +66,9 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
   meta <- template_meta_create(template, ..., extra_arg = template_extra_arg(template))
 
   if (length(meta[["downloaded"]]) > 0 && !do_cache) {
-    cli_alert_info("Meta {.strong {meta$download_checksum}} already exists. Use {.code do_cache = TRUE} to download again.")
+    cli_alert_info(
+      "Meta {.strong {meta$download_checksum}} already exists. Use {.code do_cache = TRUE} to download again."
+    )
     return(meta)
   }
 
