@@ -35,7 +35,7 @@
 #' meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
 #' read_marketdata(meta)
 #' }
-#' 
+#'
 #' @export
 read_marketdata <- function(meta) {
   filename <- try(meta$downloaded[[1]], silent = TRUE)
@@ -66,6 +66,9 @@ read_marketdata <- function(meta) {
 #' the data into a database.
 #'
 #' @param template A character string specifying the market data template to use
+#' @param throttle A logical value indicating whether to throttle the download requests
+#'   (default is `FALSE`). If `TRUE`, a 1-second delay is introduced between requests
+#'   to avoid overwhelming the server.
 #' @param ... Named arguments that will be expanded into a grid of all combinations
 #'   to fetch data for
 #'
@@ -78,48 +81,84 @@ read_marketdata <- function(meta) {
 #' Progress indicators are displayed during both steps, and warnings are shown for
 #' combinations that failed to download or produced invalid files.
 #'
+#' The throttle parameter is useful for avoiding server overload and ensuring
+#' that the requests are sent at a reasonable rate. If set to `TRUE`, a 1-second
+#' delay is introduced between each download request.
+#'
 #' @examples
 #' \dontrun{
 #' fetch_marketdata("b3-cotahist-yearly", year = 2020:2024)
 #' fetch_marketdata("b3-cotahist-daily", refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"))
-#' fetch_marketdata("b3-reference-rates", refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"),
+#' fetch_marketdata("b3-reference-rates",
+#'   refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"),
 #'   curve_name = c("DIC", "DOC", "PRE")
 #' )
+#' fetch_marketdata("b3-indexes-historical-data", throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"), year = 2000:2025)
 #' }
 #'
 #' @export
-fetch_marketdata <- function(template, ...) {
-  df <- expand.grid(...)
+fetch_marketdata <- function(template, throttle = FALSE, ...) {
+  df <- expand.grid(..., stringsAsFactors = FALSE)
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
   pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
-  ms <- purrr::pmap(df, function(...) {
-    cli::cli_progress_update(id = pb)
-    row <- list(...)
-    m <- do.call(download_marketdata, c(template, row))
-    if (is.null(m)) {
-      msg <- paste(names(row), row, sep = " = ", collapse = ", ")
-      cli::cli_alert_warning("No data downloaded for args {.val {msg}}")
-    }
-    m
-  })
+  ms <- purrr::pmap(df, download_, template = template, pb = pb, throttle = throttle)
   cli::cli_process_done(id = pb)
   # ----
   pb <- cli::cli_progress_step("Reading data into DB", spinner = TRUE)
-  purrr::map(ms, function(m) {
-    cli::cli_progress_update(id = pb)
-    if (!is.null(m)) {
-      # x <- suppressMessages(read_marketdata(m))
-      x <- read_marketdata(m)
-      if (is.null(x)) {
-        row <- m$download_args
-        msg <- paste(names(row), map(row, format), sep = " = ", collapse = ", ")
-        cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
-      }
-    }
-    NULL
-  })
+  purrr::map(ms, read_, pb = pb)
   cli::cli_process_done(id = pb)
   cli::cli_alert_info("{length(ms)} files downloaded")
   invisible(NULL)
+}
+
+process_marketdata <- function(template, ...) {
+  template <- template_retrieve(template)
+  df <- expand.grid(..., stringsAsFactors = FALSE)
+  cli::cli_h1("Processing market data for {.var {template$id}}")
+  # ----
+  cli::cli_text("Loading metadata")
+  ms <- purrr::pmap(df, meta_get_, template = template)
+  ms <- purrr::keep(ms, ~ !is.null(.x))
+  # ----
+  pb <- cli::cli_progress_step("Reading data into DB", spinner = TRUE)
+  purrr::map(ms, read_, pb = pb)
+  cli::cli_process_done(id = pb)
+  cli::cli_alert_info("{length(ms)} metadata processed")
+  invisible(NULL)
+}
+
+meta_get_ <- function(..., template) {
+  meta <- try(meta_load(template$id, ..., extra_arg = template_extra_arg(template)), silent = TRUE)
+  if (inherits(meta, "try-error")) {
+    return(NULL)
+  }
+  meta
+}
+
+download_ <- function(..., template, pb, throttle) {
+  cli::cli_progress_update(id = pb)
+  row <- list(...)
+  m <- do.call(download_marketdata, c(template, row))
+  if (throttle) {
+    Sys.sleep(1)
+  }
+  if (is.null(m)) {
+    msg <- paste(names(row), row, sep = " = ", collapse = ", ")
+    cli::cli_alert_warning("No data downloaded for args {.val {msg}}")
+  }
+  m
+}
+
+read_ <- function(m, pb) {
+  cli::cli_progress_update(id = pb)
+  if (!is.null(m)) {
+    x <- read_marketdata(m)
+    if (is.null(x)) {
+      row <- m$download_args
+      msg <- paste(names(row), map(row, format), sep = " = ", collapse = ", ")
+      cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
+    }
+  }
+  NULL
 }
