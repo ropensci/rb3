@@ -16,6 +16,13 @@ reader:
 writers:
   input:
     partition: [index, year]
+  staging:
+    function: process_index_historical_data
+    partition: [refdate, symbol]
+    columns:
+      symbol: character
+      refdate: Date
+      value: numeric
 fields:
 - name: day
   description: Dia do mês
