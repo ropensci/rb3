@@ -287,6 +287,20 @@ single_index_get <- function(index_name, year, cache_folder, do_cache) {
   index_data |> select("refdate", "index_name", "value")
 }
 
+process_index_historical_data <- function(ds) {
+  ds |>
+    collect() |>
+    pivot_longer(-c(index, day, year), names_to = "month", values_to = "value") |>
+    mutate(
+      month = as.integer(str_replace(month, "month", "")),
+      refdate = lubridate::make_date(year, month, day),
+    ) |>
+    select(index, refdate, value) |>
+    rename(symbol = index) |>
+    filter(!is.na(value)) |>
+    arrange(refdate)
+}
+
 #' Get index historical data
 #'
 #' Gets historical data from B3 indexes
