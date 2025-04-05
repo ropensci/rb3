@@ -23,5 +23,5 @@ template_dataset("b3-indexes-current-portfolio", layer = 2) |>
 
 process_marketdata("b3-indexes-theorical-portfolio", index = indexes_get())
 
-template_dataset("b3-indexes-theorical-portfolio", layer = 1) |>
+template_dataset("b3-indexes-theorical-portfolio", layer = 2) |>
   collect()
