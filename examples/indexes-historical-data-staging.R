@@ -28,4 +28,6 @@ indexes <- template_dataset("b3-indexes-composition") |>
 fetch_marketdata("b3-indexes-historical-data", index = indexes, year = 2000:2025)
 process_marketdata("b3-indexes-historical-data", index = indexes, year = 2000:2025)
 
+template_dataset("b3-indexes-historical-data", layer = "staging")
+
 expand.grid(index = indexes, year = 2000:2025)

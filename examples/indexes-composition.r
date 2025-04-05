@@ -1,4 +1,76 @@
 
+meta <- download_marketdata("b3-indexes-composition")
+read_marketdata(meta)
+
+template_dataset("b3-indexes-theorical-portfolio") |> collect()
+template_dataset("b3-indexes-current-portfolio") |> collect()
+
+max_date <- template_dataset("b3-indexes-composition") |>
+  summarise(update_date = max(update_date)) |>
+  collect() |>
+  pull(update_date)
+
+index <- c("IBOV", "SMLL", "IDIV")
+x <- lapply(index, function(index) {
+  template_dataset("b3-indexes-composition") |>
+    filter(update_date == max_date, str_detect(indexes, index)) |>
+    select(symbol) |>
+    collect() |>
+    pull(symbol)
+})
+stats::setNames(x, index)
+
+symbols <- "ABEV3"
+template_dataset("b3-indexes-composition") |>
+  filter(update_date == max_date, symbol %in% symbols) |>
+  select(indexes) |>
+  collect() |>
+  pull(indexes) |> str_split(",") |> unlist()
+
+
+template_dataset("b3-indexes-composition") |>
+  filter(update_date == max_date) |>
+  select(indexes) |>
+  collect() |>
+  pull(indexes) |>
+  str_split(",") |>
+  unlist() |>
+  unique() |>
+  sort()
+
+indexes_assets_by_indexes <- function(indexes) {
+  max_date <- template_dataset("b3-indexes-composition") |>
+    summarise(update_date = max(update_date)) |>
+    collect() |>
+    pull(update_date)
+
+  x <- lapply(indexes, function(index) {
+    template_dataset("b3-indexes-composition") |>
+      filter(update_date == max_date, str_detect(indexes, index)) |>
+      select(symbol) |>
+      collect() |>
+      pull(symbol)
+  })
+  stats::setNames(x, index)
+}
+
+indexes_indexes_by_assets <- function(symbols) {
+  max_date <- template_dataset("b3-indexes-composition") |>
+    summarise(update_date = max(update_date)) |>
+    collect() |>
+    pull(update_date)
+
+  template_dataset("b3-indexes-composition") |>
+    filter(update_date == max_date, symbol %in% symbols) |>
+    select(indexes) |>
+    collect() |>
+    pull(indexes) |>
+    str_split(",") |>
+    unlist()
+}
+
+
+
 library(httr)
 
 params <- jsonlite::toJSON(list(
