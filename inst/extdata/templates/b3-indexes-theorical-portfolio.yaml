@@ -16,6 +16,17 @@ reader:
 writers:
   input:
     partition: [refdate, index]
+  staging:
+    function: process_indexes_theorical_portfolio
+    partition: [refdate, index]
+    columns:
+      refdate: Date
+      index: character
+      symbol: character
+      weight: numeric
+      theorical_quantity: numeric
+      total_theorical_quantity: numeric
+      reductor: numeric
 fields:
 - name: symbol
   description: Código da ação
@@ -33,16 +44,16 @@ fields:
   description: Quantidade teórica no índice
   handler:
     type: number
-- name: asset_part
-  description: Participação % no índice
+- name: weight
+  description: Peso % no índice
   handler:
     type: number
 - name: id_asset
   description: Contagem
   handler:
     type: integer
-- name: total_part
-  description: Participação % no índice
+- name: total_weight
+  description: Peso total % no índice
   handler:
     type: number
 - name: total_theorical_quantity

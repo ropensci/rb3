@@ -15,6 +15,18 @@ reader:
 writers:
   input:
     partition: [refdate, index]
+  staging:
+    function: process_indexes_current_portfolio
+    partition: [refdate, index]
+    columns:
+      refdate: Date
+      index: character
+      symbol: character
+      weight: numeric
+      theorical_quantity: numeric
+      total_theorical_quantity: numeric
+      reductor: numeric
+      sector: character
 fields:
 - name: segment
   description: Código da ação
@@ -32,20 +44,20 @@ fields:
   description: Código de especificação da ação
   handler:
     type: character
-- name: asset_part
-  description: Participação % no índice
+- name: weight
+  description: Peso % no índice
   handler:
     type: number
-- name: accum_part
-  description: Participação % acumulada
+- name: accum_weight
+  description: Peso % acumulado
   handler:
     type: number
 - name: theorical_quantity
   description: Quantidade teórica no índice
   handler:
     type: number
-- name: total_part
-  description: Participação % no índice
+- name: total_weight
+  description: Peso total % no índice
   handler:
     type: number
 - name: total_theorical_quantity
