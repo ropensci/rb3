@@ -4,10 +4,14 @@
 \alias{fetch_marketdata}
 \title{Fetch and process market data}
 \usage{
-fetch_marketdata(template, ...)
+fetch_marketdata(template, throttle = FALSE, ...)
 }
 \arguments{
 \item{template}{A character string specifying the market data template to use}
+
+\item{throttle}{A logical value indicating whether to throttle the download requests
+(default is \code{FALSE}). If \code{TRUE}, a 1-second delay is introduced between requests
+to avoid overwhelming the server.}
 
 \item{...}{Named arguments that will be expanded into a grid of all combinations
 to fetch data for}
@@ -26,14 +30,20 @@ and calling \code{download_marketdata()} for each combination
 
 Progress indicators are displayed during both steps, and warnings are shown for
 combinations that failed to download or produced invalid files.
+
+The throttle parameter is useful for avoiding server overload and ensuring
+that the requests are sent at a reasonable rate. If set to \code{TRUE}, a 1-second
+delay is introduced between each download request.
 }
 \examples{
 \dontrun{
 fetch_marketdata("b3-cotahist-yearly", year = 2020:2024)
 fetch_marketdata("b3-cotahist-daily", refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"))
-fetch_marketdata("b3-reference-rates", refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"),
+fetch_marketdata("b3-reference-rates",
+  refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"),
   curve_name = c("DIC", "DOC", "PRE")
 )
+fetch_marketdata("b3-indexes-historical-data", throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"), year = 2000:2025)
 }
 
 }
