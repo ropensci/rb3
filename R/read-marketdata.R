@@ -66,6 +66,9 @@ read_marketdata <- function(meta) {
 #' the data into a database.
 #'
 #' @param template A character string specifying the market data template to use
+#' @param do_cache A logical value indicating whether to cache the downloaded files
+#'   (default is `FALSE`). If `TRUE`, the downloaded files will be cached for future use.
+#'   This can be useful for avoiding repeated downloads of the same data.
 #' @param throttle A logical value indicating whether to throttle the download requests
 #'   (default is `FALSE`). If `TRUE`, a 1-second delay is introduced between requests
 #'   to avoid overwhelming the server.

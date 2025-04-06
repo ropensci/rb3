@@ -4,10 +4,14 @@
 \alias{fetch_marketdata}
 \title{Fetch and process market data}
 \usage{
-fetch_marketdata(template, throttle = FALSE, ...)
+fetch_marketdata(template, do_cache = FALSE, throttle = FALSE, ...)
 }
 \arguments{
 \item{template}{A character string specifying the market data template to use}
+
+\item{do_cache}{A logical value indicating whether to cache the downloaded files
+(default is \code{FALSE}). If \code{TRUE}, the downloaded files will be cached for future use.
+This can be useful for avoiding repeated downloads of the same data.}
 
 \item{throttle}{A logical value indicating whether to throttle the download requests
 (default is \code{FALSE}). If \code{TRUE}, a 1-second delay is introduced between requests
