@@ -199,10 +199,9 @@ stock_indexes_json_reader <- function(., filename, ...) {
     df$header_theoricalQty <- jason$header$theoricalQty
     df$header_reductor <- jason$header$reductor
     df$index <- args_$index
+    df$refdate <- args_$extra_arg
     if (hasName(jason$header, "date")) {
-      df$refdate <- strptime(jason$header$date, "%d/%m/%y")
-    } else {
-      df$refdate <- args_$extra_arg
+      df$portfolio_date <- strptime(jason$header$date, "%d/%m/%y")
     }
   } else if (.$id == "b3-indexes-historical-data") {
     df$year <- args_$year

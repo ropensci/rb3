@@ -8,6 +8,7 @@ downloader:
   url: https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetPortfolioDay
   format: json
   encoding: utf8
+  extra-arg: Sys.Date()
   args:
     index: Nome do índice
 reader:
@@ -20,6 +21,7 @@ writers:
     partition: [refdate, index]
     columns:
       refdate: Date
+      portfolio_date: Date
       index: character
       symbol: character
       weight: numeric
@@ -74,5 +76,9 @@ fields:
     type: character
 - name: refdate
   description: Data de referência do download - argumento extra
+  handler:
+    type: Date
+- name: portfolio_date
+  description: Data da carteira teórica
   handler:
     type: Date

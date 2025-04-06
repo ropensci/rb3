@@ -79,7 +79,7 @@ process_indexes_current_portfolio <- function(ds) {
         identity(),
       weight = weight / 100, # Converte a participação para porcentagem
     ) |>
-    select(refdate, index, symbol, weight, theorical_quantity, total_theorical_quantity, reductor, sector) |>
+    select(refdate, portfolio_date, index, symbol, weight, theorical_quantity, total_theorical_quantity, reductor, sector) |>
     identity()
 }
 
