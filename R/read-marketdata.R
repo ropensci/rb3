@@ -97,12 +97,12 @@ read_marketdata <- function(meta) {
 #' }
 #'
 #' @export
-fetch_marketdata <- function(template, throttle = FALSE, ...) {
+fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
   df <- expand.grid(..., stringsAsFactors = FALSE)
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
   pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
-  ms <- purrr::pmap(df, download_, template = template, pb = pb, throttle = throttle)
+  ms <- purrr::pmap(df, download_, template = template, pb = pb, do_cache = do_cache, throttle = throttle)
   cli::cli_process_done(id = pb)
   # ----
   pb <- cli::cli_progress_step("Reading data into DB", spinner = TRUE)
@@ -136,10 +136,10 @@ meta_get_ <- function(..., template) {
   meta
 }
 
-download_ <- function(..., template, pb, throttle) {
+download_ <- function(..., template, pb, throttle, do_cache) {
   cli::cli_progress_update(id = pb)
   row <- list(...)
-  m <- do.call(download_marketdata, c(template, row))
+  m <- do.call(download_marketdata, c(template, do_cache = do_cache, row))
   if (throttle) {
     Sys.sleep(1)
   }
