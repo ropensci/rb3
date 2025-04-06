@@ -3,12 +3,12 @@
 \name{indexes-portfolio}
 \alias{indexes-portfolio}
 \alias{indexes_current_portfolio_get}
-\alias{indexes_theorical_portfolio_get}
+\alias{indexes_theoretical_portfolio_get}
 \title{Retrieve Portfolio of B3 Indexes}
 \usage{
 indexes_current_portfolio_get()
 
-indexes_theorical_portfolio_get()
+indexes_theoretical_portfolio_get()
 }
 \value{
 An \code{arrow_dplyr_query} or \code{ArrowObject}, representing a lazily evaluated query. The underlying data is not
@@ -17,9 +17,9 @@ memory usage.
 To trigger evaluation and return the results as an R \code{tibble}, use \code{collect()}.
 }
 \description{
-These functions fetch the current and theorical portfolio of B3 indexes using predefined
+These functions fetch the current and theoretical portfolio of B3 indexes using predefined
 dataset templates.
-The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theorical-portfolio".
+The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theoretical-portfolio".
 }
 \examples{
 \dontrun{
@@ -29,7 +29,7 @@ template_dataset("b3-indexes-current-portfolio", layer = 2) |>
 }
 
 \dontrun{
-template_dataset("b3-indexes-theorical-portfolio", layer = 2) |>
+template_dataset("b3-indexes-theoretical-portfolio", layer = 2) |>
   filter(index == "IBOV") |>
   collect()
 }
