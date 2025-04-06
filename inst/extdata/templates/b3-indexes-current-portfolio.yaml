@@ -25,8 +25,8 @@ writers:
       index: character
       symbol: character
       weight: numeric
-      theorical_quantity: numeric
-      total_theorical_quantity: numeric
+      theoretical_quantity: numeric
+      total_theoretical_quantity: numeric
       reductor: numeric
       sector: character
 fields:
@@ -54,7 +54,7 @@ fields:
   description: Peso % acumulado
   handler:
     type: number
-- name: theorical_quantity
+- name: theoretical_quantity
   description: Quantidade teórica no índice
   handler:
     type: number
@@ -62,7 +62,7 @@ fields:
   description: Peso total % no índice
   handler:
     type: number
-- name: total_theorical_quantity
+- name: total_theoretical_quantity
   description: Quantidade teórica total do índice
   handler:
     type: number
