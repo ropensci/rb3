@@ -194,7 +194,7 @@ stock_indexes_json_reader <- function(., filename, ...) {
     return(NULL)
   }
   df <- tibble::as_tibble(jason$results)
-  if (.$id %in% c("b3-indexes-theorical-portfolio", "b3-indexes-current-portfolio")) {
+  if (.$id %in% c("b3-indexes-theoretical-portfolio", "b3-indexes-current-portfolio")) {
     df$header_part <- jason$header$part
     df$header_theoricalQty <- jason$header$theoricalQty
     df$header_reductor <- jason$header$reductor

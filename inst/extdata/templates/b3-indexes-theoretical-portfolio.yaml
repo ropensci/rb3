@@ -1,4 +1,4 @@
-id: b3-indexes-theorical-portfolio
+id: b3-indexes-theoretical-portfolio
 filetype: CUSTOM
 description: Carteira Teórica dos índices da B3 com pesos e posições
 locale: pt
@@ -17,15 +17,15 @@ writers:
   input:
     partition: [refdate, index]
   staging:
-    function: process_indexes_theorical_portfolio
+    function: process_indexes_theoretical_portfolio
     partition: [refdate, index]
     columns:
       refdate: Date
       index: character
       symbol: character
       weight: numeric
-      theorical_quantity: numeric
-      total_theorical_quantity: numeric
+      theoretical_quantity: numeric
+      total_theoretical_quantity: numeric
       reductor: numeric
 fields:
 - name: symbol
@@ -40,7 +40,7 @@ fields:
   description: Código de especificação da ação
   handler:
     type: character
-- name: theorical_quantity
+- name: theoretical_quantity
   description: Quantidade teórica no índice
   handler:
     type: number
@@ -56,7 +56,7 @@ fields:
   description: Peso total % no índice
   handler:
     type: number
-- name: total_theorical_quantity
+- name: total_theoretical_quantity
   description: Quantidade teórica total do índice
   handler:
     type: number

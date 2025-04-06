@@ -79,15 +79,15 @@ process_indexes_current_portfolio <- function(ds) {
         identity(),
       weight = weight / 100, # Converte a participação para porcentagem
     ) |>
-    select(refdate, portfolio_date, index, symbol, weight, theorical_quantity, total_theorical_quantity, reductor, sector) |>
+    select(refdate, portfolio_date, index, symbol, weight, theoretical_quantity, total_theoretical_quantity, reductor, sector) |>
     identity()
 }
 
 #' Retrieve Portfolio of B3 Indexes
 #'
-#' These functions fetch the current and theorical portfolio of B3 indexes using predefined
+#' These functions fetch the current and theoretical portfolio of B3 indexes using predefined
 #' dataset templates.
-#' The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theorical-portfolio".
+#' The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theoretical-portfolio".
 #'
 #' @return
 #' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
@@ -109,26 +109,26 @@ indexes_current_portfolio_get <- function() {
   template_dataset("b3-indexes-current-portfolio", layer = 2)
 }
 
-process_indexes_theorical_portfolio <- function(ds) {
+process_indexes_theoretical_portfolio <- function(ds) {
   ds |>
     collect() |>
     mutate(
       weight = weight / 100, # Converte a participação para porcentagem
     ) |>
-    select(refdate, index, symbol, weight, theorical_quantity, total_theorical_quantity, reductor) |>
+    select(refdate, index, symbol, weight, theoretical_quantity, total_theoretical_quantity, reductor) |>
     identity()
 }
 
 #' @examples
 #' \dontrun{
-#' template_dataset("b3-indexes-theorical-portfolio", layer = 2) |>
+#' template_dataset("b3-indexes-theoretical-portfolio", layer = 2) |>
 #'   filter(index == "IBOV") |>
 #'   collect()
 #' }
 #' @rdname indexes-portfolio
 #' @export
-indexes_theorical_portfolio_get <- function() {
-  template_dataset("b3-indexes-theorical-portfolio", layer = 2) 
+indexes_theoretical_portfolio_get <- function() {
+  template_dataset("b3-indexes-theoretical-portfolio", layer = 2) 
 }
 
 ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
