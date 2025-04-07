@@ -96,7 +96,9 @@ read_marketdata <- function(meta) {
 #'   refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"),
 #'   curve_name = c("DIC", "DOC", "PRE")
 #' )
-#' fetch_marketdata("b3-indexes-historical-data", throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"), year = 2000:2025)
+#' fetch_marketdata("b3-indexes-historical-data",
+#'   throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"),
+#'   year = 2000:2025)
 #' }
 #'
 #' @export
