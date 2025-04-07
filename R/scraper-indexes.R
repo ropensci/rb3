@@ -13,13 +13,13 @@ indexes_get <- function() {
   max_date <- template_dataset("b3-indexes-composition") |>
     summarise(update_date = max(update_date)) |>
     collect() |>
-    pull(update_date)
+    dplyr::pull(update_date)
 
   template_dataset("b3-indexes-composition") |>
     filter(update_date == max_date) |>
     select(indexes) |>
     collect() |>
-    pull(indexes) |>
+    dplyr::pull(indexes) |>
     str_split(",") |>
     unlist() |>
     unique() |>
@@ -129,11 +129,6 @@ process_indexes_theoretical_portfolio <- function(ds) {
 #' @export
 indexes_theoretical_portfolio_get <- function() {
   template_dataset("b3-indexes-theoretical-portfolio", layer = 2) 
-}
-
-ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
-  f <- system.file("extdata/IBOV.rds", package = "rb3")
-  read_rds(f) |> filter(.data$refdate >= first_date, .data$refdate <= last_date)
 }
 
 process_index_historical_data <- function(ds) {

@@ -45,3 +45,8 @@ index_data |>
   filter(refdate <= as.Date("1980-01-01")) |>
   ggplot(aes(x = refdate, y = value)) +
   geom_line()
+
+ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
+  f <- system.file("extdata/IBOV.rds", package = "rb3")
+  read_rds(f) |> filter(.data$refdate >= first_date, .data$refdate <= last_date)
+}
