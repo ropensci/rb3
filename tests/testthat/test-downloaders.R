@@ -52,13 +52,13 @@ test_that("it should defaults to PRE in curve_download", {
 #   expect_false(f)
 # })
 
-# test_that("it should stock_indexes_composition_download", {
-#   tpl <- template_retrieve("GetStockIndex")
-#   vcr::use_cassette("GetStockIndex", {
-#     f <- stock_indexes_composition_download(tpl, tempfile())
-#   })
-#   expect_true(f)
-# })
+test_that("it should stock_indexes_composition_download", {
+  tpl <- template_retrieve("b3-indexes-composition")
+  vcr::use_cassette("GetStockIndex", {
+    f <- download_marketdata_wrapper(tpl, tempfile())
+  })
+  expect_true(f)
+})
 
 # test_that("it should base64_datetime_download", {
 #   tpl <- template_retrieve("NegociosBalcao")
@@ -119,41 +119,35 @@ test_that("it should defaults to PRE in curve_download", {
 #   expect_true(f)
 # })
 
-# test_that("it should stock_indexes_statistics_download ", {
-#   tpl <- template_retrieve("GetPortfolioDay_IndexStatistics")
-#   vcr::use_cassette("GetPortfolioDay_IndexStatistics", {
-#     fname <- tempfile()
-#     f <- stock_indexes_statistics_download(tpl, fname,
-#       index_name = "IBOV", year = 2022
-#     )
-#   })
-#   expect_true(file.size(fname) > 2)
-#   expect_true(f)
-# })
+test_that("it should stock_indexes_statistics_download ", {
+  tpl <- template_retrieve("b3-indexes-historical-data")
+  vcr::use_cassette("GetPortfolioDay_IndexStatistics", {
+    fname <- tempfile()
+    f <- download_marketdata_wrapper(tpl, fname, index = "IBOV", year = 2022)
+  })
+  expect_true(file.size(fname) > 2)
+  expect_true(f)
+})
 
-# test_that("it should stock_indexes_current_portfolio_download ", {
-#   tpl <- template_retrieve("GetPortfolioDay")
-#   vcr::use_cassette("GetPortfolioDay", {
-#     fname <- tempfile()
-#     f <- stock_indexes_current_portfolio_download(tpl, fname,
-#       index_name = "IBOV"
-#     )
-#   })
-#   expect_true(file.size(fname) > 2)
-#   expect_true(f)
-# })
+test_that("it should stock_indexes_current_portfolio_download ", {
+  tpl <- template_retrieve("b3-indexes-current-portfolio")
+  vcr::use_cassette("GetPortfolioDay", {
+    fname <- tempfile()
+    f <- download_marketdata_wrapper(tpl, fname, index = "IBOV")
+  })
+  expect_true(file.size(fname) > 2)
+  expect_true(f)
+})
 
-# test_that("it should stock_indexes_theo_portfolio_download ", {
-#   tpl <- template_retrieve("GetTheoricalPortfolio")
-#   vcr::use_cassette("GetTheoricalPortfolio", {
-#     fname <- tempfile()
-#     f <- stock_indexes_theo_portfolio_download(tpl, fname,
-#       index_name = "IBOV"
-#     )
-#   })
-#   expect_true(file.size(fname) > 2)
-#   expect_true(f)
-# })
+test_that("it should stock_indexes_theo_portfolio_download ", {
+  tpl <- template_retrieve("b3-indexes-theoretical-portfolio")
+  vcr::use_cassette("GetTheoricalPortfolio", {
+    fname <- tempfile()
+    f <- download_marketdata_wrapper(tpl, fname, index = "IBOV")
+  })
+  expect_true(file.size(fname) > 2)
+  expect_true(f)
+})
 
 # test_that("it should datetime_download FPR file", {
 #   tpl <- template_retrieve("FPR")
