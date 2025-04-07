@@ -11,15 +11,15 @@
 #' @export
 indexes_get <- function() {
   max_date <- template_dataset("b3-indexes-composition") |>
-    summarise(update_date = max(update_date)) |>
+    summarise(update_date = max(.data$update_date)) |>
     collect() |>
-    dplyr::pull(update_date)
+    dplyr::pull(.data$update_date)
 
   template_dataset("b3-indexes-composition") |>
-    filter(update_date == max_date) |>
-    select(indexes) |>
+    filter(.data$update_date == max_date) |>
+    select("indexes") |>
     collect() |>
-    dplyr::pull(indexes) |>
+    dplyr::pull(.data$indexes) |>
     str_split(",") |>
     unlist() |>
     unique() |>
@@ -51,35 +51,36 @@ indexes_get <- function() {
 #' @export
 indexes_composition_get <- function() {
   template_dataset("b3-indexes-composition") |>
-    select(update_date, symbol, indexes)
+    select("update_date", "symbol", "indexes")
 }
 
 process_indexes_current_portfolio <- function(ds) {
   ds |>
     collect() |>
     mutate(
-      sector = str_extract(segment, "^[^/]+") |> str_trim(),
-      sector = sector |>
-        str_to_lower() |> # Converte para minúsculas
-        stringi::stri_trans_general("Latin-ASCII") |> # Remove acentos
-        str_replace_all("\\s+", " ") |> # Remove espaços extras
-        str_trim() |> # Remove espaços no início e no fim
-        str_replace_all("petroleo, gas e biocombustiveis", "Petróleo, Gás e Biocombustíveis") |> # petróleo, gás e biocombustíveis
-        str_replace_all("mats basicos", "Materiais Básicos") |> # materiais básicos
-        str_replace_all("bens indls|bens industriais", "Bens Industriais") |> # bens industriais
-        str_replace_all("cons n ciclico", "Consumo Não Cíclico") |> # consumo não cíclico
-        str_replace_all("cons n basico|consumo ciclico|diversos", "Consumo Cíclico") |> # consumo cíclico
-        str_replace_all("saude", "Saúde") |> # saúde
-        str_replace_all("comput e equips|tec.informacao", "Tecnologia da Informação") |> # tecnologia da informação
-        str_replace_all("telecomunicacao|midia", "Comunicações") |> # comunicações
-        str_replace_all("utilidade públ|utilidade publ", "Utilidade Pública") |> # utilidade pública
-        str_replace_all("financ e outros|financeiro e outros", "Financeiro") |> # financeiro
-        str_replace_all("outros", "Outros") |> # outros
-        str_replace_all("n classificados", "Não Classificados") |> # não classificados
+      sector = stringr::str_extract(.data$segment, "^[^/]+") |> stringr::str_trim(),
+      sector = .data$sector |>
+        stringr::str_to_lower() |>
+        stringi::stri_trans_general("Latin-ASCII") |>
+        stringr::str_replace_all("\\s+", " ") |>
+        stringr::str_trim() |>
+        stringr::str_replace_all("petroleo, gas e biocombustiveis", "Petr\u00f3leo, G\u00e1s e Biocombust\u00edveis") |>
+        stringr::str_replace_all("mats basicos", "Materiais B\u00e1sicos") |>
+        stringr::str_replace_all("bens indls|bens industriais", "Bens Industriais") |>
+        stringr::str_replace_all("cons n ciclico", "Consumo N\u00e3o C\u00edclico") |>
+        stringr::str_replace_all("cons n basico|consumo ciclico|diversos", "Consumo C\u00edclico") |>
+        stringr::str_replace_all("saude", "Sa\u00fade") |>
+        stringr::str_replace_all("comput e equips|tec.informacao", "Tecnologia da Informa\u00e7\u00e3o") |>
+        stringr::str_replace_all("telecomunicacao|midia", "Comunica\u00e7\u00f5es") |>
+        stringr::str_replace_all("utilidade publ", "Utilidade P\u00fablica") |>
+        stringr::str_replace_all("financ e outros|financeiro e outros", "Financeiro") |>
+        stringr::str_replace_all("outros", "Outros") |>
+        stringr::str_replace_all("n classificados", "N\u00e3o Classificados") |>
         identity(),
-      weight = weight / 100, # Converte a participação para porcentagem
+      weight = .data$weight / 100,
     ) |>
-    select(refdate, portfolio_date, index, symbol, weight, theoretical_quantity, total_theoretical_quantity, reductor, sector) |>
+    select("refdate", "portfolio_date", "index", "symbol", "weight", "theoretical_quantity",
+      "total_theoretical_quantity", "reductor", "sector") |>
     identity()
 }
 
@@ -113,9 +114,9 @@ process_indexes_theoretical_portfolio <- function(ds) {
   ds |>
     collect() |>
     mutate(
-      weight = weight / 100, # Converte a participação para porcentagem
+      weight = .data$weight / 100,
     ) |>
-    select(refdate, index, symbol, weight, theoretical_quantity, total_theoretical_quantity, reductor) |>
+    select("refdate", "index", "symbol", "weight", "theoretical_quantity", "total_theoretical_quantity", "reductor") |>
     identity()
 }
 
@@ -134,15 +135,15 @@ indexes_theoretical_portfolio_get <- function() {
 process_index_historical_data <- function(ds) {
   ds |>
     collect() |>
-    tidyr::pivot_longer(-c(index, day, year), names_to = "month", values_to = "value") |>
+    tidyr::pivot_longer(-c(.data$index, .data$day, .data$year), names_to = "month", values_to = "value") |>
     mutate(
-      month = as.integer(str_replace(month, "month", "")),
-      refdate = lubridate::make_date(year, month, day),
+      month = as.integer(str_replace(.data$month, "month", "")),
+      refdate = lubridate::make_date(.data$year, .data$month, .data$day),
     ) |>
-    select(index, refdate, value) |>
-    rename(symbol = index) |>
-    filter(!is.na(value)) |>
-    arrange(refdate)
+    select("index", "refdate", "value") |>
+    rename(symbol = .data$index) |>
+    filter(!is.na(.data$value)) |>
+    arrange(.data$refdate)
 }
 
 #' Get historical data from B3 indexes
