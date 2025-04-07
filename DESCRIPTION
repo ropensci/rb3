@@ -17,6 +17,7 @@ Depends:
 Imports:
     bizdays,
     stringr,
+    stringi,
     cli,
     readr,
     dplyr,
