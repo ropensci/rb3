@@ -107,7 +107,12 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
   pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
-  ms <- purrr::pmap(df, download_, template = template, pb = pb, do_cache = do_cache, throttle = throttle)
+  if (nrow(df) == 0) {
+    m <- download_(template = template, pb = pb, do_cache = do_cache, throttle = throttle)
+    ms <- list(m)
+  } else {
+    ms <- purrr::pmap(df, download_, template = template, pb = pb, do_cache = do_cache, throttle = throttle)
+  }
   cli::cli_process_done(id = pb)
   # ----
   pb <- cli::cli_progress_step("Reading data into DB", spinner = TRUE)
