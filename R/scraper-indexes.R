@@ -139,7 +139,7 @@ ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
 process_index_historical_data <- function(ds) {
   ds |>
     collect() |>
-    pivot_longer(-c(index, day, year), names_to = "month", values_to = "value") |>
+    tidyr::pivot_longer(-c(index, day, year), names_to = "month", values_to = "value") |>
     mutate(
       month = as.integer(str_replace(month, "month", "")),
       refdate = lubridate::make_date(year, month, day),
