@@ -137,3 +137,47 @@ test_that("it should download and read b3-bvbg-086", {
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
 })
+
+test_that("it should download and read b3-indexes-composition", {
+  .meta <- download_marketdata("b3-indexes-composition")
+  .df <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+})
+
+test_that("it should download and read b3-indexes-historical-data", {
+  .meta <- download_marketdata("b3-indexes-historical-data", index = "IBOV", year = 2022)
+  .df <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+})
+
+test_that("it should download and read b3-indexes-historical-data for an invalid year", {
+  .meta <- download_marketdata("b3-indexes-historical-data", index = "IDIV", year = 1960)
+  .df <- read_marketdata(.meta)
+  expect_true(!file.exists(meta_file(.meta)))
+})
+
+test_that("it should download and read b3-indexes-historical-data for an invalid index", {
+  .meta <- download_marketdata("b3-indexes-historical-data", index = "XXXX", year = 1960)
+  .df <- read_marketdata(.meta)
+  expect_true(!file.exists(meta_file(.meta)))
+})
+
+test_that("it should download and read b3-indexes-current-portfolio", {
+  .meta <- download_marketdata("b3-indexes-current-portfolio", index = "IBOV")
+  .df <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+})
+
+test_that("it should download and read b3-indexes-theoretical-portfolio", {
+  .meta <- download_marketdata("b3-indexes-theoretical-portfolio", index = "IBOV")
+  .df <- read_marketdata(.meta)
+  expect_true(file.exists(meta_file(.meta)))
+  expect_true(length(.meta$downloaded) == 1)
+  expect_true(file.exists(.meta$downloaded[[1]]))
+})
