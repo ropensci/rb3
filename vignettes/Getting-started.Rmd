@@ -23,7 +23,7 @@ package to download various types of market data and perform common analyses.
 
 ```{r setup, eval=TRUE, message=FALSE}
 library(rb3)
-library(tidyverse)
+library(dplyr)
 library(bizdays)
 ```
 
