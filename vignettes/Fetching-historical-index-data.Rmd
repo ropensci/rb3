@@ -1,8 +1,8 @@
 ---
-title: "Analyzing B3 Index Data with rb3"
+title: "Analyzing B3 Index Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Analyzing B3 Index Data with rb3}
+  %\VignetteIndexEntry{Analyzing B3 Index Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -39,6 +39,7 @@ library(rb3)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(stringr)
 library(lubridate)
 ```
 
@@ -127,8 +128,7 @@ The `b3-indexes-composition` template provides data about which stocks belong to
 
 ```{r fetch-composition, eval=FALSE}
 # Download index composition data
-meta <- download_marketdata("b3-indexes-composition")
-read_marketdata(meta)
+fetch_marketdata("b3-indexes-composition")
 ```
 
 After downloading, you can retrieve the composition data:
@@ -137,11 +137,11 @@ After downloading, you can retrieve the composition data:
 # Get the composition data
 composition <- indexes_composition_get() |>
   collect()
+```
 
-# Get the latest date
-latest_date <- composition |>
-  summarise(latest = max(update_date)) |>
-  pull(latest)
+```{r view-composition}
+# Display a subset of the composition data
+head(composition)
 ```
 
 ### Finding stocks in multiple indices
@@ -198,7 +198,7 @@ ggplot(index_overlaps, aes(x = reorder(Index, Count), y = Count)) +
 
 You can also determine which indices include a specific stock:
 
-```{r indices-for-stock, eval=FALSE}
+```{r indices-for-stock, eval=TRUE}
 # Find all indices that include a specific stock
 find_indices_for_stock <- function(stock_symbol, comp_data, date) {
   comp_data |>
