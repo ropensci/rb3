@@ -135,15 +135,15 @@ indexes_theoretical_portfolio_get <- function() {
 process_index_historical_data <- function(ds) {
   ds |>
     collect() |>
-    tidyr::pivot_longer(-c(.data$index, .data$day, .data$year), names_to = "month", values_to = "value") |>
+    tidyr::pivot_longer(-c("index", "day", "year"), names_to = "month", values_to = "value") |>
     mutate(
       month = as.integer(str_replace(.data$month, "month", "")),
       refdate = lubridate::make_date(.data$year, .data$month, .data$day),
     ) |>
     select("index", "refdate", "value") |>
-    rename(symbol = .data$index) |>
+    rename(symbol = "index") |>
     filter(!is.na(.data$value)) |>
-    arrange(.data$refdate)
+    arrange("refdate")
 }
 
 #' Get historical data from B3 indexes
