@@ -98,12 +98,13 @@ read_marketdata <- function(meta) {
 #' )
 #' fetch_marketdata("b3-indexes-historical-data",
 #'   throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"),
-#'   year = 2000:2025)
+#'   year = 2000:2025
+#' )
 #' }
 #'
 #' @export
 fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
-  df <- expand.grid(..., stringsAsFactors = FALSE)
+  df <- tidyr::expand_grid(...)
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
   pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
@@ -148,14 +149,22 @@ meta_get_ <- function(..., template) {
 
 download_ <- function(..., template, pb, throttle, do_cache) {
   cli::cli_progress_update(id = pb)
-  row <- list(...)
-  m <- do.call(download_marketdata, c(template, do_cache = do_cache, row))
-  if (throttle) {
-    Sys.sleep(1)
-  }
+  m <- tryCatch(
+    {
+      m <- download_marketdata(template, do_cache = do_cache, ...)
+      if (throttle) {
+        Sys.sleep(1)
+      }
+      m
+    },
+    error = function(e) {
+      template_meta_load(template, ...)
+    }
+  )
   if (is.null(m)) {
+    row <- list(...)
     msg <- paste(names(row), row, sep = " = ", collapse = ", ")
-    cli::cli_alert_warning("No data downloaded for args {.val {msg}}")
+    cli::cli_alert_info("No data downloaded for args {.val {msg}}")
   }
   m
 }

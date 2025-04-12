@@ -63,42 +63,60 @@
 #' @export
 download_marketdata <- function(template, do_cache = FALSE, ...) {
   template <- template_retrieve(template)
-  meta <- template_meta_create(template, ..., extra_arg = template_extra_arg(template))
-
-  if (length(meta[["downloaded"]]) > 0 && !do_cache) {
-    cli_alert_info(
-      "Meta {.strong {meta$download_checksum}} already exists. Use {.code do_cache = TRUE} to download again."
-    )
-    return(meta)
+  meta <- try(template_meta_new(template, ...), silent = TRUE)
+  if (inherits(meta, "try-error")) {
+    if (do_cache) {
+      meta <- template_meta_load(template, ...)
+    } else {
+      e <- attr(meta, "condition")
+      cli::cli_abort("Meta exists", parent = e)
+    }
   }
+  tryCatch({
+    .download_marketdata(template, meta, ...)
+  }, error = function(e) {
+    if (inherits(e, "error_download_fail") || inherits(e, "error_download_empty_file")) {
+      meta_clean(meta)
+      return(NULL)
+    } else if (inherits(e, "error_download_file_exists")) {
+      return(meta)
+    } else {
+      stop(e)
+    }
+  })
+}
 
+.download_marketdata <- function(template, meta, ...) {
   dest <- tempfile(fileext = str_glue(".{template$downloader$format}"))
   if (download_marketdata_wrapper(template, dest, ...)) {
     filename <- unzip_recursive(dest)
     filename <- select_file_if_multiple(filename, template$downloader[["if-has-multiple-files-use"]])
     if (file.size(filename) <= 2) {
-      cli_alert_warning("File is empty: {.file {filename}}")
-      return(NULL)
+      cli::cli_abort("File is empty: {.file {filename}}",
+        class = "error_download_empty_file"
+      )
     }
     md5 <- tools::md5sum(filename)
     ext <- "gz"
     dest_fname <- meta_dest_file(meta, md5, ext)
     if (file.exists(dest_fname) && length(meta$downloaded) > 0) {
-      cli_alert_info("File {.file {dest_fname}} already exists for meta {.strong {meta$download_checksum}}")
-      return(meta)
+      cli::cli_abort("File already exists for meta {.strong {meta$download_checksum}}: {.file {dest_fname}}",
+        class = "error_download_file_exists"
+      )
     }
     downloaded <- R.utils::compressFile(filename, dest_fname, ext, gzfile, overwrite = TRUE)
     if (length(meta[["downloaded"]]) > 0) {
-      cli_alert_info("Replacing downloaded file {.file {meta$downloaded}}")
-      cli_alert_info("                     with {.file {downloaded}}")
       unlink(meta[["downloaded"]])
-      meta[["downloaded"]] <- list()
+      cli::cli_alert_info("Removing file {.file {meta$downloaded}}")
+      cli::cli_alert_info("Saving file {.file {downloaded}}")
+      meta_add_download(meta) <- NULL
     }
     meta_add_download(meta) <- downloaded
-    meta_save(meta)
     return(meta)
   } else {
-    return(NULL)
+    cli::cli_abort("Download failed for meta {.strong {meta$download_checksum}}",
+      class = "error_download_fail"
+    )
   }
 }
 
