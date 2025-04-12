@@ -1,13 +1,19 @@
 meta_new <- function(template, ..., extra_arg = NULL) {
   args <- list(...) |> lapply(format)
-  structure(list(
+  checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
+  if (file.exists(.meta_file(checksum))) {
+    cli::cli_abort("Meta {.strong {checksum}} already exists.", class = "error_meta_exists")
+  }
+  meta <- structure(list(
     template = template,
-    download_checksum = meta_checksum(template, ..., extra_arg = extra_arg),
+    download_checksum = checksum,
     download_args = toJSON(args, auto_unbox = TRUE),
     downloaded = list(),
     created = as.POSIXct(Sys.time(), tz = "UTC"),
     extra_arg = extra_arg
   ), class = "meta")
+  meta_save(meta)
+  meta
 }
 
 meta_load <- function(template, ..., extra_arg = NULL) {
@@ -20,7 +26,9 @@ meta_load <- function(template, ..., extra_arg = NULL) {
   } else {
     l <- list(...)
     args <- paste(names(l), lapply(l, format), sep = " = ", collapse = ", ")
-    stop(str_glue("Can't find meta for given arguments: template = {template}, {args}"))
+    cli::cli_abort("Can't find meta for given arguments: template = {template}, {args}",
+      class = "error_meta_not_found"
+    )
   }
 }
 
@@ -54,6 +62,12 @@ meta_save <- function(meta) {
 }
 
 meta_clean <- function(meta) {
+  meta_file <- meta_file(meta)
+  if (!file.exists(meta_file)) {
+    cli::cli_abort("Meta file {.file {meta_file}} does not exist",
+      class = "error_meta_not_found"
+    )
+  }
   cli_alert_info("Cleaning meta {.strong {meta$download_checksum}}")
   if (length(meta$downloaded) > 0) {
     for (file in meta$downloaded) {
@@ -61,14 +75,17 @@ meta_clean <- function(meta) {
       unlink(file)
     }
   }
-  meta_file <- meta_file(meta)
   unlink(meta_file)
 }
 
 `meta_add_download<-` <- function(meta, value) {
-  if (value %in% meta$downloaded) {
+  if (is.null(value)) {
+    meta$downloaded <- list()
+  } else if (value %in% meta$downloaded) {
     return(meta)
+  } else {
+    meta$downloaded <- append(meta$downloaded, value)
   }
-  meta$downloaded <- append(meta$downloaded, value)
+  meta_save(meta)
   meta
 }

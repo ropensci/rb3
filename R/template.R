@@ -127,9 +127,9 @@ template_register <- function(obj) {
 #' This function retrieves a template identified by its name.
 #'
 #' @param template_name The name identifying the template to retrieve.
-#' 
+#'
 #' @return The template associated with the given name.
-#' 
+#'
 #' @export
 template_retrieve <- function(template_name) {
   .reg <- template_registry$get_instance()
@@ -289,13 +289,51 @@ new_part <- function(x) {
   part
 }
 
-template_meta_create <- function(template, ..., extra_arg = NULL) {
-  meta <- try(meta_load(template$id, ..., extra_arg = extra_arg), silent = TRUE)
-  if (!is(meta, "try-error")) {
-    meta
-  } else {
-    meta_new(template$id, ..., extra_arg = extra_arg)
-  }
+#' Load Metadata for a Template Download
+#'
+#' These functions provide methods to load metadata associated with a template and the arguments used to a
+#' specific download.
+#'
+#' @param template An object representing the template. Can be of class `character`
+#'   (template ID) or `template` (template object).
+#' @param ... Additional arguments used in a specific download.
+#'
+#' @return The metadata associated with the download.
+#'
+#' @details
+#' The `download_marketdata()` function returns a meta object that refers to a specific download.
+#' If the meta object does not exist, it is created.
+#' If the specific download has already been performed in the past, a meta file will exist, and
+#' `download_marketdata()` will raise an error upon detecting it.
+#' In such cases, the `template_meta_load()` function should be used to load the meta object
+#' associated with the existing meta file.
+#'
+#' @examples
+#' # Example usage with a template ID
+#' m <- tryCatch(download_marketdata("b3-indexes-composition"), error = function(e) {
+#'   template_meta_load("b3-indexes-composition")
+#' })
+#' read_marketdata(m)
+#'
+#' @export
+template_meta_load <- function(template, ...) {
+  UseMethod("template_meta_load")
+}
+
+#' @export
+template_meta_load.default <- function(template, ...) {
+  template_retrieve(template) |> template_meta_load.template(...)
+}
+
+#' @export
+template_meta_load.template <- function(template, ...) {
+  extra_arg <- template_extra_arg(template)
+  meta_load(template$id, ..., extra_arg = extra_arg)
+}
+
+template_meta_new <- function(template, ...) {
+  extra_arg <- template_extra_arg(template)
+  meta_new(template$id, ..., extra_arg = extra_arg)
 }
 
 template_extra_arg <- function(template) {
