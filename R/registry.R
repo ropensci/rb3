@@ -42,7 +42,7 @@ registry_get <- function(x, key, ...) {
   if (key %in% names(.data)) {
     .data[[key]]
   } else {
-    stop(key, " not found in registry")
+    cli::cli_abort("{key} not found in registry")
   }
 }
 

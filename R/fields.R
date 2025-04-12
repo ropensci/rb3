@@ -76,10 +76,7 @@ field <- function(name, description, ...) {
     } else {
       attr(name, "description") <- ""
       parms <- list(description, ...)
-      warning(
-        "description invalid type: ",
-        paste(class(description), collapse = ", ")
-      )
+      cli::cli_warn("description invalid type: {paste(class(description), collapse = ', ')}")
     }
   }
 

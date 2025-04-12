@@ -81,7 +81,7 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
     } else if (inherits(e, "error_download_file_exists")) {
       return(meta)
     } else {
-      stop(e)
+      cli::cli_alert("Unknown error", parent = e)
     }
   })
 }

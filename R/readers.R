@@ -213,7 +213,7 @@ stock_indexes_json_reader <- function(., filename, ...) {
     df$end_month <- jason$header$endMonth
     df$year <- jason$header$year
   } else {
-    stop("Invalid template ", .$id)
+    cli::cli_abort("Invalid template {.$id}")
   }
 
   colnames(df) <- .$colnames
