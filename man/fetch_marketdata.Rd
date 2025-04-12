@@ -49,7 +49,8 @@ fetch_marketdata("b3-reference-rates",
 )
 fetch_marketdata("b3-indexes-historical-data",
   throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"),
-  year = 2000:2025)
+  year = 2000:2025
+)
 }
 
 }
