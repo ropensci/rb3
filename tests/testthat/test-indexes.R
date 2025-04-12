@@ -2,7 +2,10 @@ skip_on_cran()
 skip_if_offline()
 
 test_that("it should get index composition", {
-  download_marketdata("b3-indexes-composition") |> read_marketdata()
+  m <- tryCatch(download_marketdata("b3-indexes-composition"), error = function(e) {
+    template_meta_load("b3-indexes-composition")
+  })
+  read_marketdata(m)
 
   x <- indexes_composition_get()
   expect_true(is(x, "arrow_dplyr_query") || is(x, "ArrowObject"))

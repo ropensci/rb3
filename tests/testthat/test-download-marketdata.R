@@ -44,8 +44,8 @@ test_that("it should download again and identifies that the file has changed", {
   .meta2 <- download_marketdata("template-test-small-file", do_cache = TRUE, size = 1024)
   expect_true(file.exists(.meta2$downloaded[[1]]))
   expect_false(.meta2$downloaded[[1]] == .meta$downloaded[[1]])
+  # meta_clean cleans .meta and .meta2
   meta_clean(.meta)
-  meta_clean(.meta2)
 })
 
 test_that("it should download again and identifies that the file is the same", {
@@ -56,8 +56,8 @@ test_that("it should download again and identifies that the file is the same", {
   .meta2 <- download_marketdata("b3-cotahist-daily", do_cache = TRUE, refdate = as.Date("2018-01-02"))
   expect_true(file.exists(.meta2$downloaded[[1]]))
   expect_true(.meta2$downloaded[[1]] == .meta$downloaded[[1]])
+  # meta_clean cleans .meta and .meta2
   meta_clean(.meta)
-  meta_clean(.meta2)
 })
 
 test_that("it should clean meta when reading invalid file", {

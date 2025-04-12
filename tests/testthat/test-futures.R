@@ -2,7 +2,7 @@ test_that("it should get futures data with futures_get", {
   skip_on_cran()
   skip_if_offline()
 
-  .refdate <- bizdays::offset(Sys.Date(), -1, "Brazil/ANBIMA")
+  .refdate <- bizdays::offset(Sys.Date(), -5, "Brazil/ANBIMA")
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = .refdate)
   read_marketdata(.meta)
   

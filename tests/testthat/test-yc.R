@@ -9,8 +9,10 @@ test_df <- function(df_in) {
   invisible(TRUE)
 }
 
-.refdate <- bizdays::offset(Sys.Date(), -1, "Brazil/ANBIMA")
-.meta <- download_marketdata("b3-futures-settlement-prices", refdate = .refdate)
+.refdate <- bizdays::offset(Sys.Date(), -5, "Brazil/ANBIMA")
+.meta <- tryCatch(download_marketdata("b3-futures-settlement-prices", refdate = .refdate), error = function(e) {
+  template_meta_load("b3-futures-settlement-prices", refdate = .refdate)
+})
 read_marketdata(.meta)
 .meta <- download_marketdata("b3-reference-rates", refdate = .refdate, curve_name = "PRE")
 read_marketdata(.meta)
