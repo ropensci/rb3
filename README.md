@@ -61,24 +61,24 @@ The `rb3` package uses a template system to standardize the downloading
 and processing of different data types. To see available templates:
 
 ``` r
+library(tidyverse)
+library(bizdays)
 library(rb3)
-#> ℹ rb3: 9 templates registered
-#> ℹ rb3 cache folder: '/home/wilson/dev/rb3/rb3-cache'
 
 # List available templates
 list_templates()
 #> # A tibble: 9 × 2
-#>   Description                                                      Template     
-#>   <chr>                                                            <chr>        
-#> 1 Arquivo de Preços de Mercado - BVBG-086                          b3-bvbg-086  
-#> 2 Cotações Históricas do Pregão de Ações - Arquivo Diário          b3-cotahist-…
-#> 3 Cotações Históricas do Pregão de Ações - Arquivo Anual           b3-cotahist-…
-#> 4 Preços de Ajustes Diários de Contratos Futuros                   b3-futures-s…
-#> 5 Composição dos índices da B3                                     b3-indexes-c…
-#> 6 Carteira teórica corrente dos índices da B3 com pesos e posições b3-indexes-c…
-#> 7 Dados históricos e estatísticas dos índices da Bolsa             b3-indexes-h…
-#> 8 Carteira Teórica dos índices da B3 com pesos e posições          b3-indexes-t…
-#> 9 Taxas referenciais                                               b3-reference…
+#>   Template                         Description                                  
+#>   <chr>                            <chr>                                        
+#> 1 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086      
+#> 2 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Arq…
+#> 3 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Arq…
+#> 4 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futur…
+#> 5 b3-indexes-composition           Composição dos índices da B3                 
+#> 6 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3 …
+#> 7 b3-indexes-historical-data       Dados históricos e estatísticas dos índices …
+#> 8 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com pesos…
+#> 9 b3-reference-rates               Taxas referenciais
 ```
 
 ### Downloading Market Data
@@ -88,19 +88,23 @@ downloads data based on a template and parameters:
 
 ``` r
 # Download yield curve data for specific dates
-library(bizdays)
 fetch_marketdata("b3-reference-rates",
-  refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"),
-  curve_name = c("PRE", "DIC")
+  refdate = as.Date("2024-01-31"),
+  curve_name = "PRE"
 )
+
+# Download futures settlement prices
+fetch_marketdata("b3-futures-settlement-prices",
+  refdate = as.Date("2024-01-31")
+)
+
+# Download yearly COTAHIST files
+fetch_marketdata("b3-cotahist-yearly", year = 2023)
 ```
 
 ### Working with Historical Equity Data
 
 ``` r
-# Download yearly COTAHIST files
-fetch_marketdata("b3-cotahist-yearly", year = 2023)
-
 # Access the data
 ch <- cotahist_get("yearly")
 
@@ -115,15 +119,18 @@ symbols <- eq |>
   summarise(volume = sum(volume)) |>
   arrange(desc(volume)) |>
   head(10) |>
+  collect() |>
   pull(symbol)
+
+# show top 10 most traded stocks
+symbols
+#>  [1] "VALE3" "PETR4" "ITUB4" "BBDC4" "BBAS3" "B3SA3" "PRIO3" "PETR3" "RENT3"
+#> [10] "MGLU3"
 ```
 
 ### Yield Curve Analysis
 
 ``` r
-# Access yield curve data
-library(ggplot2)
-
 # Get Brazilian nominal yield curve (PRE)
 yc_data <- yc_brl_get() |>
   filter(refdate == "2024-01-31") |>
@@ -140,6 +147,8 @@ ggplot(yc_data, aes(x = forward_date, y = r_252)) +
   scale_y_continuous(labels = scales::percent)
 ```
 
+<img src="man/figures/README-plot-yc-1.png" width="100%" />
+
 ### Futures Contracts
 
 ``` r
@@ -155,7 +164,19 @@ di1_futures <- futures_data |>
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     implied_rate = (100000 / price)^(252 / business_days) - 1
   )
+
+# Plot the implied rates
+ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
+  geom_line() +
+  labs(
+    title = "Implied Rates for DI1 Futures",
+    x = "Maturity Date",
+    y = "Implied Rate"
+  ) +
+  scale_y_continuous(labels = scales::percent)
 ```
+
+<img src="man/figures/README-plot-futures-1.png" width="100%" />
 
 ## Documentation
 

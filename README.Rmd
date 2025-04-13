@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+# load README.RData
+load("README.RData")
 ```
 
 # rb3 <img src="man/figures/logo.png" align="right" width="120" alt="rb3" />
@@ -55,7 +57,9 @@ devtools::install_github("ropensci/rb3")
 
 The `rb3` package uses a template system to standardize the downloading and processing of different data types. To see available templates:
 
-```{r, eval=TRUE}
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(bizdays)
 library(rb3)
 
 # List available templates
@@ -68,19 +72,23 @@ The main function for fetching data is `fetch_marketdata()`, which downloads dat
 
 ```{r, eval=FALSE}
 # Download yield curve data for specific dates
-library(bizdays)
 fetch_marketdata("b3-reference-rates",
-  refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"),
-  curve_name = c("PRE", "DIC")
+  refdate = as.Date("2024-01-31"),
+  curve_name = "PRE"
 )
+
+# Download futures settlement prices
+fetch_marketdata("b3-futures-settlement-prices",
+  refdate = as.Date("2024-01-31")
+)
+
+# Download yearly COTAHIST files
+fetch_marketdata("b3-cotahist-yearly", year = 2023)
 ```
 
 ### Working with Historical Equity Data
 
-```{r, eval=FALSE}
-# Download yearly COTAHIST files
-fetch_marketdata("b3-cotahist-yearly", year = 2023)
-
+```{r cotahist, eval=TRUE}
 # Access the data
 ch <- cotahist_get("yearly")
 
@@ -95,15 +103,16 @@ symbols <- eq |>
   summarise(volume = sum(volume)) |>
   arrange(desc(volume)) |>
   head(10) |>
+  collect() |>
   pull(symbol)
+
+# show top 10 most traded stocks
+symbols
 ```
 
 ### Yield Curve Analysis
 
-```{r, eval=FALSE}
-# Access yield curve data
-library(ggplot2)
-
+```{r plot-yc, eval=TRUE}
 # Get Brazilian nominal yield curve (PRE)
 yc_data <- yc_brl_get() |>
   filter(refdate == "2024-01-31") |>
@@ -122,7 +131,7 @@ ggplot(yc_data, aes(x = forward_date, y = r_252)) +
 
 ### Futures Contracts
 
-```{r, eval=FALSE}
+```{r plot-futures, eval=TRUE}
 # Get futures settlement prices
 futures_data <- futures_get() |>
   filter(commodity == "DI1") |>
@@ -135,6 +144,16 @@ di1_futures <- futures_data |>
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     implied_rate = (100000 / price)^(252 / business_days) - 1
   )
+
+# Plot the implied rates
+ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
+  geom_line() +
+  labs(
+    title = "Implied Rates for DI1 Futures",
+    x = "Maturity Date",
+    y = "Implied Rate"
+  ) +
+  scale_y_continuous(labels = scales::percent)
 ```
 
 ## Documentation

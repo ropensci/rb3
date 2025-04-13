@@ -6,8 +6,7 @@ legacy
 b3-docs
 .lintr
 inst\extdata\big-files
-templates_load.r
-templates_save.r
+README.R
 .github
 ^_pkgdown\.yml$
 ^docs$
