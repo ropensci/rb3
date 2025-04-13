@@ -156,8 +156,8 @@ list_templates <- function() {
   purrr::map_dfr(registry_keys(.reg), function(cls) {
     tpl_ <- .reg[[cls]]
     dplyr::tibble(
-      "Description" = tpl_$description,
       "Template" = tpl_$id,
+      "Description" = tpl_$description,
     )
   })
 }
