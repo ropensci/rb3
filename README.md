@@ -131,9 +131,13 @@ symbols
 ```
 
 ``` r
-# Plot the most traded stocks
+# Plot the most traded stocks grouped by month
 eq |>
   filter(symbol %in% symbols) |>
+  mutate(refdate = floor_date(refdate, "month")) |>
+  group_by(refdate, symbol) |>
+  summarise(volume = sum(volume)) |>
+  # Plot
   ggplot(aes(x = refdate, y = volume, color = symbol)) +
   geom_line() +
   labs(
@@ -142,6 +146,8 @@ eq |>
     y = "Volume"
   ) +
   scale_y_continuous(labels = scales::comma)
+#> `summarise()` has grouped output by 'refdate'. You can override using the
+#> `.groups` argument.
 ```
 
 <img src="man/figures/README-plot-cotahist-1.png" width="100%" />
