@@ -66,7 +66,7 @@ meta_file <- function(meta) {
 }
 
 .meta_serialize_obj <- function(obj) {
-  capture.output(dput(obj))
+  utils::capture.output(dput(obj))
 }
 
 .meta_deserialize_obj <- function(x) {
