@@ -7,7 +7,7 @@ meta_new <- function(template, ..., extra_arg = NULL) {
   meta <- structure(list(
     template = template,
     download_checksum = checksum,
-    download_args = toJSON(args, auto_unbox = TRUE),
+    download_args = jsonlite::toJSON(args, auto_unbox = TRUE),
     downloaded = list(),
     created = as.POSIXct(Sys.time(), tz = "UTC"),
     extra_arg = extra_arg
@@ -20,7 +20,7 @@ meta_load <- function(template, ..., extra_arg = NULL) {
   checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
   filename <- .meta_file(checksum)
   if (file.exists(filename)) {
-    meta <- structure(fromJSON(filename), class = "meta")
+    meta <- structure(jsonlite::fromJSON(filename), class = "meta")
     meta$created <- as.POSIXct(meta$created, tz = "UTC")
     meta
   } else {
@@ -40,7 +40,7 @@ meta_checksum <- function(template, ..., extra_arg = NULL) {
   }
   x <- lapply(l_, format)
   names(x) <- names(l_)
-  digest(x)
+  digest::digest(x)
 }
 
 meta_dest_file <- function(meta, checksum, ext = "gz") {
@@ -58,7 +58,7 @@ meta_file <- function(meta) {
 }
 
 meta_save <- function(meta) {
-  writeLines(toJSON(meta |> unclass(), auto_unbox = TRUE), meta_file(meta))
+  writeLines(jsonlite::toJSON(meta |> unclass(), auto_unbox = TRUE), meta_file(meta))
 }
 
 meta_clean <- function(meta) {
@@ -68,10 +68,10 @@ meta_clean <- function(meta) {
       class = "error_meta_not_found"
     )
   }
-  cli_alert_info("Cleaning meta {.strong {meta$download_checksum}}")
+  cli::cli_alert_info("Cleaning meta {.strong {meta$download_checksum}}")
   if (length(meta$downloaded) > 0) {
     for (file in meta$downloaded) {
-      cli_alert_info("Removing raw file {.file {file}}")
+      cli::cli_alert_info("Removing raw file {.file {file}}")
       unlink(file)
     }
   }

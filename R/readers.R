@@ -46,23 +46,23 @@ flatten_names <- function(nx) {
 }
 
 settlement_prices_read <- function(., filename, ...) {
-  doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
-  refdate_ns <- getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
+  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
+  refdate_ns <- XML::getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
   if (length(refdate_ns) > 0) {
-    refdate <- str_match(xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")[1, 1]
+    refdate <- str_match(XML::xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")[1, 1]
   }
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  table <- getNodeSet(doc, xpath)
-  if (is(table, "XMLNodeSet") && length(table) == 1) {
+  table <- XML::getNodeSet(doc, xpath)
+  if (inherits(table, "XMLNodeSet") && length(table) == 1) {
     tb <- table[[1]]
-    vals <- sapply(tb[["tbody"]]["tr"], \(x) sapply(x["td"], xmlValue))
+    vals <- sapply(tb[["tbody"]]["tr"], \(x) sapply(x["td"], XML::xmlValue))
     dm <- matrix(vals, nrow = ncol(vals), byrow = TRUE)
   } else {
     return(NULL)
   }
   dm <- cbind(dm, refdate)
   colnames(dm) <- .$colnames
-  df <- as_tibble(dm)
+  df <- dplyr::as_tibble(dm)
 
   df <- .parse_columns(., df)
   df[["commodity"]] <- flatten_names(df[["commodity"]])
@@ -76,9 +76,9 @@ cols_number <- c(
 )
 
 curve_read <- function(., filename, ...) {
-  text <- read_file(filename)
-  doc <- htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
-  char_vec <- xmlSApply(getNodeSet(doc, "//table/td"), xmlValue)
+  text <- readr::read_file(filename)
+  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
+  char_vec <- XML::xmlSApply(XML::getNodeSet(doc, "//table/td"), XML::xmlValue)
 
   if (length(char_vec) == 0) {
     return(NULL)
@@ -107,7 +107,7 @@ curve_read <- function(., filename, ...) {
     col2 <- char_vec[idx3]
   }
 
-  df <- tibble(
+  df <- dplyr::tibble(
     refdate,
     curve_name,
     cur_days,
@@ -174,7 +174,7 @@ pricereport_reader <- function(., filename, ...) {
     state = envir
   )
 
-  df <- as_tibble(envir$data)
+  df <- dplyr::as_tibble(envir$data)
   df <- df[, fields_names(.$fields)]
   .parse_columns(., df)
 }
@@ -189,18 +189,18 @@ read_file_wrapper <- function(., filename, meta) {
 
 stock_indexes_json_reader <- function(., filename, ...) {
   args_ <- list(...)
-  jason <- try(fromJSON(filename), silent = TRUE)
+  jason <- try(jsonlite::fromJSON(filename), silent = TRUE)
   if (inherits(jason, "try-error")) {
     return(NULL)
   }
-  df <- tibble::as_tibble(jason$results)
+  df <- dplyr::as_tibble(jason$results)
   if (.$id %in% c("b3-indexes-theoretical-portfolio", "b3-indexes-current-portfolio")) {
     df$header_part <- jason$header$part
     df$header_theoricalQty <- jason$header$theoricalQty
     df$header_reductor <- jason$header$reductor
     df$index <- args_$index
     df$refdate <- args_$extra_arg
-    if (hasName(jason$header, "date")) {
+    if (utils::hasName(jason$header, "date")) {
       df$portfolio_date <- strptime(jason$header$date, "%d/%m/%y")
     }
   } else if (.$id == "b3-indexes-historical-data") {

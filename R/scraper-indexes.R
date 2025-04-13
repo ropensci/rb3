@@ -11,7 +11,7 @@
 #' @export
 indexes_get <- function() {
   max_date <- template_dataset("b3-indexes-composition") |>
-    summarise(update_date = max(.data$update_date)) |>
+    dplyr::summarise(update_date = max(.data$update_date)) |>
     collect() |>
     dplyr::pull(.data$update_date)
 
@@ -141,9 +141,9 @@ process_index_historical_data <- function(ds) {
       refdate = lubridate::make_date(.data$year, .data$month, .data$day),
     ) |>
     select("index", "refdate", "value") |>
-    rename(symbol = "index") |>
+    dplyr::rename(symbol = "index") |>
     filter(!is.na(.data$value)) |>
-    arrange("refdate")
+    dplyr::arrange("refdate")
 }
 
 #' Get historical data from B3 indexes

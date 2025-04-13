@@ -40,13 +40,13 @@
 read_marketdata <- function(meta) {
   filename <- try(meta$downloaded[[1]], silent = TRUE)
   if (inherits(filename, "try-error")) {
-    cli_alert_warning("File could not be read for meta {.strong {meta$download_checksum}}")
+    cli::cli_alert_warning("File could not be read for meta {.strong {meta$download_checksum}}")
     return(invisible(NULL))
   }
   template <- template_retrieve(meta$template)
   df <- read_file_wrapper(template, filename, meta)
   if (is.null(df) || nrow(df) == 0) {
-    cli_alert_warning("File could not be read: {.file {filename}}")
+    cli::cli_alert_warning("File could not be read: {.file {filename}}")
     meta_clean(meta)
     return(invisible(NULL))
   }
@@ -175,7 +175,7 @@ read_ <- function(m, pb) {
     x <- read_marketdata(m)
     if (is.null(x)) {
       row <- m$download_args
-      msg <- paste(names(row), map(row, format), sep = " = ", collapse = ", ")
+      msg <- paste(names(row), purrr::map(row, format), sep = " = ", collapse = ", ")
       cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
     }
   }

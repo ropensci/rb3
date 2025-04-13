@@ -89,7 +89,7 @@ yc_get <- function() {
 #' @export
 yc_brl_get <- function() {
   .yield_curve_get("PRE") |>
-    rename(r_252 = "col1", r_360 = "col2") |>
+    dplyr::rename(r_252 = "col1", r_360 = "col2") |>
     select(
       "curve_name",
       "refdate",
@@ -112,7 +112,7 @@ yc_brl_get <- function() {
 #' @export
 yc_ipca_get <- function() {
   .yield_curve_get("DIC") |>
-    rename(r_252 = "col1") |>
+    dplyr::rename(r_252 = "col1") |>
     select(
       "curve_name",
       "refdate",
@@ -134,7 +134,7 @@ yc_ipca_get <- function() {
 #' @export
 yc_usd_get <- function() {
   .yield_curve_get("DOC") |>
-    rename(r_360 = "col1") |>
+    dplyr::rename(r_360 = "col1") |>
     select(
       "curve_name",
       "refdate",
@@ -158,9 +158,9 @@ yc_usd_get <- function() {
 
   yc |>
     filter(.data$refdate == .refdate) |>
-    left_join(fut_di1, by = c("refdate", "forward_date")) |>
+    dplyr::left_join(fut_di1, by = c("refdate", "forward_date")) |>
     collect() |>
-    arrange(.data$forward_date)
+    dplyr::arrange(.data$forward_date)
 }
 
 #' @details

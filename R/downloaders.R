@@ -1,8 +1,8 @@
 check_args <- function(..., required_args) {
   args <- list(...)
   for (arg_name in required_args) {
-    if (!hasName(args, arg_name)) {
-      cli_alert_danger("{arg_name} argument not provided")
+    if (!utils::hasName(args, arg_name)) {
+      cli::cli_alert_danger("{arg_name} argument not provided")
       return(FALSE)
     }
   }
@@ -11,20 +11,20 @@ check_args <- function(..., required_args) {
 
 save_resource <- function(res, encoding, dest) {
   if (
-    headers(res)[["content-type"]] == "application/octet-stream" ||
-      headers(res)[["content-type"]] == "application/x-zip-compressed"
+    httr::headers(res)[["content-type"]] == "application/octet-stream" ||
+      httr::headers(res)[["content-type"]] == "application/x-zip-compressed"
   ) {
-    bin <- content(res, as = "raw")
+    bin <- httr::content(res, as = "raw")
     writeBin(bin, dest)
   } else {
-    text <- content(res, as = "text", encoding = encoding)
+    text <- httr::content(res, as = "text", encoding = encoding)
     writeLines(text, dest, useBytes = TRUE)
   }
 }
 
 handle_response <- function(res, encoding, dest) {
-  if (status_code(res) != 200 || !.safecontent(res)) {
-    cli_alert_danger("Failed to download file: {.url {res$url}}, status code = {status_code(res)}")
+  if (httr::status_code(res) != 200 || !.safecontent(res)) {
+    cli::cli_alert_danger("Failed to download file: {.url {res$url}}, status code = {httr::status_code(res)}")
     return(FALSE)
   }
   save_resource(res, encoding, dest)
@@ -32,7 +32,7 @@ handle_response <- function(res, encoding, dest) {
 }
 
 .safecontent <- function(x) {
-  cl <- headers(x)[["content-length"]]
+  cl <- httr::headers(x)[["content-length"]]
   if (is.null(cl)) {
     TRUE
   } else {
@@ -42,9 +42,9 @@ handle_response <- function(res, encoding, dest) {
 
 url_encode <- function(url, ...) {
   args <- list(...)
-  params <- toJSON(args, auto_unbox = TRUE)
-  params_enc <- base64encode(charToRaw(params))
-  url <- parse_url(url)
+  params <- jsonlite::toJSON(args, auto_unbox = TRUE)
+  params_enc <- base64enc::base64encode(charToRaw(params))
+  url <- httr::parse_url(url)
   url$path <- c(url$path, params_enc)
   url
 }
@@ -63,7 +63,7 @@ download_marketdata_wrapper <- function(., dest, ...) {
 just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
   verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
   encoding <- if (is.null(encoding)) "utf8" else encoding
-  res <- GET(url, config(ssl_verifypeer = verifyssl))
+  res <- httr::GET(url, httr::config(ssl_verifypeer = verifyssl))
   handle_response(res, encoding, dest)
 }
 
@@ -85,7 +85,7 @@ sprintf_download <- function(., dest, ...) {
 
 curve_download <- function(., dest, ...) {
   args <- list(...)
-  url <- parse_url(.$downloader$url)
+  url <- httr::parse_url(.$downloader$url)
   url$query <- list(
     Data = format(as.Date(args$refdate), "%d/%m/%Y"),
     Data1 = format(as.Date(args$refdate), "%Y%m%d"),
@@ -138,7 +138,7 @@ stock_indexes_statistics_download <- function(., dest, ...) {
 
 post_download_data <- function(url, encoding, dest, verifyssl, ...) {
   verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
-  res <- POST(url, body = list(...), encode = "form", config(ssl_verifypeer = verifyssl))
+  res <- httr::POST(url, body = list(...), encode = "form", httr::config(ssl_verifypeer = verifyssl))
   handle_response(res, encoding, dest)
 }
 

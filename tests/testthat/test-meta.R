@@ -4,11 +4,11 @@ test_that("it should create a new meta object", {
   expect_equal(meta$template, "template-test")
   args <- list(var1 = 1, var2 = 2) |>
     lapply(format) |>
-    toJSON(auto_unbox = TRUE)
+    jsonlite::toJSON(auto_unbox = TRUE)
   expect_equal(meta$download_args, args)
   checksum <- c(id = "template-test", list(var1 = 1, var2 = 2)) |>
     lapply(format) |>
-    digest()
+    digest::digest()
   expect_equal(meta$download_checksum, checksum)
   expect_true(length(meta$downloaded) == 0)
   meta_clean(meta)

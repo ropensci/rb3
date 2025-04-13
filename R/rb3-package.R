@@ -67,31 +67,12 @@ NULL
 #' streamline the process of transforming raw B3 data into actionable insights 
 #' for analysis and reporting.
 #' 
-#' @importFrom base64enc base64encode
-#' @importFrom stats na.omit
 #' @importFrom bizdays following preceding load_builtin_calendars
 #' @importFrom bizdays add.bizdays bizdayse bizseq getdate
-#' @importFrom cli cli_alert_info cli_alert_danger cli_alert_success
-#' @importFrom cli cli_alert_warning
-#' @importFrom cli cli_progress_along pb_spin pb_current pb_total pb_bar
-#' @importFrom cli pb_percent pb_eta_str
-#' @importFrom digest digest
-#' @importFrom dplyr tibble inner_join mutate select filter left_join as_tibble
-#' @importFrom dplyr bind_rows arrange rename group_by summarise collect
-#' @importFrom httr GET POST parse_url status_code headers content config
-#' @importFrom jsonlite toJSON fromJSON
-#' @importFrom purrr map_dfr map_lgl map_chr map_int map
-#' @importFrom readr write_rds read_rds read_csv read_file
+#' @importFrom dplyr mutate select filter collect
 #' @importFrom rlang .data
-#' @importFrom stringr str_replace_all str_starts str_match str_sub str_split
-#' @importFrom stringr str_to_lower str_detect str_pad str_replace str_trim
-#' @importFrom stringr str_ends str_replace str_c
-#' @importFrom stringr str_glue str_length
-#' @importFrom yaml yaml.load_file
-#' @importFrom methods is new slot
-#' @importFrom utils write.table unzip getFromNamespace hasName read.table
-#' @importFrom XML xmlInternalTreeParse getNodeSet xmlValue
-#' @importFrom XML htmlTreeParse xmlSApply
+#' @importFrom stringr str_replace_all str_starts str_match str_sub str_split str_ends str_replace str_c
+#' @importFrom stringr str_to_lower str_detect str_pad str_replace str_trim str_glue str_length
 #' @keywords internal
 "_PACKAGE"
 
@@ -126,12 +107,12 @@ rb3_registry <- create_registry()
 rb3_bootstrap <- function() {
   cache_folder <- getOption("rb3.cachedir")
   cache_folder <- if (is.null(cache_folder)) {
-    cli_alert_info("Option rb3.cachedir not set using {.fn tempdir}")
+    cli::cli_alert_info("Option rb3.cachedir not set using {.fn tempdir}")
     file.path(tempdir(), "rb3-cache")
   } else {
     cache_folder
   }
-  cli_alert_info("rb3 cache folder: {.file {cache_folder}}")
+  cli::cli_alert_info("rb3 cache folder: {.file {cache_folder}}")
   
   if (!dir.exists(cache_folder)) {
     dir.create(cache_folder, recursive = TRUE)

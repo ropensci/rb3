@@ -123,7 +123,7 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
 unzip_recursive <- function(fname) {
   if (length(fname) == 1 && str_ends(str_to_lower(fname), ".zip")) {
     exdir <- str_replace(fname, "\\.zip$", "")
-    l <- unzip(fname, exdir = exdir)
+    l <- utils::unzip(fname, exdir = exdir)
     unzip_recursive(l)
   } else {
     fname

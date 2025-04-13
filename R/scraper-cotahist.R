@@ -286,10 +286,10 @@ cotahist_options_by_symbols_get <- function(symbols) {
     filter(.data$instrument_market %in% c(70, 80)) |>
     select("refdate", "symbol", "strike_price", "maturity_date", "close", "volume", "isin", "instrument_market")
 
-  eq <- inner_join(eqs_opts, eqs,
+  eq <- dplyr::inner_join(eqs_opts, eqs,
     by = c("refdate", "isin"), suffix = c("", "_underlying"), relationship = "many-to-one"
   )
-  ds <- inner_join(eq, yc, by = c("refdate" = "refdate", "maturity_date" = "forward_date"))
+  ds <- dplyr::inner_join(eq, yc, by = c("refdate" = "refdate", "maturity_date" = "forward_date"))
 
   ds |>
     mutate(type = ifelse(.data$instrument_market == 80, "call", "put")) |>

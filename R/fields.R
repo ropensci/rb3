@@ -10,7 +10,7 @@ as.data.frame.fields <- function(x, ...) {
     `Field name` = fields_names(x),
     `Description` = fields_description(x),
     `Width` = fields_widths(x),
-    `Type` = map_chr(fields_handlers(x), function(y) attr(y, "type")),
+    `Type` = purrr::map_chr(fields_handlers(x), function(y) attr(y, "type")),
     row.names = seq_along(x),
     check.names = FALSE
   )
@@ -30,15 +30,15 @@ print.fields <- function(x, ...) {
 }
 
 fields_names <- function(fields) {
-  map_chr(fields, function(x) as.character(x))
+  purrr::map_chr(fields, function(x) as.character(x))
 }
 
 fields_widths <- function(fields) {
-  map_int(fields, function(x) as.integer(attr(x, "width")))
+  purrr::map_int(fields, function(x) as.integer(attr(x, "width")))
 }
 
 fields_description <- function(fields) {
-  map_chr(fields, function(x) as.character(attr(x, "description")))
+  purrr::map_chr(fields, function(x) as.character(attr(x, "description")))
 }
 
 fields_handlers <- function(fields) {
@@ -70,7 +70,7 @@ field <- function(name, description, ...) {
     attr(name, "description") <- ""
     parms <- list(...)
   } else {
-    if (is(description, "character")) {
+    if (inherits(description, "character")) {
       attr(name, "description") <- description
       parms <- list(...)
     } else {
@@ -81,15 +81,15 @@ field <- function(name, description, ...) {
   }
 
   classes <- lapply(parms, function(x) {
-    if (is(x, "width")) {
+    if (inherits(x, "width")) {
       "width"
-    } else if (is(x, "tag")) {
+    } else if (inherits(x, "tag")) {
       "tag"
-    } else if (is(x, "handler")) {
+    } else if (inherits(x, "handler")) {
       "handler"
-    } else if (is(x, "collector")) {
+    } else if (inherits(x, "collector")) {
       "col"
-    } else if (is(x, "DataType") && is(x, "ArrowObject")) {
+    } else if (inherits(x, "DataType") && inherits(x, "ArrowObject")) {
       "arrow"
     } else {
       NULL

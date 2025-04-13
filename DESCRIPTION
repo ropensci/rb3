@@ -26,7 +26,6 @@ Imports:
     jsonlite,
     purrr,
     rlang,
-    methods,
     yaml,
     digest,
     base64enc,

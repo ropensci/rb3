@@ -4,7 +4,7 @@ new_template <- function(id, description = "") {
 }
 
 load_template_from_file <- function(fname) {
-  tpl <- yaml.load_file(fname)
+  tpl <- yaml::yaml.load_file(fname)
   obj <- new_template(tpl$id)
   for (n in names(tpl)) {
     if (n == "fields") {
@@ -14,14 +14,14 @@ load_template_from_file <- function(fname) {
     } else if (n == "reader") {
       obj[["reader"]] <- tpl$reader
       func_name <- tpl$reader[["function"]]
-      obj[["read_file"]] <- getFromNamespace(func_name, "rb3")
+      obj[["read_file"]] <- utils::getFromNamespace(func_name, "rb3")
     } else if (n == "writers") {
       writers_names <- names(tpl$writers)
       writers <- lapply(writers_names, function(n) {
         w <- tpl$writers[[n]]
         w$layer <- n
         if (!is.null(w[["function"]])) {
-          w$process_marketdata <- getFromNamespace(w[["function"]], "rb3")
+          w$process_marketdata <- utils::getFromNamespace(w[["function"]], "rb3")
         } else {
           w$process_marketdata <- identity
         }
@@ -45,7 +45,7 @@ load_template_from_file <- function(fname) {
     } else if (n == "downloader") {
       obj[["downloader"]] <- tpl$downloader
       func_name <- tpl$downloader[["function"]]
-      obj[["download_marketdata"]] <- getFromNamespace(func_name, "rb3")
+      obj[["download_marketdata"]] <- utils::getFromNamespace(func_name, "rb3")
     } else {
       obj[[n]] <- tpl[[n]]
     }
@@ -53,7 +53,7 @@ load_template_from_file <- function(fname) {
 
   if (is.null(obj$reader)) {
     reader_name <- paste0(str_to_lower(obj$filetype), "_read_file")
-    obj[["read_file"]] <- getFromNamespace(reader_name, "rb3")
+    obj[["read_file"]] <- utils::getFromNamespace(reader_name, "rb3")
     obj[["has_reader"]] <- TRUE
   }
 
@@ -97,7 +97,7 @@ print.template <- function(x, ...) {
     cli::cli_end(ulid)
   }
   # cat("Template:", x$id, "\n")
-  if (is(x$fields, "fields")) {
+  if (inherits(x$fields, "fields")) {
     cli::cli_text("{.strong Fields}: ")
     print.fields(x$fields)
   } else {
@@ -153,9 +153,9 @@ template_retrieve <- function(template_name) {
 #' @export
 list_templates <- function() {
   .reg <- template_registry$get_instance()
-  map_dfr(registry_keys(.reg), function(cls) {
+  purrr::map_dfr(registry_keys(.reg), function(cls) {
     tpl_ <- .reg[[cls]]
-    tibble(
+    dplyr::tibble(
       "Description" = tpl_$description,
       "Template" = tpl_$id,
     )
