@@ -25,3 +25,4 @@ examples
 rb3-cache
 vignettes/rb3-data
 vignettes/*.R
+Makefile
