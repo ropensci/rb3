@@ -1,3 +1,16 @@
+## rb3 0.1.0
+
+- Introduced a new template framework that no longer uses `proto` and is fully adapted to downloader and reader functions.
+- Added functionality to download and process futures settlement prices using the templates.
+- Heavily refactored the codebase to improve readability and maintainability.
+- Enhanced error handling and logging throughout the package.
+- Improved the caching mechanism to ensure that files are stored in a structured manner within the cache directory.
+  - The caching system now organizes files by template, making it easier to manage and retrieve cached data.
+  - Uses `arrow` for efficient data storage and retrieval.
+- Removed dependencies on `rvest`, `proto`, `ascii`, `readxl` and other packages that aren't heavy used.
+- Fixed test cases to align with the new template framework.
+- Fixed issues with the `glue` environment list requiring explicit passing as an environment.
+
 # rb3 0.0.13
 
 * Implemented registry as a singleton pattern.
