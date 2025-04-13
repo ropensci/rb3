@@ -19,7 +19,8 @@ ch <- cotahist_get("yearly")
 # Filter for stocks
 eq <- ch |>
   filter(year(refdate) == 2023) |>
-  cotahist_filter_equity()
+  cotahist_filter_equity() |>
+  collect()
 
 # Get top 10 most traded stocks
 symbols <- eq |>
@@ -42,9 +43,7 @@ futures_data <- futures_get() |>
 
 # save datasets: ch, eq, symbols, yc_data, futures_data to file README.RData
 save(
-  ch,
   eq,
-  symbols,
   yc_data,
   futures_data,
   file = "README.RData"

@@ -111,15 +111,17 @@ ch <- cotahist_get("yearly")
 # Filter for stocks
 eq <- ch |>
   filter(year(refdate) == 2023) |>
-  cotahist_filter_equity()
+  cotahist_filter_equity() |>
+  collect()
+```
 
+``` r
 # Get top 10 most traded stocks
 symbols <- eq |>
   group_by(symbol) |>
   summarise(volume = sum(volume)) |>
   arrange(desc(volume)) |>
   head(10) |>
-  collect() |>
   pull(symbol)
 
 # show top 10 most traded stocks
@@ -128,6 +130,22 @@ symbols
 #> [10] "MGLU3"
 ```
 
+``` r
+# Plot the most traded stocks
+eq |>
+  filter(symbol %in% symbols) |>
+  ggplot(aes(x = refdate, y = volume, color = symbol)) +
+  geom_line() +
+  labs(
+    title = "Top 10 Most Traded Stocks in 2023",
+    x = "Date",
+    y = "Volume"
+  ) +
+  scale_y_continuous(labels = scales::comma)
+```
+
+<img src="man/figures/README-plot-cotahist-1.png" width="100%" />
+
 ### Yield Curve Analysis
 
 ``` r
@@ -135,7 +153,9 @@ symbols
 yc_data <- yc_brl_get() |>
   filter(refdate == "2024-01-31") |>
   collect()
+```
 
+``` r
 # Plot the yield curve
 ggplot(yc_data, aes(x = forward_date, y = r_252)) +
   geom_line() +
@@ -156,7 +176,9 @@ ggplot(yc_data, aes(x = forward_date, y = r_252)) +
 futures_data <- futures_get() |>
   filter(commodity == "DI1") |>
   collect()
+```
 
+``` r
 # Calculate implied rates
 di1_futures <- futures_data |>
   mutate(
