@@ -1,5 +1,5 @@
 meta_new <- function(template, ..., extra_arg = NULL) {
-  args <- list(...) |> lapply(format)
+  args <- list(...)
   checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
   if (file.exists(.meta_file(checksum))) {
     cli::cli_abort("Meta {.strong {checksum}} already exists.", class = "error_meta_exists")
@@ -7,7 +7,7 @@ meta_new <- function(template, ..., extra_arg = NULL) {
   meta <- structure(list(
     template = template,
     download_checksum = checksum,
-    download_args = jsonlite::toJSON(args, auto_unbox = TRUE),
+    download_args = args,
     downloaded = list(),
     created = as.POSIXct(Sys.time(), tz = "UTC"),
     extra_arg = extra_arg
@@ -18,25 +18,33 @@ meta_new <- function(template, ..., extra_arg = NULL) {
 
 meta_load <- function(template, ..., extra_arg = NULL) {
   checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
-  filename <- .meta_file(checksum)
-  if (file.exists(filename)) {
-    meta <- structure(jsonlite::fromJSON(filename), class = "meta")
-    meta$created <- as.POSIXct(meta$created, tz = "UTC")
-    meta
-  } else {
+  tryCatch(meta_get(checksum), error = function(e) {
     l <- list(...)
     args <- paste(names(l), lapply(l, format), sep = " = ", collapse = ", ")
     cli::cli_abort("Can't find meta for given arguments: template = {template}, {args}",
-      class = "error_meta_not_found"
+      class = "error_meta_not_found", parent = e
     )
+  })
+}
+
+meta_get <- function(checksum) {
+  filename <- .meta_file(checksum)
+  if (file.exists(filename)) {
+    meta <- structure(jsonlite::fromJSON(filename), class = "meta")
+    meta$download_args <- .meta_deserialize_obj(meta$download_args)
+    meta$created <- .meta_deserialize_obj(meta$created)
+    meta$extra_arg <- .meta_deserialize_obj(meta$extra_arg)
+    meta
+  } else {
+    cli::cli_abort("Can't load meta for checksum {.strong {checksum}}", class = "error_meta_not_found")
   }
 }
 
 meta_checksum <- function(template, ..., extra_arg = NULL) {
   l_ <- if (!is.null(extra_arg)) {
-    c(id = template, list(...), extra_arg = extra_arg)
+    list(template = template, download_args = list(...), extra_arg = extra_arg)
   } else {
-    c(id = template, list(...))
+    list(template = template, download_args = list(...))
   }
   x <- lapply(l_, format)
   names(x) <- names(l_)
@@ -57,8 +65,20 @@ meta_file <- function(meta) {
   .meta_file(meta$download_checksum)
 }
 
+.meta_serialize_obj <- function(obj) {
+  capture.output(dput(obj))
+}
+
+.meta_deserialize_obj <- function(x) {
+  dget(textConnection(x))
+}
+
 meta_save <- function(meta) {
-  writeLines(jsonlite::toJSON(meta |> unclass(), auto_unbox = TRUE), meta_file(meta))
+  filename <- meta_file(meta)
+  meta$download_args <- .meta_serialize_obj(meta$download_args)
+  meta$created <- .meta_serialize_obj(meta$created)
+  meta$extra_arg <- .meta_serialize_obj(meta$extra_arg)
+  writeLines(jsonlite::toJSON(meta |> unclass(), auto_unbox = TRUE), filename)
 }
 
 meta_clean <- function(meta) {

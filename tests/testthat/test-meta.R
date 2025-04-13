@@ -2,11 +2,9 @@ test_that("it should create a new meta object", {
   meta <- meta_new("template-test", var1 = 1, var2 = 2)
 
   expect_equal(meta$template, "template-test")
-  args <- list(var1 = 1, var2 = 2) |>
-    lapply(format) |>
-    jsonlite::toJSON(auto_unbox = TRUE)
+  args <- list(var1 = 1, var2 = 2)
   expect_equal(meta$download_args, args)
-  checksum <- c(id = "template-test", list(var1 = 1, var2 = 2)) |>
+  checksum <- list(template = "template-test", download_args = list(var1 = 1, var2 = 2)) |>
     lapply(format) |>
     digest::digest()
   expect_equal(meta$download_checksum, checksum)

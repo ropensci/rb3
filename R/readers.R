@@ -180,7 +180,7 @@ pricereport_reader <- function(., filename, ...) {
 }
 
 read_file_wrapper <- function(., filename, meta) {
-  download_args <- jsonlite::fromJSON(meta$download_args)
+  download_args <- meta$download_args
   if (!is.null(meta$extra_arg)) {
     download_args[["extra_arg"]] <- meta$extra_arg
   }
