@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load-data, echo=FALSE}
-load("futures.RData")
+load("data_futures.RData")
 ```
 
 ## Introduction

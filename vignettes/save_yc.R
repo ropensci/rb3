@@ -1,6 +1,7 @@
 
+options(rb3.cachedir = tempdir())
 library(bizdays)
-library(rb3)
+devtools::load_all()
 
 dates <- getdate("first bizday", 2021:2025, "Brazil/B3")
 fetch_marketdata("b3-reference-rates", refdate = dates, curve_name = c("DIC", "DOC", "PRE"))
@@ -21,5 +22,5 @@ save(
   df_yc_brl,
   df_yc_ipca,
   df_yc_usd,
-  file = "vignettes/yc.RData"
+  file = "vignettes/data_yc.RData"
 )

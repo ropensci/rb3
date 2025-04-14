@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```{r load-data, echo=FALSE}
 # This loads pre-saved data to avoid network calls during CRAN checks
 # See vignette creation script in data-raw/vignettes/save_equity_data.R
-load("equity_data.RData")
+load("data_equity.RData")
 ```
 
 ## Introduction

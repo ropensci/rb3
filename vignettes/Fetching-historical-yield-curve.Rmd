@@ -43,7 +43,7 @@ For further details on how B3 constructs these curves,
 see [B3's reference rate documentation (PDF)](https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf).
 
 ```{r load-used-data, echo=FALSE}
-load("yc.RData")
+load("data_yc.RData")
 ```
 
 ```{r packages, message=FALSE}

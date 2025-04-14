@@ -1,20 +1,21 @@
 # Script to generate sample equity data for the vignette using actual data
 # Run this script to create the data needed for vignettes/Fetching-historical-equity-data.Rmd
 
-library(rb3)
+options(rb3.cachedir = tempdir())
+devtools::load_all()
 library(dplyr)
 library(lubridate)
 library(ggplot2)
 
 # Download a sample of COTAHIST data if needed
-# fetch_marketdata("b3-cotahist-yearly", year = 2023)
+fetch_marketdata("b3-cotahist-yearly", year = 2023)
 
 # Access the dataset
 ch <- cotahist_get("yearly")
 
 # Extract equity data
-eq <- ch |> 
-  filter(year(refdate) == 2023) |> 
+eq <- ch |>
+  filter(year(refdate) == 2023) |>
   cotahist_filter_equity()
 
 # Get top 10 stocks by volume
@@ -63,19 +64,19 @@ stock_data <- eq |>
 bdrs <- ch |> cotahist_filter_bdr()
 
 # Extract data for a specific BDR (AAPL34 or another available BDR)
-# Check if AAPL34 exists in the dataset
-if (any(bdrs$symbol == "AAPL34")) {
-  bdr_symbol <- "AAPL34"
-} else {
-  # Get the first BDR with sufficient data
-  bdr_symbol <- bdrs |>
-    group_by(symbol) |>
-    summarise(count = n()) |>
-    filter(count > 100) |>
-    head(1) |>
-    pull(symbol)
-}
+# Get the first BDR with sufficient data
+bdr_symbol <- bdrs |>
+  group_by(symbol) |>
+  summarise(count = n()) |>
+  # get the most traded BDR
+  arrange(desc(count)) |>
+  # filter to get BDRs with more than 100 trades
+  # and take the first one
+  filter(count > 100) |>
+  head(1) |>
+  pull(symbol, as_vector = TRUE)
 
+# Extract BDR data for the selected symbol
 bdr_data <- bdrs |>
   filter(symbol == bdr_symbol) |>
   arrange(refdate) |>
@@ -88,7 +89,7 @@ save(
   etf_shares,
   stock_data,
   bdr_data,
-  file = "vignettes/equity_data.RData"
+  file = "vignettes/data_equity.RData"
 )
 
 cat("Sample data saved to vignettes/equity_data.RData\n")

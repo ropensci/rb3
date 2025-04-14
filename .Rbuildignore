@@ -6,7 +6,8 @@ legacy
 b3-docs
 .lintr
 inst\extdata\big-files
-README.R
+^README\.R$
+^README\.RData$
 .github
 ^_pkgdown\.yml$
 ^docs$
