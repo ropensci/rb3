@@ -1,62 +1,77 @@
 url: https://ropensci.github.io/rb3/
 template:
-  params:
-    bootswatch: yeti
+  bootstrap: 5
+  bootswatch: yeti
+
+navbar:
+  structure:
+    left: [home, reference, articles, news]
+    right: [github]
+  components:
+    articles:
+      text: Vignettes
+      menu:
+      - text: Getting Started
+        href: articles/Getting-started.html
+      - text: Fetching Historical Equity Data
+        href: articles/Fetching-historical-equity-data.html
+      - text: Analyzing B3 Index Data
+        href: articles/Fetching-historical-index-data.html
+      - text: How to Compute Historical Rates from B3 Future Prices
+        href: articles/Fetching-historical-future-rates.html
+      - text: Fetching B3 Yield Curves
+        href: articles/Fetching-historical-yield-curve.html
 
 reference:
   - title: rb3 Package
+    desc: >
+      Package overview and core functionality
     contents:
-      - rb3-package
+      - rb3
+      - rb3_bootstrap
+      - rb3.cachedir
+      - rb3_db_connection
 
-  - title: Download and Read Marketdata
+  - title: Marketdata Access
+    desc: >
+      Functions for downloading and reading market data from B3
     contents:
-      - read_marketdata
+      - fetch_marketdata
       - download_marketdata
-      - convert_to
+      - read_marketdata
+      - list_templates
+      - template_retrieve
+      - template_dataset
+      - template_meta_load
 
-  - title: Templates
+  - title: Equity Data (COTAHIST files)
+    desc: >
+      Functions to access and filter equity historical data (COTAHIST files)
     contents:
-      - show_templates
-      - display_template
+      - starts_with("cotahist")
 
-  - title: Yield Curves
+  - title: B3 Indexes Data
+    desc: >
+      Functions to access and filter B3 indexes composition, weights and historical data
     contents:
-      - yc_get
+      - starts_with("indexes")
 
-  - title: COTAHIST datasets
+  - title: Yield Curves Data
+    desc: >
+      Functions to access yield curve data
     contents:
-      - cotahist_get
-      - cotahist_equity_get
+      - starts_with("yc")
 
-  - title: Indexes
-    contents:
-      - index_get
-      - indexes_get
-      - indexes_last_update
-      - index_comp_get
-      - index_weights_get
-      - index_by_segment_get
-      - indexreport_get
-
-  - title: Companies
-    contents:
-      - company_cash_dividends_get
-      - company_info_get
-      - company_stock_dividends_get
-      - company_subscriptions_get
-
-  - title: Futures
+  - title: Futures Data
+    desc: >
+      Functions for accessing and working with futures data
     contents:
       - futures_get
+
+  - title: Utilities
+    desc: >
+      Helper functions for working with rb3 data
+    contents:
+      - superdataset
       - maturity2date
       - code2month
-
-  - title: Super datasets (mix datasets)
-    contents:
-      - yc_superset
-      - cotahist_equity_options_superset
-
-  - title: Cache
-    contents:
-      - cachedir
-      - clearcache

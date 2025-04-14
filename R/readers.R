@@ -1,173 +1,72 @@
-read_fwf <- function(fname, widths, colnames = NULL, skip = 0, text) {
-  colpositions <- list()
-  x <- 1
-  i <- 1
-  for (y in widths) {
-    colpositions[[i]] <- c(x, x + y - 1)
-    x <- x + y
-    i <- i + 1
-  }
-
-  if (is.null(colnames)) {
-    colnames <- paste0("V", seq_along(widths))
-  }
-
-  lines <- if (missing(text)) readLines(fname) else text
-
-  if (skip) {
-    lines <- lines[-seq(skip), ]
-  }
-
-  t <- list()
-  for (i in seq_along(colnames)) {
-    dx <- colpositions[[i]]
-    t[[colnames[i]]] <- str_sub(lines, dx[1], dx[2])
-  }
-
-  as.data.frame(t,
-    stringsAsFactors = FALSE, optional = TRUE,
-    check.names = FALSE
-  )
-}
-
-trim_fields <- function(x) {
-  fields <- lapply(x, function(z) {
-    if (is(z, "character")) {
-      str_trim(z)
-    } else {
-      z
-    }
-  })
-  do.call("data.frame", c(fields,
-    stringsAsFactors = FALSE,
-    check.names = FALSE
-  ))
-}
-
-parse_columns <- function(df, colnames, handlers, parser) {
-  df <- trim_fields(df)
-  e <- evalq(environment(), df, NULL)
-  df <- lapply(colnames, function(x) {
-    fun <- handlers[[x]]
-    x <- df[[x]]
-    do.call(fun, list(x), envir = e)
-  })
-  names(df) <- colnames
-  df <- do.call(
-    "data.frame",
-    c(df, stringsAsFactors = FALSE, check.names = FALSE)
-  )
-  parse_text(parser, df) |> as_tibble()
-}
-
-fwf_read_file <- function(., filename, parse_fields = TRUE) {
-  df <- read_fwf(filename, .$widths, colnames = .$colnames)
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
+.parse_columns <- function(., df) {
+  loc <- if (is.null(.$reader$locale)) {
+    readr::locale()
   } else {
-    df
+    do.call(readr::locale, .$reader$locale)
   }
+  cols <- fields_cols(.$fields)
+  for (nx in .$colnames) {
+    df[[nx]] <- readr::parse_vector(as.character(df[[nx]]), cols[[nx]], locale = loc)
+  }
+  df
 }
 
-csv_read_file <- function(., filename, parse_fields = TRUE) {
-  skip <- if (is.null(.$skip)) 0 else .$skip
-  comment <- if (is.null(.$comment)) "#" else .$comment
-  df <- read.table(filename,
-    col.names = .$colnames, sep = .$separator, skip = skip,
-    comment.char = comment, as.is = TRUE, stringsAsFactors = FALSE
+csv_read_file <- function(., filename, ...) {
+  df <- readr::read_csv(filename,
+    col_names = .$colnames, col_types = fields_cols(.$fields),
+    locale = readr::locale(), skip = .$reader$skip
   )
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
+  df
 }
 
-json_read_file <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  df <- as.data.frame(jason)
-  colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
-}
-
-mcsv_read_file <- function(., filename, parse_fields = TRUE) {
-  lines <- readLines(filename)
-  l <- list()
-  for (part_name in names(.$parts)) {
-    part <- .$parts[[part_name]]
-    idx <- template_detect_lines(., part, lines)
-    df <- read.table(
-      text = lines[idx],
-      col.names = part$colnames,
-      sep = template_separator(., part),
-      as.is = TRUE,
-      stringsAsFactors = FALSE,
-      check.names = FALSE,
-      colClasses = "character"
+fwf_read_file <- function(., filename, ...) {
+  encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
+  suppressWarnings(
+    df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
+      col_types = fields_cols(.$fields), locale = readr::locale(encoding = encoding)
     )
-    l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, template_parser(.))
-    } else {
-      df
-    }
+  )
+  hs <- fields_handlers(.$fields)
+  ns <- sapply(hs, \(h) attr(h, "type")) == "numeric"
+  for (nx in colnames(df)[ns]) {
+    df[[nx]] <- suppressWarnings(hs[[nx]](df[[nx]]))
   }
-  class(l) <- "parts"
-  l
+  df
 }
 
-mfwf_read_file <- function(., filename, parse_fields = TRUE) {
-  lines <- readLines(filename)
-  l <- list()
-  for (part_name in names(.$parts)) {
-    part <- .$parts[[part_name]]
-    idx <- template_detect_lines(., part, lines)
-    df <- read_fwf(
-      text = lines[idx], widths = part$widths,
-      colnames = part$colnames
-    )
-    l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, template_parser(.))
-    } else {
-      df
+flatten_names <- function(nx) {
+  for (ix in seq_along(nx)) {
+    if (!is.na(nx[ix])) {
+      last_name <- nx[ix]
     }
+    nx[ix] <- last_name
   }
-  class(l) <- "parts"
-  l
+  x <- nx |> str_match("^(\\w+)")
+  as.vector(x[, 2])
 }
 
-settlement_prices_read <- function(., filename, parse_fields = TRUE) {
-  doc <- read_html(filename)
+settlement_prices_read <- function(., filename, ...) {
+  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
+  refdate_ns <- XML::getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
+  if (length(refdate_ns) > 0) {
+    refdate <- str_match(XML::xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")[1, 1]
+  }
   xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  table <- html_element(doc, xpath = xpath)
-  if (is(table, "xml_node")) {
-    df <- html_table(table)
+  table <- XML::getNodeSet(doc, xpath)
+  if (inherits(table, "XMLNodeSet") && length(table) == 1) {
+    tb <- table[[1]]
+    vals <- sapply(tb[["tbody"]]["tr"], \(x) sapply(x["td"], XML::xmlValue))
+    dm <- matrix(vals, nrow = ncol(vals), byrow = TRUE)
   } else {
     return(NULL)
   }
-  colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
-}
+  dm <- cbind(dm, refdate)
+  colnames(dm) <- .$colnames
+  df <- dplyr::as_tibble(dm)
 
-options_open_interest_read <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  if (is.null(jason$Empresa)) {
-    return(NULL)
-  }
-  df <- do.call(rbind, jason$Empresa)
-  names(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
+  df <- .parse_columns(., df)
+  df[["commodity"]] <- flatten_names(df[["commodity"]])
+  df
 }
 
 cols_number <- c(
@@ -176,12 +75,10 @@ cols_number <- c(
   DP = 3, PRE = 3, TFP = 3, TP = 3, TR = 3
 )
 
-curve_read <- function(., filename, parse_fields = TRUE) {
-  text <- read_file(filename)
-
-  char_vec <- read_html(text) |>
-    html_nodes("td") |>
-    html_text()
+curve_read <- function(., filename, ...) {
+  text <- readr::read_file(filename)
+  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
+  char_vec <- XML::xmlSApply(XML::getNodeSet(doc, "//table/td"), XML::xmlValue)
 
   if (length(char_vec) == 0) {
     return(NULL)
@@ -191,7 +88,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
   curve_name <- ctx[1, 2]
 
   mtx <- str_match(text, "Atualizado em: (\\d{2}/\\d{2}/\\d{4})")
-  refdate <- mtx[1, 2] |> as.Date("%d/%m/%Y")
+  refdate <- mtx[1, 2]
 
   if (cols_number[curve_name] == 2) {
     idx1 <- seq(1, length(char_vec), by = 2)
@@ -199,7 +96,7 @@ curve_read <- function(., filename, parse_fields = TRUE) {
 
     cur_days <- char_vec[idx1]
     col1 <- char_vec[idx2]
-    col2 <- NA
+    col2 <- NA_character_
   } else {
     idx1 <- seq(1, length(char_vec), by = 3)
     idx2 <- seq(2, length(char_vec), by = 3)
@@ -210,259 +107,115 @@ curve_read <- function(., filename, parse_fields = TRUE) {
     col2 <- char_vec[idx3]
   }
 
-  df <- tibble(
+  df <- dplyr::tibble(
     refdate,
+    curve_name,
     cur_days,
     col1,
     col2
   )
-
   colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
+
+  .parse_columns(., df)
 }
 
-stock_indexes_composition_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  if (is.null(jason$results)) {
+pricereport_reader <- function(., filename, ...) {
+  count_handler <- \(name, attrs, .state) (.state <- .state + 1)
+  n_rows <- XML::xmlEventParse(
+    filename,
+    handlers = list(PricRpt = count_handler),
+    state = 0
+  )
+
+  fin_instrm_id_names <- c(Id = "security_id", Prtry = "security_proprietary", MktIdrCd = "security_market")
+  .tags <- Filter(\(x) !x %in% names(fin_instrm_id_names), fields_tags(.$fields))
+  fin_instrm_names <- stats::setNames(names(.tags), .tags)
+
+  start_handler <- function(name, attrs, .state) {
+    if (name == "PricRpt") {
+      .state$count <- .state$count + 1
+    } else if (name == "FinInstrmId") {
+      .state$collecting_fin_instrm_id <- TRUE
+    } else if (!.state$collecting_fin_instrm_id && name %in% names(fin_instrm_names)) {
+      .state$column <- fin_instrm_names[name]
+      .state$collecting <- TRUE
+    } else if (.state$collecting_fin_instrm_id && name %in% names(fin_instrm_id_names)) {
+      .state$column <- fin_instrm_id_names[name]
+      .state$collecting <- TRUE
+    }
+    .state
+  }
+  text_handler <- function(text, .state) {
+    if (.state$collecting) {
+      .state$data[[.state$column]][.state$count] <- text
+      .state$collecting <- FALSE
+    }
+    .state
+  }
+  end_handler <- function(name, .state) {
+    if (name == "FinInstrmId") {
+      .state$collecting_fin_instrm_id <- FALSE
+    }
+    .state
+  }
+  envir <- list()
+  envir$count <- 0
+  envir$collecting <- FALSE
+  envir$collecting_fin_instrm_id <- FALSE
+  envir$data <- list()
+  for (n in fin_instrm_names) envir$data[[n]] <- character(n_rows)
+  for (n in fin_instrm_id_names) envir$data[[n]] <- character(n_rows)
+  envir <- XML::xmlEventParse(filename,
+    handlers = list(
+      startElement = start_handler,
+      text = text_handler,
+      endElement = end_handler
+    ),
+    state = envir
+  )
+
+  df <- dplyr::as_tibble(envir$data)
+  df <- df[, fields_names(.$fields)]
+  .parse_columns(., df)
+}
+
+read_file_wrapper <- function(., filename, meta) {
+  download_args <- meta$download_args
+  if (!is.null(meta$extra_arg)) {
+    download_args[["extra_arg"]] <- meta$extra_arg
+  }
+  do.call(.$read_file, append(list(., filename), download_args))
+}
+
+stock_indexes_json_reader <- function(., filename, ...) {
+  args_ <- list(...)
+  jason <- try(jsonlite::fromJSON(filename), silent = TRUE)
+  if (inherits(jason, "try-error")) {
     return(NULL)
   }
-  df <- jason$results
-  df[["update"]] <- jason$header$update
-  df[["start_month"]] <- jason$header$startMonth
-  df[["end_month"]] <- jason$header$endMonth
-  df[["year"]] <- jason$header$year
-  colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
+  df <- dplyr::as_tibble(jason$results)
+  if (.$id %in% c("b3-indexes-theoretical-portfolio", "b3-indexes-current-portfolio")) {
+    df$header_part <- jason$header$part
+    df$header_theoricalQty <- jason$header$theoricalQty
+    df$header_reductor <- jason$header$reductor
+    df$index <- args_$index
+    df$refdate <- args_$extra_arg
+    if (utils::hasName(jason$header, "date")) {
+      df$portfolio_date <- strptime(jason$header$date, "%d/%m/%y")
+    }
+  } else if (.$id == "b3-indexes-historical-data") {
+    df$year <- args_$year
+    df$index <- args_$index
+  } else if (.$id == "b3-indexes-composition") {
+    df$refdate <- args_$extra_arg
+    df$update_date <- jason$header$update
+    df$start_month <- jason$header$startMonth
+    df$end_month <- jason$header$endMonth
+    df$year <- jason$header$year
   } else {
-    df
+    cli::cli_abort("Invalid template {.$id}")
   }
-}
-
-stock_indexes_json_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  l <- list()
-  for (part_name in names(.$parts)) {
-    part <- .$parts[[part_name]]
-    if (is.null(jason[[part$name]])) {
-      return(NULL)
-    }
-    df <- as.data.frame(jason[[part$name]])
-    colnames(df) <- part$colnames
-    l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, template_parser(.))
-    } else {
-      df
-    }
-  }
-  class(l) <- "parts"
-  l
-}
-
-indexreport_reader <- function(., filename, parse_fields = TRUE) {
-  doc <- xmlInternalTreeParse(filename)
-
-  indxrpt <- getNodeSet(doc, "//d:IndxRpt", c(d = "urn:bvmf.218.01.xsd"))
-  refdate_ <- xmlValue(indxrpt[[1]][["TradDt"]][["Dt"]])
-
-  indxs <- getNodeSet(doc, "//d:IndxInf", c(d = "urn:bvmf.218.01.xsd"))
-
-  df <- map_dfr(indxs, function(node) {
-    inf_node <- node[["SctyInf"]]
-
-    tibble(
-      refdate = refdate_,
-      symbol = xmlValue(inf_node[["SctyId"]][["TckrSymb"]]),
-      security_id = xmlValue(inf_node[["FinInstrmId"]][["OthrId"]][["Id"]]),
-      security_proprietary = xmlValue(
-        inf_node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]
-      ),
-      security_market = xmlValue(
-        inf_node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]
-      ),
-      asset_desc = xmlValue(node[["AsstDesc"]]),
-      settlement_price = xmlValue(node[["SttlmVal"]]),
-      open = xmlValue(inf_node[["OpngPric"]]),
-      min = xmlValue(inf_node[["MinPric"]]),
-      max = xmlValue(inf_node[["MaxPric"]]),
-      average = xmlValue(inf_node[["TradAvrgPric"]]),
-      close = xmlValue(inf_node[["ClsgPric"]]),
-      last_price = xmlValue(inf_node[["IndxVal"]]),
-      oscillation_val = xmlValue(inf_node[["OscnVal"]]),
-      rising_shares_number = xmlValue(node[["RsngShrsNb"]]),
-      falling_shares_number = xmlValue(node[["FlngShrsNb"]]),
-      stable_shares_number = xmlValue(node[["StblShrsNb"]])
-    )
-  })
 
   colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
-}
-
-pricereport_reader <- function(., filename, parse_fields = TRUE) {
-  doc <- xmlInternalTreeParse(filename)
-  negs <- getNodeSet(doc, "//d:PricRpt", c(d = "urn:bvmf.217.01.xsd"))
-
-  df <- map_dfr(negs, function(node) {
-    refdate <- xmlValue(node[["TradDt"]][["Dt"]])
-    ticker <- xmlValue(node[["SctyId"]][["TckrSymb"]])
-    attrib <- node[["FinInstrmAttrbts"]]
-
-    tibble(
-      refdate = refdate,
-      ticker_symbol = ticker,
-      security_id = xmlValue(node[["FinInstrmId"]][["OthrId"]][["Id"]]),
-      security_proprietary = xmlValue(
-        node[["FinInstrmId"]][["OthrId"]][["Tp"]][["Prtry"]]
-      ),
-      security_market = xmlValue(
-        node[["FinInstrmId"]][["PlcOfListg"]][["MktIdrCd"]]
-      ),
-      volume = xmlValue(attrib[["NtlFinVol"]]),
-      open_interest = xmlValue(attrib[["OpnIntrst"]]),
-      traded_contracts = xmlValue(attrib[["FinInstrmQty"]]),
-      best_ask_price = xmlValue(attrib[["BestAskPric"]]),
-      best_bid_price = xmlValue(attrib[["BestBidPric"]]),
-      first_price = xmlValue(attrib[["FrstPric"]]),
-      min_price = xmlValue(attrib[["MinPric"]]),
-      max_price = xmlValue(attrib[["MaxPric"]]),
-      last_price = xmlValue(attrib[["LastPric"]]),
-      average_price = xmlValue(attrib[["TradAvrgPric"]]),
-      regular_transactions_quantity = xmlValue(attrib[["RglrTxsQty"]]),
-      regular_traded_contracts = xmlValue(attrib[["RglrTraddCtrcts"]]),
-      regular_volume = xmlValue(attrib[["NtlRglrVol"]]),
-      nonregular_transactions_quantity = xmlValue(attrib[["NonRglrTxsQty"]]),
-      nonregular_traded_contracts = xmlValue(attrib[["NonRglrTraddCtrcts"]]),
-      nonregular_volume = xmlValue(attrib[["NtlNonRglrVol"]]),
-      oscillation_percentage = xmlValue(attrib[["OscnPctg"]]),
-      adjusted_quote = xmlValue(attrib[["AdjstdQt"]]),
-      adjusted_tax = xmlValue(attrib[["AdjstdQtTax"]]),
-      previous_adjusted_quote = xmlValue(attrib[["PrvsAdjstdQt"]]),
-      previous_adjusted_tax = xmlValue(attrib[["PrvsAdjstdQtTax"]]),
-      variation_points = xmlValue(attrib[["VartnPts"]]),
-      adjusted_value_contract = xmlValue(attrib[["AdjstdValCtrct"]]),
-    )
-  })
-
-  colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
-}
-
-company_listed_supplement_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  l <- list()
-  for (part_name in names(.$parts)) {
-    part <- .$parts[[part_name]]
-    if (part_name == "Info") {
-      df <- tibble(
-        stockCapital = ck_if_null(jason$stockCapital),
-        segment = ck_if_null(jason$segment),
-        quotedPerSharSince = ck_if_null(jason$quotedPerSharSince),
-        commonSharesForm = ck_if_null(jason$commonSharesForm),
-        preferredSharesForm = ck_if_null(jason$preferredSharesForm),
-        hasCommom = ck_if_null(jason$hasCommom),
-        hasPreferred = ck_if_null(jason$hasPreferred),
-        code = ck_if_null(jason$code),
-        codeCVM = ck_if_null(jason$codeCVM),
-        totalNumberShares = ck_if_null(jason$totalNumberShares),
-        numberCommonShares = ck_if_null(jason$numberCommonShares),
-        numberPreferredShares = ck_if_null(jason$numberPreferredShares),
-        roundLot = ck_if_null(jason$roundLot),
-        tradingName = ck_if_null(jason$tradingName),
-      )
-    } else {
-      df <- as.data.frame(jason[[part$name]][[1]])
-    }
-    if (length(df) == 0) {
-      next
-    }
-    colnames(df) <- part$colnames
-    l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, template_parser(.))
-    } else {
-      df
-    }
-  }
-  class(l) <- "parts"
-  l
-}
-
-company_details_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  l <- list()
-  for (part_name in names(.$parts)) {
-    part <- .$parts[[part_name]]
-    if (part_name == "Info") {
-      df <- tibble(
-        issuingCompany = ck_if_null(jason$issuingCompany),
-        companyName = ck_if_null(jason$companyName),
-        tradingName = ck_if_null(jason$tradingName),
-        cnpj = ck_if_null(jason$cnpj),
-        industryClassification = ck_if_null(jason$industryClassification),
-        industryClassificationEng = ck_if_null(jason$industryClassificationEng),
-        activity = ck_if_null(jason$activity),
-        website = ck_if_null(jason$website),
-        hasQuotation = ck_if_null(jason$hasQuotation),
-        status = ck_if_null(jason$status),
-        marketIndicator = ck_if_null(jason$marketIndicator),
-        market = ck_if_null(jason$market),
-        institutionCommon = ck_if_null(jason$institutionCommon),
-        institutionPreferred = ck_if_null(jason$institutionPreferred),
-        code = ck_if_null(jason$code),
-        codeCVM = ck_if_null(jason$codeCVM),
-        lastDate = ck_if_null(jason$lastDate),
-        hasEmissions = ck_if_null(jason$hasEmissions),
-        hasBDR = ck_if_null(jason$hasBDR),
-        typeBDR = ck_if_null(jason$typeBDR),
-        describleCategoryBVMF = ck_if_null(jason$describleCategoryBVMF),
-      )
-    } else {
-      df <- as.data.frame(jason[[part$name]])
-    }
-    if (length(df) == 0) {
-      next
-    }
-    colnames(df) <- part$colnames
-    l[[part_name]] <- if (parse_fields) {
-      parse_columns(df, part$colnames, part$handlers, template_parser(.))
-    } else {
-      df
-    }
-  }
-  class(l) <- "parts"
-  l
-}
-
-company_cash_dividends_reader <- function(., filename, parse_fields = TRUE) {
-  jason <- fromJSON(filename)
-  if (length(jason$results) == 0) {
-    return(NULL)
-  }
-  df <- as.data.frame(jason[["results"]])
-  colnames(df) <- .$colnames
-  if (parse_fields) {
-    parse_columns(df, .$colnames, .$handlers, template_parser(.))
-  } else {
-    df
-  }
-}
-
-ck_if_null <- function(x) {
-  if (is.null(x)) {
-    ""
-  } else {
-    x
-  }
+  .parse_columns(., df)
 }

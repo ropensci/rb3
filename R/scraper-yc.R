@@ -1,386 +1,220 @@
-#' Fetches Yield Curve Data from B3
+process_yc <- function(ds) {
+  template <- template_retrieve("b3-reference-rates")
+  ds <- ds |>
+    mutate(
+      dur = lubridate::ddays(.data$cur_days),
+      forward_date = lubridate::as_date(.data$refdate + .data$dur),
+      col1 = .data$col1 / 100,
+      col2 = .data$col2 / 100
+    ) |>
+    collect() |>
+    mutate(
+      biz_days = bizdays::bizdayse(.data$refdate, .data$cur_days, template$calendar)
+    ) |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "col1",
+      "col2",
+    )
+  ds
+}
+
+.yield_curve_get <- function(.curve_name = NULL) {
+  template <- template_retrieve("b3-reference-rates")
+  if (is.null(.curve_name)) {
+    template_dataset(template, layer = 2)
+  } else {
+    template_dataset(template, layer = 2) |> filter(.data$curve_name == .curve_name)
+  }
+}
+
+#' @title Retrieve Yield Curve Data
 #'
-#' Downloads yield curve data from B3 website
+#' @description
+#' These functions retrieve yield curve data, either for all available curves (`yc_get`) or
+#' specifically for:
+#' - the nominal rates curve (`yc_brl_get`).
+#' - the nominal rates curve for USD in Brazil - Cupom Cambial Limpo (`yc_usd_get`).
+#' - the real rates curve (`yc_ipca_get`).
+#'
+#' @details 
+#' The yield curve data is downloaded from the B3 website
 #' <https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp>.
-#' Particularly, we import data for
-#' - DI X Pre (`yc_get`)
-#' - Cupom limpo (`yc_usd_get`)
-#' - DI x IPCA (`yc_ipca_get`)
-#'
-#' See <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
+#' See the Curve Manual in this link
+#' <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
 #'
-#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
-#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
+#' @return
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
+#' 
+#' The returned data includes the following columns:
+#' - `curve_name`: Identifier of the yield curve (e.g., "PRE", "DOC", "DIC").
+#' - `refdate`: Reference date of the curve.
+#' - `forward_date`: Maturity date associated with the interest rate.
+#' - `biz_days`: Number of business days between `refdate` and `forward_date`.
+#' - `cur_days`: Number of calendar days between `refdate` and `forward_date`.
+#' - `r_252`: Annualized interest rate based on 252 business days.
+#' - `r_360`: Annualized interest rate based on 360 calendar days.
 #'
-#' @details
-#' `yc_get` returns the yield curve for the given date and `yc_mget` returns
-#' multiple yield curves for a given range of dates.
-#'
-#' @return A dataframe/tibble with yield curve data
-#'
-#' @name yc_get
-#'
+#' @name yc_xxx_get
+NULL
+
 #' @examples
 #' \dontrun{
-#' df_yc <- yc_mget(first_date = Sys.Date() - 5, last_date = Sys.Date())
+#' df <- yc_get() |>
+#'   filter(curve_name == "PRE") |>
+#'   collect()
+#' }
+#' @rdname yc_xxx_get
+#' @export 
+yc_get <- function() {
+  .yield_curve_get()
+}
+
+#' @rdname yc_xxx_get
+#' @examples
+#' \dontrun{
+#' df_yc <- yc_brl_get() |>
+#'   filter(refdate == Sys.Date()) |>
+#'   collect()
 #' head(df_yc)
 #' }
 #' @export
-yc_mget <- function(first_date = Sys.Date() - 5,
-                    last_date = Sys.Date(),
-                    by = 1,
-                    cache_folder = cachedir(),
-                    do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-
-  # find biz days in between
-  tpl <- template_retrieve("TaxasReferenciais")
-
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-
-  # use by to separate dates
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  # get data!
-  df_yc <- bind_rows(
-    log_map_process_along(date_vec, get_single_yc,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
+yc_brl_get <- function() {
+  .yield_curve_get("PRE") |>
+    dplyr::rename(r_252 = "col1", r_360 = "col2") |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "r_252",
+      "r_360",
     )
-  )
-
-  return(df_yc)
 }
 
-#' @rdname yc_get
+#' @rdname yc_xxx_get
 #' @examples
 #' \dontrun{
-#' df_yc <- yc_get(Sys.Date())
-#' head(df_yc)
-#' }
-#' @export
-yc_get <- function(refdate = Sys.Date(),
-                   cache_folder = cachedir(),
-                   do_cache = TRUE) {
-  get_single_yc(1, as.Date(refdate), cache_folder, do_cache)
-}
-
-#' Fetches a single data
-#'
-#' @param idx_date index of data (1.. n_dates)
-#' @param date_vec Vector of dates
-#' @inheritParams yc_get
-#'
-#' @return A dataframe
-#' @noRd
-get_single_yc <- function(idx_date,
-                          date_vec,
-                          cache_folder,
-                          do_cache) {
-  tpl_name <- "TaxasReferenciais"
-  tpl <- template_retrieve(tpl_name)
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
-    refdate = refdate,
-    curve_name = "PRE"
-  )
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = df$refdate,
-        cur_days = df$cur_days,
-        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = add.bizdays(
-          refdate,
-          .data$biz_days, tpl$calendar
-        ),
-        r_252 = df$col1 / 100,
-        r_360 = df$col2 / 100
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Error: no data found for date {refdate}",
-      refdate = refdate
-    )
-    return(NULL)
-  }
-}
-
-#' @details
-#' `yc_ipca_get` returns the yield curve of real interest rates
-#' for the given date and `yc_ipca_mget` returns
-#' multiple yield curves of real interest rates for a given range of dates.
-#' These real interest rates consider IPCA as its inflation index.
-#'
-#' @rdname yc_get
-#' @examples
-#' \dontrun{
-#' df_yc_ipca <- yc_ipca_mget(
-#'   first_date = Sys.Date() - 5,
-#'   last_date = Sys.Date()
-#' )
+#' df_yc_ipca <- yc_ipca_get() |>
+#'   filter(refdate == Sys.Date()) |>
+#'   collect()
 #' head(df_yc_ipca)
 #' }
 #' @export
-yc_ipca_mget <- function(first_date = Sys.Date() - 5,
-                         last_date = Sys.Date(),
-                         by = 1,
-                         cache_folder = cachedir(),
-                         do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-
-  # find biz days in between
-  tpl <- template_retrieve("TaxasReferenciais")
-
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-
-  # use by to separate dates
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  # get data!
-  df_yc <- bind_rows(
-    log_map_process_along(date_vec, get_single_yc_ipca,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
+yc_ipca_get <- function() {
+  .yield_curve_get("DIC") |>
+    dplyr::rename(r_252 = "col1") |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "r_252"
     )
-  )
-
-  return(df_yc)
 }
 
-#' @rdname yc_get
+#' @rdname yc_xxx_get
 #' @examples
 #' \dontrun{
-#' df_yc_ipca <- yc_ipca_get(Sys.Date())
-#' head(df_yc_ipca)
+#' df_yc_usd <- yc_usd_get() |>
+#'   filter(refdate == Sys.Date()) |>
+#'   collect()
+#' head(df_yc_usd)
 #' }
 #' @export
-yc_ipca_get <- function(refdate = Sys.Date(),
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  get_single_yc_ipca(1, as.Date(refdate), cache_folder, do_cache)
-}
-
-#' Fetches a single data
-#'
-#' @param idx_date index of data (1.. n_dates)
-#' @param date_vec Vector of dates
-#' @inheritParams yc_get
-#'
-#' @return A dataframe
-#' @noRd
-get_single_yc_ipca <- function(idx_date,
-                               date_vec,
-                               cache_folder,
-                               do_cache) {
-  tpl_name <- "TaxasReferenciais"
-  tpl <- template_retrieve(tpl_name)
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
-    refdate = refdate,
-    curve_name = "DIC"
-  )
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = df$refdate,
-        cur_days = df$cur_days,
-        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = add.bizdays(
-          refdate,
-          .data$biz_days, tpl$calendar
-        ),
-        r_252 = df$col1 / 100
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Error: no data found for date {refdate}",
-      refdate = refdate
+yc_usd_get <- function() {
+  .yield_curve_get("DOC") |>
+    dplyr::rename(r_360 = "col1") |>
+    select(
+      "curve_name",
+      "refdate",
+      "forward_date",
+      "cur_days",
+      "biz_days",
+      "r_360"
     )
-    return(NULL)
-  }
 }
 
-#' @rdname yc_get
-#'
+.yc_with_futures <- function(yc, .refdate, .commodity, .expr) {
+  template <- template_retrieve("b3-reference-rates")
+  fut <- futures_get()
+  fut_di1 <- fut |>
+    filter(.data$commodity == .commodity, .data$refdate == .refdate) |>
+    collect() |>
+    mutate(
+      forward_date = maturity2date(.data$maturity_code, .expr) |> following(template$calendar)
+    ) |>
+    select("refdate", "forward_date", "symbol")
+
+  yc |>
+    filter(.data$refdate == .refdate) |>
+    dplyr::left_join(fut_di1, by = c("refdate", "forward_date")) |>
+    collect() |>
+    dplyr::arrange(.data$forward_date)
+}
+
 #' @details
-#' `yc_usd_get` returns the yield curve of nominal interest rates for USD in
-#' Brazil for the given date and `yc_usd_mget` returns
-#' multiple yield curves of nominal interest rates for USD in Brazil for a
-#' given range of dates.
-#' These real interest rates consider IPCA as its inflation index.
+#' These functions retrieve yield curve data merged with corresponding futures contract information:
+#' - `yc_brl_with_futures_get()`: BRL nominal rates with DI1 futures contracts
+#' - `yc_usd_with_futures_get()`: USD rates (Cupom Cambial) with DDI futures contracts
+#' - `yc_ipca_with_futures_get()`: Real (inflation-indexed) rates with DAP futures contracts
 #'
-#' @examples
-#' \dontrun{
-#' df_yc_usd <- yc_usd_mget(
-#'   first_date = Sys.Date() - 5,
-#'   last_date = Sys.Date()
-#' )
-#' head(df_yc_usd)
-#' }
-#' @export
-yc_usd_mget <- function(first_date = Sys.Date() - 5,
-                        last_date = Sys.Date(),
-                        by = 1,
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-
-  # find biz days in between
-  tpl <- template_retrieve("TaxasReferenciais")
-
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-
-  # use by to separate dates
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  # get data!
-  df_yc <- bind_rows(
-    log_map_process_along(date_vec, get_single_yc_usd,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-
-  return(df_yc)
-}
-
-#' @rdname yc_get
-#' @examples
-#' \dontrun{
-#' df_yc_usd <- yc_usd_get(Sys.Date())
-#' head(df_yc_usd)
-#' }
-#' @export
-yc_usd_get <- function(refdate = Sys.Date(),
-                       cache_folder = cachedir(),
-                       do_cache = TRUE) {
-  get_single_yc_usd(1, as.Date(refdate), cache_folder, do_cache)
-}
-
-#' Fetches a single data
+#' These functions combine data from B3 Reference Rates (`b3-reference-rates`) and
+#' Futures Settlement Prices (`b3-futures-settlement-prices`) to create comprehensive yield curve datasets.
+#' The resulting data highlights key vertices along the curve with their corresponding futures contracts,
+#' providing insight into the term structure of interest rates.
 #'
-#' @param idx_date index of data (1.. n_dates)
-#' @param date_vec Vector of dates
-#' @inheritParams yc_get
+#' Each function requires a specific reference date to prevent excessive memory usage and
+#' ensure optimal performance.
 #'
-#' @return A dataframe
-#' @noRd
-get_single_yc_usd <- function(idx_date,
-                              date_vec,
-                              cache_folder,
-                              do_cache) {
-  tpl_name <- "TaxasReferenciais"
-  tpl <- template_retrieve(tpl_name)
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl_name, cache_folder, do_cache,
-    refdate = refdate,
-    curve_name = "DOC"
-  )
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl_name, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = df$refdate,
-        cur_days = df$cur_days,
-        biz_days = bizdayse(refdate, .data$cur_days, tpl$calendar),
-        forward_date = add.bizdays(
-          refdate,
-          .data$biz_days, tpl$calendar
-        ),
-        r_360 = df$col1 / 100
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Error: no data found for date {refdate}",
-      refdate = refdate
-    )
-    return(NULL)
-  }
-}
-
-#' Creates superset with yield curves and futures
-#'
-#' Creates superset with yield curves and future contracts indicating the
-#' terms that match with futures contracts maturities.
-#'
-#' @param yc yield curve dataset
-#' @param fut futures dataset
+#' @param refdate A Date object specifying the reference date for which to retrieve data
 #'
 #' @return
-#' A dataframe with yield curve flagged with futures maturities.
-#'
-#' @name yc_superset
+#' The functions `yc_brl_with_futures_get()`, `yc_usd_with_futures_get()` and `yc_ipca_with_futures_get()` return
+#' a `data.frame` containing the yield curve data merged with futures contract information.
+#' The data is pre-collected (not lazy) and includes all columns from the respective yield curve
+#' function plus a `symbol` column identifying the corresponding futures contract.
 #'
 #' @examples
 #' \dontrun{
-#' fut <- futures_get(Sys.Date() - 1)
-#'
-#' yc <- yc_get(Sys.Date() - 1)
-#' yc_superset(yc, fut)
-#'
-#' yc_usd <- yc_usd_get(Sys.Date() - 1)
-#' yc_usd_superset(yc_usd, fut)
-#'
-#' yc_ipca <- yc_ipca_get(Sys.Date() - 1)
-#' yc_ipca_superset(yc_ipca, fut)
+#' # Get data for the last business day
+#' date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
+#' 
+#' # Retrieve BRL yield curve with DI1 futures
+#' brl_curve <- yc_brl_with_futures_get(date)
+#' head(brl_curve)
+#' 
+#' # Retrieve USD yield curve with DDI futures
+#' usd_curve <- yc_usd_with_futures_get(date)
+#' 
+#' # Retrieve inflation-indexed yield curve with DAP futures
+#' ipca_curve <- yc_ipca_with_futures_get(date)
 #' }
+#'
+#' @rdname superdataset
 #' @export
-yc_superset <- function(yc, fut) {
-  fut_di1 <- fut |>
-    filter(.data$commodity == "DI1") |>
-    mutate(forward_date = maturity2date(.data$maturity_code) |>
-      following("Brazil/ANBIMA")) |>
-    select("refdate", "forward_date", "symbol")
-
-  yc |>
-    left_join(fut_di1, by = c("refdate", "forward_date"))
+yc_brl_with_futures_get <- function(refdate) {
+  .yc_with_futures(yc_brl_get(), refdate, "DI1", "first day")
 }
 
-#' @rdname yc_superset
+#' @rdname superdataset
 #' @export
-yc_usd_superset <- function(yc, fut) {
-  fut_di1 <- fut |>
-    filter(.data$commodity == "DDI") |>
-    mutate(forward_date = maturity2date(.data$maturity_code) |>
-      following("Brazil/ANBIMA")) |>
-    select("refdate", "forward_date", "symbol")
-
-  yc |>
-    left_join(fut_di1, by = c("refdate", "forward_date"))
+yc_usd_with_futures_get <- function(refdate) {
+  .yc_with_futures(yc_usd_get(), refdate, "DDI", "first day")
 }
 
-#' @rdname yc_superset
+#' @rdname superdataset
 #' @export
-yc_ipca_superset <- function(yc, fut) {
-  fut_di1 <- fut |>
-    filter(.data$commodity == "DAP") |>
-    mutate(forward_date = maturity2date(.data$maturity_code, "15th day") |>
-      following("Brazil/ANBIMA")) |>
-    select("refdate", "forward_date", "symbol")
-
-  yc |>
-    left_join(fut_di1, by = c("refdate", "forward_date"))
+yc_ipca_with_futures_get <- function(refdate) {
+  .yc_with_futures(yc_ipca_get(), refdate, "DAP", "15th day")
 }

@@ -1,0 +1,56 @@
+id: b3-reference-rates
+filename: ~
+filetype: CUSTOM
+description: Taxas referenciais
+locale: pt
+calendar: Brazil/ANBIMA
+downloader:
+  function: curve_download
+  url: https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp
+  verifyssl: false
+  format: html
+  encoding: latin1
+  args:
+    refdate: Data de referência
+    curve_name: "Identificação da curva: PRE (juros nominais), DIC (juros reais), DOC (cupom cambial limpo)"
+reader:
+  function: curve_read
+  locale:
+    decimal_mark: ','
+    grouping_mark: '.'
+writers:
+  input:
+    partition: [curve_name, refdate]
+  staging:
+    function: process_yc
+    partition: [curve_name, refdate]
+    columns:
+      curve_name: character
+      refdate: Date
+      forward_date: Date
+      cur_days: integer
+      biz_days: integer
+      col1: numeric
+      col2: numeric
+fields:
+- name: refdate
+  description: Data de referência
+  handler:
+    type: Date
+    format: '%d/%m/%Y'
+- name: curve_name
+  description: Nome da curva
+  handler:
+    type: character
+- name: cur_days
+  description: Dias corridos
+  handler:
+    type: integer
+- name: col1
+  description: Taxa na base 252 ou taxa na base 360 ou preço futuro
+  handler:
+    type: number
+- name: col2
+  description: Taxa na base 360 ou NA
+  handler:
+    type: number

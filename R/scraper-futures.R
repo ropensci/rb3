@@ -1,23 +1,23 @@
-flatten_names <- function(nx) {
-  for (ix in seq_along(nx)) {
-    if (nx[ix] != "") {
-      last_name <- nx[ix]
-    }
-    nx[ix] <- last_name
-  }
-  x <- nx |> str_match("^(\\w+)")
-  as.vector(x[, 2])
-}
-
-#' Get month from maturity code
+#' Convert Maturity Code to Corresponding Month
 #'
-#' Get the corresponding month for the string that represent maturities of
-#' futures contracts.
+#' This function takes a character string representing the maturity code of a 
+#' futures contract and returns the corresponding month as an integer. It supports 
+#' both the new and old maturity code formats used in futures contracts.
 #'
-#' @param x a character with letters that represent the month of maturity of
-#'        futures contracts.
+#' @param x A character vector with the maturity code(s) of futures contracts. 
+#'          The codes can be either a single letter (e.g., "F", "G", "H", ...) 
+#'          representing the new code format or a three-letter abbreviation (e.g., 
+#'          "JAN", "FEV", "MAR", ...) representing the old code format.
 #'
-#' @return a vector of integers
+#' @details
+#' The function distinguishes between two maturity code formats: 
+#' - The **new code format** uses a single letter (e.g., "F" = January, 
+#'   "G" = February, etc.).
+#' - The **old code format** uses a three-letter abbreviation (e.g., 
+#'   "JAN" = January, "FEV" = February, etc.).
+#' 
+#' @return A vector of integers corresponding to the months of the year, where 
+#'         1 = January, 2 = February, ..., 12 = December.
 #'
 #' @examples
 #' code2month(c("F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"))
@@ -47,15 +47,26 @@ code2month_oldcode <- function(x) {
   m[x] |> unname()
 }
 
-#' Get maturity date from maturity code
+#' Convert Maturity Code to Date
 #'
+#' This function converts a vector of maturity codes into actual dates.
+#'
+#' @param x A character vector containing maturity codes.
+#' @param expr A string specifying the expression of the date, default is "first day".
+#' @param refdate An optional reference date used to determine the base year for old codes.
+#'
+#' @return A vector of dates corresponding to the input maturity codes.
+
+#' Convert Maturity Code to Date
+#'
+#' This function converts a vector of maturity codes into actual dates.
 #' Get the corresponding maturity date for the three characters string
 #' that represent maturity of futures contracts.
 #'
 #' @param x a character vector with three letters string that represent
 #'        maturity of futures contracts.
-#' @param expr a string which indicates the day to use in maturity date.
-#'        See `bizdays::getdate` for more details on this argument.
+#' @param expr a string which indicates the day to use in maturity date, default is "first day".
+#'        See `bizdays::getdate` for more details on this argument
 #' @param refdate reference date to be passed. It is necessary to convert old
 #'        maturities like JAN0, that can be Jan/2000 or Jan/2010. If `refdate`
 #'        is greater that 2001-01-01 JAN0 is converted to Jan/2010, otherwise,
@@ -99,88 +110,57 @@ maturity2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
   getdate(expr, paste0(year, "-", month), "Brazil/BMF") |> as.character()
 }
 
-#' Get futures prices from trading session settlements page
+#' @title Retrieves B3 Futures Settlement Prices
+#' 
+#' @description
+#' This function fetches settlement price data for B3 futures contracts.
+#' This function retrieves futures settlement prices from the B3 dataset,
+#' adding a `symbol` column that combines `commodity` and `maturity_code`.
 #'
-#' Scrape page <https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/>
-#' to get futures prices.
-#'
-#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
-#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
-#'
-#' `futures_get` returns the future contracts for the given date and
-#' `futures_mget` returns future contracts for multiple dates in a given range.
-#'
-#' @return `data.frame` with futures prices.
-#'
-#' @name futures_get
-#'
-#' @examples
-#' \dontrun{
-#' df <- futures_get("2022-04-18", "2022-04-22")
+#' @return
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
+#' 
+#' The returned data includes the following columns:
+#' \itemize{
+#'   \item \code{refdate}: Reference date for the prices.
+#'   \item \code{symbol}: Futures contract symbol, created by concatenating the commodity code and the maturity code.
+#'   \item \code{commodity}: Commodity code of the futures contract.
+#'   \item \code{maturity_code}: Maturity code of the futures contract.
+#'   \item \code{previous_price}: Closing price from the previous trading day.
+#'   \item \code{price}: Current price of the futures contract.
+#'   \item \code{price_change}: Price variation compared to the previous day.
+#'   \item \code{settlement_value}: Settlement value of the futures contract.
 #' }
-#' @export
-futures_mget <- function(first_date = Sys.Date() - 5,
-                         last_date = Sys.Date(),
-                         by = 1,
-                         cache_folder = cachedir(),
-                         do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-  date_vec <- bizseq(first_date, last_date, "Brazil/BMF")
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-  df <- bind_rows(
-    log_map_process_along(date_vec, single_futures_get,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-  return(df)
-}
-
-#' @rdname futures_get
+#'
+#' @source [B3 Market Data](https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/)
+#' 
 #' @examples
 #' \dontrun{
-#' df_fut <- futures_get(Sys.Date())
+#' df_fut <- futures_get() |> filter(refdate == Sys.Date()) |> collect()
 #' head(df_fut)
 #' }
 #' @export
-futures_get <- function(refdate = Sys.Date(),
-                        cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  single_futures_get(1, as.Date(refdate), cache_folder, do_cache)
+futures_get <- function() {
+  template <- template_retrieve("b3-futures-settlement-prices")
+  template_dataset(template, layer = 2)
 }
 
-single_futures_get <- function(idx_date,
-                               date_vec,
-                               cache_folder = cachedir(),
-                               do_cache = TRUE) {
-  tpl <- "AjustesDiarios"
-  refdate <- date_vec[idx_date]
-  fname <- download_marketdata(tpl, cache_folder, do_cache, refdate = refdate)
-  if (!is.null(fname)) {
-    df <- read_marketdata(fname, tpl, TRUE, do_cache)
-    if (!is.null(df)) {
-      tibble(
-        refdate = as.Date(refdate),
-        commodity = flatten_names(df$mercadoria),
-        maturity_code = df$vencimento,
-        symbol = paste0(.data$commodity, .data$maturity_code),
-        price_previous = df$pu_anterior,
-        price = df$pu_atual,
-        change = df$variacao,
-        settlement_value = df$ajuste
-      )
-    } else {
-      NULL
-    }
-  } else {
-    alert("danger", "Failed download")
-    return(NULL)
-  }
+process_futures <- function(ds) {
+  ds |>
+    mutate(
+      symbol = paste0(.data$commodity, .data$maturity_code),
+    ) |>
+    select(
+      "refdate",
+      "symbol",
+      "commodity",
+      "maturity_code",
+      "previous_price",
+      "price",
+      "price_change",
+      "settlement_value",
+    )
 }

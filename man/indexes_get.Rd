@@ -4,12 +4,7 @@
 \alias{indexes_get}
 \title{Get B3 indexes available}
 \usage{
-indexes_get(cache_folder = cachedir(), do_cache = TRUE)
-}
-\arguments{
-\item{cache_folder}{Location of cache folder (default = cachedir())}
-
-\item{do_cache}{Whether to use cache or not (default = TRUE)}
+indexes_get()
 }
 \value{
 a character vector with symbols of indexes available

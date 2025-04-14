@@ -3,7 +3,7 @@ Title: Download and Parse Public Data Released by B3 Exchange
 Description: Download and parse public files released by B3 and convert them
     into useful formats and data structures common to data analysis
     practitioners.
-Version: 0.0.12
+Version: 0.1.0
 Authors@R: c(person("Wilson", "Freitas",
                     email = "wilson.freitas@gmail.com",
                     role = c("aut", "cre")),
@@ -17,26 +17,25 @@ Depends:
 Imports:
     bizdays,
     stringr,
+    stringi,
     cli,
     readr,
     dplyr,
-    rvest,
+    arrow,
     httr,
     jsonlite,
     purrr,
     rlang,
-    methods,
     yaml,
     digest,
     base64enc,
-    XML
+    XML,
+    R.utils,
+    lubridate,
+    duckdb
 Suggests:
     testthat,
     knitr,
-    DT,
-    miniUI,
-    shiny,
-    xtable,
     rmarkdown,
     ggplot2,
     covr,
@@ -47,30 +46,24 @@ Suggests:
     tidyr,
     vcr (>= 0.6.0)
 Collate:
-    'rb3-package.R'
-    'util.R'
-    'transmute.R'
     'fields.R'
     'handlers.R'
     'registry.R'
     'template.R'
-    'marketdata.R'
+    'meta.R'
+    'read-marketdata.R'
     'download-data.R'
-    'file.R'
-    'convert_to.R'
     'scraper-futures.R'
-    'scraper-yc.R'
     'scraper-cotahist.R'
+    'scraper-yc.R'
     'scraper-indexes.R'
-    'scraper-company.R'
-    'addin-show-templates.R'
-    'addin-display-template.R'
     'readers.R'
     'downloaders.R'
+    'rb3-package.R'
     'zzz.R'
 BugReports: https://github.com/ropensci/rb3/issues
 URL: https://github.com/ropensci/rb3,
-    http://ropensci.github.io/rb3/
+    https://ropensci.github.io/rb3/
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

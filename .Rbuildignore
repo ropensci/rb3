@@ -6,8 +6,8 @@ legacy
 b3-docs
 .lintr
 inst\extdata\big-files
-templates_load.r
-templates_save.r
+^README\.R$
+^README\.RData$
 .github
 ^_pkgdown\.yml$
 ^docs$
@@ -22,3 +22,8 @@ examples
 ^\.dockerignore$
 ^\.devcontainer$
 ^\.vscode$
+.Renviron
+rb3-cache
+vignettes/rb3-data
+vignettes/*.R
+Makefile

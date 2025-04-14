@@ -2,48 +2,39 @@
 % Please edit documentation in R/scraper-futures.R
 \name{futures_get}
 \alias{futures_get}
-\alias{futures_mget}
-\title{Get futures prices from trading session settlements page}
-\usage{
-futures_mget(
-  first_date = Sys.Date() - 5,
-  last_date = Sys.Date(),
-  by = 1,
-  cache_folder = cachedir(),
-  do_cache = TRUE
-)
-
-futures_get(refdate = Sys.Date(), cache_folder = cachedir(), do_cache = TRUE)
+\title{Retrieves B3 Futures Settlement Prices}
+\source{
+\href{https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/}{B3 Market Data}
 }
-\arguments{
-\item{first_date}{First date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
-
-\item{last_date}{Last date ("YYYY-MM-DD") to \code{yc_mget} multiple curves}
-
-\item{by}{Number of days in between fetched dates (default = 1) in \code{yc_mget}}
-
-\item{cache_folder}{Location of cache folder (default = cachedir())}
-
-\item{do_cache}{Whether to use cache or not (default = TRUE)
-
-\code{futures_get} returns the future contracts for the given date and
-\code{futures_mget} returns future contracts for multiple dates in a given range.}
-
-\item{refdate}{Specific date ("YYYY-MM-DD") to \code{yc_get} single curve}
+\usage{
+futures_get()
 }
 \value{
-\code{data.frame} with futures prices.
+An \code{arrow_dplyr_query} or \code{ArrowObject}, representing a lazily evaluated query. The underlying data is not
+collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+memory usage.
+To trigger evaluation and return the results as an R \code{tibble}, use \code{collect()}.
+
+The returned data includes the following columns:
+\itemize{
+\item \code{refdate}: Reference date for the prices.
+\item \code{symbol}: Futures contract symbol, created by concatenating the commodity code and the maturity code.
+\item \code{commodity}: Commodity code of the futures contract.
+\item \code{maturity_code}: Maturity code of the futures contract.
+\item \code{previous_price}: Closing price from the previous trading day.
+\item \code{price}: Current price of the futures contract.
+\item \code{price_change}: Price variation compared to the previous day.
+\item \code{settlement_value}: Settlement value of the futures contract.
+}
 }
 \description{
-Scrape page \url{https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/}
-to get futures prices.
+This function fetches settlement price data for B3 futures contracts.
+This function retrieves futures settlement prices from the B3 dataset,
+adding a \code{symbol} column that combines \code{commodity} and \code{maturity_code}.
 }
 \examples{
 \dontrun{
-df <- futures_get("2022-04-18", "2022-04-22")
-}
-\dontrun{
-df_fut <- futures_get(Sys.Date())
+df_fut <- futures_get() |> filter(refdate == Sys.Date()) |> collect()
 head(df_fut)
 }
 }

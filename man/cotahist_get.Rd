@@ -2,50 +2,66 @@
 % Please edit documentation in R/scraper-cotahist.R
 \name{cotahist_get}
 \alias{cotahist_get}
-\title{Get COTAHIST data from B3}
+\title{Access COTAHIST datasets}
 \usage{
-cotahist_get(
-  refdate,
-  type = c("yearly", "monthly", "daily"),
-  cache_folder = cachedir(),
-  do_cache = TRUE
-)
+cotahist_get(type = c("yearly", "monthly", "daily"))
 }
 \arguments{
-\item{refdate}{the reference date used to download the file. This reference
-date will be formatted as year/month/day according to the given type.
-Accepts ISO formatted date strings.}
-
-\item{type}{a string with \code{yearly} for all data of the given year, \code{monthly}
-for all data of the given month and \code{daily} for the given day.}
-
-\item{cache_folder}{Location of cache folder (default = cachedir())}
-
-\item{do_cache}{Whether to use cache or not (default = TRUE)
-
-All valuable information is in the \code{HistoricalPrices} element of the
-returned list.
-\code{Header} and \code{Trailer} have informations regarding file generation.
-The \code{HistoricalPrices} element has a data.frame with data of many assets
-traded in the stock exchange: stocks, bdrs, funds, ETFs, equity options,
-forward contracts on equities and a few warrants due to some corporate
-events.}
+\item{type}{A string specifying the dataset to be used:
+\code{"daily"}, \code{"monthly"}, or \code{"yearly"}.}
 }
 \value{
-a list with 3 data.frames: \code{Header}, \code{HistoricalPrices}, \code{Trailer}.
+An \code{arrow_dplyr_query} or \code{ArrowObject}, representing a lazily evaluated query. The underlying data is not
+collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+memory usage.
+To trigger evaluation and return the results as an R \code{tibble}, use \code{collect()}.
 }
 \description{
-Download COTAHIST file and parses it returning structured data into R
-objects.
+The COTAHIST files are available with daily, monthly, and yearly data.
+Therefore, the datasets correspond to these periods (\code{daily}, \code{monthly}, \code{yearly}).
+See \code{\link{download_marketdata}} and \code{\link{read_marketdata}} for
+instructions on how to download the files and create the datasets.
+}
+\details{
+The COTAHIST files contain historical quotation data (\emph{Cotações Históricas})
+for stocks, stock options, stock forward contracts, ETFs, ETF options,
+BDRs, UNITs, REITs (FIIs - \emph{Fundos Imobiliários}), FIAGROs (\emph{Fundos da Agroindústria}),
+and FIDCs (\emph{Fundos de Direitos Creditórios}). These files from B3 hold
+the oldest available information. The earliest annual file available dates back to 1986.
+However, it is not recommended to use data prior to 1995 due to the monetary
+stabilization process in 1994 (Plano Real).
+
+Note that the prices in the files are not adjusted for corporate actions.
+As a result, only ETF series can be used without issues.
+
+Before using the dataset, it is necessary to download the files
+using the \code{\link{download_marketdata}} function and create the datasets
+with the \code{\link{read_marketdata}} function.
 }
 \examples{
 \dontrun{
 # get all data to the year of 2001
-df_2001 <- cotahist_get("2001-01-01", "yearly")
-# get data of January of 2001
-df_200101 <- cotahist_get("2001-01-01", "monthly")
-# get data of 2001-01-02
-df_daily <- cotahist_get("2001-01-02", "daily")
+meta <- download_marketdata("b3-cotahist-yearly", year = 2001)
+read_marketdata(meta)
+ds_yearly <- cotahist_get()
+
+# Earliest available annual file: 1986
+# Recommended starting point: 1995 (after Plano Real)
+}
+\dontrun{
+# To obtain data from January 2, 2014, the earliest available date:
+meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2014-01-02"))
+read_marketdata(meta)
+ds_daily <- cotahist_get("daily")
+}
+\dontrun{
+# Once you download more dates, the data downloaded before remains stored and you can filter
+# any date you want.
+meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2014-01-03"))
+read_marketdata(meta)
+df_daily <- cotahist_get("daily") |>
+  filter(refdate == "2014-01-03") |>
+  collect()
 }
 
 }

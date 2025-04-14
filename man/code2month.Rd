@@ -2,20 +2,33 @@
 % Please edit documentation in R/scraper-futures.R
 \name{code2month}
 \alias{code2month}
-\title{Get month from maturity code}
+\title{Convert Maturity Code to Corresponding Month}
 \usage{
 code2month(x)
 }
 \arguments{
-\item{x}{a character with letters that represent the month of maturity of
-futures contracts.}
+\item{x}{A character vector with the maturity code(s) of futures contracts.
+The codes can be either a single letter (e.g., "F", "G", "H", ...)
+representing the new code format or a three-letter abbreviation (e.g.,
+"JAN", "FEV", "MAR", ...) representing the old code format.}
 }
 \value{
-a vector of integers
+A vector of integers corresponding to the months of the year, where
+1 = January, 2 = February, ..., 12 = December.
 }
 \description{
-Get the corresponding month for the string that represent maturities of
-futures contracts.
+This function takes a character string representing the maturity code of a
+futures contract and returns the corresponding month as an integer. It supports
+both the new and old maturity code formats used in futures contracts.
+}
+\details{
+The function distinguishes between two maturity code formats:
+\itemize{
+\item The \strong{new code format} uses a single letter (e.g., "F" = January,
+"G" = February, etc.).
+\item The \strong{old code format} uses a three-letter abbreviation (e.g.,
+"JAN" = January, "FEV" = February, etc.).
+}
 }
 \examples{
 code2month(c("F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"))

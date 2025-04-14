@@ -1,3 +1,8 @@
+tag <- function(x) {
+  class(x) <- c("character", "tag")
+  x
+}
+
 width <- function(x) {
   x <- as.numeric(x)
   class(x) <- c("numeric", "width")
@@ -47,7 +52,7 @@ to_factor_handler <- function(levels = NULL, labels = levels) {
 
 to_numeric_handler <- function(dec = 0, sign = "") {
   handler <- function(x) {
-    if (is(dec, "character")) {
+    if (inherits(dec, "character")) {
       dec <- get(dec, envir = parent.frame())
     }
     if (!sign %in% c("+", "-", "")) {

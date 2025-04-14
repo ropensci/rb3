@@ -1,0 +1,13 @@
+id: template-test-error
+filename: ~
+filetype: FWF
+description: Test template
+downloader:
+  function: simple_download
+  url: https://httpbin.org/status/500
+  format: html
+fields:
+- name: test
+  description: Test field
+  handler:
+    type: character

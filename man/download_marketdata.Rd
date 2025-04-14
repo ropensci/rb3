@@ -2,35 +2,78 @@
 % Please edit documentation in R/download-data.R
 \name{download_marketdata}
 \alias{download_marketdata}
-\title{Download datasets}
+\title{Download Raw Market Data Files from B3}
 \usage{
-download_marketdata(template, cache_folder = cachedir(), do_cache = TRUE, ...)
+download_marketdata(template, do_cache = FALSE, ...)
 }
 \arguments{
-\item{template}{the template name}
+\item{template}{character string specifying the template name}
 
-\item{cache_folder}{Location of cache folder (default = cachedir())}
+\item{do_cache}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
 
-\item{do_cache}{a logical indicating if the existing file (previously
-downloaded) should be used or replaced.}
-
-\item{...}{additional arguments}
+\item{...}{additional arguments passed to template-specific download functions}
 }
 \value{
-a string with the file path of downloaded file or \code{NULL} if download
-fails.
+Returns a meta object containing the downloaded file's metadata:
+\itemize{
+\item template - Name of the template used
+\item download_checksum - Unique hash code for the download
+\item download_args - Arguments passed via ...
+\item downloaded - Path to the downloaded file
+\item created - Timestamp of file creation
+}
 
-This function downloads data sets for those templates that specifies a
-\code{downloader} attribute.
-If \code{dest} is not provided, \code{cache_folder} is used and a file with template
-id is saved inside it.
+A meta object containing the downloaded file's metadata.
+This meta object is used with the \code{read_marketdata} function to read the downloaded file.
 }
 \description{
-Download datasets for a given template.
+Downloads and caches financial market datasets from B3 (Brazilian Stock Exchange)
+based on predefined templates. Handles file downloading and caching.
+}
+\details{
+The function follows this workflow:
+\enumerate{
+\item Checks if requested data exists in cache
+\item Downloads data if needed (based on template specifications)
+\item Manages file compression and storage
+\item Maintains metadata for tracking and verification
+}
+
+Files are organized in the \code{rb3.cachedir} as follows:
+\itemize{
+\item Metadata: JSON files in 'meta/' directory, named by download_checksum
+\item Data: Gzipped files in 'raw/' directory, named by file's checksum
+}
+
+Templates are YAML documents that define:
+\itemize{
+\item Download parameters and methods
+\item Data reading instructions
+\item Dataset structure (columns, types)
+}
+
+Templates can be found using \code{list_templates()} and retrieved with \code{template_retrieve()}.
 }
 \examples{
 \dontrun{
-fname <- download_marketdata("CDIIDI")
+# Download daily market data
+meta <- download_marketdata("b3-cotahist-daily", 
+                            refdate = as.Date("2024-04-05"))
+read_marketdata(meta)
+
+# Download reference rates
+meta <- download_marketdata("b3-reference-rates",
+                            refdate = as.Date("2024-04-05"),
+                            curve_name = "PRE")
+read_marketdata(meta)
 }
 
+}
+\seealso{
+\itemize{
+\item \code{\link{list_templates}} for listing available data templates
+\item \code{\link{template_retrieve}} for retrieving specific template details
+}
+
+\code{\link{read_marketdata}}, \code{\link{rb3.cachedir}}
 }

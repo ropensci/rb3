@@ -1,5 +1,4 @@
-# Singleton implementation using S3 objects
-create_singleton <- function() {
+create_registry <- function() {
   # Private instance variable
   instance <- NULL
 
@@ -9,15 +8,13 @@ create_singleton <- function() {
     if (is.null(instance)) {
       new_instance <- list(
         data = list(),
-        created_at = Sys.time()
+        created_at = Sys.time(),
+        .p = environment(create)
       )
       # Set class for S3 dispatch
-      class(new_instance) <- "Singleton"
+      class(new_instance) <- "registry"
       # Store instance in enclosing environment
       instance <<- new_instance
-      message("New Singleton instance created")
-    } else {
-      message("Returning existing Singleton instance")
     }
     instance
   }
@@ -26,37 +23,33 @@ create_singleton <- function() {
   list(get_instance = create)
 }
 
-# S3 methods for the Singleton class
-print.Singleton <- function(x, ...) {
-  cat("Singleton instance created at:", format(x$created_at), "\n")
-  cat("Data:", if (is.null(x$data)) "NULL" else as.character(x$data), "\n")
+print.registry <- function(x, ...) {
+  cat("registry instance created at:", format(x$created_at), "\n")
+  cat("# elements", length(x$data), "\n")
+  invisible(x)
 }
 
-get_data <- function(x, ...) {
-  UseMethod("get_data")
-}
-
-get_data.Singleton <- function(x, ...) {
+registry_get <- function(x, ...) {
   x$data
 }
 
-set_data <- function(x, value, ...) {
-  UseMethod("set_data")
+registry_put <- function(x, key, value, ...) {
+  x$data[[key]] <- value
+  x$.p[["instance"]] <- x
+  invisible(x)
 }
 
-set_data.Singleton <- function(x, key, value, ...) {
-  x$data[[key]] <- value
-  # Since we're modifying the original object by reference,
-  # we don't need to return it but we do so for chaining
-  invisible(x)
+registry_keys <- function(x, ...) {
+  names(x$data)
 }
 
 # Usage example
 singleton <- create_singleton()
 instance1 <- singleton$get_instance()
-set_data(instance1, "name", "Hello, world!")
-print(instance1)
-
-# Get another reference - should be the same instance
+instance1 <- set_data(instance1, "name", "Hello, world!")
+instance1
 instance2 <- singleton$get_instance()
-print(instance2) # Should show the same data
+instance2
+instance2 <- set_data(instance2, "name", "Wilson")
+singleton$get_instance()
+instance2$data

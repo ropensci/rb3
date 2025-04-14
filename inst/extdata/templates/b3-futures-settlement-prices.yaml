@@ -1,0 +1,63 @@
+id: b3-futures-settlement-prices
+filename: ~
+filetype: CUSTOM
+description: Preços de Ajustes Diários de Contratos Futuros
+locale: pt
+downloader:
+  function: settlement_prices_download
+  url: https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp
+  verifyssl: false
+  format: html
+  encoding: latin1
+  args:
+    refdate: Data de referência
+reader:
+  function: settlement_prices_read
+  locale:
+    decimal_mark: ','
+    grouping_mark: '.'
+writers:
+  input:
+    partition: refdate
+  staging:
+    function: process_futures
+    partition: [refdate, commodity]
+    columns:
+      refdate: Date
+      symbol: character
+      commodity: character
+      maturity_code: character
+      previous_price: numeric
+      price: numeric
+      price_change: numeric
+      settlement_value: numeric
+fields:
+- name: commodity
+  description: Nome e código da mercadoria
+  handler:
+    type: character
+- name: maturity_code
+  description: Código de vencimento do contrato futuro com 3 caractéres
+  handler:
+    type: character
+- name: previous_price
+  description: Preço de ajuste do dia anterior
+  handler:
+    type: number
+- name: price
+  description: Preço de ajuste atual
+  handler:
+    type: number
+- name: price_change
+  description: Variação do preço de ajuste
+  handler:
+    type: number
+- name: settlement_value
+  description: Valor do ajuste por contrato (R$)
+  handler:
+    type: number
+- name: refdate
+  description: Data de referência
+  handler:
+    type: Date
+    format: '%d/%m/%Y'

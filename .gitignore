@@ -10,3 +10,5 @@ docs
 /doc/
 /Meta/
 .vscode
+rb3-cache
+.Rprofile

@@ -1,93 +1,6 @@
-#' Get composition of B3 indexes
-#'
-#' Gets the composition of listed B3 indexes.
-#'
-#' @param index_name a string with the index name
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
-#'
-#' @return a character vector with symbols that belong to the given index name
-#'
-#' @examples
-#' \dontrun{
-#' index_comp_get("IBOV")
-#' }
-#' @export
-index_comp_get <- function(index_name,
-                           cache_folder = cachedir(),
-                           do_cache = TRUE) {
-  f <- download_marketdata("GetTheoricalPortfolio", cache_folder, do_cache,
-    index_name = index_name
-  )
-  df <- read_marketdata(
-    f, "GetTheoricalPortfolio", TRUE,
-    do_cache
-  )
-  df$Results$code
-}
-
-#' Get the assets weights of B3 indexes
-#'
-#' Gets the assets weights of B3 indexes.
-#'
-#' @param index_name a string with the index name
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
-#'
-#' @return
-#' data.frame with symbols that belong to the given index name with its weights
-#' and theoretical positions.
-#'
-#' @examples
-#' \dontrun{
-#' index_weights_get("IBOV")
-#' }
-#' @export
-index_weights_get <- function(index_name,
-                              cache_folder = cachedir(),
-                              do_cache = TRUE) {
-  f <- download_marketdata("GetTheoricalPortfolio", cache_folder, do_cache,
-    index_name = index_name
-  )
-  df <- read_marketdata(
-    f, "GetTheoricalPortfolio", TRUE,
-    do_cache
-  )
-  ds <- df$Results[, c("code", "part", "theoricalQty")]
-  colnames(ds) <- c("symbol", "weight", "position")
-  ds$weight <- ds$weight / 100
-  ds
-}
-
-#' Get the date of indexes composition last update
-#'
-#' Gets the date where the indexes have been updated lastly.
-#'
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
-#'
-#' @return the Date when the indexes have been updated
-#'
-#' @examples
-#' \dontrun{
-#' indexes_last_update()
-#' }
-#' @export
-indexes_last_update <- function(cache_folder = cachedir(),
-                                do_cache = TRUE) {
-  f <- download_marketdata("GetStockIndex",
-    cache_folder = cache_folder, do_cache = do_cache
-  )
-  df <- read_marketdata(f, "GetStockIndex", do_cache = do_cache)
-  df$Header$update
-}
-
 #' Get B3 indexes available
 #'
 #' Gets B3 indexes available.
-#'
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
 #'
 #' @return a character vector with symbols of indexes available
 #'
@@ -96,224 +9,161 @@ indexes_last_update <- function(cache_folder = cachedir(),
 #' indexes_get()
 #' }
 #' @export
-indexes_get <- function(cache_folder = cachedir(),
-                        do_cache = TRUE) {
-  f <- download_marketdata("GetStockIndex",
-    cache_folder = cache_folder, do_cache = do_cache
-  )
-  df <- read_marketdata(f, "GetStockIndex", do_cache = do_cache)
-  str_split(df$Results$indexes, ",") |>
+indexes_get <- function() {
+  max_date <- template_dataset("b3-indexes-composition") |>
+    dplyr::summarise(update_date = max(.data$update_date)) |>
+    collect() |>
+    dplyr::pull(.data$update_date)
+
+  template_dataset("b3-indexes-composition") |>
+    filter(.data$update_date == max_date) |>
+    select("indexes") |>
+    collect() |>
+    dplyr::pull(.data$indexes) |>
+    str_split(",") |>
     unlist() |>
     unique() |>
     sort()
 }
 
-#' Get B3 indexes available
+#' Retrieve Composition of B3 Indexes
 #'
-#' Gets B3 indexes available.
+#' This function fetches the composition of B3 indexes.
+#' It uses the template dataset "b3-indexes-composition" to retrieve the data.
 #'
-#' @param index_name a string with the index name
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
-#'
-#' @return
-#' A dataframe with the index stocks, their weights, segments and positions.
-#'
+#' @return A data frame containing the columns:
+#'   \describe{
+#'     \item{update_date}{The date when the data was last updated.}
+#'     \item{symbol}{The symbol of the asset.}
+#'     \item{indexes}{The indexes associated with the asset.}
+#'   }
+#' 
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
+#' 
 #' @examples
 #' \dontrun{
-#' index_by_segment_get("IBOV")
+#'   indexes_composition <- indexes_composition_get()
+#'   head(indexes_composition)
 #' }
 #' @export
-index_by_segment_get <- function(index_name,
-                                 cache_folder = cachedir(),
-                                 do_cache = TRUE) {
-  f <- download_marketdata("GetPortfolioDay",
-    cache_folder = cache_folder,
-    do_cache = do_cache,
-    index_name = index_name
-  )
-  pp <- read_marketdata(f, "GetPortfolioDay", do_cache = do_cache)
-  df <- pp$Results[, c("code", "segment", "part", "part_acum", "theoricalQty")]
-  colnames(df) <- c("symbol", "segment", "weight", "segment_weight", "position")
-  df$weight <- df$weight / 100
-  df$segment_weight <- df$segment_weight / 100
-  df$refdate <- pp$Header$date
-
-  df
+indexes_composition_get <- function() {
+  template_dataset("b3-indexes-composition") |>
+    select("update_date", "symbol", "indexes")
 }
 
-#' Fetches indexes data from B3
-#'
-#' Downloads index data from B3 website
-#' <https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/>.
-#'
-#' @param refdate Specific date ("YYYY-MM-DD") to `yc_get` single curve
-#' @param first_date First date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param last_date Last date ("YYYY-MM-DD") to `yc_mget` multiple curves
-#' @param by Number of days in between fetched dates (default = 1) in `yc_mget`
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
-#'
-#' @details
-#' `indexreport_get` returns index data for the given date and
-#' `indexreport_mget` returns index data for a given range of dates.
-#'
-#' @return
-#' A dataframe with index data (OHLC, average and daily oscillation)
-#'
-#' @name indexreport_get
-#'
-#' @examples
-#' \dontrun{
-#' df_ir <- indexreport_mget(Sys.Date() - 5, Sys.Date())
-#' head(df_ir)
-#' }
-#' @export
-indexreport_mget <- function(first_date = Sys.Date() - 5,
-                             last_date = Sys.Date(),
-                             by = 1,
-                             cache_folder = cachedir(),
-                             do_cache = TRUE) {
-  first_date <- as.Date(first_date)
-  last_date <- as.Date(last_date)
-  tpl <- template_retrieve("IndexReport")
-  date_vec <- bizseq(first_date, last_date, tpl$calendar)
-  date_vec <- date_vec[seq(1, length(date_vec), by = by)]
-
-  bind_rows(
-    log_map_process_along(date_vec, get_single_indexreport,
-      "Fetching data points",
-      date_vec = date_vec,
-      cache_folder = cache_folder,
-      do_cache = do_cache
-    )
-  )
-}
-
-#' @rdname indexreport_get
-#' @examples
-#' \dontrun{
-#' df_ir <- indexreport_get(Sys.Date())
-#' head(df_ir)
-#' }
-#' @export
-indexreport_get <- function(refdate = Sys.Date(),
-                            cache_folder = cachedir(),
-                            do_cache = TRUE) {
-  get_single_indexreport(1, as.Date(refdate), cache_folder, do_cache)
-}
-
-get_single_indexreport <- function(idx_date,
-                                   date_vec,
-                                   cache_folder,
-                                   do_cache) {
-  df <- get_single_marketdata(
-    "IndexReport", idx_date, date_vec, cache_folder, do_cache
-  )
-  if (!is.null(df)) {
-    cols <- c(
-      "refdate", "symbol", "open", "high", "low", "close", "average",
-      "oscillation"
-    )
-    df[, cols]
-  } else {
-    NULL
-  }
-}
-
-ibovespa_index_get <- function(first_date, last_date = as.Date("1997-12-31")) {
-  f <- system.file("extdata/IBOV.rds", package = "rb3")
-  read_rds(f) |> filter(.data$refdate >= first_date, .data$refdate <= last_date)
-}
-
-single_index_get <- function(index_name, year, cache_folder, do_cache) {
-  template <- "GetPortfolioDay_IndexStatistics"
-  f <- download_marketdata(template,
-    index_name = index_name, year = year,
-    cache_folder = cache_folder, do_cache = do_cache
-  )
-  index_data <- read_marketdata(f, template, do_cache = do_cache)
-
-  if (is.null(index_data)) {
-    return(NULL)
-  }
-
-  day <- index_data$Results$day
-  months <- index_data$Results |>
-    select("month01":"month12") |>
-    as.list()
-  months_dfs <- names(months) |>
-    lapply(function(m) {
-      month <- as.integer(str_match(m, "\\d\\d")[1])
-      data.frame(year, month, day, value = months[[m]])
-    })
-  index_data <- do.call(rbind, months_dfs) |>
+process_indexes_current_portfolio <- function(ds) {
+  ds |>
+    collect() |>
     mutate(
-      refdate = ISOdate(.data$year, .data$month, .data$day) |> as.Date(),
-      index_name = index_name
+      sector = stringr::str_extract(.data$segment, "^[^/]+") |> stringr::str_trim(),
+      sector = .data$sector |>
+        stringr::str_to_lower() |>
+        stringi::stri_trans_general("Latin-ASCII") |>
+        stringr::str_replace_all("\\s+", " ") |>
+        stringr::str_trim() |>
+        stringr::str_replace_all("petroleo, gas e biocombustiveis", "Petr\u00f3leo, G\u00e1s e Biocombust\u00edveis") |>
+        stringr::str_replace_all("mats basicos", "Materiais B\u00e1sicos") |>
+        stringr::str_replace_all("bens indls|bens industriais", "Bens Industriais") |>
+        stringr::str_replace_all("cons n ciclico", "Consumo N\u00e3o C\u00edclico") |>
+        stringr::str_replace_all("cons n basico|consumo ciclico|diversos", "Consumo C\u00edclico") |>
+        stringr::str_replace_all("saude", "Sa\u00fade") |>
+        stringr::str_replace_all("comput e equips|tec.informacao", "Tecnologia da Informa\u00e7\u00e3o") |>
+        stringr::str_replace_all("telecomunicacao|midia", "Comunica\u00e7\u00f5es") |>
+        stringr::str_replace_all("utilidade publ", "Utilidade P\u00fablica") |>
+        stringr::str_replace_all("financ e outros|financeiro e outros", "Financeiro") |>
+        stringr::str_replace_all("outros", "Outros") |>
+        stringr::str_replace_all("n classificados", "N\u00e3o Classificados") |>
+        identity(),
+      weight = .data$weight / 100,
     ) |>
-    filter(!is.na(.data$value)) |>
-    arrange("refdate")
-
-  index_data |> select("refdate", "index_name", "value")
+    select("refdate", "portfolio_date", "index", "symbol", "weight", "theoretical_quantity",
+      "total_theoretical_quantity", "reductor", "sector") |>
+    identity()
 }
 
-#' Get index historical data
+#' Retrieve Portfolio of B3 Indexes
 #'
-#' Gets historical data from B3 indexes
+#' These functions fetch the current and theoretical portfolio of B3 indexes using predefined
+#' dataset templates.
+#' The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theoretical-portfolio".
 #'
-#' @param index_name a string with the index name
-#' @param first_date First date
-#' @param last_date Last date
-#' @param cache_folder Location of cache folder (default = cachedir())
-#' @param do_cache Whether to use cache or not (default = TRUE)
+#' @return
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
+#' 
+#' @examples
+#' \dontrun{
+#' template_dataset("b3-indexes-current-portfolio", layer = 2) |>
+#'   filter(index %in% c("SMLL", "IBOV", "IBRA")) |>
+#'   collect()
+#' }
 #'
-#' @return A data.frame/tibble with index data
+#' @name indexes-portfolio
+#' 
+#' @export
+indexes_current_portfolio_get <- function() {
+  template_dataset("b3-indexes-current-portfolio", layer = 2)
+}
+
+process_indexes_theoretical_portfolio <- function(ds) {
+  ds |>
+    collect() |>
+    mutate(
+      weight = .data$weight / 100,
+    ) |>
+    select("refdate", "index", "symbol", "weight", "theoretical_quantity", "total_theoretical_quantity", "reductor") |>
+    identity()
+}
+
+#' @examples
+#' \dontrun{
+#' template_dataset("b3-indexes-theoretical-portfolio", layer = 2) |>
+#'   filter(index == "IBOV") |>
+#'   collect()
+#' }
+#' @rdname indexes-portfolio
+#' @export
+indexes_theoretical_portfolio_get <- function() {
+  template_dataset("b3-indexes-theoretical-portfolio", layer = 2) 
+}
+
+process_index_historical_data <- function(ds) {
+  ds |>
+    collect() |>
+    tidyr::pivot_longer(-c("index", "day", "year"), names_to = "month", values_to = "value") |>
+    mutate(
+      month = as.integer(str_replace(.data$month, "month", "")),
+      refdate = lubridate::make_date(.data$year, .data$month, .data$day),
+    ) |>
+    select("index", "refdate", "value") |>
+    dplyr::rename(symbol = "index") |>
+    filter(!is.na(.data$value)) |>
+    dplyr::arrange("refdate")
+}
+
+#' Get historical data from B3 indexes
+#'
+#' Fetches historical data from B3 indexes.
+#'
+#' @return
+#' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
+#' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate
+#' memory usage.  
+#' To trigger evaluation and return the results as an R `tibble`, use `collect()`.
 #'
 #' @examples
 #' \dontrun{
-#' index_get("IBOV", as.Date("1977-01-01"), as.Date("1999-12-31"))
+#' fetch_marketdata("b3-indexes-historical-data", index = "IBOV", year = 2001:2010)
+#' indexes_historical_data_get() |>
+#'  filter(index == "IBOV", refdate >= as.Date("2001-01-01"), refdate <= as.Date("2010-12-31"))
 #' }
 #'
 #' @export
-index_get <- function(index_name, first_date,
-                      last_date = Sys.Date(),
-                      cache_folder = cachedir(),
-                      do_cache = TRUE) {
-  start_year <- format(first_date, "%Y") |> as.integer()
-  end_year <- format(last_date, "%Y") |> as.integer()
-  if (index_name == "IBOV") {
-    if (start_year > 1997) {
-      year <- seq(start_year, end_year)
-      map_dfr(year, \(year) single_index_get(
-        index_name, year, cache_folder,
-        do_cache
-      ))
-    } else {
-      if (end_year <= 1997) {
-        df <- ibovespa_index_get(first_date, last_date)
-      } else {
-        df1 <- ibovespa_index_get(first_date, as.Date("1997-12-31"))
-        year <- seq(1998, end_year)
-        df2 <- map_dfr(year, \(year) single_index_get(
-          index_name, year,
-          cache_folder, do_cache
-        )) |>
-          filter(.data$refdate <= last_date)
-        df <- bind_rows(df1, df2) |> arrange("refdate")
-      }
-    }
-  } else {
-    year <- seq(start_year, end_year)
-    df <- map_dfr(year, \(year) single_index_get(
-      index_name, year,
-      cache_folder, do_cache
-    ))
-    if (any(dim(df) == 0)) {
-      return(NULL)
-    } else {
-      df |>
-        filter(.data$refdate <= last_date, .data$refdate >= first_date)
-    }
-  }
+indexes_historical_data_get <- function() {
+  template_dataset("b3-indexes-historical-data", layer = 2)
 }

@@ -25,6 +25,5 @@ install.packages(c("cli", "rlang",
 "testthat",
 "tidyr",
 "XML",
-"rvest",
 "readr",
 "bizdays"))
