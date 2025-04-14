@@ -4,130 +4,213 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fetching Historical Yield Curves from B3 • rb3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Fetching B3 Yield Curves • rb3</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Fetching Historical Yield Curves from B3">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fetching B3 Yield Curves">
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">rb3</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.12</span>
-      </span>
-    </div>
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
+    <a class="navbar-brand me-2" href="../index.html">rb3</a>
 
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/B3-Indexes.html">B3 Indexes</a>
-    </li>
-    <li>
-      <a href="../articles/Fetching-historical-future-rates.html">How to Compute Historical Rates from B3 Future Prices</a>
-    </li>
-    <li>
-      <a href="../articles/Fetching-historical-yield-curve.html">Fetching Historical Yield Curves from B3</a>
-    </li>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Vignettes</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+<li><a class="dropdown-item" href="../articles/Getting-started.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="../articles/Fetching-historical-equity-data.html">Fetching Historical Equity Data</a></li>
+    <li><a class="dropdown-item" href="../articles/Fetching-historical-index-data.html">Analyzing B3 Index Data</a></li>
+    <li><a class="dropdown-item" href="../articles/Fetching-historical-future-rates.html">How to Compute Historical Rates from B3 Future Prices</a></li>
+    <li><a class="dropdown-item" href="../articles/Fetching-historical-yield-curve.html">Fetching B3 Yield Curves</a></li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/ropensci/rb3/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/ropensci/rb3/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
 
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Fetching Historical Yield Curves from B3</h1>
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Fetching B3 Yield Curves</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ropensci/rb3/blob/v0.0.12/vignettes/Fetching-historical-yield-curve.Rmd" class="external-link"><code>vignettes/Fetching-historical-yield-curve.Rmd</code></a></small>
-      <div class="hidden name"><code>Fetching-historical-yield-curve.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/rb3/blob/main/vignettes/Fetching-historical-yield-curve.Rmd" class="external-link"><code>vignettes/Fetching-historical-yield-curve.Rmd</code></a></small>
+      <div class="d-none name"><code>Fetching-historical-yield-curve.Rmd</code></div>
     </div>
 
     
     
-<p>Data for the yield curve is available in <a href="https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp" class="external-link">B3’s
-website</a>. The data is built using interest rate futures. See this <a href="https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf" class="external-link">pdf</a>
-for more details about the source of the yield curves.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>The template <code>b3-reference-rates</code> allows you to fetch
+historical yield curves from B3, the Brazilian stock exchange. This
+vignette provides a step-by-step guide on how to retrieve and visualize
+these curves using the <code>rb3</code> package.</p>
+<p>The yield curve is a key tool in financial markets, offering insights
+into interest rate expectations, inflation outlook, and economic
+sentiment. In Brazil, the local exchange (B3) publishes a set of
+reference yield curves built from the pricing of interest rate futures
+contracts. B3 provides historical yield curves on its <a href="https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp" class="external-link">website</a>.
+These curves are built using interest rate futures contracts.</p>
+<p>This vignette demonstrates how to retrieve and analyze historical
+yield curves from B3 using the <a href="https://github.com/ropensci/rb3" class="external-link"><code>rb3</code></a> R package.
+We focus on three main curves:</p>
+<ul>
+<li>
+<strong>PRE</strong>: nominal interest rate curve, derived from
+fixed-rate (DI) futures.</li>
+<li>
+<strong>DIC</strong>: real interest rate curve, based on
+IPCA-indexed futures (Cupom de IPCA).</li>
+<li>
+<strong>DOC</strong>: FX-linked curve (Cupom Cambial), reflecting
+the interest rate differential between BRL and USD.</li>
+</ul>
+<p>For further details on how B3 constructs these curves, see <a href="https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf" class="external-link">B3’s
+reference rate documentation (PDF)</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; rb3: 35 templates registered</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-bizdays" class="external-link">bizdays</a></span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
-<h2 id="di-x-pre-curve">DI X Pre Curve<a class="anchor" aria-label="anchor" href="#di-x-pre-curve"></a>
+<h2 id="fetching-the-data">Fetching the data<a class="anchor" aria-label="anchor" href="#fetching-the-data"></a>
 </h2>
+<p>In this section, we will fetch the historical yield curve data for
+the years 2021 to 2025. The yield curves are constructed using interest
+rate futures data, which is provided by B3. To obtain the data, we
+follow these two main steps:</p>
+<div class="section level3">
+<h3 id="selecting-reference-dates">Selecting Reference Dates<a class="anchor" aria-label="anchor" href="#selecting-reference-dates"></a>
+</h3>
+<p>We begin by selecting the first business day of each year between
+2021 and 2025 using the <code><a href="https://rdrr.io/pkg/bizdays/man/getdate.html" class="external-link">getdate()</a></code> function. This provides a
+set of consistent reference points, free from seasonal distortions or
+holiday effects, which are ideal for comparing yield curves over
+time.</p>
+</div>
+<div class="section level3">
+<h3 id="fetching-and-storing-market-data">2. Fetching and Storing Market Data<a class="anchor" aria-label="anchor" href="#fetching-and-storing-market-data"></a>
+</h3>
+<p>The <code><a href="../reference/fetch_marketdata.html">fetch_marketdata()</a></code> function is used to download the
+yield curve data for the selected reference dates using the template
+<code>b3-reference-rates</code>. This template is designed to fetch the
+reference rates from B3’s systems. This function fetches data directly
+from B3’s systems and stores it in a structured format within the rb3
+package database. The data is stored locally in an optimized structure,
+allowing for efficient querying and analysis in subsequent steps.</p>
+<p>We specify the <code>curve_name</code> argument to request data for
+three different yield curves:</p>
+<ul>
+<li>
+<strong>PRE</strong>: The <strong>Nominal Interest Rate</strong>
+curve. This curve represents the market’s expectations for
+<strong>accumulated interbank interest rates (DI - interbank
+deposit)</strong> from the reference date to each forward date. It is
+constructed from DI1 interest futures and reflects the <strong>nominal
+yield</strong> investors require, inclusive of inflation expectations
+and real interest.</li>
+<li>
+<strong>DOC</strong>: The <strong>Cupom Cambial (FX Swap Implied
+Rate)</strong> curve. This curve reflects the interest rate differential
+between Brazilian real (BRL) and U.S. dollar (USD), as implied by FX
+swap contracts. It is derived from contracts where the local leg pays
+fixed BRL interest and the foreign leg pays USD, adjusted by the spot
+and forward exchange rate. This curve is useful for pricing instruments
+that involve currency exposure or hedging strategies.</li>
+<li>
+<strong>DIC</strong>: The <strong>IPCA-Linked (Real Interest
+Rate)</strong> curve, also referred to as the <strong>Cupom de
+IPCA</strong>. This curve represents the real interest rate (excluding
+inflation) implied by futures contracts indexed to the Brazilian
+consumer price index (IPCA). It is used to assess the market’s
+expectation of real returns and is essential for pricing
+inflation-linked bonds (like NTN-B).</li>
+</ul>
+<p>The <code>curve_name</code> argument allows us to specify which of
+these three curves we want data for. By passing a vector like
+<code>c("DIC", "DOC", "PRE")</code>, we are telling the function to
+retrieve data for all three curves for the selected reference dates.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yc_get.html">yc_mget</a></span><span class="op">(</span></span>
-<span>  first_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">255</span> <span class="op">*</span> <span class="fl">5</span>,</span>
-<span>  last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  by <span class="op">=</span> <span class="fl">255</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/getdate.html" class="external-link">getdate</a></span><span class="op">(</span><span class="st">"first bizday"</span>, <span class="fl">2021</span><span class="op">:</span><span class="fl">2025</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="va">dates</span>, curve_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIC"</span>, <span class="st">"DOC"</span>, <span class="st">"PRE"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>After the data is stored, it becomes available for querying through
+the following functions:</p>
+<ul>
+<li>
+<code><a href="../reference/yc_xxx_get.html">yc_brl_get()</a></code>: This function retrieves the Brazilian
+nominal yield curve data (PRE curve), which includes accumulated
+interbank interest rates (DI) for the selected dates.</li>
+<li>
+<code><a href="../reference/yc_xxx_get.html">yc_usd_get()</a></code>: This function retrieves the FX-linked
+yield curve data (DOC curve), reflecting the interest rate differential
+between Brazilian real (BRL) and U.S. dollar (USD).</li>
+<li>
+<code><a href="../reference/yc_xxx_get.html">yc_ipca_get()</a></code>: This function retrieves the Brazilian
+real interest rate curve (DIC curve), which is based on futures
+contracts linked to the Brazilian Consumer Price Index (IPCA).</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="pre-curve-di-rates">PRE Curve (DI rates)<a class="anchor" aria-label="anchor" href="#pre-curve-di-rates"></a>
+</h2>
+<p>In this section, we will visualize the yield curves for Nominal
+Interest Rate, based on the previously fetched data.</p>
+<p>This section focuses on the <strong>PRE curve</strong>, which
+represents the <strong>nominal interest rate curve</strong> built using
+DI1 futures contracts. These contracts reflect the market’s expectations
+for the cumulative interbank interest rates (DI rates) from the
+reference date to each future maturity.</p>
+<p>The PRE curve is essential for understanding nominal yield dynamics
+in Brazil’s fixed income market, and it’s commonly used for pricing
+public and private debt instruments.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_yc_brl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yc_xxx_get.html">yc_brl_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">forward_date</span> <span class="op">&lt;</span> <span class="st">"2035-01-01"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>We apply a filter to restrict the forward dates to maturities before
+January 1st, 2035. This is because after this point, the futures market
+becomes significantly less liquid, and the yield curve relies more
+heavily on extrapolation methods rather than observable market data.
+Including such long maturities could introduce distortions or give a
+false sense of precision beyond what the market actually supports.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
-<span>  <span class="va">df_yc</span>,</span>
+<span>  <span class="va">df_yc_brl</span>,</span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">forward_date</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">r_252</span>,</span>
@@ -139,7 +222,7 @@ for more details about the source of the yield curves.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Yield Curves for Brazil"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Built using interest rates future contracts"</span>,</span>
-<span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3 at {Sys.Date()}"</span><span class="op">)</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source B3 - package rb3"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Forward Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Annual Interest Rate"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Reference Date"</span></span>
@@ -148,20 +231,35 @@ for more details about the source of the yield curves.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Fetching-historical-yield-curve_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
+<div class="figure">
+<img src="Fetching-historical-yield-curve_files/figure-html/yc-brl-plot-1.png" alt="Yield Curves for Brazil" width="100%"><p class="caption">
+Yield Curves for Brazil
+</p>
+</div>
+<p>This plot shows how the nominal yield curve evolves over time, with
+different lines representing the curves on each reference date (first
+business day of each year from 2021 to 2025). You can observe shifts in
+market expectations for interest rates and detect periods of steepening,
+flattening, or inversion of the curve, which often signal changes in
+monetary policy outlook or economic sentiment.</p>
 </div>
 <div class="section level2">
-<h2 id="di-x-ipca-curve">DI x IPCA Curve<a class="anchor" aria-label="anchor" href="#di-x-ipca-curve"></a>
+<h2 id="ipca-curve-dic-curve">IPCA Curve (DIC curve)<a class="anchor" aria-label="anchor" href="#ipca-curve-dic-curve"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yc_get.html">yc_ipca_mget</a></span><span class="op">(</span></span>
-<span>  first_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">255</span> <span class="op">*</span> <span class="fl">5</span>,</span>
-<span>  last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  by <span class="op">=</span> <span class="fl">255</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<p>This section analyzes the <strong>DIC curve</strong>, which
+represents the <strong>real interest rate</strong> implied by futures
+contracts indexed to the Brazilian consumer price index (IPCA). It
+reflects market expectations for <strong>inflation-adjusted (real)
+returns</strong>.</p>
+<p>The DIC curve is especially relevant for pricing inflation-linked
+bonds (such as NTN-Bs) and for analyzing the market’s perception of
+long-term inflation dynamics.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_yc_ipca</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yc_xxx_get.html">yc_ipca_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
-<span>  <span class="va">df_yc</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">biz_days</span> <span class="op">&gt;</span> <span class="fl">21</span>, <span class="va">biz_days</span> <span class="op">&lt;</span> <span class="fl">1008</span><span class="op">)</span>,</span>
+<span>  <span class="va">df_yc_ipca</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">biz_days</span> <span class="op">&gt;</span> <span class="fl">21</span>, <span class="va">biz_days</span> <span class="op">&lt;</span> <span class="fl">1008</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">forward_date</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">r_252</span>,</span>
@@ -173,7 +271,7 @@ for more details about the source of the yield curves.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"DIxIPCA Yield Curves for Brazil"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Built using interest rates future contracts"</span>,</span>
-<span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3 at {Sys.Date()}"</span><span class="op">)</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source B3 - package rb3"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Forward Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Annual Interest Rate"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Reference Date"</span></span>
@@ -182,20 +280,37 @@ for more details about the source of the yield curves.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Fetching-historical-yield-curve_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<div class="figure">
+<img src="Fetching-historical-yield-curve_files/figure-html/yc-ipca-plot-1.png" alt="DIxIPCA Yield Curves for Brazil" width="100%"><p class="caption">
+DIxIPCA Yield Curves for Brazil
+</p>
+</div>
+<p>This plot illustrates how real interest rates have evolved across
+different reference dates. These rates reflect the market’s view on
+long-term monetary stability and inflation control.</p>
 </div>
 <div class="section level2">
-<h2 id="cupom-limpo-usd">Cupom Limpo (USD)<a class="anchor" aria-label="anchor" href="#cupom-limpo-usd"></a>
+<h2 id="cupom-limpo-usd---doc-curve">Cupom Limpo (USD - DOC curve)<a class="anchor" aria-label="anchor" href="#cupom-limpo-usd---doc-curve"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_yc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yc_get.html">yc_usd_mget</a></span><span class="op">(</span></span>
-<span>  first_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">255</span> <span class="op">*</span> <span class="fl">5</span>,</span>
-<span>  last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  by <span class="op">=</span> <span class="fl">255</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<p>This section focuses on the <strong>DOC curve</strong>, which
+represents the <strong>cupom cambial</strong> — the interest rate
+differential between the Brazilian real (BRL) and the U.S. dollar (USD),
+derived from FX swap contracts.</p>
+<p>The DOC curve is constructed using the pricing of contracts where one
+leg pays fixed BRL interest and the other is tied to the USD. It
+reflects <strong>market expectations for exchange rate and interest rate
+spreads</strong>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_yc_usd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yc_xxx_get.html">yc_usd_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">forward_date</span> <span class="op">&lt;</span> <span class="st">"2035-01-01"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>As with other curves, we filter out maturities beyond 2035. This is
+because FX futures contracts tend to be illiquid at longer horizons, and
+extrapolated values beyond that point may not reflect reliable market
+pricing.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
-<span>  <span class="va">df_yc</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">biz_days</span> <span class="op">&gt;</span> <span class="fl">21</span>, <span class="va">biz_days</span> <span class="op">&lt;</span> <span class="fl">2520</span><span class="op">)</span>,</span>
+<span>  <span class="va">df_yc_usd</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">biz_days</span> <span class="op">&gt;</span> <span class="fl">21</span>, <span class="va">biz_days</span> <span class="op">&lt;</span> <span class="fl">2520</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">forward_date</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">r_360</span>,</span>
@@ -207,7 +322,7 @@ for more details about the source of the yield curves.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Cupom Limpo (USD) Yield Curves for Brazil"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Built using interest rates future contracts"</span>,</span>
-<span>    caption <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"Data imported using rb3 at {Sys.Date()}"</span><span class="op">)</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source B3 - package rb3"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Forward Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Annual Interest Rate"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Reference Date"</span></span>
@@ -216,31 +331,145 @@ for more details about the source of the yield curves.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Fetching-historical-yield-curve_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
+<div class="figure">
+<img src="Fetching-historical-yield-curve_files/figure-html/plot-cupom-limpo-1.png" alt="Cupom Limpo (USD) Yield Curves for Brazil" width="100%"><p class="caption">
+Cupom Limpo (USD) Yield Curves for Brazil
+</p>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-      </div>
-
+<p>This curve provides insight into how the market prices currency risk
+and interest rate differentials between Brazil and the U.S., which are
+key for investors operating in cross-border markets or using hedging
+strategies.</p>
+</div>
+<div class="section level2">
+<h2 id="break-even-inflation-pre-vs-dic">Break-even Inflation: PRE vs DIC<a class="anchor" aria-label="anchor" href="#break-even-inflation-pre-vs-dic"></a>
+</h2>
+<p>By comparing the <strong>nominal yield curve (PRE)</strong> with the
+<strong>real yield curve (DIC)</strong>, we can derive the
+<strong>implied inflation expectation</strong> priced by the market.
+This difference, known as <strong>break-even inflation</strong>,
+represents the inflation rate that would make an investor indifferent
+between holding nominal versus inflation-linked instruments.</p>
+<p>The formula is straightforward:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Implied Inflation</mtext><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>r</mi><mtext mathvariant="normal">nominal</mtext></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>r</mi><mtext mathvariant="normal">real</mtext></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+\text{Implied Inflation} = (1 + r_{\text{nominal}}) / (1 + r_{\text{real}}) - 1
+</annotation></semantics></math></p>
+<p>Where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mtext mathvariant="normal">nominal</mtext></msub><annotation encoding="application/x-tex">r_{\text{nominal}}</annotation></semantics></math>
+comes from the PRE curve and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mtext mathvariant="normal">real</mtext></msub><annotation encoding="application/x-tex">r_{\text{real}}</annotation></semantics></math>
+from the DIC curve. For simplicity, we use the approximation:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Implied Inflation</mtext><mo>≈</mo><msub><mi>r</mi><mtext mathvariant="normal">nominal</mtext></msub><mo>−</mo><msub><mi>r</mi><mtext mathvariant="normal">real</mtext></msub></mrow><annotation encoding="application/x-tex">
+\text{Implied Inflation} \approx r_{\text{nominal}} - r_{\text{real}}
+</annotation></semantics></math></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load and prepare PRE and DIC curves</span></span>
+<span><span class="va">pre</span> <span class="op">&lt;-</span> <span class="va">df_yc_brl</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">refdate</span>, <span class="va">forward_date</span>, r_nominal <span class="op">=</span> <span class="va">r_252</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ipca</span> <span class="op">&lt;-</span> <span class="va">df_yc_ipca</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">refdate</span>, <span class="va">forward_date</span>, r_real <span class="op">=</span> <span class="va">r_252</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Join both curves by refdate and forward_date</span></span>
+<span><span class="va">df_be</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">pre</span>, <span class="va">ipca</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"refdate"</span>, <span class="st">"forward_date"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>break_even <span class="op">=</span> <span class="va">r_nominal</span> <span class="op">-</span> <span class="va">r_real</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
+<span>  <span class="va">df_be</span>,</span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">forward_date</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">break_even</span>,</span>
+<span>    group <span class="op">=</span> <span class="va">refdate</span>,</span>
+<span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Implied Inflation (Break-even) from Yield Curves"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Calculated as PRE (nominal) minus DIC (real)"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source B3 - package rb3"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Forward Date"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Annual Implied Inflation Rate"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Reference Date"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="Fetching-historical-yield-curve_files/figure-html/break-even-inflation-plot-1.png" alt="Break-even Inflation" width="100%"><p class="caption">
+Break-even Inflation
+</p>
+</div>
+<p>This chart shows the inflation expectations embedded in the market at
+different points in time and across different maturities. Steeper
+break-even curves may indicate expected inflationary pressures ahead,
+while flatter curves may reflect confidence in inflation control or
+economic deceleration.</p>
+<p>Such analysis is useful for:</p>
+<ul>
+<li>Pricing inflation-linked bonds</li>
+<li>Assessing central bank credibility</li>
+<li>Supporting asset allocation decisions (e.g., real vs nominal fixed
+income)</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h2>
+<p>In this vignette, we explored how to fetch and visualize historical
+yield curves from the Brazilian exchange (B3) using the <code>rb3</code>
+package. We covered three types of curves:</p>
+<ul>
+<li>
+<strong>PRE</strong>: nominal interest rates, built from fixed-rate
+futures contracts.</li>
+<li>
+<strong>DIC</strong>: real interest rates (inflation-adjusted),
+derived from IPCA-indexed futures.</li>
+<li>
+<strong>DOC</strong>: FX-linked rates (cupom cambial), representing
+BRL-USD interest differentials.</li>
+</ul>
+<p>We also showed how to extract <strong>break-even inflation</strong>
+expectations by comparing the nominal and real curves — a powerful tool
+for understanding the market’s inflation outlook.</p>
+<p>These curves are widely used in:</p>
+<ul>
+<li><strong>Monetary policy analysis</strong></li>
+<li><strong>Fixed income pricing</strong></li>
+<li><strong>Inflation forecasting</strong></li>
+<li><strong>Asset allocation and risk management</strong></li>
+</ul>
+<p>The <code>rb3</code> package provides a simple yet flexible interface
+for retrieving and working with this data directly in R.</p>
+<p>As next steps, you might consider:</p>
+<ul>
+<li>Tracking curve movements on a daily basis</li>
+<li>Building yield curve interpolation models</li>
+<li>Estimating forward rates or zero-coupon curves</li>
+<li>Backtesting strategies based on curve dynamics</li>
+</ul>
+<p>Feel free to explore the package documentation and source code for
+more advanced features and use cases.</p>
+<p>Happy analyzing!</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p></p>
-<p>Developed by Wilson Freitas, Marcelo Perlin.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p>Developed by Wilson Freitas, Marcelo Perlin.</p>
 </div>
 
-<div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<div class="pkgdown-footer-right">
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
-
 
 
 
