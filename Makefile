@@ -19,6 +19,9 @@ README.RData: README.R
 README.md: README.Rmd README.RData
 	$(RSCRIPT) -e "devtools::build_readme()"
 
+site:
+	$(RSCRIPT) -e "devtools::build_site()"
+
 vignettes: $(HTML_FILES) $(VIGNETTE_RDATA_FILES)
 
 vignettes-data: $(VIGNETTE_RDATA_FILES)

@@ -196,6 +196,7 @@ di1_futures <- futures_data |>
 # Plot the implied rates
 ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
   geom_line() +
+  geom_point() +
   labs(
     title = "Implied Rates for DI1 Futures",
     x = "Maturity Date",
@@ -216,9 +217,11 @@ For comprehensive documentation and examples, visit:
     Started](https://ropensci.github.io/rb3/articles/Getting-started.html)
   - [Fetching Historical Equity
     Data](https://ropensci.github.io/rb3/articles/Fetching-historical-equity-data.html)
-  - [Fetching Historical Future
-    Rates](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html)
-  - [Fetching Historical Yield
+  - [Analyzing B3 Index
+    Data](https://ropensci.github.io/rb3/articles/Fetching-historical-index-data.html)
+  - [How to Compute Historical Rates from B3 Future
+    Prices](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html)
+  - [Fetching B3 Yield
     Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html)
 
 ## Citation

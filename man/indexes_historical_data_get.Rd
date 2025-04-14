@@ -19,7 +19,7 @@ Fetches historical data from B3 indexes.
 \dontrun{
 fetch_marketdata("b3-indexes-historical-data", index = "IBOV", year = 2001:2010)
 indexes_historical_data_get() |>
- filter(index == "IBOV", refdate >= as.Date("2001-01-01"), refdate <= as.Date("2010-12-31")) |>
+ filter(index == "IBOV", refdate >= as.Date("2001-01-01"), refdate <= as.Date("2010-12-31"))
 }
 
 }

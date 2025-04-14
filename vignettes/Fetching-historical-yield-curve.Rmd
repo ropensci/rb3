@@ -1,8 +1,8 @@
 ---
-title: "Fetching Historical Yield Curves from B3"
+title: "Fetching B3 Yield Curves"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Fetching Historical Yield Curves from B3}
+  %\VignetteIndexEntry{Fetching B3 Yield Curves}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
