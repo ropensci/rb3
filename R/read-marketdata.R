@@ -104,7 +104,7 @@ read_marketdata <- function(meta) {
 #'
 #' @export
 fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
-  df <- tidyr::expand_grid(...)
+  df <- expand.grid(..., stringsAsFactors = FALSE)
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
   pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
