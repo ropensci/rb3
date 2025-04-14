@@ -10,19 +10,8 @@
 - Removed dependencies on `rvest`, `proto`, `ascii`, `readxl` and other packages that aren't heavy used.
 - Fixed test cases to align with the new template framework.
 - Fixed issues with the `glue` environment list requiring explicit passing as an environment.
-
-# rb3 0.0.13
-
-* Implemented registry as a singleton pattern.
-* Removed dependencies:
-  * `rvest`
-  * `proto` (in tests)
-  * `ascii`
-  * `tidyr` (now in Suggests because of the vignettes)
-  * `readxl`
-* Removed the filename text match to find the templates.
-* New template framework:
-  * The new template framework doesn't use `proto`.
+- Implemented registry as a singleton pattern.
+- Removed the filename text match to find the templates.
 
 # rb3 0.0.12
 
