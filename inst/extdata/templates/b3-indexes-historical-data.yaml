@@ -18,11 +18,12 @@ writers:
     partition: [index, year]
   staging:
     function: process_index_historical_data
-    partition: [refdate, symbol]
+    partition: [symbol, year]
     columns:
       symbol: character
       refdate: Date
       value: numeric
+      year: integer
 fields:
 - name: day
   description: Dia do mês

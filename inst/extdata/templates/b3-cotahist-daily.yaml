@@ -15,10 +15,36 @@ reader:
   encoding: latin1
 writers:
   input:
-    partition: [refdate, instrument_market]
+    partition: refdate
   staging:
     function: process_cotahist
-    partition: [refdate, instrument_market]
+    partition: refdate
+    columns:
+      refdate: Date
+      bdi_code: integer
+      symbol: character
+      instrument_market: integer
+      corporation_name: character
+      specification_code: character
+      days_to_settlement: integer
+      trading_currency: character
+      open: numeric
+      high: numeric
+      low: numeric
+      average: numeric
+      close: numeric
+      best_bid: numeric
+      best_ask: numeric
+      trade_quantity: integer
+      traded_contracts: integer
+      volume: numeric
+      strike_price: numeric
+      strike_price_adjustment_indicator: character
+      maturity_date: Date
+      allocation_lot_size: integer
+      strike_price_in_points: numeric
+      isin: character
+      distribution_id: integer
 fields:
 - name: regtype
   description: Tipo de registro

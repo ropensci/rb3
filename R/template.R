@@ -226,7 +226,7 @@ template_dataset.default <- function(template, layer = NULL) {
 template_dataset.template <- function(template, layer = NULL) {
   schema <- template_schema(template, layer)
   dir <- template_db_folder(template, layer)
-  arrow::open_dataset(dir, schema)
+  arrow::open_dataset(dir, schema, hive_style = TRUE, unify_schemas = FALSE)
 }
 
 new_field <- function(x) {
