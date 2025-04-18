@@ -310,7 +310,7 @@ cotahist_options_by_symbols_get <- function(symbols) {
 process_cotahist <- function(ds) {
   ds |>
     filter(.data$regtype == 1) |>
-    mutate(year = lubridate::year(refdate)) |>
+    mutate(year = lubridate::year(.data$refdate)) |>
     select(
       "year",
       "refdate",
