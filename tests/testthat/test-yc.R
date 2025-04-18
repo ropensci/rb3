@@ -10,16 +10,8 @@ test_df <- function(df_in) {
 }
 
 .refdate <- bizdays::offset(Sys.Date(), -5, "Brazil/ANBIMA")
-.meta <- tryCatch(download_marketdata("b3-futures-settlement-prices", refdate = .refdate), error = function(e) {
-  template_meta_load("b3-futures-settlement-prices", refdate = .refdate)
-})
-read_marketdata(.meta)
-.meta <- download_marketdata("b3-reference-rates", refdate = .refdate, curve_name = "PRE")
-read_marketdata(.meta)
-.meta <- download_marketdata("b3-reference-rates", refdate = .refdate, curve_name = "DOC")
-read_marketdata(.meta)
-.meta <- download_marketdata("b3-reference-rates", refdate = .refdate, curve_name = "DIC")
-read_marketdata(.meta)
+fetch_marketdata("b3-futures-settlement-prices", refdate = .refdate)
+fetch_marketdata("b3-reference-rates", refdate = .refdate, curve_name = c("PRE", "DIC", "DOC"))
 
 test_that("Test of yc_get function", {
   df_yc_1 <- yc_get()
