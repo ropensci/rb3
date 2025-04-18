@@ -18,8 +18,9 @@ writers:
     partition: refdate
   staging:
     function: process_cotahist
-    partition: refdate
+    partition: year
     columns:
+      year: integer
       refdate: Date
       bdi_code: integer
       symbol: character

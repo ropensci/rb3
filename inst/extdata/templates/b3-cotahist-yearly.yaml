@@ -17,7 +17,7 @@ writers:
   input:
     partition: refdate
   staging:
-    function: process_cotahist_yearly
+    function: process_cotahist
     partition: year
     columns:
       year: integer
