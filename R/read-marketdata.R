@@ -50,12 +50,13 @@ read_marketdata <- function(meta) {
     meta_clean(meta)
     return(invisible(NULL))
   }
-  for (writer in template$writers) {
-    ds <- writer$process_marketdata(df)
-    path <- template_db_folder(template, layer = writer$layer)
-    ds <- arrow::arrow_table(ds, schema = template_schema(template, writer$layer))
-    arrow::write_dataset(ds, path, partitioning = writer$partition)
-  }
+
+  arrow::write_dataset(
+    arrow::arrow_table(df, schema = template_schema(template, template$writers$input$layer)),
+    template_db_folder(template, layer = template$writers$input$layer),
+    partitioning = template$writers$input$partition
+  )
+
   invisible(df)
 }
 
@@ -107,19 +108,47 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
   df <- expand.grid(..., stringsAsFactors = FALSE)
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
-  pb <- cli::cli_progress_step("Downloading data", spinner = TRUE)
   if (nrow(df) == 0) {
+    pb <- cli::cli_progress_bar("Downloading data", total = 1, clear = FALSE)
     m <- download_(template = template, pb = pb, do_cache = do_cache, throttle = throttle)
     ms <- list(m)
   } else {
+    pb <- cli::cli_progress_bar("Downloading data", total = nrow(df), clear = FALSE)
     ms <- purrr::pmap(df, download_, template = template, pb = pb, do_cache = do_cache, throttle = throttle)
   }
   cli::cli_process_done(id = pb)
   # ----
-  pb <- cli::cli_progress_step("Reading data into DB", spinner = TRUE)
+  ms <- purrr::keep(ms, ~ !is.null(.x))
+  if (length(ms) == 0) {
+    cli::cli_alert_warning("No data downloaded")
+    return(invisible(NULL))
+  }
+  # ----
+  cli::cli_alert_info("{length(ms)} files downloaded")
+  # Creating input layer ----
+  pb <- cli::cli_progress_bar("Creating input layer", total = length(ms), clear = FALSE)
   purrr::map(ms, read_, pb = pb)
   cli::cli_process_done(id = pb)
-  cli::cli_alert_info("{length(ms)} files downloaded")
+  # Creating staging layer ----
+  cli::cli_alert_info("Creating staging layer")
+  template <- template_retrieve(template)
+  if (!is.null(template$writers$staging)) {
+    ds <- template_dataset(template, layer = template$writers$input$layer)
+    ds <- template$writers$staging$process_marketdata(ds)
+    if (!is.null(template$writers$staging$partition)) {
+      arrow::write_dataset(
+        ds,
+        template_db_folder(template, layer = template$writers$staging$layer),
+        partitioning = template$writers$staging$partition
+      )
+    } else {
+      arrow::write_dataset(
+        ds,
+        template_db_folder(template, layer = template$writers$staging$layer)
+      )
+    }
+  }
+
   invisible(NULL)
 }
 
@@ -171,13 +200,10 @@ download_ <- function(..., template, pb, throttle, do_cache) {
 
 read_ <- function(m, pb) {
   cli::cli_progress_update(id = pb)
-  if (!is.null(m)) {
-    x <- read_marketdata(m)
-    if (is.null(x)) {
-      row <- m$download_args
-      msg <- paste(names(row), purrr::map(row, format), sep = " = ", collapse = ", ")
-      cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
-    }
+  x <- read_marketdata(m)
+  if (is.null(x)) {
+    row <- m$download_args
+    msg <- paste(names(row), purrr::map(row, format), sep = " = ", collapse = ", ")
+    cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
   }
-  NULL
 }

@@ -23,7 +23,6 @@ writers:
     partition: [curve_name, refdate]
   staging:
     function: process_yc
-    partition: [curve_name, refdate]
     columns:
       curve_name: character
       refdate: Date
