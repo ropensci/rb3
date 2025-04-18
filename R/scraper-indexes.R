@@ -143,8 +143,7 @@ process_index_historical_data <- function(ds) {
     select("index", "refdate", "value") |>
     dplyr::rename(symbol = "index") |>
     filter(!is.na(.data$value)) |>
-    dplyr::arrange("refdate") |>
-    mutate(year = lubridate::year(refdate))
+    dplyr::arrange("refdate")
 }
 
 #' Get historical data from B3 indexes
