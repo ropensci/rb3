@@ -108,6 +108,7 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
   df <- expand.grid(..., stringsAsFactors = FALSE)
   cli::cli_h1("Fetching market data for {.var {template}}")
   # ----
+  start_ <- Sys.time()
   if (nrow(df) == 0) {
     pb <- cli::cli_progress_bar("Downloading data", total = 1, clear = FALSE)
     m <- download_(template = template, pb = pb, do_cache = do_cache, throttle = throttle)
@@ -116,6 +117,8 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
     pb <- cli::cli_progress_bar("Downloading data", total = nrow(df), clear = FALSE)
     ms <- purrr::pmap(df, download_, template = template, pb = pb, do_cache = do_cache, throttle = throttle)
   }
+  end_ <- Sys.time()
+  elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
   cli::cli_process_done(id = pb)
   # ----
   ms <- purrr::keep(ms, ~ !is.null(.x))
@@ -124,15 +127,20 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
     return(invisible(NULL))
   }
   # ----
-  cli::cli_alert_info("{length(ms)} files downloaded")
+  cli::cli_inform(c(v = "{length(ms)} file{?s} downloaded [{round(elapsed, 2)}s]"))
   # Creating input layer ----
   pb <- cli::cli_progress_bar("Creating input layer", total = length(ms), clear = FALSE)
+  start_ <- Sys.time()
   purrr::map(ms, read_, pb = pb)
+  end_ <- Sys.time()
+  elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
   cli::cli_process_done(id = pb)
+  cli::cli_inform(c(v = "{.strong input} layer created [{round(elapsed, 2)}s]"))
   # Creating staging layer ----
-  cli::cli_alert_info("Creating staging layer")
   template <- template_retrieve(template)
   if (!is.null(template$writers$staging)) {
+    cli::cli_alert_info("Creating {.strong staging} layer")
+    start_ <- Sys.time()
     ds <- template_dataset(template, layer = template$writers$input$layer)
     ds <- template$writers$staging$process_marketdata(ds)
     if (!is.null(template$writers$staging$partition)) {
@@ -147,6 +155,9 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
         template_db_folder(template, layer = template$writers$staging$layer)
       )
     }
+    end_ <- Sys.time()
+    elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
+    cli::cli_inform(c(v = "{.strong staging} layer created [{round(elapsed, 2)}s]"))
   }
 
   invisible(NULL)
