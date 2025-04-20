@@ -55,6 +55,37 @@ devtools::install_github("ropensci/rb3")
 
 ## Basic Usage
 
+### Downloading Data
+
+Execute the following code to download all data you need to start
+working with `rb3`:
+
+``` r
+# Set the rb3.cachedir folder - it must be executed before loading rb3 package
+options(rb3.cachedir = "/path/to/your/custom/folder")
+
+library(rb3)
+library(bizdays)
+
+# download COTAHIST data from 2000 to 2025
+fetch_marketdata("b3-cotahist-yearly", year = 2000:2025)
+# download futures settlement prices from 2000 to 2025
+fetch_marketdata("b3-futures-settlement-prices", refdate = bizseq("2000-01-01", Sys.Date(), "Brazil/B3"))
+# download yield curves from 2018 to 2025
+fetch_marketdata("b3-reference-rates",
+  refdate = bizseq("2018-01-01", Sys.Date(), "Brazil/B3"),
+  curve_name = c("DIC", "DOC", "PRE")
+)
+# download indexes composition data - it is necessary to execute `indexes_get()`
+fetch_marketdata("b3-indexes-composition")
+# download current portfolio for all indexes
+fetch_marketdata("b3-indexes-current-portfolio", index = indexes_get(), throttle = TRUE)
+# download theoretical portfolio for all indexes
+fetch_marketdata("b3-indexes-theoretical-portfolio", index = indexes_get(), throttle = TRUE)
+# download historical data for all indexes
+fetch_marketdata("b3-indexes-historical-data", index = indexes_get(), year = 2000:2025, throttle = TRUE)
+```
+
 ### Market Data Templates
 
 The `rb3` package uses a template system to standardize the downloading
