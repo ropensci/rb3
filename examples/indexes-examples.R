@@ -2,9 +2,6 @@ library(rb3)
 library(tidyverse)
 library(bizdays)
 
-# loading the current portfolio data for all indexes
-fetch_marketdata("b3-indexes-current-portfolio", index = indexes_get())
-
 index_name <- "IBOV"
 
 # find out available dates
@@ -42,11 +39,6 @@ current_portfolio |>
   labs(x = NULL, y = "%") +
   scale_y_continuous(labels = scales::percent)
 
-# fetch theoretical portfolio data
-fetch_marketdata("b3-indexes-theoretical-portfolio", index = indexes_get())
-
-## b3-indexes-theoretical-portfolio does not have a sector column
-
 # get last date
 last_date <- indexes_theoretical_portfolio_get() |>
   filter(index == index_name) |>
@@ -62,11 +54,6 @@ indexes_theoretical_portfolio_get() |>
   slice_max(order_by = weight, n = 10)
 
 # index composition
-
-# fetch_marketdata("b3-indexes-composition") does not work!
-# usar download_marketdata() e read_marketdata()
-meta <- download_marketdata("b3-indexes-composition")
-read_marketdata(meta)
 
 # get last date
 last_date <- indexes_composition_get() |>
@@ -137,8 +124,6 @@ indexes_indexes_by_assets <- function(symbols) {
 }
 
 # indexes historical data
-
-fetch_marketdata("b3-indexes-historical-data", throttle = TRUE, index = indexes_get(), year = 2000:2025)
 
 indexes_data <- indexes_historical_data_get() |>
   filter(symbol %in% c("IBOV", "IDIV", "IBXL", "IBXX", "IBRA"), refdate >= "2010-01-01") |>
