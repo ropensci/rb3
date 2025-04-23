@@ -18,7 +18,6 @@ writers:
     partition: [index, year]
   staging:
     function: process_index_historical_data
-    partition: [refdate, symbol]
     columns:
       symbol: character
       refdate: Date

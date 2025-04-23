@@ -308,5 +308,35 @@ cotahist_options_by_symbols_get <- function(symbols) {
 }
 
 process_cotahist <- function(ds) {
-  ds |> filter(.data$regtype == 1)
+  ds |>
+    filter(.data$regtype == 1) |>
+    mutate(year = lubridate::year(.data$refdate)) |>
+    select(
+      "year",
+      "refdate",
+      "bdi_code",
+      "symbol",
+      "instrument_market",
+      "corporation_name",
+      "specification_code",
+      "days_to_settlement",
+      "trading_currency",
+      "open",
+      "high",
+      "low",
+      "average",
+      "close",
+      "best_bid",
+      "best_ask",
+      "trade_quantity",
+      "traded_contracts",
+      "volume",
+      "strike_price",
+      "strike_price_adjustment_indicator",
+      "maturity_date",
+      "allocation_lot_size",
+      "strike_price_in_points",
+      "isin",
+      "distribution_id",
+    )
 }

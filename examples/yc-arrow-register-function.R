@@ -1,10 +1,12 @@
+# registrar funções no arrow pode ser interessante na criação de datasets que podem ser utilizados com duckdb
+
 arrow_bizdayse <- function(context, refdate, cur_days, calendar) {
   bizdays::bizdayse(refdate, cur_days, calendar)
 }
 
 arrow::register_scalar_function(
   name = "arrow_bizdayse",
-  fun = bizdayse_arrow,
+  fun = arrow_bizdayse,
   in_type = arrow::schema(
     refdate = arrow::date32(),
     cur_days = arrow::int64(),
@@ -15,7 +17,9 @@ arrow::register_scalar_function(
 )
 
 template <- template_retrieve("b3-reference-rates")
+
 .curve_name <- "PRE"
+
 df <- template_dataset(template) |>
   filter(.data$curve_name == .curve_name) |>
   mutate(
@@ -27,6 +31,7 @@ df <- template_dataset(template) |>
   ) |>
   collect() |> arrange()
 df
+
 yc_superset(yc_get("2025-02-28"), futures_get("2025-02-28", "DI1")) |> View()
 
 f <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2025-03-06"))

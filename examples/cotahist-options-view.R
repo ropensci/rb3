@@ -1,32 +1,33 @@
+library(rb3)
 library(tidyverse)
 library(bizdays)
 library(oplib)
 
-refdate <- Sys.Date() - 2
+refdate <- as.Date("2025-04-15")
 
-ch <- cotahist_get(refdate, "daily")
-yc <- yc_get(refdate)
-
-df <- cotahist_equity_options_superset(ch, yc)
+df <- cotahist_options_by_symbols_get("PETR4") |>
+  filter(refdate == !!refdate) |>
+  collect()
 
 close_underlying <- df |>
-  filter(symbol.underlying == "PETR4", maturity_date == min(maturity_date)) |>
-  pull(close.underlying)
+  filter(maturity_date == min(maturity_date)) |>
+  pull(close_underlying) |>
+  unique()
 
 maturities <- df |>
-  filter(symbol.underlying == "PETR4") |>
+  filter(!stringr::str_detect(symbol, "W\\d")) |>
   pull(maturity_date) |>
   unique() |>
   sort()
 
 df |>
-  filter(symbol.underlying == "PETR4", maturity_date %in% maturities[1:2]) |>
+  filter(maturity_date %in% maturities[1:2]) |>
   ggplot(aes(
-    x = strike, y = close, linewidth = volume,
+    x = strike_price, y = close, linewidth = volume,
     group = maturity_date, color = factor(maturity_date)
   )) +
   geom_vline(
-    xintercept = close_underlying[1], linewidth = 1, color = "red", alpha = 0.25
+    xintercept = close_underlying, linewidth = 1, color = "red", alpha = 0.25
   ) +
   geom_point(alpha = 0.5) +
   facet_grid(. ~ type)

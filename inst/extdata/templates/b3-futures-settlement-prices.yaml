@@ -21,7 +21,6 @@ writers:
     partition: refdate
   staging:
     function: process_futures
-    partition: [refdate, commodity]
     columns:
       refdate: Date
       symbol: character

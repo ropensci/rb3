@@ -165,5 +165,7 @@ process_index_historical_data <- function(ds) {
 #'
 #' @export
 indexes_historical_data_get <- function() {
-  template_dataset("b3-indexes-historical-data", layer = 2)
+  template_dataset("b3-indexes-historical-data", layer = 2) |>
+    select("symbol", "refdate", "value") |>
+    dplyr::arrange(.data$symbol, .data$refdate)
 }

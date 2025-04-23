@@ -18,7 +18,6 @@ writers:
     partition: [refdate, index]
   staging:
     function: process_indexes_current_portfolio
-    partition: [refdate, index]
     columns:
       refdate: Date
       portfolio_date: Date

@@ -1,55 +1,58 @@
+library(rb3)
 library(duckdb)
-
-reg <- rb3_registry$get_instance()
-con <- dbConnect(duckdb::duckdb(), file.path(reg[["db_folder"]], "duckdb.db"))
 
 con <- rb3_db_connection()
 
-t <- template_retrieve("b3-reference-rates")
-t <- template_retrieve("b3-cotahist-yearly")
-ds <- template_dataset(t)
-q <- yc_brl_get()
+duckdb::duckdb_register_arrow(con, "b3_cotahist_yearly", cotahist_get("yearly"))
+duckdb::duckdb_register_arrow(con, "b3_yc_brl", yc_brl_get())
+duckdb::duckdb_register_arrow(con, "b3_futures", futures_get())
+duckdb::duckdb_register_arrow(con, "b3_indexes", indexes_historical_data_get())
+duckdb::duckdb_register_arrow(con, "b3_indexes_composition", indexes_composition_get())
+duckdb::duckdb_register_arrow(con, "b3_indexes_current_portfolio", indexes_current_portfolio_get())
+duckdb::duckdb_register_arrow(con, "b3_indexes_theoretical_portfolio", indexes_theoretical_portfolio_get())
 
-duckdb::duckdb_register_arrow(con, "b3-reference-rates", ds)
-duckdb::duckdb_register_arrow(con, "b3-cotahist-yearly", ds)
-duckdb::duckdb_register_arrow(con, "b3-yc-brl", q)
-duckdb::dbExistsTable(con, "b3-reference-rates")
-duckdb::dbExistsTable(con, "b3-yc-brl")
+duckdb::dbSendQuery(con, "select refdate, symbol, close from 'b3_cotahist_yearly' where symbol = 'PETR4' and refdate = '2025-04-14' order by refdate") |>
+  duckdb::dbFetch()
 
-duckdb::dbSendQuery(con, "select * from 'b3-cotahist-yearly' where regtype = 1 and instrument_market = 10 and symbol = 'PETR4' order by refdate") |> duckdb::dbFetch()
+DBI::dbGetQuery(con, "SELECT * FROM b3_yc_brl where refdate = '2025-03-10' and curve_name = 'PRE'")
 
-DBI::dbGetQuery(con, "SELECT * FROM 'b3-reference-rates' where refdate = '2025-03-10' and curve_name = 'PRE'")
-DBI::dbGetQuery(con, "SELECT * FROM 'b3-yc-brl' where refdate = '2025-03-10'")
-DBI::dbGetQuery(con, "SELECT * FROM 'b3-reference-rates' where refdate = '2025-03-10'")
+DBI::dbGetQuery(con, "SELECT * FROM b3_indexes where symbol = 'IBOV'")
+
+DBI::dbGetQuery(con, "SELECT * FROM b3_indexes_current_portfolio where index = 'IBOV' limit 10") |> dplyr::as_tibble()
+
+DBI::dbGetQuery(con, "SELECT * FROM b3_indexes_theoretical_portfolio limit 10")
+DBI::dbGetQuery(con, "SELECT symbol FROM b3_indexes_current_portfolio where index = 'IBOV' and refdate = '2025-04-14'")
+
+df <- DBI::dbGetQuery(con, "
+SELECT
+  c.symbol,
+  c.close,
+FROM b3_cotahist_yearly c
+WHERE c.refdate = '2025-04-14'
+  and c.symbol in (SELECT symbol FROM b3_indexes_current_portfolio where index = 'IBOV' and refdate = '2025-04-14')
+")
+
+write.table(df, file = "/mnt/c/Users/wilso/Downloads/stocks.csv", sep = ";", dec = ",", row.names = FALSE, col.names = TRUE)
+
+df <- DBI::dbGetQuery(con, "
+SELECT
+  c.refdate,
+  c.symbol,
+  c.close,
+  p.theoretical_quantity,
+  c.close * p.theoretical_quantity / p.reductor as theoretical_value
+FROM b3_cotahist_yearly c
+inner join b3_indexes_current_portfolio p
+  on c.symbol = p.symbol and c.refdate = p.refdate and p.index = 'IBOV'
+WHERE c.refdate = '2025-04-14'
+") |> dplyr::as_tibble()
+
+df$theoretical_value |> sum()
+
+DBI::dbGetQuery(con, "SELECT * FROM b3_indexes where symbol = 'IBOV' and refdate = '2025-04-14'") |>
+  dplyr::as_tibble()
+
+t <- template_retrieve("b3-indexes-current-portfolio")
+rb3:::meta_load(t$id, index = "IBOV", extra_arg = "2025-04-14")
 
 duckdb::dbDisconnect(con)
-
-library(duckplyr)
-
-template_db_folder(t)
-
-duckplyr::read_parquet_duckdb(list.files(template_db_folder(t), full.names = TRUE), prudence = "stingy") |> nrow()
-
-DBI::dbGetQuery(
-  con,
-  "select * from 'b3-cotahist-daily' limit 10"
-)
-
-q <- sprintf("create or replace view 'b3-cotahist-daily' as SELECT * FROM read_parquet('%s/*.parquet') where regtype = 1", template_db_folder(t))
-
-dbExecute(con, q)
-
-duckplyr::db_exec("INSTALL json")
-duckplyr::db_exec("LOAD json")
-duckplyr::read_json_duckdb(sprintf("%s/*.json", reg$meta_folder)) |> filter(template == "b3-reference-rates")
-
-dbGetQuery(
-  con,
-  sprintf("select * from read_json('%s/*.json') limit 10", reg[["meta_folder"]])
-)
-
-dbGetQuery(
-  con,
-  sprintf("select * from read_json('%s/*.json') where template = 'b3-cotahist-daily'", reg[["meta_folder"]])
-)
-

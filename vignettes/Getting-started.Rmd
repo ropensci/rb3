@@ -133,6 +133,16 @@ getOption("rb3.cachedir")
 #> [1] "/home/wilson/dev/rb3/rb3-cache"
 ```
 
+You can change the location of the `rb3.cachedir` folder by setting the option
+`rb3.cachedir` to a different path.
+```{r set-rb3-cachedir, eval=FALSE}
+# Set the rb3.cachedir folder to a different path
+options(rb3.cachedir = "/path/to/your/custom/folder")
+```
+
+> #### Note
+> It is strongly recommended to set the `rb3.cachedir` folder in the .Rprofile file.
+
 Inside this folder it has the 3 folders:
 
 - raw: for raw downloaded files

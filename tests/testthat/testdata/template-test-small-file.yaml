@@ -6,6 +6,8 @@ downloader:
   function: sprintf_download
   url: https://httpbin.org/bytes/%d
   format: html
+  args:
+    size: Tamanho do arquivo
 fields:
 - name: test
   description: Test field
