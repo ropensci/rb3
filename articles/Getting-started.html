@@ -206,6 +206,16 @@ using:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"rb3.cachedir"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "/home/wilson/dev/rb3/rb3-cache"</span></span></code></pre></div>
+<p>You can change the location of the <code>rb3.cachedir</code> folder
+by setting the option <code>rb3.cachedir</code> to a different path.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set the rb3.cachedir folder to a different path</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>rb3.cachedir <span class="op">=</span> <span class="st">"/path/to/your/custom/folder"</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<h4 id="note">Note</h4>
+<p>It is strongly recommended to set the <code>rb3.cachedir</code>
+folder in the .Rprofile file.</p>
+</blockquote>
 <p>Inside this folder it has the 3 folders:</p>
 <ul>
 <li>raw: for raw downloaded files</li>
@@ -228,7 +238,7 @@ transformed and stored in the <code>input</code> layer within the
 is saved in the <code>staging</code> layer, also within the
 <code>db</code> folder. The dataset cam be accessed using the function
 <code><a href="../reference/template_dataset.html">rb3::template_dataset()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the dataset for the template "b3-reference-rates"</span></span>
 <span><span class="fu"><a href="../reference/template_dataset.html">template_dataset</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; FileSystemDataset with 47 Parquet files</span></span>
@@ -241,7 +251,7 @@ is saved in the <code>staging</code> layer, also within the
 <p>This function defaults to the <code>input</code> layer, but you can
 specify the <code>layer</code> argument to access the
 <code>staging</code> layer if needed.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the dataset for the template "b3-reference-rates" in the input layer</span></span>
 <span><span class="fu"><a href="../reference/template_dataset.html">template_dataset</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, layer <span class="op">=</span> <span class="st">"staging"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; FileSystemDataset with 47 Parquet files</span></span>
@@ -287,7 +297,7 @@ rate curve (DIC).</li>
 <p>and many others. For example, to access the data downloaded using the
 <code>b3-reference-rates</code> template, you can use the
 <code><a href="../reference/yc_xxx_get.html">yc_brl_get()</a></code> function:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the Brazilian nominal yield curve (PRE)</span></span>
 <span><span class="fu"><a href="../reference/yc_xxx_get.html">yc_brl_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">refdate</span> <span class="op">==</span> <span class="st">"2024-01-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span>

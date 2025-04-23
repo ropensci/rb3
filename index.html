@@ -104,10 +104,39 @@
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
 <div class="section level3">
+<h3 id="downloading-data">Downloading Data<a class="anchor" aria-label="anchor" href="#downloading-data"></a>
+</h3>
+<p>Execute the following code to download all data you need to start working with <code>rb3</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set the rb3.cachedir folder - it must be executed before loading rb3 package</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>rb3.cachedir <span class="op">=</span> <span class="st">"/path/to/your/custom/folder"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-bizdays" class="external-link">bizdays</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># download COTAHIST data from 2000 to 2025</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-cotahist-yearly"</span>, year <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2025</span><span class="op">)</span></span>
+<span><span class="co"># download futures settlement prices from 2000 to 2025</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="st">"2000-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># download yield curves from 2018 to 2025</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>,</span>
+<span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="st">"2018-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span>,</span>
+<span>  curve_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIC"</span>, <span class="st">"DOC"</span>, <span class="st">"PRE"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># download indexes composition data - it is necessary to execute `indexes_get()`</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-indexes-composition"</span><span class="op">)</span></span>
+<span><span class="co"># download current portfolio for all indexes</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-indexes-current-portfolio"</span>, index <span class="op">=</span> <span class="fu"><a href="reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span>, throttle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># download theoretical portfolio for all indexes</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-indexes-theoretical-portfolio"</span>, index <span class="op">=</span> <span class="fu"><a href="reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span>, throttle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># download historical data for all indexes</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-indexes-historical-data"</span>, index <span class="op">=</span> <span class="fu"><a href="reference/indexes_get.html">indexes_get</a></span><span class="op">(</span><span class="op">)</span>, year <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2025</span>, throttle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="market-data-templates">Market Data Templates<a class="anchor" aria-label="anchor" href="#market-data-templates"></a>
 </h3>
 <p>The <code>rb3</code> package uses a template system to standardize the downloading and processing of different data types. To see available templates:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wilsonfreitas/R-bizdays" class="external-link">bizdays</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span></span>
@@ -131,7 +160,7 @@
 <h3 id="downloading-market-data">Downloading Market Data<a class="anchor" aria-label="anchor" href="#downloading-market-data"></a>
 </h3>
 <p>The main function for fetching data is <code><a href="reference/fetch_marketdata.html">fetch_marketdata()</a></code>, which downloads data based on a template and parameters:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Download yield curve data for specific dates</span></span>
 <span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>,</span>
 <span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-31"</span><span class="op">)</span>,</span>
@@ -149,7 +178,7 @@
 <div class="section level3">
 <h3 id="working-with-historical-equity-data">Working with Historical Equity Data<a class="anchor" aria-label="anchor" href="#working-with-historical-equity-data"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Access the data</span></span>
 <span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cotahist_get.html">cotahist_get</a></span><span class="op">(</span><span class="st">"yearly"</span><span class="op">)</span></span>
 <span></span>
@@ -158,7 +187,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">year</span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2023</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/cotahist-extracts.html">cotahist_filter_equity</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">collect</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get top 10 most traded stocks</span></span>
 <span><span class="va">symbols</span> <span class="op">&lt;-</span> <span class="va">eq</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -171,7 +200,7 @@
 <span><span class="va">symbols</span></span>
 <span><span class="co">#&gt;  [1] "VALE3" "PETR4" "ITUB4" "BBDC4" "BBAS3" "B3SA3" "PRIO3" "PETR3" "RENT3"</span></span>
 <span><span class="co">#&gt; [10] "MGLU3"</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the most traded stocks grouped by month</span></span>
 <span><span class="va">eq</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">symbol</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">symbols</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -194,12 +223,12 @@
 <div class="section level3">
 <h3 id="yield-curve-analysis">Yield Curve Analysis<a class="anchor" aria-label="anchor" href="#yield-curve-analysis"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get Brazilian nominal yield curve (PRE)</span></span>
 <span><span class="va">yc_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yc_xxx_get.html">yc_brl_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">refdate</span> <span class="op">==</span> <span class="st">"2024-01-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">collect</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the yield curve</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">yc_data</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">forward_date</span>, y <span class="op">=</span> <span class="va">r_252</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -214,12 +243,12 @@
 <div class="section level3">
 <h3 id="futures-contracts">Futures Contracts<a class="anchor" aria-label="anchor" href="#futures-contracts"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get futures settlement prices</span></span>
 <span><span class="va">futures_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/futures_get.html">futures_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">commodity</span> <span class="op">==</span> <span class="st">"DI1"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">collect</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate implied rates</span></span>
 <span><span class="va">di1_futures</span> <span class="op">&lt;-</span> <span class="va">futures_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
@@ -262,21 +291,21 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use <code>rb3</code> in your research, please cite it:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>To cite rb3 <span class="cf">in</span> publications use<span class="sc">:</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  Download and parse public files released by B3 and convert them into</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  useful formats and data structures common to data analysis</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  practitioners.</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="sc">@</span>Manual{rb3<span class="sc">-</span>package,</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>    title <span class="ot">=</span> {Download and Parse Public Data Released by B3 Exchange},</span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>    author <span class="ot">=</span> {Wilson Freitas and Marcelo Perlin},</span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>    note <span class="ot">=</span> {R package version <span class="dv">0</span>.<span class="fl">0.8</span>},</span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>ropensci<span class="sc">/</span>rb3},</span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>To cite rb3 <span class="cf">in</span> publications use<span class="sc">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  Download and parse public files released by B3 and convert them into</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  useful formats and data structures common to data analysis</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  practitioners.</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="sc">@</span>Manual{rb3<span class="sc">-</span>package,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>    title <span class="ot">=</span> {Download and Parse Public Data Released by B3 Exchange},</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>    author <span class="ot">=</span> {Wilson Freitas and Marcelo Perlin},</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>    note <span class="ot">=</span> {R package version <span class="dv">0</span>.<span class="fl">0.8</span>},</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>ropensci<span class="sc">/</span>rb3},</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
