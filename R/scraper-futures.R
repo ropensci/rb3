@@ -75,31 +75,31 @@ code2month_oldcode <- function(x) {
 #' @return a Date vector with maturity dates
 #'
 #' @examples
-#' maturity2date(c("F22", "F23", "G23", "H23", "F45"), "first day")
-#' maturity2date(c("F23", "K35"), "15th day")
-#' maturity2date(c("AGO2", "SET2"), "first day")
+#' maturitycode2date(c("F22", "F23", "G23", "H23", "F45"), "first day")
+#' maturitycode2date(c("F23", "K35"), "15th day")
+#' maturitycode2date(c("AGO2", "SET2"), "first day")
 #' @export
-maturity2date <- function(x, expr = "first day", refdate = NULL) {
+maturitycode2date <- function(x, expr = "first day", refdate = NULL) {
   res <- character(length(x))
   ix <- which(str_length(x) == 3)
   if (length(ix)) {
-    res[ix] <- maturity2date_newcode(x[ix], expr)
+    res[ix] <- maturitycode2date_newcode(x[ix], expr)
   }
   ix <- which(str_length(x) == 4)
   if (length(ix)) {
-    res[ix] <- maturity2date_oldcode(x[ix], expr, refdate)
+    res[ix] <- maturitycode2date_oldcode(x[ix], expr, refdate)
   }
   as.Date(res)
 }
 
-maturity2date_newcode <- function(x, expr = "first day") {
+maturitycode2date_newcode <- function(x, expr = "first day") {
   year <- as.integer(str_sub(x, 2)) + 2000
   month <- code2month_newcode(str_sub(x, 1, 1))
   month <- str_pad(month, 2, pad = "0")
   getdate(expr, paste0(year, "-", month), "Brazil/BMF") |> as.character()
 }
 
-maturity2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
+maturitycode2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
   base_year <- 2000
   if (!is.null(refdate) && refdate >= as.Date("2001-01-01")) {
     base_year <- 2010
