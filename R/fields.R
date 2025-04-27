@@ -55,7 +55,7 @@ field <- function(name, description, ...) {
     } else if (inherits(x, "type")) {
       "type"
     } else if (inherits(x, "collector")) {
-      "col"
+      "collector"
     } else if (inherits(x, "DataType") && inherits(x, "ArrowObject")) {
       "arrow"
     } else {
@@ -82,7 +82,7 @@ field <- function(name, description, ...) {
     }
   }
 
-  attr(name, "col") <- type_collector(attr(name, "type"))
+  attr(name, "collector") <- type_collector(attr(name, "type"))
   attr(name, "arrow") <- type_arrow_scalar(attr(name, "type"))
 
   class(name) <- "field"
@@ -156,8 +156,8 @@ fields_handlers <- function(fields) {
 }
 
 #' Extract field column specifications
-fields_cols <- function(fields) {
-  extract_named_attributes(fields, "col")
+fields_collectors <- function(fields) {
+  extract_named_attributes(fields, "collector")
 }
 
 #' Extract field arrow types

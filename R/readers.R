@@ -4,7 +4,7 @@
   } else {
     do.call(readr::locale, .$reader$locale)
   }
-  cols <- fields_cols(.$fields)
+  cols <- fields_collectors(.$fields)
   for (nx in .$colnames) {
     df[[nx]] <- readr::parse_vector(as.character(df[[nx]]), cols[[nx]], locale = loc)
   }
@@ -13,7 +13,7 @@
 
 csv_read_file <- function(., filename, ...) {
   df <- readr::read_csv(filename,
-    col_names = .$colnames, col_types = fields_cols(.$fields),
+    col_names = .$colnames, col_types = fields_collectors(.$fields),
     locale = readr::locale(), skip = .$reader$skip
   )
   df
@@ -23,7 +23,7 @@ fwf_read_file <- function(., filename, ...) {
   encoding <- if (!is.null(.$reader) && !is.null(.$reader$encoding)) .$reader$encoding else "UTF-8"
   suppressWarnings(
     df <- readr::read_fwf(filename, readr::fwf_widths(.$widths, .$colnames),
-      col_types = fields_cols(.$fields), locale = readr::locale(encoding = encoding)
+      col_types = fields_collectors(.$fields), locale = readr::locale(encoding = encoding)
     )
   )
   hs <- fields_handlers(.$fields)

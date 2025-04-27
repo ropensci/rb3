@@ -27,7 +27,7 @@ test_that("it should create a field with full specifications", {
   expect_equal(attr(f, "description"), "field_description")
   expect_equal(attr(f, "width"), 0)
   expect_equal(attr(f, "type"), type("character"))
-  expect_equal(attr(f, "col"), readr::col_character())
+  expect_equal(attr(f, "collector"), readr::col_character())
   expect_equal(class(attr(f, "arrow")), class(arrow::string()))
 })
 
@@ -40,7 +40,7 @@ test_that("it should create a field with default values", {
                           ))
   
   # Additional checks for default values
-  expect_equal(attr(f, "col"), readr::col_character())
+  expect_equal(attr(f, "collector"), readr::col_character())
   expect_equal(class(attr(f, "arrow")), class(arrow::string()))
 })
 
