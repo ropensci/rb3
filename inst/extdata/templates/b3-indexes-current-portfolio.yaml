@@ -19,8 +19,8 @@ writers:
   staging:
     function: process_indexes_current_portfolio
     columns:
-      refdate: Date
-      portfolio_date: Date
+      refdate: date
+      portfolio_date: date
       index: character
       symbol: character
       weight: numeric
@@ -31,53 +31,40 @@ writers:
 fields:
 - name: segment
   description: Código da ação
-  handler:
-    type: character
+  type: character
 - name: symbol
   description: Código da ação
-  handler:
-    type: character
+  type: character
 - name: corporation_name
   description: Nome da companhia
-  handler:
-    type: character
+  type: character
 - name: specification_code
   description: Código de especificação da ação
-  handler:
-    type: character
+  type: character
 - name: weight
   description: Peso % no índice
-  handler:
-    type: number
+  type: number
 - name: accum_weight
   description: Peso % acumulado
-  handler:
-    type: number
+  type: number
 - name: theoretical_quantity
   description: Quantidade teórica no índice
-  handler:
-    type: number
+  type: number
 - name: total_weight
   description: Peso total % no índice
-  handler:
-    type: number
+  type: number
 - name: total_theoretical_quantity
   description: Quantidade teórica total do índice
-  handler:
-    type: number
+  type: number
 - name: reductor
   description: Redutor
-  handler:
-    type: number
+  type: number
 - name: index
   description: Nome do índice
-  handler:
-    type: character
+  type: character
 - name: refdate
   description: Data de referência do download - argumento extra
-  handler:
-    type: Date
+  type: date
 - name: portfolio_date
   description: Data da carteira teórica
-  handler:
-    type: Date
+  type: date

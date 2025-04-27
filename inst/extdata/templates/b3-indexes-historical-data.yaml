@@ -20,66 +20,51 @@ writers:
     function: process_index_historical_data
     columns:
       symbol: character
-      refdate: Date
+      refdate: date
       value: numeric
 fields:
 - name: day
   description: Dia do mês
-  handler:
-    type: integer
+  type: integer
 - name: month01
   description: Coluna do mês de janeiro
-  handler:
-    type: number
+  type: number
 - name: month02
   description: Coluna do mês de fevereiro
-  handler:
-    type: number
+  type: number
 - name: month03
   description: Coluna do mês de março
-  handler:
-    type: number
+  type: number
 - name: month04
   description: Coluna do mês de abril
-  handler:
-    type: number
+  type: number
 - name: month05
   description: Coluna do mês de maio
-  handler:
-    type: number
+  type: number
 - name: month06
   description: Coluna do mês de junho
-  handler:
-    type: number
+  type: number
 - name: month07
   description: Coluna do mês de julho
-  handler:
-    type: number
+  type: number
 - name: month08
   description: Coluna do mês de agosto
-  handler:
-    type: number
+  type: number
 - name: month09
   description: Coluna do mês de setembro
-  handler:
-    type: number
+  type: number
 - name: month10
   description: Coluna do mês de outubro
-  handler:
-    type: number
+  type: number
 - name: month11
   description: Coluna do mês de novembro
-  handler:
-    type: number
+  type: number
 - name: month12
   description: Coluna do mês de dezembro
-  handler:
-    type: number
+  type: number
 - name: year
   description: Ano
-  handler:
-    type: integer
+  type: integer
 - name: index
   description: Nome do índice
-  handler:
-    type: character
+  type: character
