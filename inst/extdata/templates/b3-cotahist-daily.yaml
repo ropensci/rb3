@@ -2,7 +2,6 @@ id: b3-cotahist-daily
 filename: COTAHIST
 filetype: CUSTOM
 description: Cotações Históricas do Pregão de Ações - Arquivo Diário
-locale: en
 downloader:
   function: datetime_download
   url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_D%d%m%Y.ZIP

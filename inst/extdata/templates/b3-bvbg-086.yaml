@@ -3,7 +3,6 @@ filename: ~
 filetype: CUSTOM
 description: Arquivo de Preços de Mercado - BVBG-086
 calendar: Brazil/B3
-locale: en
 downloader:
   function: datetime_download
   url: https://www.b3.com.br/pesquisapregao/download?filelist=PR%y%m%d.zip

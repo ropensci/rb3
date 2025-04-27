@@ -1,7 +1,6 @@
 id: b3-indexes-current-portfolio
 filetype: CUSTOM
 description: Carteira teórica corrente dos índices da B3 com pesos e posições
-locale: pt
 downloader:
   function: stock_indexes_current_portfolio_download
   verifyssl: false
