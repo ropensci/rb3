@@ -21,7 +21,7 @@ writers:
     partition: year
     columns:
       year: integer
-      refdate: Date
+      refdate: date
       bdi_code: integer
       symbol: character
       instrument_market: integer
@@ -41,7 +41,7 @@ writers:
       volume: numeric
       strike_price: numeric
       strike_price_adjustment_indicator: character
-      maturity_date: Date
+      maturity_date: date
       allocation_lot_size: integer
       strike_price_in_points: numeric
       isin: character
@@ -49,157 +49,109 @@ writers:
 fields:
 - name: regtype
   description: Tipo de registro
-  handler:
-    type: integer
+  type: integer
   width: 2
 - name: refdate
   description: Data do pregão
-  handler:
-    type: Date
-    format: '%Y%m%d'
+  type: date(format='%Y%m%d')
   width: 8
 - name: bdi_code
   description: Código BDI
-  handler:
-    type: integer
+  type: integer
   width: 2
 - name: symbol
   description: Código de negociação do papel
-  handler:
-    type: character
+  type: character
   width: 12
 - name: instrument_market
   description: Tipo de mercado
-  handler:
-    type: integer
+  type: integer
   width: 3
 - name: corporation_name
   description: Nome resumido da empresa emissora do papel
-  handler:
-    type: character
+  type: character
   width: 12
 - name: specification_code
   description: Especificação do papel
-  handler:
-    type: character
+  type: character
   width: 10
 - name: days_to_settlement
   description: Prazo em dias do mercado a termo
-  handler:
-    type: integer
+  type: integer
   width: 3
 - name: trading_currency
   description: Moeda de referência
-  handler:
-    type: character
+  type: character
   width: 4
 - name: open
   description: Preço de abertura do papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: high
   description: Preço máximo do papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: low
   description: Preço mínimo do papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: average
   description: Preço médio do papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: close
   description: Preço último negócio efetuado com o papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: best_bid
   description: Preço da melhor oferta de compra do papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: best_ask
   description: Preço da melhor oferta de venda do papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: trade_quantity
   description: Número de negócios efetuados com o papel
-  handler:
-    type: integer
+  type: integer
   width: 5
 - name: traded_contracts
   description: Quantidade total de títulos negociados neste papel
-  handler:
-    type: integer
+  type: integer
   width: 18
 - name: volume
   description: Volume total de títulos negociados neste papel
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric(dec=2.0, sign='')
   width: 18
 - name: strike_price
   description: Preço de exercício para o mercado de opções ou valor do contrato
     para o mercado de termo secundário
-  handler:
-    type: numeric
-    dec: 2.0
-    sign: ''
+  type: numeric
   width: 13
 - name: strike_price_adjustment_indicator
   description: Indicador de correção de preços de exercícios ou valores de contrato
     para os mercados de opções, termo secundário ou futuro
-  handler:
-    type: character
+  type: character
   width: 1
 - name: maturity_date
   description: Data do vencimento para os mercados de opções, termo secundário
     ou futuro
-  handler:
-    type: Date
-    format: '%Y%m%d'
+  type: date(format='%Y%m%d')
   width: 8
 - name: allocation_lot_size
   description: Fator de cotação do papel
-  handler:
-    type: integer
+  type: integer
   width: 7
 - name: strike_price_in_points
   description: Preço de exercício em pontos para opções referenciadas em dólar
     ou valor de contrato em pontos para termo secundário
-  handler:
-    type: numeric
-    dec: 6.0
-    sign: ''
+  type: numeric(dec=6.0, sign='')
   width: 13
 - name: isin
   description: Código do papel no sistema ISIN
-  handler:
-    type: character
+  type: character
   width: 12
 - name: distribution_id
   description: Número de distribuição do papel
-  handler:
-    type: integer
+  type: integer
   width: 3

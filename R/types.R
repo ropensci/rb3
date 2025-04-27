@@ -8,7 +8,7 @@ VALID_TYPES <- list(
   time = list(format = "%H:%M:%S"),
   datetime = list(format = "%Y-%m-%d %H:%M:%S"),
   numeric = list(dec = 0, sign = "+"),
-  number = list(dec = 0, sign = "+"),
+  number = list(),
   integer = list(),
   character = list(),
   logical = list()
@@ -37,7 +37,10 @@ type <- function(name, ...) {
   # Apply custom attributes from ...
   dots <- list(...)
   for (attr_name in names(dots)) {
-    attr(type_obj, attr_name) <- dots[[attr_name]]
+    if (!is.na(dots[[attr_name]]) && !is.null(dots[[attr_name]])) {
+      # Check if the attribute is valid
+      attr(type_obj, attr_name) <- dots[[attr_name]]
+    }
   }
   
   # Set the class
@@ -177,7 +180,6 @@ numeric_handler <- function(type) {
   sign <- if (type$sign == "-") -1 else 1
   dec <- type$dec
   function(x) {
-    x <- paste0(sign, x)
     sign * x / (10^dec)
   }
 }

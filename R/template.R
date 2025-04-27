@@ -27,18 +27,18 @@ load_template_from_file <- function(fname) {
         }
         if (!is.null(w[["columns"]])) {
           fields_ <- lapply(names(w$columns), function(name) {
-            arrow_type <- switch(w$columns[[name]],
-              numeric = arrow::float64(),
-              integer = arrow::int64(),
-              character = arrow::string(),
-              Date = arrow::date32(),
-              date = arrow::date32(),
-              POSIXct = arrow::timestamp(),
-              datetime = arrow::timestamp(),
-              strtime = arrow::time64(),
-              time = arrow::time64(),
+            type <- switch(w$columns[[name]],
+              numeric = type("numeric"),
+              integer = type("integer"),
+              character = type("character"),
+              Date = type("date"),
+              date = type("date"),
+              POSIXct = type("datetime"),
+              datetime = type("datetime"),
+              strtime = type("time"),
+              time = type("time"),
             )
-            field(name, "", arrow_type)
+            field(name, "", type)
           })
           w$columns <- do.call(fields, fields_)
         }
