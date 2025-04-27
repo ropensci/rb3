@@ -56,7 +56,7 @@ test_that("it should parse basic type strings", {
   test_type_parsing("time", "time", list(format = "%H:%M:%S"))
   test_type_parsing("datetime", "datetime", list(format = "%Y-%m-%d %H:%M:%S"))
   test_type_parsing("numeric", "numeric", list(dec = 0, sign = "+"))
-  test_type_parsing("number", "number", list(dec = 0, sign = "+"))
+  test_type_parsing("number", "number")
   test_type_parsing("integer", "integer")
   test_type_parsing("character", "character")
   test_type_parsing("logical", "logical")
