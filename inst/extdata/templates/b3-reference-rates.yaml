@@ -2,7 +2,6 @@ id: b3-reference-rates
 filename: ~
 filetype: CUSTOM
 description: Taxas referenciais
-locale: pt
 calendar: Brazil/ANBIMA
 downloader:
   function: curve_download

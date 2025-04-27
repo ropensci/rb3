@@ -1,7 +1,6 @@
 id: b3-indexes-historical-data
 filetype: CUSTOM
 description: Dados históricos e estatísticas dos índices da Bolsa
-locale: pt
 downloader:
   function: stock_indexes_statistics_download
   verifyssl: false

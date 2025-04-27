@@ -2,7 +2,6 @@ id: b3-cotahist-yearly
 filename: COTAHIST
 filetype: CUSTOM
 description: Cotações Históricas do Pregão de Ações - Arquivo Anual
-locale: en
 downloader:
   function: sprintf_download
   url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A%s.ZIP

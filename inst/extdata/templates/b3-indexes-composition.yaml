@@ -2,7 +2,6 @@ id: b3-indexes-composition
 filename: ~
 filetype: CUSTOM
 description: Composição dos índices da B3
-locale: pt
 downloader:
   function: stock_indexes_composition_download
   verifyssl: false
