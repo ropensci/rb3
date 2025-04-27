@@ -12,7 +12,7 @@ df <- futures_get() |>
 di1_futures <- df |>
   filter(commodity == "DI1") |>
   mutate(
-    maturity_date = maturity2date(maturity_code),
+    maturity_date = maturitycode2date(maturity_code),
     fixing = following(maturity_date, "Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     adjusted_tax = implied_rate("discrete", business_days / 252, 100000 / price)

@@ -73,5 +73,5 @@ reference:
       Helper functions for working with rb3 data
     contents:
       - superdataset
-      - maturity2date
+      - maturitycode2date
       - code2month

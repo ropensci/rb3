@@ -12,7 +12,7 @@ df <- futures_get() |>
 di1_futures <- df |>
   filter(commodity == "DI1") |>
   mutate(
-    maturity_date = maturity2date(maturity_code),
+    maturity_date = maturitycode2date(maturity_code),
     fixing = following(maturity_date, "Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     adjusted_tax = implied_rate("discrete", business_days / 252, 100000 / price)
@@ -36,7 +36,7 @@ di1_futures |>
 dap_futures <- df |>
   filter(commodity == "DAP") |>
   mutate(
-    maturity_date = maturity2date(maturity_code, "15th day"),
+    maturity_date = maturitycode2date(maturity_code, "15th day"),
     fixing = following(maturity_date, "Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     adjusted_tax = implied_rate("discrete", business_days / 252, 100000 / price)
@@ -66,7 +66,7 @@ infl_futures <- df |>
   filter(symbol %in% c(col_di1, col_dap)) |>
   mutate(
     maturity_date = if_else(commodity == "DI1",
-      maturity2date(maturity_code), maturity2date(maturity_code, "15th day")
+      maturitycode2date(maturity_code), maturitycode2date(maturity_code, "15th day")
     ),
     fixing = following(maturity_date, "Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),

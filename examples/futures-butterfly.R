@@ -20,7 +20,7 @@ fut3 <- "DI1F36"
 df_fut <- df |>
   filter(symbol %in% c(fut1, fut2, fut3)) |>
   mutate(
-    maturity_date = maturity2date(maturity_code) |> following("Brazil/ANBIMA"),
+    maturity_date = maturitycode2date(maturity_code) |> following("Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA")
   )
 
