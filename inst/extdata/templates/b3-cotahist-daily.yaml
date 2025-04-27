@@ -19,7 +19,7 @@ writers:
   staging:
     function: process_cotahist
     partition: year
-    columns:
+    fields:
       year: integer
       refdate: date
       bdi_code: integer

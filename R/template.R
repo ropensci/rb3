@@ -25,9 +25,9 @@ load_template_from_file <- function(fname) {
         } else {
           w$process_marketdata <- identity
         }
-        if (!is.null(w[["columns"]])) {
-          fields_pairs <- lapply(names(w$columns), function(name) list(name = name, type = w$columns[[name]]))
-          w[["columns"]] <- do.call(fields, lapply(fields_pairs, new_field))
+        if (!is.null(w[["fields"]])) {
+          fields_pairs <- lapply(names(w$fields), function(name) list(name = name, type = w$fields[[name]]))
+          w[["fields"]] <- do.call(fields, lapply(fields_pairs, new_field))
         }
         w
       })
@@ -156,7 +156,7 @@ template_schema <- function(template, layer = NULL) {
   layer <- if (is.null(layer)) template$writers[[1]]$layer else template$writers[[layer]]$layer
   stopifnot(!is.null(layer))
   writer <- template$writers[[layer]]
-  flds <- if (is.null(writer[["columns"]])) template$fields else writer$columns
+  flds <- if (is.null(writer[["fields"]])) template$fields else writer$fields
   do.call(arrow::schema, fields_arrow_types(flds))
 }
 

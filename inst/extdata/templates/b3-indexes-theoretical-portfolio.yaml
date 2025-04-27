@@ -18,7 +18,7 @@ writers:
     partition: [refdate, index]
   staging:
     function: process_indexes_theoretical_portfolio
-    columns:
+    fields:
       refdate: date
       index: character
       symbol: character
