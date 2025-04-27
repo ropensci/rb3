@@ -121,7 +121,7 @@ $$
 di1_futures <- df |>
   filter(commodity == "DI1") |>
   mutate(
-    maturity_date = maturity2date(maturity_code),
+    maturity_date = maturitycode2date(maturity_code),
     fixing = following(maturity_date, "Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     adjusted_tax = (100000 / price)^(252 / business_days) - 1
@@ -161,7 +161,7 @@ exactly as we did for the DI1 contracts.
 dap_futures <- df |>
   filter(commodity == "DAP") |>
   mutate(
-    maturity_date = maturity2date(maturity_code, "15th day"),
+    maturity_date = maturitycode2date(maturity_code, "15th day"),
     fixing = following(maturity_date, "Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     adjusted_tax = (100000 / price)^(252 / business_days) - 1
@@ -270,7 +270,7 @@ df_fut <- df |>
 ```{r enrich-data, warning=FALSE}
 df_fut <- df_fut |>
   mutate(
-    maturity_date = maturity2date(maturity_code) |>
+    maturity_date = maturitycode2date(maturity_code) |>
       following("Brazil/ANBIMA"),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA")
   )

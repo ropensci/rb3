@@ -219,7 +219,7 @@ futures_data <- futures_get() |>
 # Calculate implied rates
 di1_futures <- futures_data |>
   mutate(
-    maturity_date = maturity2date(maturity_code),
+    maturity_date = maturitycode2date(maturity_code),
     business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
     implied_rate = (100000 / price)^(252 / business_days) - 1
   )

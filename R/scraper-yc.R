@@ -152,7 +152,7 @@ yc_usd_get <- function() {
     filter(.data$commodity == .commodity, .data$refdate == .refdate) |>
     collect() |>
     mutate(
-      forward_date = maturity2date(.data$maturity_code, .expr) |> following(template$calendar)
+      forward_date = maturitycode2date(.data$maturity_code, .expr) |> following(template$calendar)
     ) |>
     select("refdate", "forward_date", "symbol")
 

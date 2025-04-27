@@ -48,14 +48,14 @@ test_that("it should test code2month", {
   expect_equal(months, c(1, 3))
 })
 
-test_that("it should test maturity2date", {
-  expect_equal(maturity2date("F22"), as.Date("2022-01-01"))
-  expect_equal(maturity2date("F22", "15th day"), as.Date("2022-01-15"))
-  expect_equal(maturity2date("AGO2"), as.Date("2002-08-01"))
-  expect_equal(maturity2date("AGO2", "15th day"), as.Date("2002-08-15"))
-  expect_equal(maturity2date("AGO2", "15th day", refdate = as.Date("2002-01-01")), as.Date("2012-08-15"))
+test_that("it should test maturitycode2date", {
+  expect_equal(maturitycode2date("F22"), as.Date("2022-01-01"))
+  expect_equal(maturitycode2date("F22", "15th day"), as.Date("2022-01-15"))
+  expect_equal(maturitycode2date("AGO2"), as.Date("2002-08-01"))
+  expect_equal(maturitycode2date("AGO2", "15th day"), as.Date("2002-08-15"))
+  expect_equal(maturitycode2date("AGO2", "15th day", refdate = as.Date("2002-01-01")), as.Date("2012-08-15"))
   expect_equal(
-    maturity2date(c("F22", "AGO2")),
+    maturitycode2date(c("F22", "AGO2")),
     c(as.Date("2022-01-01"), as.Date("2002-08-01"))
   )
 })
