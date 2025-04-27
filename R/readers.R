@@ -27,9 +27,8 @@ fwf_read_file <- function(., filename, ...) {
     )
   )
   hs <- fields_handlers(.$fields)
-  ns <- sapply(hs, \(h) attr(h, "type")) == "numeric"
-  for (nx in colnames(df)[ns]) {
-    df[[nx]] <- suppressWarnings(hs[[nx]](df[[nx]]))
+  for (nx in colnames(df)) {
+    df[[nx]] <- hs[[nx]](df[[nx]])
   }
   df
 }

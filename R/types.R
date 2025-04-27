@@ -150,6 +150,42 @@ type_arrow_scalar <- function(type) {
   )
 }
 
+#' Create a post parse handler based on the type
+#'
+#' @param type A type object
+#'
+#' @return A function that executes the post parse handling
+type_post_parse_handler <- function(type) {
+  # Get the type name
+  type_name <- class(type)[2]
+
+  # Create a collector based on the type
+  switch(type_name,
+    date = pass_thru_handler(type),
+    time = pass_thru_handler(type),
+    datetime = pass_thru_handler(type),
+    numeric = numeric_handler(type),
+    number = pass_thru_handler(type),
+    integer = pass_thru_handler(type),
+    character = pass_thru_handler(type),
+    logical = pass_thru_handler(type),
+    cli::cli_abort("Unsupported type: {.emph {type_name}}")
+  )
+}
+
+numeric_handler <- function(type) {
+  sign <- if (type$sign == "-") -1 else 1
+  dec <- type$dec
+  function(x) {
+    x <- paste0(sign, x)
+    sign * x / (10^dec)
+  }
+}
+
+pass_thru_handler <- function(type) {
+  identity
+}
+
 #' Helper function to parse type parameters
 #'
 #' @param param_str A string containing parameters

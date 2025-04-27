@@ -48,7 +48,6 @@ Suggests:
 Collate:
     'types.R'
     'fields.R'
-    'handlers.R'
     'registry.R'
     'template.R'
     'meta.R'

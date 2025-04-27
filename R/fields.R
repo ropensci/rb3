@@ -12,6 +12,25 @@ fields <- function(...) {
   that
 }
 
+#' Create the tag attribute of the field
+#'
+#' @param x A string representing the tag
+#' @return A tag object with class "tag"
+tag <- function(x) {
+  class(x) <- c("character", "tag")
+  x
+}
+
+#' Create the width attribute of the field
+#' 
+#' @param x A numeric value representing the width
+#' @return A width object with class "width"
+width <- function(x) {
+  x <- as.numeric(x)
+  class(x) <- c("numeric", "width")
+  x
+}
+
 #' Create a new field from specifications
 #'
 #' @param x A list containing field specifications
@@ -84,6 +103,7 @@ field <- function(name, description, ...) {
 
   attr(name, "collector") <- type_collector(attr(name, "type"))
   attr(name, "arrow") <- type_arrow_scalar(attr(name, "type"))
+  attr(name, "handler") <- type_post_parse_handler(attr(name, "type"))
 
   class(name) <- "field"
   name
