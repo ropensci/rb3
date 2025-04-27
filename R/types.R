@@ -1,6 +1,7 @@
 #' Type system for data fields
 #' 
 #' Defines and manages data types with their attributes for parsing and validating data
+#' @noRd
 
 # Define valid types with their default attributes
 VALID_TYPES <- list(
@@ -20,6 +21,7 @@ VALID_TYPES <- list(
 #' @param ... Additional attributes for the type
 #' 
 #' @return A type object with specified attributes
+#' @noRd
 type <- function(name, ...) {
   if (!name %in% names(VALID_TYPES)) {
     cli::cli_abort("Invalid type name: {.emph {name}}")
@@ -51,12 +53,14 @@ type <- function(name, ...) {
 
 #' Access type attributes
 #' @export
+#' @noRd
 `$.type` <- function(x, name) {
   attr(x, name)
 }
 
 #' Set type attributes
 #' @export
+#' @noRd
 `$<-.type` <- function(x, name, value) {
   attr(x, name) <- value
   x
@@ -66,6 +70,7 @@ type <- function(name, ...) {
 #'
 #' @param x A string describing a type, e.g., "date", "numeric(dec=2)"
 #' @return A type object
+#' @noRd
 type_parse <- function(x) {
   # Match the type name and optional parameters
   result <- parse_type_string(x)
@@ -82,6 +87,7 @@ type_parse <- function(x) {
 #'
 #' @param type_str A string describing a type
 #' @return A list with name and params components
+#' @noRd
 parse_type_string <- function(type_str) {
   # Define the regex pattern for type matching
   type_pattern <- paste0(
@@ -114,6 +120,7 @@ parse_type_string <- function(type_str) {
 #' @param type A type object
 #'
 #' @return A collector function for the specified type
+#' @noRd
 type_collector <- function(type) {
   # Get the type name
   type_name <- class(type)[2]
@@ -135,6 +142,7 @@ type_collector <- function(type) {
 # create a function that return an arrow scalar according to the type object
 #' @param type A type object
 #' @return An arrow scalar for the specified type
+#' @noRd
 type_arrow_scalar <- function(type) {
   # Get the type name
   type_name <- class(type)[2]
@@ -158,6 +166,7 @@ type_arrow_scalar <- function(type) {
 #' @param type A type object
 #'
 #' @return A function that executes the post parse handling
+#' @noRd
 type_post_parse_handler <- function(type) {
   # Get the type name
   type_name <- class(type)[2]
@@ -192,6 +201,7 @@ pass_thru_handler <- function(type) {
 #'
 #' @param param_str A string containing parameters
 #' @return A named list of parameter values
+#' @noRd
 parse_type_params <- function(param_str) {
   # Split the parameter string by commas
   param_pairs <- stringr::str_split(param_str, ",\\s*")[[1]]
@@ -227,7 +237,7 @@ parse_type_params <- function(param_str) {
 #'
 #' @param type_str A string to check
 #' @return TRUE if valid, FALSE otherwise
-#' @export
+#' @noRd
 is_valid_type <- function(type_str) {
   tryCatch({
     type_parse(type_str)
