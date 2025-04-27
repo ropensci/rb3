@@ -46,8 +46,8 @@ Suggests:
     tidyr,
     vcr (>= 0.6.0)
 Collate:
+    'types.R'
     'fields.R'
-    'handlers.R'
     'registry.R'
     'template.R'
     'meta.R'

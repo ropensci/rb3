@@ -25,19 +25,9 @@ load_template_from_file <- function(fname) {
         } else {
           w$process_marketdata <- identity
         }
-        if (!is.null(w[["columns"]])) {
-          fields_ <- lapply(names(w$columns), function(name) {
-            arrow_type <- switch(w$columns[[name]],
-              numeric = arrow::float64(),
-              integer = arrow::int64(),
-              character = arrow::string(),
-              Date = arrow::date32(),
-              POSIXct = arrow::timestamp(),
-              strtime = arrow::time64(),
-            )
-            field(name, "", arrow_type)
-          })
-          w$columns <- do.call(fields, fields_)
+        if (!is.null(w[["fields"]])) {
+          fields_pairs <- lapply(names(w$fields), function(name) list(name = name, type = w$fields[[name]]))
+          w[["fields"]] <- do.call(fields, lapply(fields_pairs, new_field))
         }
         w
       })
@@ -166,7 +156,7 @@ template_schema <- function(template, layer = NULL) {
   layer <- if (is.null(layer)) template$writers[[1]]$layer else template$writers[[layer]]$layer
   stopifnot(!is.null(layer))
   writer <- template$writers[[layer]]
-  flds <- if (is.null(writer[["columns"]])) template$fields else writer$columns
+  flds <- if (is.null(writer[["fields"]])) template$fields else writer$fields
   do.call(arrow::schema, fields_arrow_types(flds))
 }
 
@@ -227,54 +217,6 @@ template_dataset.template <- function(template, layer = NULL) {
   schema <- template_schema(template, layer)
   dir <- template_db_folder(template, layer)
   arrow::open_dataset(dir, schema, hive_style = TRUE, unify_schemas = FALSE)
-}
-
-new_field <- function(x) {
-  tag_ <- if (!is.null(x$tag)) tag(x$tag)
-  width_ <- if (!is.null(x$width)) width(x$width)
-  x$description <- if (is.null(x$description)) "" else x$description
-  if (is.null(x$handler$type)) {
-    handler_ <- pass_thru_handler()
-    col_ <- readr::col_guess()
-    arrow_type_ <- arrow::string()
-  } else if (x$handler$type == "number") {
-    handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
-    col_ <- readr::col_number()
-    arrow_type_ <- arrow::float64()
-  } else if (x$handler$type == "numeric") {
-    handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
-    col_ <- readr::col_double()
-    arrow_type_ <- arrow::float64()
-  } else if (x$handler$type == "integer") {
-    handler_ <- to_numeric_handler(0, "")
-    col_ <- readr::col_integer()
-    arrow_type_ <- arrow::int64()
-  } else if (x$handler$type == "factor") {
-    handler_ <- to_factor_handler(x$handler$levels, x$handler$labels)
-    col_ <- readr::col_factor(x$handler$levels, x$handler$labels)
-    arrow_type_ <- arrow::string()
-  } else if (x$handler$type == "Date") {
-    handler_ <- to_date_handler(x$handler$format)
-    col_ <- readr::col_date(format = x$handler$format)
-    arrow_type_ <- arrow::date32()
-  } else if (x$handler$type == "POSIXct") {
-    handler_ <- to_time_handler(x$handler$format)
-    col_ <- readr::col_datetime(format = x$handler$format)
-    arrow_type_ <- arrow::timestamp()
-  } else if (x$handler$type == "strtime") {
-    handler_ <- to_strtime_handler(x$handler$format)
-    col_ <- readr::col_time(format = x$handler$format)
-    arrow_type_ <- arrow::time64()
-  } else if (x$handler$type == "character") {
-    handler_ <- pass_thru_handler()
-    col_ <- readr::col_character()
-    arrow_type_ <- arrow::string()
-  } else {
-    handler_ <- pass_thru_handler()
-    col_ <- readr::col_guess()
-    arrow_type_ <- arrow::string()
-  }
-  field(x$name, x$description, width_, tag_, handler_, col_, arrow_type_)
 }
 
 new_part <- function(x) {

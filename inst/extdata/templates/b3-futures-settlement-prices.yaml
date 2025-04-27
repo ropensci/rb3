@@ -21,8 +21,8 @@ writers:
     partition: refdate
   staging:
     function: process_futures
-    columns:
-      refdate: Date
+    fields:
+      refdate: date
       symbol: character
       commodity: character
       maturity_code: character
@@ -33,30 +33,22 @@ writers:
 fields:
 - name: commodity
   description: Nome e código da mercadoria
-  handler:
-    type: character
+  type: character
 - name: maturity_code
   description: Código de vencimento do contrato futuro com 3 caractéres
-  handler:
-    type: character
+  type: character
 - name: previous_price
   description: Preço de ajuste do dia anterior
-  handler:
-    type: number
+  type: number
 - name: price
   description: Preço de ajuste atual
-  handler:
-    type: number
+  type: number
 - name: price_change
   description: Variação do preço de ajuste
-  handler:
-    type: number
+  type: number
 - name: settlement_value
   description: Valor do ajuste por contrato (R$)
-  handler:
-    type: number
+  type: number
 - name: refdate
   description: Data de referência
-  handler:
-    type: Date
-    format: '%d/%m/%Y'
+  type: date(format="%d/%m/%Y")

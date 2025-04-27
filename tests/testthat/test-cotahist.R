@@ -17,7 +17,7 @@ test_that("it should fail the download for cotahist file", {
 })
 
 .date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
-fetch_marketdata("b3-cotahist-daily", refdate = .date)
+suppressMessages(fetch_marketdata("b3-cotahist-daily", refdate = .date))
 ch_df <- cotahist_get("daily") |>
   filter(refdate == .date) |>
   head(1000) |>
@@ -27,7 +27,7 @@ test_that("it should get cotahist data", {
   expect_s3_class(ch_df, "data.frame")
   expect_true(nrow(ch_df) == 1000)
   template <- template_retrieve("b3-cotahist-daily")
-  names <- fields_names(template$writers$staging$columns)
+  names <- fields_names(template$writers$staging$fields)
   expect_equal(sort(colnames(ch_df)), sort(names))
   expect_equal(ncol(ch_df), length(names))
   expect_true(ch_df$refdate[1] == .date)

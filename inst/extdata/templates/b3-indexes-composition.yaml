@@ -18,37 +18,28 @@ writers:
 fields:
 - name: corporation_name
   description: Nome da companhia
-  handler:
-    type: character
+  type: character
 - name: specification_code
   description: Código de especificação da ação
-  handler:
-    type: character
+  type: character
 - name: symbol
   description: Código da ação
-  handler:
-    type: character
+  type: character
 - name: indexes
   description: Lista de índexes separados por vírgula
-  handler:
-    type: character
+  type: character
 - name: refdate
   description: Data de referência
-  handler:
-    type: Date
+  type: date
 - name: update_date
   description: Data de atualização do índice
-  handler:
-    type: Date
+  type: date
 - name: start_month
   description: Mês de início de vigência do índice
-  handler:
-    type: integer
+  type: integer
 - name: end_month
   description: Mês de fim de vigência do índice
-  handler:
-    type: integer
+  type: integer
 - name: year
   description: Ano de criação do índice
-  handler:
-    type: integer
+  type: integer

@@ -19,7 +19,7 @@ test_that("it should get available indexes", {
 })
 
 test_that("it should get index weights for current portfolio", {
-  fetch_marketdata("b3-indexes-current-portfolio", index = "IBOV")
+  suppressMessages(fetch_marketdata("b3-indexes-current-portfolio", index = "IBOV"))
 
   x <- indexes_current_portfolio_get()
   expect_true(is(x, "arrow_dplyr_query") || is(x, "ArrowObject"))
@@ -30,7 +30,7 @@ test_that("it should get index weights for current portfolio", {
 })
 
 test_that("it should get index weights for theoretical portfolio", {
-  fetch_marketdata("b3-indexes-theoretical-portfolio", index = "IBOV")
+  suppressMessages(fetch_marketdata("b3-indexes-theoretical-portfolio", index = "IBOV"))
 
   x <- indexes_theoretical_portfolio_get()
   expect_true(is(x, "arrow_dplyr_query") || is(x, "ArrowObject"))
@@ -54,7 +54,7 @@ test_that("it should get index weights for theoretical portfolio", {
 # })
 
 test_that("it should get index historical data", {
-  fetch_marketdata("b3-indexes-historical-data", index = "IBOV", year = 2022)
+  suppressMessages(fetch_marketdata("b3-indexes-historical-data", index = "IBOV", year = 2022))
   x <- indexes_historical_data_get()
   expect_true(is(x, "arrow_dplyr_query") || is(x, "ArrowObject"))
   x <- x |> collect()

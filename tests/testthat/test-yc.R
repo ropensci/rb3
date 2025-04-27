@@ -10,8 +10,8 @@ test_df <- function(df_in) {
 }
 
 .refdate <- bizdays::offset(Sys.Date(), -5, "Brazil/ANBIMA")
-fetch_marketdata("b3-futures-settlement-prices", refdate = .refdate)
-fetch_marketdata("b3-reference-rates", refdate = .refdate, curve_name = c("PRE", "DIC", "DOC"))
+suppressMessages(fetch_marketdata("b3-futures-settlement-prices", refdate = .refdate))
+suppressMessages(fetch_marketdata("b3-reference-rates", refdate = .refdate, curve_name = c("PRE", "DIC", "DOC")))
 
 test_that("Test of yc_get function", {
   df_yc_1 <- yc_get()

@@ -3,7 +3,7 @@ test_that("it should get futures data with futures_get", {
   skip_if_offline()
 
   .refdate <- bizdays::offset(Sys.Date(), -5, "Brazil/ANBIMA")
-  fetch_marketdata("b3-futures-settlement-prices", refdate = .refdate)
+  suppressMessages(fetch_marketdata("b3-futures-settlement-prices", refdate = .refdate))
   
   df <- futures_get() |> filter(refdate == .refdate)
   expect_true(is(df, "arrow_dplyr_query"))
