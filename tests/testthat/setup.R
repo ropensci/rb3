@@ -3,7 +3,6 @@ withr::defer(unlink(local_cachedir, recursive = TRUE), teardown_env())
 
 op <- options(
   rb3.cachedir = local_cachedir,
-  rb3.silent = TRUE,
   cli.default_handler = function(...) { }
 )
 

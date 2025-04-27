@@ -110,10 +110,12 @@ test_that("it should fail to download b3-reference-rates with no curve name", {
 })
 
 test_that("it should fetch b3-reference-rates", {
-  fetch_marketdata("b3-reference-rates",
-    refdate = c(as.Date("2025-03-12"), as.Date("2025-03-13")),
-    curve_name = c("PRE", "DIC")
-  )
+  suppressMessages({
+    fetch_marketdata("b3-reference-rates",
+      refdate = c(as.Date("2025-03-12"), as.Date("2025-03-13")),
+      curve_name = c("PRE", "DIC")
+    )
+  })
   expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12"), curve_name = "PRE"))
   expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-13"), curve_name = "PRE"))
   expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12"), curve_name = "DIC"))
@@ -122,10 +124,10 @@ test_that("it should fetch b3-reference-rates", {
 
 test_that("it should fetch b3-reference-rates with fails", {
   # download fail
-  fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12"))
+  suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12")))
   expect_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12")))
   # read fail
-  fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE")
+  suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))
   expect_error(meta_load("b3-reference-rates", , refdate = as.Date("2025-03-15"), curve_name = "PRE"))
 })
 

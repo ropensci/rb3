@@ -17,7 +17,7 @@ test_that("it should fail the download for cotahist file", {
 })
 
 .date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
-fetch_marketdata("b3-cotahist-daily", refdate = .date)
+suppressMessages(fetch_marketdata("b3-cotahist-daily", refdate = .date))
 ch_df <- cotahist_get("daily") |>
   filter(refdate == .date) |>
   head(1000) |>
