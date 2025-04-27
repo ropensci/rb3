@@ -32,8 +32,11 @@ load_template_from_file <- function(fname) {
               integer = arrow::int64(),
               character = arrow::string(),
               Date = arrow::date32(),
+              date = arrow::date32(),
               POSIXct = arrow::timestamp(),
+              datetime = arrow::timestamp(),
               strtime = arrow::time64(),
+              time = arrow::time64(),
             )
             field(name, "", arrow_type)
           })
@@ -227,54 +230,6 @@ template_dataset.template <- function(template, layer = NULL) {
   schema <- template_schema(template, layer)
   dir <- template_db_folder(template, layer)
   arrow::open_dataset(dir, schema, hive_style = TRUE, unify_schemas = FALSE)
-}
-
-new_field <- function(x) {
-  tag_ <- if (!is.null(x$tag)) tag(x$tag)
-  width_ <- if (!is.null(x$width)) width(x$width)
-  x$description <- if (is.null(x$description)) "" else x$description
-  if (is.null(x$handler$type)) {
-    handler_ <- pass_thru_handler()
-    col_ <- readr::col_guess()
-    arrow_type_ <- arrow::string()
-  } else if (x$handler$type == "number") {
-    handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
-    col_ <- readr::col_number()
-    arrow_type_ <- arrow::float64()
-  } else if (x$handler$type == "numeric") {
-    handler_ <- to_numeric_handler(x$handler$dec, x$handler$sign)
-    col_ <- readr::col_double()
-    arrow_type_ <- arrow::float64()
-  } else if (x$handler$type == "integer") {
-    handler_ <- to_numeric_handler(0, "")
-    col_ <- readr::col_integer()
-    arrow_type_ <- arrow::int64()
-  } else if (x$handler$type == "factor") {
-    handler_ <- to_factor_handler(x$handler$levels, x$handler$labels)
-    col_ <- readr::col_factor(x$handler$levels, x$handler$labels)
-    arrow_type_ <- arrow::string()
-  } else if (x$handler$type == "Date") {
-    handler_ <- to_date_handler(x$handler$format)
-    col_ <- readr::col_date(format = x$handler$format)
-    arrow_type_ <- arrow::date32()
-  } else if (x$handler$type == "POSIXct") {
-    handler_ <- to_time_handler(x$handler$format)
-    col_ <- readr::col_datetime(format = x$handler$format)
-    arrow_type_ <- arrow::timestamp()
-  } else if (x$handler$type == "strtime") {
-    handler_ <- to_strtime_handler(x$handler$format)
-    col_ <- readr::col_time(format = x$handler$format)
-    arrow_type_ <- arrow::time64()
-  } else if (x$handler$type == "character") {
-    handler_ <- pass_thru_handler()
-    col_ <- readr::col_character()
-    arrow_type_ <- arrow::string()
-  } else {
-    handler_ <- pass_thru_handler()
-    col_ <- readr::col_guess()
-    arrow_type_ <- arrow::string()
-  }
-  field(x$name, x$description, width_, tag_, handler_, col_, arrow_type_)
 }
 
 new_part <- function(x) {

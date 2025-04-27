@@ -9,6 +9,17 @@ width <- function(x) {
   x
 }
 
+# Create a handler with common attributes
+create_handler <- function(handler_fn, type, ...) {
+  attrs <- list(...)
+  attrs$type <- type
+  for (name in names(attrs)) {
+    attr(handler_fn, name) <- attrs[[name]]
+  }
+  class(handler_fn) <- c("function", "handler")
+  handler_fn
+}
+
 to_date_handler <- function(format = NULL) {
   if (is.null(format)) {
     format <- "%Y-%m-%d"
@@ -16,10 +27,7 @@ to_date_handler <- function(format = NULL) {
   handler <- function(x) {
     as.Date(x, format = format)
   }
-  attr(handler, "format") <- format
-  attr(handler, "type") <- "Date"
-  class(handler) <- c("function", "handler")
-  handler
+  create_handler(handler, "Date", format = format)
 }
 
 to_time_handler <- function(format = NULL) {
@@ -29,10 +37,7 @@ to_time_handler <- function(format = NULL) {
   handler <- function(x) {
     strptime(x, format = format)
   }
-  attr(handler, "format") <- format
-  attr(handler, "type") <- "POSIXct"
-  class(handler) <- c("function", "handler")
-  handler
+  create_handler(handler, "POSIXct", format = format)
 }
 
 to_factor_handler <- function(levels = NULL, labels = levels) {
@@ -43,11 +48,7 @@ to_factor_handler <- function(levels = NULL, labels = levels) {
       factor(x, levels = levels, labels = labels)
     }
   }
-  attr(handler, "levels") <- levels
-  attr(handler, "labels") <- labels
-  attr(handler, "type") <- "factor"
-  class(handler) <- c("function", "handler")
-  handler
+  create_handler(handler, "factor", levels = levels, labels = labels)
 }
 
 to_numeric_handler <- function(dec = 0, sign = "") {
@@ -61,18 +62,11 @@ to_numeric_handler <- function(dec = 0, sign = "") {
     x <- paste0(sign, x)
     as.numeric(x) / (10^as.numeric(dec))
   }
-  attr(handler, "dec") <- dec
-  attr(handler, "sign") <- sign
-  attr(handler, "type") <- "numeric"
-  class(handler) <- c("function", "handler")
-  handler
+  create_handler(handler, "numeric", dec = dec, sign = sign)
 }
 
 pass_thru_handler <- function() {
-  handler <- identity
-  attr(handler, "type") <- "character"
-  class(handler) <- c("function", "handler")
-  handler
+  create_handler(identity, "character")
 }
 
 to_strtime_handler <- function(format = NULL, tz = NULL) {
@@ -83,12 +77,10 @@ to_strtime_handler <- function(format = NULL, tz = NULL) {
     tz <- "GMT"
   }
   handler <- function(x) {
-    z <- str_pad(x, 9, pad = "0") |> str_match("(\\d{6})(\\d{3})")
-    t <- str_c(z[, 2], ".", z[, 3])
+    z <- stringr::str_pad(x, 9, pad = "0") |> 
+      stringr::str_match("(\\d{6})(\\d{3})")
+    t <- stringr::str_c(z[, 2], ".", z[, 3])
     strptime(t, format = format, tz = tz)
   }
-  attr(handler, "format") <- format
-  attr(handler, "type") <- "strtime"
-  class(handler) <- c("function", "handler")
-  handler
+  create_handler(handler, "strtime", format = format)
 }

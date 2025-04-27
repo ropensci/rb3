@@ -25,8 +25,8 @@ writers:
     function: process_yc
     columns:
       curve_name: character
-      refdate: Date
-      forward_date: Date
+      refdate: date
+      forward_date: date
       cur_days: integer
       biz_days: integer
       col1: numeric
@@ -34,22 +34,16 @@ writers:
 fields:
 - name: refdate
   description: Data de referência
-  handler:
-    type: Date
-    format: '%d/%m/%Y'
+  type: date(format="%d/%m/%Y")
 - name: curve_name
   description: Nome da curva
-  handler:
-    type: character
+  type: character
 - name: cur_days
   description: Dias corridos
-  handler:
-    type: integer
+  type: integer
 - name: col1
   description: Taxa na base 252 ou taxa na base 360 ou preço futuro
-  handler:
-    type: number
+  type: number
 - name: col2
   description: Taxa na base 360 ou NA
-  handler:
-    type: number
+  type: number

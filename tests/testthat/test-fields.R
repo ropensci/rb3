@@ -3,8 +3,10 @@ test_that("it should create a field", {
   expect_s3_class(f, "field")
   expect_equal(as.character(f), "field_name")
   expect_equal(attr(f, "description"), "field_description")
-  expect_equal(attr(f, "handler"), pass_thru_handler())
   expect_equal(attr(f, "width"), 0)
+  expect_equal(attr(f, "type"), type("character"))
+  expect_equal(attr(f, "col"), readr::col_character())
+  expect_equal(class(attr(f, "arrow")), class(arrow::string()))
 })
 
 test_that("it should create a field with invalid description", {
@@ -21,10 +23,11 @@ test_that("it should create fields", {
   expect_equal(fields_names(fs), c("f1", "f2"))
   expect_equal(fields_widths(fs), c(0, 0))
   expect_equal(fields_description(fs), c("", ""))
-  expect_equal(
-    fields_handlers(fs),
-    list(f1 = pass_thru_handler(), f2 = pass_thru_handler())
-  )
+  expect_equal(fields_types(fs), c("character", "character"))
+  # expect_equal(
+  #   fields_handlers(fs),
+  #   list(f1 = pass_thru_handler(), f2 = pass_thru_handler())
+  # )
   df <- data.frame(
     `Field name` = c("f1", "f2"),
     `Description` = "",
