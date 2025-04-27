@@ -26,21 +26,8 @@ load_template_from_file <- function(fname) {
           w$process_marketdata <- identity
         }
         if (!is.null(w[["columns"]])) {
-          fields_ <- lapply(names(w$columns), function(name) {
-            type <- switch(w$columns[[name]],
-              numeric = type("numeric"),
-              integer = type("integer"),
-              character = type("character"),
-              Date = type("date"),
-              date = type("date"),
-              POSIXct = type("datetime"),
-              datetime = type("datetime"),
-              strtime = type("time"),
-              time = type("time"),
-            )
-            field(name, "", type)
-          })
-          w$columns <- do.call(fields, fields_)
+          fields_pairs <- lapply(names(w$columns), function(name) list(name = name, type = w$columns[[name]]))
+          w[["columns"]] <- do.call(fields, lapply(fields_pairs, new_field))
         }
         w
       })
