@@ -252,7 +252,7 @@
 <code class="sourceCode R"><span><span class="co"># Calculate implied rates</span></span>
 <span><span class="va">di1_futures</span> <span class="op">&lt;-</span> <span class="va">futures_data</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    maturity_date <span class="op">=</span> <span class="fu"><a href="reference/maturity2date.html">maturity2date</a></span><span class="op">(</span><span class="va">maturity_code</span><span class="op">)</span>,</span>
+<span>    maturity_date <span class="op">=</span> <span class="fu"><a href="reference/maturitycode2date.html">maturitycode2date</a></span><span class="op">(</span><span class="va">maturity_code</span><span class="op">)</span>,</span>
 <span>    business_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/bizdays.html" class="external-link">bizdays</a></span><span class="op">(</span><span class="va">refdate</span>, <span class="va">maturity_date</span>, <span class="st">"Brazil/ANBIMA"</span><span class="op">)</span>,</span>
 <span>    implied_rate <span class="op">=</span> <span class="op">(</span><span class="fl">100000</span> <span class="op">/</span> <span class="va">price</span><span class="op">)</span><span class="op">^</span><span class="op">(</span><span class="fl">252</span> <span class="op">/</span> <span class="va">business_days</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span></span>
