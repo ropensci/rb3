@@ -151,7 +151,7 @@ rb3_bootstrap <- function() {
 #'
 #' @examples
 #' # Get a connection to the RB3 database
-#' con <- rb3_db_connection()
+#' con <- rb3_duckdb_connection()
 #'
 #' @details
 #' The function first checks if a valid connection already exists in the package registry.
@@ -159,7 +159,7 @@ rb3_bootstrap <- function() {
 #' database folder and stores this connection in the package registry.
 #'
 #' @export
-rb3_db_connection <- function() {
+rb3_duckdb_connection <- function() {
   reg <- rb3_registry$get_instance()
   if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
     reg$duck_db_connection
