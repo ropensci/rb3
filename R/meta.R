@@ -21,10 +21,11 @@
   tryCatch({
     reg <- rb3_registry$get_instance()
     if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
+      cli::cli_inform(c("v" = "Closing DuckDB connection"))
       duckdb::dbDisconnect(reg$duck_db_connection, shutdown = TRUE)
     }
   }, error = function(e) {
-    message("Error closing DuckDB connection: ", e$message)
+    cli::cli_inform(c("x" = "Error closing DuckDB connection: {e$message}"))
   })
 }
 
@@ -39,7 +40,6 @@ meta_new <- function(template, ..., extra_arg = NULL) {
     "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
     params = list(checksum)
   )
-  duckdb::dbDisconnect(con, shutdown = TRUE)
 
   if (exists_query$count > 0) {
     cli::cli_abort("Meta {.strong {checksum}} already exists.", class = "error_meta_exists")
@@ -76,7 +76,7 @@ meta_get <- function(checksum) {
     "SELECT * FROM meta WHERE download_checksum = ?",
     params = list(checksum)
   )
-  duckdb::dbDisconnect(con, shutdown = TRUE)
+
   if (nrow(query) == 0) {
     cli::cli_abort("Can't load meta for checksum {.strong {checksum}}", class = "error_meta_not_found")
   }
@@ -110,7 +110,9 @@ meta_dest_file <- function(meta, checksum, ext = "gz") {
 }
 
 .meta_serialize_obj <- function(obj) {
-  utils::capture.output(dput(obj))
+  x <- paste(utils::capture.output(dput(obj)), collapse = "\n")
+  stopifnot(length(x) > 0)
+  x
 }
 
 .meta_deserialize_obj <- function(x) {
@@ -171,7 +173,7 @@ meta_save <- function(meta) {
       )
     )
   }
-  duckdb::dbDisconnect(con, shutdown = TRUE)
+
   meta
 }
 
@@ -201,13 +203,11 @@ meta_clean <- function(meta) {
   }
   
   # Delete meta record
-  con <- rb3_duckdb_connection()
   DBI::dbExecute(
     con,
     "DELETE FROM meta WHERE download_checksum = ?",
     params = list(meta$download_checksum)
   )
-  duckdb::dbDisconnect(con, shutdown = TRUE)
 }
 
 `meta_add_download<-` <- function(meta, value) {

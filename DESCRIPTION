@@ -32,7 +32,8 @@ Imports:
     XML,
     R.utils,
     lubridate,
-    duckdb
+    duckdb,
+    DBI
 Suggests:
     testthat,
     knitr,
