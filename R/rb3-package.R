@@ -138,6 +138,7 @@ rb3_bootstrap <- function() {
   .reg[["raw_folder"]] <- raw_folder
   .reg[["meta_folder"]] <- meta_folder
   .reg[["db_folder"]] <- db_folder
+  .init_meta_db()
   invisible(NULL)
 }
 

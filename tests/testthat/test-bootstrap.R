@@ -8,12 +8,6 @@ test_that("it should check rb3 folders", {
 
 test_that("it should check rb3 duckdb connection", {
   reg <- rb3_registry$get_instance()
-  expect_false("duck_db_connection" %in% names(reg))
-  
-  con <- rb3_duckdb_connection()
-  expect_true(duckdb::dbIsValid(con))
-
-  reg <- rb3_registry$get_instance()
   expect_true("duck_db_connection" %in% names(reg))
   
   con <- rb3_duckdb_connection()
