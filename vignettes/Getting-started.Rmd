@@ -146,7 +146,6 @@ options(rb3.cachedir = "/path/to/your/custom/folder")
 Inside this folder it has the 3 folders:
 
 - raw: for raw downloaded files
-- meta: with the metadata that represets each download made
 - db: where the processed files are stored as datasets (parquet files)
 
 The folder structure looks like this:
@@ -154,7 +153,6 @@ The folder structure looks like this:
 ```text
 rb3.cachedir
 ├── raw
-├── meta
 └── db
 ```
 

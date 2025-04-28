@@ -123,11 +123,6 @@ rb3_bootstrap <- function() {
     dir.create(raw_folder, recursive = TRUE)
   }
 
-  meta_folder <- file.path(cache_folder, "meta")
-  if (!dir.exists(meta_folder)) {
-    dir.create(meta_folder, recursive = TRUE)
-  }
-
   db_folder <- file.path(cache_folder, "db")
   if (!dir.exists(db_folder)) {
     dir.create(db_folder, recursive = TRUE)
@@ -136,7 +131,6 @@ rb3_bootstrap <- function() {
   .reg <- rb3_registry$get_instance()
   .reg[["rb3_folder"]] <- cache_folder
   .reg[["raw_folder"]] <- raw_folder
-  .reg[["meta_folder"]] <- meta_folder
   .reg[["db_folder"]] <- db_folder
   .init_meta_db()
   invisible(NULL)
