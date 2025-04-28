@@ -14,17 +14,13 @@ q <- sprintf("create or replace view 'b3-cotahist-daily' as SELECT * FROM read_p
 
 dbExecute(con, q)
 
-duckplyr::db_exec("INSTALL json")
-duckplyr::db_exec("LOAD json")
-duckplyr::read_json_duckdb(sprintf("%s/*.json", reg$meta_folder)) |> filter(template == "b3-reference-rates")
-
 dbGetQuery(
   con,
-  sprintf("select * from read_json('%s/*.json') limit 10", reg[["meta_folder"]])
+  "select * from meta limit 10"
 )
 
 dbGetQuery(
   con,
-  sprintf("select * from read_json('%s/*.json') where template = 'b3-cotahist-daily'", reg[["meta_folder"]])
+  "select * from meta where template = 'b3-cotahist-daily'"
 )
 

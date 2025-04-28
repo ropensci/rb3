@@ -1,9 +1,50 @@
+# Initialize DuckDB connection and create meta table
+.init_meta_db <- function() {
+  con <- rb3_duckdb_connection()
+  if (!duckdb::dbExistsTable(con, "meta")) {
+    DBI::dbExecute(con, "
+      CREATE TABLE meta (
+        download_checksum VARCHAR PRIMARY KEY,
+        template VARCHAR,
+        download_args VARCHAR,
+        downloaded VARCHAR,
+        created VARCHAR,
+        extra_arg VARCHAR
+      )
+    ")
+  }
+  duckdb::dbDisconnect(con, shutdown = TRUE)
+}
+
+# Close DuckDB connection on package unload
+.onUnload <- function(libpath) {
+  tryCatch({
+    reg <- rb3_registry$get_instance()
+    if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
+      cli::cli_inform(c("v" = "Closing DuckDB connection"))
+      duckdb::dbDisconnect(reg$duck_db_connection, shutdown = TRUE)
+    }
+  }, error = function(e) {
+    cli::cli_inform(c("x" = "Error closing DuckDB connection: {e$message}"))
+  })
+}
+
 meta_new <- function(template, ..., extra_arg = NULL) {
   args <- list(...)
   checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
-  if (file.exists(.meta_file(checksum))) {
+  
+  # Check if meta already exists in DB
+  con <- rb3_duckdb_connection()
+  exists_query <- DBI::dbGetQuery(
+    con,
+    "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
+    params = list(checksum)
+  )
+
+  if (exists_query$count > 0) {
     cli::cli_abort("Meta {.strong {checksum}} already exists.", class = "error_meta_exists")
   }
+  
   meta <- structure(list(
     template = template,
     download_checksum = checksum,
@@ -12,6 +53,7 @@ meta_new <- function(template, ..., extra_arg = NULL) {
     created = as.POSIXct(Sys.time(), tz = "UTC"),
     extra_arg = extra_arg
   ), class = "meta")
+  
   meta_save(meta)
   meta
 }
@@ -28,16 +70,27 @@ meta_load <- function(template, ..., extra_arg = NULL) {
 }
 
 meta_get <- function(checksum) {
-  filename <- .meta_file(checksum)
-  if (file.exists(filename)) {
-    meta <- structure(jsonlite::fromJSON(filename), class = "meta")
-    meta$download_args <- .meta_deserialize_obj(meta$download_args)
-    meta$created <- .meta_deserialize_obj(meta$created)
-    meta$extra_arg <- .meta_deserialize_obj(meta$extra_arg)
-    meta
-  } else {
+  con <- rb3_duckdb_connection()
+  query <- DBI::dbGetQuery(
+    con,
+    "SELECT * FROM meta WHERE download_checksum = ?",
+    params = list(checksum)
+  )
+
+  if (nrow(query) == 0) {
     cli::cli_abort("Can't load meta for checksum {.strong {checksum}}", class = "error_meta_not_found")
   }
+  
+  meta <- structure(list(
+    template = query$template,
+    download_checksum = query$download_checksum,
+    download_args = .meta_deserialize_obj(query$download_args),
+    downloaded = .meta_deserialize_obj(query$downloaded),
+    created = .meta_deserialize_obj(query$created),
+    extra_arg = .meta_deserialize_obj(query$extra_arg)
+  ), class = "meta")
+  
+  meta
 }
 
 meta_checksum <- function(template, ..., extra_arg = NULL) {
@@ -56,46 +109,105 @@ meta_dest_file <- function(meta, checksum, ext = "gz") {
   file.path(reg[["raw_folder"]], str_glue("{checksum}.{ext}"))
 }
 
-.meta_file <- function(checksum) {
-  reg <- rb3_registry$get_instance()
-  file.path(reg$meta_folder, str_glue("{checksum}.json"))
-}
-
-meta_file <- function(meta) {
-  .meta_file(meta$download_checksum)
-}
-
 .meta_serialize_obj <- function(obj) {
-  utils::capture.output(dput(obj))
+  x <- paste(utils::capture.output(dput(obj)), collapse = "\n")
+  stopifnot(length(x) > 0)
+  x
 }
 
 .meta_deserialize_obj <- function(x) {
+  if (is.null(x) || length(x) == 0 || is.na(x)) {
+    return(NULL)
+  }
   dget(textConnection(x))
 }
 
 meta_save <- function(meta) {
-  filename <- meta_file(meta)
-  meta$download_args <- .meta_serialize_obj(meta$download_args)
-  meta$created <- .meta_serialize_obj(meta$created)
-  meta$extra_arg <- .meta_serialize_obj(meta$extra_arg)
-  writeLines(jsonlite::toJSON(meta |> unclass(), auto_unbox = TRUE), filename)
+  con <- rb3_duckdb_connection()
+  
+  serialized_args <- .meta_serialize_obj(meta$download_args)
+  serialized_downloaded <- .meta_serialize_obj(meta$downloaded)
+  serialized_created <- .meta_serialize_obj(meta$created)
+  serialized_extra_arg <- .meta_serialize_obj(meta$extra_arg)
+  
+  # Check if record exists
+  exists_query <- DBI::dbGetQuery(
+    con,
+    "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
+    params = list(meta$download_checksum)
+  )
+  
+  if (exists_query$count > 0) {
+    # Update existing record
+    DBI::dbExecute(
+      con,
+      "UPDATE meta SET 
+       template = ?, 
+       download_args = ?, 
+       downloaded = ?, 
+       created = ?, 
+       extra_arg = ? 
+       WHERE download_checksum = ?",
+      params = list(
+        meta$template,
+        serialized_args,
+        serialized_downloaded,
+        serialized_created,
+        serialized_extra_arg,
+        meta$download_checksum
+      )
+    )
+  } else {
+    # Insert new record
+    DBI::dbExecute(
+      con,
+      "INSERT INTO meta (download_checksum, template, download_args, downloaded, created, extra_arg)
+       VALUES (?, ?, ?, ?, ?, ?)",
+      params = list(
+        meta$download_checksum,
+        meta$template,
+        serialized_args,
+        serialized_downloaded,
+        serialized_created,
+        serialized_extra_arg
+      )
+    )
+  }
+
+  meta
 }
 
 meta_clean <- function(meta) {
-  meta_file <- meta_file(meta)
-  if (!file.exists(meta_file)) {
-    cli::cli_abort("Meta file {.file {meta_file}} does not exist",
+  # Check if meta exists in DB
+  con <- rb3_duckdb_connection()
+  exists_query <- DBI::dbGetQuery(
+    con,
+    "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
+    params = list(meta$download_checksum)
+  )
+  
+  if (exists_query$count == 0) {
+    cli::cli_abort("Meta record for checksum {.strong {meta$download_checksum}} does not exist",
       class = "error_meta_not_found"
     )
   }
+  
   cli::cli_alert_info("Cleaning meta {.strong {meta$download_checksum}}")
+  
+  # Clean downloaded files
   if (length(meta$downloaded) > 0) {
     for (file in meta$downloaded) {
       cli::cli_alert_info("Removing raw file {.file {file}}")
       unlink(file)
     }
   }
-  unlink(meta_file)
+  
+  # Delete meta record
+  DBI::dbExecute(
+    con,
+    "DELETE FROM meta WHERE download_checksum = ?",
+    params = list(meta$download_checksum)
+  )
 }
 
 `meta_add_download<-` <- function(meta, value) {

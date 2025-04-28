@@ -20,7 +20,6 @@ the rb3 registry.
 The cache structure includes:
 \itemize{
 \item raw folder - for storing raw downloaded data
-\item meta folder - for storing metadata
 \item db folder - for database files
 }
 }

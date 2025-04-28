@@ -93,7 +93,6 @@ rb3_registry <- create_registry()
 #' The cache structure includes:
 #' \itemize{
 #'   \item raw folder - for storing raw downloaded data
-#'   \item meta folder - for storing metadata
 #'   \item db folder - for database files
 #' }
 #' 
@@ -123,11 +122,6 @@ rb3_bootstrap <- function() {
     dir.create(raw_folder, recursive = TRUE)
   }
 
-  meta_folder <- file.path(cache_folder, "meta")
-  if (!dir.exists(meta_folder)) {
-    dir.create(meta_folder, recursive = TRUE)
-  }
-
   db_folder <- file.path(cache_folder, "db")
   if (!dir.exists(db_folder)) {
     dir.create(db_folder, recursive = TRUE)
@@ -136,8 +130,8 @@ rb3_bootstrap <- function() {
   .reg <- rb3_registry$get_instance()
   .reg[["rb3_folder"]] <- cache_folder
   .reg[["raw_folder"]] <- raw_folder
-  .reg[["meta_folder"]] <- meta_folder
   .reg[["db_folder"]] <- db_folder
+  .init_meta_db()
   invisible(NULL)
 }
 
@@ -151,7 +145,7 @@ rb3_bootstrap <- function() {
 #'
 #' @examples
 #' # Get a connection to the RB3 database
-#' con <- rb3_db_connection()
+#' con <- rb3_duckdb_connection()
 #'
 #' @details
 #' The function first checks if a valid connection already exists in the package registry.
@@ -159,7 +153,7 @@ rb3_bootstrap <- function() {
 #' database folder and stores this connection in the package registry.
 #'
 #' @export
-rb3_db_connection <- function() {
+rb3_duckdb_connection <- function() {
   reg <- rb3_registry$get_instance()
   if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
     reg$duck_db_connection

@@ -6,6 +6,7 @@
 #'
 #' @param ... Field objects to group together
 #' @return A list of fields with class "fields"
+#' @noRd
 fields <- function(...) {
   that <- list(...)
   class(that) <- "fields"
@@ -16,6 +17,7 @@ fields <- function(...) {
 #'
 #' @param x A string representing the tag
 #' @return A tag object with class "tag"
+#' @noRd
 tag <- function(x) {
   class(x) <- c("character", "tag")
   x
@@ -25,6 +27,7 @@ tag <- function(x) {
 #' 
 #' @param x A numeric value representing the width
 #' @return A width object with class "width"
+#' @noRd
 width <- function(x) {
   x <- as.numeric(x)
   class(x) <- c("numeric", "width")
@@ -35,6 +38,7 @@ width <- function(x) {
 #'
 #' @param x A list containing field specifications
 #' @return A field object with appropriate attributes
+#' @noRd
 new_field <- function(x) {
   tag_ <- if (!is.null(x$tag)) tag(x$tag)
   width_ <- if (!is.null(x$width)) width(x$width)
@@ -49,6 +53,7 @@ new_field <- function(x) {
 #' @param description Description of the field
 #' @param ... Additional parameters (width, tag, type, col, arrow)
 #' @return A field object
+#' @noRd
 field <- function(name, description, ...) {
   # Handle description parameter
   if (missing(description)) {
@@ -119,6 +124,7 @@ field <- function(name, description, ...) {
 #' @param attr_name Attribute name to extract
 #' @param convert_fn Function to convert the attribute value
 #' @return Vector of attribute values
+#' @noRd
 extract_field_attr <- function(fields, attr_name, convert_fn = NULL) {
   if (is.null(convert_fn)) {
     convert_fn <- as.character
@@ -140,21 +146,25 @@ extract_field_attr <- function(fields, attr_name, convert_fn = NULL) {
 }
 
 #' Extract field names
+#' @noRd
 fields_names <- function(fields) {
   extract_field_attr(fields, "self", as.character)
 }
 
 #' Extract field widths
+#' @noRd
 fields_widths <- function(fields) {
   extract_field_attr(fields, "width", as.integer)
 }
 
 #' Extract field descriptions
+#' @noRd
 fields_description <- function(fields) {
   extract_field_attr(fields, "description", as.character)
 }
 
 #' Extract field types
+#' @noRd
 fields_types <- function(fields) {
   extract_field_attr(fields, "type", as.character)
 }
@@ -164,6 +174,7 @@ fields_types <- function(fields) {
 #' @param fields A fields object
 #' @param attr_name Attribute name to extract
 #' @return Named list of attribute values
+#' @noRd
 extract_named_attributes <- function(fields, attr_name) {
   handlers <- lapply(fields, function(x) attr(x, attr_name))
   names(handlers) <- fields_names(fields)
@@ -171,21 +182,25 @@ extract_named_attributes <- function(fields, attr_name) {
 }
 
 #' Extract field handlers
+#' @noRd
 fields_handlers <- function(fields) {
   extract_named_attributes(fields, "handler")
 }
 
 #' Extract field column specifications
+#' @noRd
 fields_collectors <- function(fields) {
   extract_named_attributes(fields, "collector")
 }
 
 #' Extract field arrow types
+#' @noRd
 fields_arrow_types <- function(fields) {
   extract_named_attributes(fields, "arrow")
 }
 
 #' Extract field tags
+#' @noRd
 fields_tags <- function(fields) {
   extract_named_attributes(fields, "tag")
 }

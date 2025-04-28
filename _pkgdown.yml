@@ -30,7 +30,7 @@ reference:
       - rb3
       - rb3_bootstrap
       - rb3.cachedir
-      - rb3_db_connection
+      - rb3_duckdb_connection
 
   - title: Marketdata Access
     desc: >

@@ -282,7 +282,6 @@ template_extra_arg <- function(template) {
   if (is.null(template$downloader[["extra-arg"]])) {
     NULL
   } else {
-    v <- eval(parse(text = template$downloader[["extra-arg"]]))
-    format(v)
+    eval(parse(text = template$downloader[["extra-arg"]]))
   }
 }
