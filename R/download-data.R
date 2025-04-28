@@ -26,7 +26,6 @@
 #' 4. Maintains metadata for tracking and verification
 #'
 #' Files are organized in the `rb3.cachedir` as follows:
-#' - Metadata: JSON files in 'meta/' directory, named by download_checksum
 #' - Data: Gzipped files in 'raw/' directory, named by file's checksum
 #'
 #' Templates are YAML documents that define:

@@ -41,7 +41,6 @@ The function follows this workflow:
 
 Files are organized in the \code{rb3.cachedir} as follows:
 \itemize{
-\item Metadata: JSON files in 'meta/' directory, named by download_checksum
 \item Data: Gzipped files in 'raw/' directory, named by file's checksum
 }
 
