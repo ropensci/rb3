@@ -82,8 +82,7 @@ This meta object is used with the <code>read_marketdata</code> function to read 
 <li><p>Downloads data if needed (based on template specifications)</p></li>
 <li><p>Manages file compression and storage</p></li>
 <li><p>Maintains metadata for tracking and verification</p></li>
-</ol><p>Files are organized in the <code>rb3.cachedir</code> as follows:</p><ul><li><p>Metadata: JSON files in 'meta/' directory, named by download_checksum</p></li>
-<li><p>Data: Gzipped files in 'raw/' directory, named by file's checksum</p></li>
+</ol><p>Files are organized in the <code>rb3.cachedir</code> as follows:</p><ul><li><p>Data: Gzipped files in 'raw/' directory, named by file's checksum</p></li>
 </ul><p>Templates are YAML documents that define:</p><ul><li><p>Download parameters and methods</p></li>
 <li><p>Data reading instructions</p></li>
 <li><p>Dataset structure (columns, types)</p></li>
