@@ -1,17 +1,34 @@
 # Initialize DuckDB connection and create meta table
 .init_meta_db <- function() {
-  con <- rb3_duckdb_connection()
+  con <- meta_db_connection()
   if (!duckdb::dbExistsTable(con, "meta")) {
     DBI::dbExecute(con, "
       CREATE TABLE meta (
         download_checksum VARCHAR PRIMARY KEY,
         template VARCHAR,
         download_args VARCHAR,
+        download_args_json VARCHAR,
         downloaded VARCHAR,
         created VARCHAR,
-        extra_arg VARCHAR
+        extra_arg VARCHAR,
+        is_valid BOOLEAN,
+        is_processed BOOLEAN
       )
     ")
+  } else {
+    # Check if we need to add the new columns to an existing table
+    result <- DBI::dbGetQuery(con, "PRAGMA table_info(meta)")
+    columns <- result$name
+    
+    if (!"download_args_json" %in% columns) {
+      DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN download_args_json VARCHAR")
+    }
+    if (!"is_valid" %in% columns) {
+      DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN is_valid BOOLEAN")
+    }
+    if (!"is_processed" %in% columns) {
+      DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN is_processed BOOLEAN")
+    }
   }
   duckdb::dbDisconnect(con, shutdown = TRUE)
 }
@@ -34,7 +51,7 @@ meta_new <- function(template, ..., extra_arg = NULL) {
   checksum <- meta_checksum(template, ..., extra_arg = extra_arg)
   
   # Check if meta already exists in DB
-  con <- rb3_duckdb_connection()
+  con <- meta_db_connection()
   exists_query <- DBI::dbGetQuery(
     con,
     "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
@@ -45,13 +62,19 @@ meta_new <- function(template, ..., extra_arg = NULL) {
     cli::cli_abort("Meta {.strong {checksum}} already exists.", class = "error_meta_exists")
   }
   
+  # Convert download args to JSON
+  args_json <- jsonlite::toJSON(args, auto_unbox = TRUE)
+  
   meta <- structure(list(
     template = template,
     download_checksum = checksum,
     download_args = args,
+    download_args_json = args_json,
     downloaded = list(),
     created = as.POSIXct(Sys.time(), tz = "UTC"),
-    extra_arg = extra_arg
+    extra_arg = extra_arg,
+    is_valid = FALSE,
+    is_processed = FALSE
   ), class = "meta")
   
   meta_save(meta)
@@ -70,7 +93,7 @@ meta_load <- function(template, ..., extra_arg = NULL) {
 }
 
 meta_get <- function(checksum) {
-  con <- rb3_duckdb_connection()
+  con <- meta_db_connection()
   query <- DBI::dbGetQuery(
     con,
     "SELECT * FROM meta WHERE download_checksum = ?",
@@ -85,9 +108,12 @@ meta_get <- function(checksum) {
     template = query$template,
     download_checksum = query$download_checksum,
     download_args = .meta_deserialize_obj(query$download_args),
+    download_args_json = query$download_args_json,
     downloaded = .meta_deserialize_obj(query$downloaded),
     created = .meta_deserialize_obj(query$created),
-    extra_arg = .meta_deserialize_obj(query$extra_arg)
+    extra_arg = .meta_deserialize_obj(query$extra_arg),
+    is_valid = query$is_valid,
+    is_processed = query$is_processed
   ), class = "meta")
   
   meta
@@ -123,13 +149,18 @@ meta_dest_file <- function(meta, checksum, ext = "gz") {
 }
 
 meta_save <- function(meta) {
-  con <- rb3_duckdb_connection()
+  con <- meta_db_connection()
   
   serialized_args <- .meta_serialize_obj(meta$download_args)
   serialized_downloaded <- .meta_serialize_obj(meta$downloaded)
   serialized_created <- .meta_serialize_obj(meta$created)
   serialized_extra_arg <- .meta_serialize_obj(meta$extra_arg)
   
+  # Ensure download_args_json is updated
+  if (is.null(meta$download_args_json)) {
+    meta$download_args_json <- jsonlite::toJSON(meta$download_args, auto_unbox = TRUE)
+  }
+
   # Check if record exists
   exists_query <- DBI::dbGetQuery(
     con,
@@ -144,16 +175,22 @@ meta_save <- function(meta) {
       "UPDATE meta SET 
        template = ?, 
        download_args = ?, 
+       download_args_json = ?,
        downloaded = ?, 
        created = ?, 
-       extra_arg = ? 
+       extra_arg = ?,
+       is_valid = ?,
+       is_processed = ?
        WHERE download_checksum = ?",
       params = list(
         meta$template,
         serialized_args,
+        meta$download_args_json,
         serialized_downloaded,
         serialized_created,
         serialized_extra_arg,
+        meta$is_valid,
+        meta$is_processed,
         meta$download_checksum
       )
     )
@@ -161,15 +198,18 @@ meta_save <- function(meta) {
     # Insert new record
     DBI::dbExecute(
       con,
-      "INSERT INTO meta (download_checksum, template, download_args, downloaded, created, extra_arg)
-       VALUES (?, ?, ?, ?, ?, ?)",
+      "INSERT INTO meta (download_checksum, template, download_args, download_args_json, downloaded, created, extra_arg, is_valid, is_processed)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       params = list(
         meta$download_checksum,
         meta$template,
         serialized_args,
+        meta$download_args_json,
         serialized_downloaded,
         serialized_created,
-        serialized_extra_arg
+        serialized_extra_arg,
+        meta$is_valid,
+        meta$is_processed
       )
     )
   }
@@ -179,7 +219,7 @@ meta_save <- function(meta) {
 
 meta_clean <- function(meta) {
   # Check if meta exists in DB
-  con <- rb3_duckdb_connection()
+  con <- meta_db_connection()
   exists_query <- DBI::dbGetQuery(
     con,
     "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
@@ -220,4 +260,52 @@ meta_clean <- function(meta) {
   }
   meta_save(meta)
   meta
+}
+
+`meta_set_valid<-` <- function(meta, value) {
+  meta$is_valid <- value
+  meta_save(meta)
+  meta
+}
+
+`meta_set_processed<-` <- function(meta, value) {
+  meta$is_processed <- value
+  meta_save(meta)
+  meta
+}
+
+meta_query_status <- function(valid = NULL, processed = NULL) {
+  con <- meta_db_connection()
+  
+  # Build the query conditions
+  conditions <- c()
+  params <- list()
+  
+  if (!is.null(valid)) {
+    conditions <- c(conditions, "is_valid = ?")
+    params <- c(params, list(valid))
+  }
+  
+  if (!is.null(processed)) {
+    conditions <- c(conditions, "is_processed = ?")
+    params <- c(params, list(processed))
+  }
+  
+  # Construct the query
+  query <- "SELECT download_checksum, template, download_args_json, created, is_valid, is_processed FROM meta"
+  if (length(conditions) > 0) {
+    query <- paste(query, "WHERE", paste(conditions, collapse = " AND "))
+  }
+  
+  # Execute the query
+  result <- do.call(DBI::dbGetQuery, list(conn = con, statement = query, params = params))
+  
+  # Parse JSON in the result
+  if (nrow(result) > 0 && "download_args_json" %in% names(result)) {
+    result$download_args <- lapply(result$download_args_json, function(json) {
+      if (!is.na(json)) jsonlite::fromJSON(json) else list()
+    })
+  }
+  
+  result
 }

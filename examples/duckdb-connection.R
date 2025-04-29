@@ -1,7 +1,7 @@
 library(rb3)
 library(duckdb)
 
-con <- rb3_duckdb_connection()
+con <- meta_db_connection()
 
 duckdb::duckdb_register_arrow(con, "b3_cotahist_yearly", cotahist_get("yearly"))
 duckdb::duckdb_register_arrow(con, "b3_yc_brl", yc_brl_get())
