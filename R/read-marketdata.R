@@ -48,7 +48,7 @@ read_marketdata <- function(meta) {
   if (is.null(df) || nrow(df) == 0) {
     cli::cli_alert_warning("File could not be read: {.file {filename}}")
     meta_set_valid(meta) <- FALSE
-    return(invisible(NULL))
+    return(invisible(meta))
   }
 
   arrow::write_dataset(

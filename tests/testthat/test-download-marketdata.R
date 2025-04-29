@@ -35,7 +35,7 @@ test_that("it should download and read template-test", {
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "data.frame")
+  expect_s3_class(.df, "meta")
 })
 
 test_that("it should clean meta and its dependencies", {
@@ -95,9 +95,10 @@ test_that("it should clean meta when reading invalid file", {
   expect_true(file.exists(.meta$downloaded[[1]]))
   
   # Reading should clean if invalid
-  read_marketdata(.meta)
-  expect_false(meta_exists_in_db(.meta$download_checksum))
-  expect_false(file.exists(.meta$downloaded[[1]]))
+  .meta <- read_marketdata(.meta)
+  expect_true(meta_exists_in_db(.meta$download_checksum))
+  expect_false(.meta$is_valid)
+  expect_true(file.exists(.meta$downloaded[[1]]))
 })
 
 test_that("it should download and read b3-futures-settlement-prices", {
@@ -108,7 +109,7 @@ test_that("it should download and read b3-futures-settlement-prices", {
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "data.frame")
+  expect_s3_class(.df, "meta")
 })
 
 test_that("it should download and read b3-cotahist-daily", {
@@ -119,7 +120,7 @@ test_that("it should download and read b3-cotahist-daily", {
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "data.frame")
+  expect_s3_class(.df, "meta")
 })
 
 test_that("it should download and read b3-reference-rates", {
@@ -130,17 +131,17 @@ test_that("it should download and read b3-reference-rates", {
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "data.frame")
+  expect_s3_class(.df, "meta")
 })
 
 test_that("it should download and read b3-reference-rates for an invalid date", {
   .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE")
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Should be cleaned up if invalid
-  expect_true(is.null(.df))
-  expect_false(meta_exists_in_db(.meta$download_checksum))
-  expect_false(file.exists(.meta$downloaded[[1]]))
+  expect_false(.meta$is_valid)
+  expect_true(meta_exists_in_db(.meta$download_checksum))
+  expect_true(file.exists(.meta$downloaded[[1]]))
 })
 
 test_that("it should fail to download b3-reference-rates with no curve name", {
@@ -169,7 +170,7 @@ test_that("it should fetch b3-reference-rates with fails", {
   
   # read fail
   suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))
-  expect_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))
+  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))
 })
 
 test_that("it should download and read b3-bvbg-086", {
@@ -205,18 +206,18 @@ test_that("it should download and read b3-indexes-historical-data", {
 
 test_that("it should download and read b3-indexes-historical-data for an invalid year", {
   .meta <- download_marketdata("b3-indexes-historical-data", index = "IDIV", year = 1960)
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
-  # Should be cleaned up if invalid
-  expect_false(meta_exists_in_db(.meta$download_checksum))
+  expect_false(.meta$is_valid)
+  expect_true(meta_exists_in_db(.meta$download_checksum))
 })
 
 test_that("it should download and read b3-indexes-historical-data for an invalid index", {
   .meta <- download_marketdata("b3-indexes-historical-data", index = "XXXX", year = 1960)
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
-  # Should be cleaned up if invalid
-  expect_false(meta_exists_in_db(.meta$download_checksum))
+  expect_false(.meta$is_valid)
+  expect_true(meta_exists_in_db(.meta$download_checksum))
 })
 
 test_that("it should download and read b3-indexes-current-portfolio", {
