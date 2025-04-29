@@ -135,17 +135,17 @@ rb3_bootstrap <- function() {
   invisible(NULL)
 }
 
-#' Returns a DuckDB Database Connection for the RB3 Package
+#' Returns a DuckDB Database Connection for the RB3 Package Metadata
 #'
-#' This function provides a consistent way to connect to the DuckDB database used by the RB3 package.
+#' This function provides a consistent way to connect to the DuckDB database used for RB3 package metadata.
 #' It returns an existing connection if one is already established and valid, or creates a new
 #' connection if needed.
 #'
-#' @return A DuckDB connection object
+#' @return A DuckDB connection object for metadata storage
 #'
 #' @examples
-#' # Get a connection to the RB3 database
-#' con <- rb3_duckdb_connection()
+#' # Get a connection to the RB3 metadata database
+#' con <- meta_db_connection()
 #'
 #' @details
 #' The function first checks if a valid connection already exists in the package registry.
@@ -153,12 +153,12 @@ rb3_bootstrap <- function() {
 #' database folder and stores this connection in the package registry.
 #'
 #' @export
-rb3_duckdb_connection <- function() {
+meta_db_connection <- function() {
   reg <- rb3_registry$get_instance()
   if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
     reg$duck_db_connection
   } else {
-    con <- duckdb::dbConnect(duckdb::duckdb(), file.path(reg$db_folder, "duckdb.db"))
+    con <- duckdb::dbConnect(duckdb::duckdb(), file.path(reg$rb3_folder, "meta.db"))
     reg$duck_db_connection <- con
     con
   }

@@ -3,7 +3,7 @@ skip_if_offline()
 
 # Helper function to check if meta exists in DuckDB
 meta_exists_in_db <- function(checksum) {
-  con <- rb3_duckdb_connection()
+  con <- meta_db_connection()
   result <- DBI::dbGetQuery(
     con,
     "SELECT COUNT(*) as count FROM meta WHERE download_checksum = ?",
