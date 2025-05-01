@@ -54,7 +54,6 @@ Collate:
     'meta.R'
     'read-marketdata.R'
     'fetch-marketdata.R'
-    'process-marketdata.R'
     'download-marketdata.R'
     'scraper-futures.R'
     'scraper-cotahist.R'
