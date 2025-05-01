@@ -56,14 +56,16 @@ Templates can be found using \code{list_templates()} and retrieved with \code{te
 \examples{
 \dontrun{
 # Download daily market data
-meta <- download_marketdata("b3-cotahist-daily", 
-                            refdate = as.Date("2024-04-05"))
+meta <- download_marketdata("b3-cotahist-daily",
+  refdate = as.Date("2024-04-05")
+)
 read_marketdata(meta)
 
 # Download reference rates
 meta <- download_marketdata("b3-reference-rates",
-                            refdate = as.Date("2024-04-05"),
-                            curve_name = "PRE")
+  refdate = as.Date("2024-04-05"),
+  curve_name = "PRE"
+)
 read_marketdata(meta)
 }
 
