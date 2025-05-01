@@ -1,14 +1,3 @@
-check_args <- function(..., required_args) {
-  args <- list(...)
-  for (arg_name in required_args) {
-    if (!utils::hasName(args, arg_name)) {
-      cli::cli_alert_danger("{arg_name} argument not provided")
-      return(FALSE)
-    }
-  }
-  TRUE
-}
-
 save_resource <- function(res, encoding, dest) {
   if (
     httr::headers(res)[["content-type"]] == "application/octet-stream" ||
@@ -50,12 +39,7 @@ url_encode <- function(url, ...) {
 }
 
 download_marketdata_wrapper <- function(., dest, ...) {
-  if (
-    is.null(.$downloader$args) ||
-      (!is.null(.$downloader$args) && check_args(..., required_args = names(.$downloader$args)))) {
-    return(.$download_marketdata(., dest, ...))
-  }
-  FALSE
+  .$download_marketdata(., dest, ...)
 }
 
 # just_download_data ----

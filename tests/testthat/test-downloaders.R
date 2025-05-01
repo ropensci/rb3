@@ -16,28 +16,10 @@ test_that("it should download a file directly by its URL", {
 test_that("it should download a file with a datetime downloader", {
   tpl <- template_retrieve("b3-cotahist-daily")
   dest <- tempfile()
-  expect_false(download_marketdata_wrapper(tpl, dest))
-  expect_false(file.exists(dest))
   date <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
   x <- download_marketdata_wrapper(tpl, dest, refdate = date)
   expect_true(x)
   expect_true(file.exists(dest))
-})
-
-test_that("it should fail to settlement_prices_download", {
-  tpl <- template_retrieve("b3-reference-rates")
-  f <- download_marketdata_wrapper(tpl, tempfile())
-  expect_false(f)
-  dest <- tempfile()
-  x <- download_marketdata_wrapper(tpl, dest, refdate = as.Date("2022-12-01"))
-  expect_false(x)
-  expect_false(file.exists(dest))
-})
-
-test_that("it should fail to curve_download", {
-  tpl <- template_retrieve("b3-reference-rates")
-  f <- download_marketdata_wrapper(tpl, tempfile())
-  expect_false(f)
 })
 
 test_that("it should defaults to PRE in curve_download", {
