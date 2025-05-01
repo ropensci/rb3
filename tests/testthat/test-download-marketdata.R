@@ -29,13 +29,13 @@ test_that("it should download an small file", {
 
 test_that("it should download and read template-test", {
   .meta <- download_marketdata("template-test")
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Check meta exists in database
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "meta")
+  expect_s3_class(.meta, "meta")
 })
 
 test_that("it should clean meta and its dependencies", {
@@ -103,35 +103,35 @@ test_that("it should clean meta when reading invalid file", {
 
 test_that("it should download and read b3-futures-settlement-prices", {
   .meta <- download_marketdata("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "meta")
+  expect_s3_class(.meta, "meta")
 })
 
 test_that("it should download and read b3-cotahist-daily", {
   .meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2018-01-02"))
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "meta")
+  expect_s3_class(.meta, "meta")
 })
 
 test_that("it should download and read b3-reference-rates", {
   .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2018-01-02"), curve_name = "PRE")
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
-  expect_s3_class(.df, "meta")
+  expect_s3_class(.meta, "meta")
 })
 
 test_that("it should download and read b3-reference-rates for an invalid date", {
@@ -176,7 +176,7 @@ test_that("it should fetch b3-reference-rates with fails", {
 test_that("it should download and read b3-bvbg-086", {
   # it has multiple files but it picks only one
   .meta <- download_marketdata("b3-bvbg-086", refdate = as.Date("2018-01-02"))
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
@@ -186,7 +186,7 @@ test_that("it should download and read b3-bvbg-086", {
 
 test_that("it should download and read b3-indexes-composition", {
   .meta <- download_marketdata("b3-indexes-composition")
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
@@ -196,7 +196,7 @@ test_that("it should download and read b3-indexes-composition", {
 
 test_that("it should download and read b3-indexes-historical-data", {
   .meta <- download_marketdata("b3-indexes-historical-data", index = "IBOV", year = 2022)
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
@@ -222,7 +222,7 @@ test_that("it should download and read b3-indexes-historical-data for an invalid
 
 test_that("it should download and read b3-indexes-current-portfolio", {
   .meta <- download_marketdata("b3-indexes-current-portfolio", index = "IBOV")
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))
@@ -232,7 +232,7 @@ test_that("it should download and read b3-indexes-current-portfolio", {
 
 test_that("it should download and read b3-indexes-theoretical-portfolio", {
   .meta <- download_marketdata("b3-indexes-theoretical-portfolio", index = "IBOV")
-  .df <- read_marketdata(.meta)
+  .meta <- read_marketdata(.meta)
   
   # Verify meta in DB and file exists
   expect_true(meta_exists_in_db(.meta$download_checksum))

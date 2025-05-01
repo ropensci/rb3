@@ -106,7 +106,7 @@ rb3_registry <- create_registry()
 rb3_bootstrap <- function() {
   cache_folder <- getOption("rb3.cachedir")
   cache_folder <- if (is.null(cache_folder)) {
-    cli::cli_alert_info("Option rb3.cachedir not set using {.fn tempdir}")
+    cli::cli_alert_info("Option rb3.cachedir not set, using {.fn tempdir}")
     file.path(tempdir(), "rb3-cache")
   } else {
     cache_folder

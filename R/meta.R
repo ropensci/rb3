@@ -309,3 +309,9 @@ meta_query_status <- function(valid = NULL, processed = NULL) {
   
   result
 }
+
+#' @exportS3Method base::print
+print.meta <- function(x, ...) {
+  cli::cli_inform("<meta {x$download_checksum} {x$download_args_json}>\n")
+  x
+}
