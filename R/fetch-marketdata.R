@@ -43,30 +43,57 @@
 #' @export
 fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
   df <- expand.grid(..., stringsAsFactors = FALSE)
-  cli::cli_h1("Fetching market data for {.var {template}}")
+  cli::cli_h2("Fetching market data for {.var {template}}")
   # ----
+  cli::cli_h3("Downloading data")
   start_ <- Sys.time()
   if (nrow(df) == 0) {
-    pb <- cli::cli_progress_bar("Downloading data", total = 1, clear = FALSE)
+    pb <- cli::cli_progress_bar("Downloading data", total = 1)
     m <- download_(template = template, pb = pb, do_cache = do_cache, throttle = throttle)
     ms <- list(m)
   } else {
-    pb <- cli::cli_progress_bar("Downloading data", total = nrow(df), clear = FALSE)
-    ms <- purrr::pmap(df, download_, template = template, pb = pb, do_cache = do_cache, throttle = throttle)
+    # check for existing metas ----
+    metas <- purrr::pmap(df, meta_, template = template)
+    if (do_cache) {
+      to_skip_idx <- integer(0)
+      to_download_idx <- seq_along(metas)
+    } else {
+      to_skip_idx <- purrr::map_lgl(metas, ~ !is.null(.x)) |> which()
+      to_download_idx <- purrr::map_lgl(metas, is.null) |> which()
+    }
+    if (length(to_skip_idx) > 0) {
+      cli::cli_alert_info("Downloading {length(to_download_idx)}/{length(metas)} file{?s}, skipping {length(to_skip_idx)}/{length(metas)}")
+    } else {
+      cli::cli_alert_info("Downloading {length(to_download_idx)}/{length(metas)} file{?s}")
+    }
+    if (length(to_download_idx) > 0) {
+      dfx <- df[to_download_idx, , drop = FALSE]
+      pb <- cli::cli_progress_bar("Downloading data", total = nrow(dfx))
+      ms <- purrr::pmap(dfx, download_,
+        template = template, pb = pb, do_cache = do_cache, throttle = throttle
+      )
+      cli::cli_process_done(id = pb)
+    } else {
+      ms <- list()
+    }
   }
   end_ <- Sys.time()
   elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
-  cli::cli_process_done(id = pb)
+  cli::cli_inform(c(v = "{length(ms)} file{?s} downloaded [{round(elapsed, 2)}s]"))
   # ----
+  initial_len <- length(ms)
   ms <- purrr::keep(ms, ~ !is.null(.x))
   if (length(ms) == 0) {
     cli::cli_alert_warning("No data downloaded")
     return(invisible(NULL))
+  } else if (length(ms) < initial_len) {
+    cli::cli_alert_warning("{length(ms)} file{?s} could not be downloaded - check messages above")
   }
   # ----
-  cli::cli_inform(c(v = "{length(ms)} file{?s} downloaded [{round(elapsed, 2)}s]"))
+  cli::cli_h3("Processing {length(ms)} file{?s}")
   # Creating input layer ----
-  pb <- cli::cli_progress_bar("Creating input layer", total = length(ms), clear = FALSE)
+  cli::cli_alert_info("Creating {.strong input} layer")
+  pb <- cli::cli_progress_bar("Creating input layer", total = length(ms))
   start_ <- Sys.time()
   purrr::map(ms, read_, pb = pb)
   end_ <- Sys.time()
@@ -100,34 +127,57 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
   invisible(NULL)
 }
 
+get_existing_meta <- function(template, ...) {
+  df <- expand.grid(..., stringsAsFactors = FALSE)
+  purrr::pmap(df, meta_, template = template)
+}
+
+meta_ <- function(..., template) {
+  template <- template_retrieve(template)
+  checksum <- meta_checksum(template$id, ..., extra_arg = template_extra_arg(template))
+  tryCatch(meta_get(checksum), error = function(e) NULL)
+}
+
 download_ <- function(..., template, pb, throttle, do_cache) {
   cli::cli_progress_update(id = pb)
-  m <- tryCatch(
-    {
-      m <- download_marketdata(template, do_cache = do_cache, ...)
-      if (throttle) {
-        Sys.sleep(1)
+  m <- withCallingHandlers(
+    tryCatch(
+      {
+        m <- download_marketdata(template, do_cache = do_cache, ...)
+        if (throttle) {
+          Sys.sleep(1)
+        }
+        m
+      },
+      error = function(e) {
+        template_meta_load(template, ...)
       }
-      m
-    },
-    error = function(e) {
-      template_meta_load(template, ...)
+    ),
+    message = function(m) {
+      invokeRestart("muffleMessage")
     }
   )
   if (is.null(m)) {
     row <- list(...)
     msg <- paste(names(row), row, sep = " = ", collapse = ", ")
-    cli::cli_alert_info("No data downloaded for args {.val {msg}}")
+    cli::cli_progress_output("No data downloaded for args {.val {msg}}", id = pb)
   }
   m
 }
 
 read_ <- function(m, pb) {
   cli::cli_progress_update(id = pb)
-  x <- read_marketdata(m)
-  if (is.null(x)) {
+  x <- withCallingHandlers(
+    {
+      read_marketdata(m)
+    },
+    message = function(m) {
+      invokeRestart("muffleMessage")
+    }
+  )
+  if (!x$is_valid) {
     row <- m$download_args
     msg <- paste(names(row), purrr::map(row, format), sep = " = ", collapse = ", ")
-    cli::cli_alert_warning("Invalid file for args: {.val {msg}}")
+    cli::cli_progress_output("Invalid file for args: {.val {msg}}", id = pb)
   }
 }
