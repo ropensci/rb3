@@ -42,142 +42,280 @@
 #'
 #' @export
 fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
-  df <- expand.grid(..., stringsAsFactors = FALSE)
   cli::cli_h2("Fetching market data for {.var {template}}")
-  # ----
-  cli::cli_h3("Downloading data")
-  start_ <- Sys.time()
-  if (nrow(df) == 0) {
-    pb <- cli::cli_progress_bar("Downloading data", total = 1)
-    m <- download_(template = template, pb = pb, do_cache = do_cache, throttle = throttle)
-    ms <- list(m)
-  } else {
-    # check for existing metas ----
-    metas <- purrr::pmap(df, meta_, template = template)
-    if (do_cache) {
-      to_skip_idx <- integer(0)
-      to_download_idx <- seq_along(metas)
-    } else {
-      to_skip_idx <- purrr::map_lgl(metas, ~ !is.null(.x)) |> which()
-      to_download_idx <- purrr::map_lgl(metas, is.null) |> which()
-    }
-    if (length(to_skip_idx) > 0) {
-      cli::cli_alert_info("Downloading {length(to_download_idx)}/{length(metas)} file{?s}, skipping {length(to_skip_idx)}/{length(metas)}")
-    } else {
-      cli::cli_alert_info("Downloading {length(to_download_idx)}/{length(metas)} file{?s}")
-    }
-    if (length(to_download_idx) > 0) {
-      dfx <- df[to_download_idx, , drop = FALSE]
-      pb <- cli::cli_progress_bar("Downloading data", total = nrow(dfx))
-      ms <- purrr::pmap(dfx, download_,
-        template = template, pb = pb, do_cache = do_cache, throttle = throttle
-      )
-      cli::cli_process_done(id = pb)
-    } else {
-      ms <- list()
-    }
-  }
-  end_ <- Sys.time()
-  elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
-  cli::cli_inform(c(v = "{length(ms)} file{?s} downloaded [{round(elapsed, 2)}s]"))
-  # ----
-  initial_len <- length(ms)
-  ms <- purrr::keep(ms, ~ !is.null(.x))
-  if (length(ms) == 0) {
+  
+  # Download phase
+  metadata_list <- download_market_files(template, do_cache, throttle, ...)
+  
+  if (length(metadata_list) == 0) {
     cli::cli_alert_warning("No data downloaded")
     return(invisible(NULL))
-  } else if (length(ms) < initial_len) {
-    cli::cli_alert_warning("{length(ms)} file{?s} could not be downloaded - check messages above")
   }
-  # ----
-  cli::cli_h3("Processing {length(ms)} file{?s}")
-  # Creating input layer ----
-  cli::cli_alert_info("Creating {.strong input} layer")
-  pb <- cli::cli_progress_bar("Creating input layer", total = length(ms))
-  start_ <- Sys.time()
-  purrr::map(ms, read_, pb = pb)
-  end_ <- Sys.time()
-  elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
-  cli::cli_process_done(id = pb)
-  cli::cli_inform(c(v = "{.strong input} layer created [{round(elapsed, 2)}s]"))
-  # Creating staging layer ----
-  template <- template_retrieve(template)
-  if (!is.null(template$writers$staging)) {
-    cli::cli_alert_info("Creating {.strong staging} layer")
-    start_ <- Sys.time()
-    ds <- template_dataset(template, layer = template$writers$input$layer)
-    ds <- template$writers$staging$process_marketdata(ds)
-    if (!is.null(template$writers$staging$partition)) {
-      arrow::write_dataset(
-        ds,
-        template_db_folder(template, layer = template$writers$staging$layer),
-        partitioning = template$writers$staging$partition
-      )
-    } else {
-      arrow::write_dataset(
-        ds,
-        template_db_folder(template, layer = template$writers$staging$layer)
-      )
-    }
-    end_ <- Sys.time()
-    elapsed <- as.numeric(difftime(end_, start_, units = "secs"))
-    cli::cli_inform(c(v = "{.strong staging} layer created [{round(elapsed, 2)}s]"))
-  }
-
+  
+  # Process phase
+  process_market_files(template, metadata_list)
+  
   invisible(NULL)
 }
 
-get_existing_meta <- function(template, ...) {
-  df <- expand.grid(..., stringsAsFactors = FALSE)
-  purrr::pmap(df, meta_, template = template)
+#' Download market data files based on template and parameters
+#'
+#' @param template Name of the template to use
+#' @param do_cache Whether to cache downloaded files
+#' @param throttle Whether to introduce delay between downloads
+#' @param ... Parameter combinations for data to fetch
+#' 
+#' @return List of metadata for successfully downloaded files
+#'
+#' @noRd
+download_market_files <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
+  cli::cli_h3("Downloading data")
+  start_time <- Sys.time()
+  
+  parameter_grid <- expand.grid(..., stringsAsFactors = FALSE)
+  
+  # Single download case (no parameters)
+  if (nrow(parameter_grid) == 0) {
+    pb <- cli::cli_progress_bar("Downloading data", total = 1)
+    metadata <- download_single_file(template, pb, do_cache, throttle)
+    metadata_list <- list(metadata)
+  } else {
+    # Multiple downloads case
+    metadata_list <- download_multiple_files(template, parameter_grid, do_cache, throttle)
+  }
+  
+  end_time <- Sys.time()
+  elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+  
+  # Filter out NULL entries (failed downloads)
+  initial_count <- length(metadata_list)
+  metadata_list <- purrr::keep(metadata_list, ~ !is.null(.x))
+  
+  # Report results
+  cli::cli_inform(c(v = "{length(metadata_list)} file{?s} downloaded [{round(elapsed, 2)}s]"))
+  if (length(metadata_list) < initial_count) {
+    cli::cli_alert_warning("{initial_count - length(metadata_list)} file{?s} could not be downloaded - check messages above")
+  }
+  
+  return(metadata_list)
 }
 
-meta_ <- function(..., template) {
-  template <- template_retrieve(template)
-  checksum <- meta_checksum(template$id, ..., extra_arg = template_extra_arg(template))
+#' Download a single market data file
+#'
+#' @param template Template name
+#' @param pb Progress bar ID
+#' @param do_cache Whether to cache downloaded files
+#' @param throttle Whether to introduce delay between downloads
+#' @param ... Additional parameters for download
+#'
+#' @return Metadata for the downloaded file or NULL if download failed
+#' 
+#' @noRd
+download_single_file <- function(template, pb, do_cache = FALSE, throttle = FALSE, ...) {
+  cli::cli_progress_update(id = pb)
+  
+  metadata <- withCallingHandlers(
+    tryCatch({
+      m <- download_marketdata(template, do_cache = do_cache, ...)
+      if (throttle) {
+        Sys.sleep(1)
+      }
+      m
+    }, error = function(e) {
+      template_meta_load(template, ...)
+    }),
+    message = function(m) {
+      invokeRestart("muffleMessage")
+    }
+  )
+  
+  if (is.null(metadata)) {
+    args <- list(...)
+    arg_str <- paste(names(args), args, sep = " = ", collapse = ", ")
+    cli::cli_progress_output("No data downloaded for args {.val {arg_str}}", id = pb)
+  }
+  
+  return(metadata)
+}
+
+#' Download multiple market data files
+#'
+#' @param template Template name
+#' @param parameter_grid Data frame with parameter combinations
+#' @param do_cache Whether to cache downloaded files
+#' @param throttle Whether to introduce delay between downloads
+#'
+#' @return List of metadata for successfully downloaded files
+#'
+#' @noRd
+download_multiple_files <- function(template, parameter_grid, do_cache = FALSE, throttle = FALSE) {
+  # Check for existing metadata to avoid redundant downloads
+  existing_metadata <- purrr::pmap(parameter_grid, get_file_metadata, template = template)
+  
+  if (do_cache) {
+    download_indices <- seq_along(existing_metadata)
+    skip_indices <- integer(0)
+  } else {
+    skip_indices <- which(purrr::map_lgl(existing_metadata, ~ !is.null(.x)))
+    download_indices <- which(purrr::map_lgl(existing_metadata, is.null))
+  }
+  
+  # Report on files to download vs. skip
+  if (length(skip_indices) > 0) {
+    cli::cli_alert_info("Downloading {length(download_indices)}/{length(existing_metadata)} file{?s}, skipping {length(skip_indices)}/{length(existing_metadata)}")
+  } else {
+    cli::cli_alert_info("Downloading {length(download_indices)}/{length(existing_metadata)} file{?s}")
+  }
+  
+  metadata_list <- list()
+  
+  # Download files that need downloading
+  if (length(download_indices) > 0) {
+    download_grid <- parameter_grid[download_indices, , drop = FALSE]
+    pb <- cli::cli_progress_bar("Downloading data", total = nrow(download_grid))
+    
+    metadata_list <- purrr::pmap(download_grid, download_single_file,
+                                template = template, pb = pb, 
+                                do_cache = do_cache, throttle = throttle)
+    
+    cli::cli_process_done(id = pb)
+  }
+  
+  return(metadata_list)
+}
+
+#' Process downloaded market data files
+#'
+#' @param template Template name
+#' @param metadata_list List of metadata for downloaded files
+#'
+#' @return NULL (invisibly)
+#'
+#' @noRd
+process_market_files <- function(template, metadata_list) {
+  cli::cli_h3("Processing {length(metadata_list)} file{?s}")
+  
+  # Process input layer
+  create_input_layer(metadata_list)
+  
+  # Process staging layer if configured
+  template_obj <- template_retrieve(template)
+  if (!is.null(template_obj$writers$staging)) {
+    create_staging_layer(template_obj)
+  }
+  
+  return(invisible(NULL))
+}
+
+#' Create input layer from downloaded files
+#'
+#' @param metadata_list List of metadata for downloaded files
+#'
+#' @return NULL (invisibly)
+#'
+#' @noRd
+create_input_layer <- function(metadata_list) {
+  cli::cli_alert_info("Creating {.strong input} layer")
+  pb <- cli::cli_progress_bar("Creating input layer", total = length(metadata_list))
+  
+  start_time <- Sys.time()
+  purrr::map(metadata_list, process_file, pb = pb)
+  end_time <- Sys.time()
+  
+  elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+  cli::cli_process_done(id = pb)
+  cli::cli_inform(c(v = "{.strong input} layer created [{round(elapsed, 2)}s]"))
+  
+  return(invisible(NULL))
+}
+
+#' Create staging layer from input layer
+#'
+#' @param template Template object
+#'
+#' @return NULL (invisibly)
+#'
+#' @noRd
+create_staging_layer <- function(template) {
+  cli::cli_alert_info("Creating {.strong staging} layer")
+  start_time <- Sys.time()
+  
+  # Load dataset from input layer
+  ds <- template_dataset(template, layer = template$writers$input$layer)
+  
+  # Process dataset using template-specific function
+  ds <- template$writers$staging$process_marketdata(ds)
+  
+  # Write dataset with appropriate partitioning
+  if (!is.null(template$writers$staging$partition)) {
+    arrow::write_dataset(
+      ds,
+      template_db_folder(template, layer = template$writers$staging$layer),
+      partitioning = template$writers$staging$partition
+    )
+  } else {
+    arrow::write_dataset(
+      ds,
+      template_db_folder(template, layer = template$writers$staging$layer)
+    )
+  }
+  
+  end_time <- Sys.time()
+  elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+  cli::cli_inform(c(v = "{.strong staging} layer created [{round(elapsed, 2)}s]"))
+  
+  return(invisible(NULL))
+}
+
+#' Process a single downloaded file
+#'
+#' @param metadata Metadata for the downloaded file
+#' @param pb Progress bar ID
+#'
+#' @return Result of read_marketdata operation
+#'
+#' @noRd
+process_file <- function(metadata, pb) {
+  cli::cli_progress_update(id = pb)
+  
+  result <- withCallingHandlers({
+    read_marketdata(metadata)
+  }, message = function(m) {
+    invokeRestart("muffleMessage")
+  })
+  
+  if (!result$is_valid) {
+    args <- metadata$download_args
+    arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
+    cli::cli_progress_output("Invalid file for args: {.val {arg_str}}", id = pb)
+  }
+  
+  return(result)
+}
+
+#' Get metadata for a file with specific parameters
+#'
+#' @param ... Parameters for the file
+#' @param template Template name
+#'
+#' @return Metadata for the file or NULL if not found
+#'
+#' @noRd
+get_file_metadata <- function(..., template) {
+  template_obj <- template_retrieve(template)
+  checksum <- meta_checksum(template_obj$id, ..., extra_arg = template_extra_arg(template_obj))
   tryCatch(meta_get(checksum), error = function(e) NULL)
 }
 
-download_ <- function(..., template, pb, throttle, do_cache) {
-  cli::cli_progress_update(id = pb)
-  m <- withCallingHandlers(
-    tryCatch(
-      {
-        m <- download_marketdata(template, do_cache = do_cache, ...)
-        if (throttle) {
-          Sys.sleep(1)
-        }
-        m
-      },
-      error = function(e) {
-        template_meta_load(template, ...)
-      }
-    ),
-    message = function(m) {
-      invokeRestart("muffleMessage")
-    }
-  )
-  if (is.null(m)) {
-    row <- list(...)
-    msg <- paste(names(row), row, sep = " = ", collapse = ", ")
-    cli::cli_progress_output("No data downloaded for args {.val {msg}}", id = pb)
-  }
-  m
-}
-
-read_ <- function(m, pb) {
-  cli::cli_progress_update(id = pb)
-  x <- withCallingHandlers(
-    {
-      read_marketdata(m)
-    },
-    message = function(m) {
-      invokeRestart("muffleMessage")
-    }
-  )
-  if (!x$is_valid) {
-    row <- m$download_args
-    msg <- paste(names(row), purrr::map(row, format), sep = " = ", collapse = ", ")
-    cli::cli_progress_output("Invalid file for args: {.val {msg}}", id = pb)
-  }
+#' Get existing metadata for all parameter combinations
+#'
+#' @param template Template name
+#' @param ... Parameters to expand into combinations
+#'
+#' @return List of metadata objects
+#'
+#' @noRd
+get_existing_meta <- function(template, ...) {
+  df <- expand.grid(..., stringsAsFactors = FALSE)
+  purrr::pmap(df, get_file_metadata, template = template)
 }
