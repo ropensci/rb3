@@ -5,10 +5,10 @@ test_that("it should check rb3 folders", {
   expect_true(dir.exists(reg[["db_folder"]]))
 })
 
-test_that("it should check rb3 duckdb connection", {
+test_that("it should check rb3 sqlite connection", {
   reg <- rb3_registry$get_instance()
   expect_true("sqlite_db_connection" %in% names(reg))
   
   con <- meta_db_connection()
-  expect_true(duckdb::dbIsValid(con))
+  expect_true(DBI::dbIsValid(con))
 })
