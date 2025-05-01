@@ -32,7 +32,6 @@ Imports:
     XML,
     R.utils,
     lubridate,
-    duckdb,
     DBI,
     RSQLite
 Suggests:
