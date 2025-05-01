@@ -18,7 +18,7 @@ test_that("it should get available indexes", {
 })
 
 test_that("it should get index weights for current portfolio", {
-  fetch_marketdata("b3-indexes-current-portfolio", index = "SMLL")
+  suppressMessages(fetch_marketdata("b3-indexes-current-portfolio", index = "SMLL"))
   m <- template_meta_load("b3-indexes-current-portfolio", index = "SMLL")
   expect_true(m$is_valid)
 
