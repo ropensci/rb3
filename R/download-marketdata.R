@@ -105,8 +105,9 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
     }
     downloaded <- R.utils::compressFile(filename, dest_fname, ext, gzfile, overwrite = TRUE)
     if (length(meta[["downloaded"]]) > 0) {
-      unlink(meta[["downloaded"]])
-      cli::cli_alert_info("Removing file {.file {meta$downloaded}}")
+      x <- meta[["downloaded"]][[1]]
+      unlink(x)
+      cli::cli_alert_info("Removing file {.file {x}}")
       cli::cli_alert_info("Saving file {.file {downloaded}}")
       meta_add_download(meta) <- NULL
     }
