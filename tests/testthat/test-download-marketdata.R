@@ -1,7 +1,7 @@
 skip_on_cran()
 skip_if_offline()
 
-# Helper function to check if meta exists in DuckDB
+# Helper function to check if meta exists in SQLite
 meta_exists_in_db <- function(checksum) {
   con <- meta_db_connection()
   result <- DBI::dbGetQuery(

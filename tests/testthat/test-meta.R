@@ -23,7 +23,7 @@ test_that("it should create a new meta object", {
   meta_clean(meta)
 })
 
-test_that("it should save meta to duckdb", {
+test_that("it should save meta to sqlite", {
   meta <- meta_new("template-test", var1 = 1, var2 = 2)
   
   # Modify and save
@@ -42,7 +42,7 @@ test_that("it should save meta to duckdb", {
   meta_clean(meta)
 })
 
-test_that("it should load existing meta from duckdb", {
+test_that("it should load existing meta from sqlite", {
   meta0 <- meta_new("template-test", var1 = 1, var2 = 2)
   
   meta1 <- meta_load("template-test", var1 = 1, var2 = 2)
@@ -52,7 +52,7 @@ test_that("it should load existing meta from duckdb", {
   meta_clean(meta1)
 })
 
-test_that("it should clean meta from duckdb", {
+test_that("it should clean meta from sqlite", {
   meta <- meta_new("template-test", var1 = 1, var2 = 2)
   checksum <- meta$download_checksum
   
