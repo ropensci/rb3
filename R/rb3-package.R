@@ -135,13 +135,13 @@ rb3_bootstrap <- function() {
   invisible(NULL)
 }
 
-#' Returns a DuckDB Database Connection for the RB3 Package Metadata
+#' Returns a SQLite Database Connection for the RB3 Package Metadata
 #'
-#' This function provides a consistent way to connect to the DuckDB database used for RB3 package metadata.
+#' This function provides a consistent way to connect to the SQLite database used for RB3 package metadata.
 #' It returns an existing connection if one is already established and valid, or creates a new
 #' connection if needed.
 #'
-#' @return A DuckDB connection object for metadata storage
+#' @return A SQLite connection object for metadata storage
 #'
 #' @examples
 #' # Get a connection to the RB3 metadata database
@@ -149,17 +149,17 @@ rb3_bootstrap <- function() {
 #'
 #' @details
 #' The function first checks if a valid connection already exists in the package registry.
-#' If not, it establishes a new connection to a DuckDB database located in the configured
+#' If not, it establishes a new connection to a SQLite database located in the configured
 #' database folder and stores this connection in the package registry.
 #'
 #' @export
 meta_db_connection <- function() {
   reg <- rb3_registry$get_instance()
-  if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
-    reg$duck_db_connection
+  if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
+    reg$sqlite_db_connection
   } else {
-    con <- duckdb::dbConnect(duckdb::duckdb(), file.path(reg$rb3_folder, "meta.db"))
-    reg$duck_db_connection <- con
+    con <- RSQLite::dbConnect(RSQLite::SQLite(), file.path(reg$rb3_folder, "meta.sqlite"))
+    reg$sqlite_db_connection <- con
     con
   }
 }

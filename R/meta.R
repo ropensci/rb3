@@ -1,7 +1,7 @@
-# Initialize DuckDB connection and create meta table
+# Initialize SQLite connection and create meta table
 .init_meta_db <- function() {
   con <- meta_db_connection()
-  if (!duckdb::dbExistsTable(con, "meta")) {
+  if (!DBI::dbExistsTable(con, "meta")) {
     DBI::dbExecute(con, "
       CREATE TABLE meta (
         download_checksum VARCHAR PRIMARY KEY,
@@ -30,19 +30,19 @@
       DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN is_processed BOOLEAN")
     }
   }
-  duckdb::dbDisconnect(con, shutdown = TRUE)
+  DBI::dbDisconnect(con)
 }
 
-# Close DuckDB connection on package unload
+# Close SQLite connection on package unload
 .onUnload <- function(libpath) {
   tryCatch({
     reg <- rb3_registry$get_instance()
-    if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
-      cli::cli_inform(c("v" = "Closing DuckDB connection"))
-      duckdb::dbDisconnect(reg$duck_db_connection, shutdown = TRUE)
+    if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
+      cli::cli_inform(c("v" = "Closing SQLite connection"))
+      DBI::dbDisconnect(reg$sqlite_db_connection)
     }
   }, error = function(e) {
-    cli::cli_inform(c("x" = "Error closing DuckDB connection: {e$message}"))
+    cli::cli_inform(c("x" = "Error closing SQLite connection: {e$message}"))
   })
 }
 

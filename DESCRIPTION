@@ -33,7 +33,8 @@ Imports:
     R.utils,
     lubridate,
     duckdb,
-    DBI
+    DBI,
+    RSQLite
 Suggests:
     testthat,
     knitr,
