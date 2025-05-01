@@ -1,7 +1,7 @@
-# Initialize DuckDB connection and create meta table
+# Initialize SQLite connection and create meta table
 .init_meta_db <- function() {
   con <- meta_db_connection()
-  if (!duckdb::dbExistsTable(con, "meta")) {
+  if (!DBI::dbExistsTable(con, "meta")) {
     DBI::dbExecute(con, "
       CREATE TABLE meta (
         download_checksum VARCHAR PRIMARY KEY,
@@ -11,38 +11,24 @@
         downloaded VARCHAR,
         created VARCHAR,
         extra_arg VARCHAR,
-        is_valid BOOLEAN,
+        is_valid INTEGER CHECK (is_valid IN (0, 1)),
         is_processed BOOLEAN
       )
     ")
-  } else {
-    # Check if we need to add the new columns to an existing table
-    result <- DBI::dbGetQuery(con, "PRAGMA table_info(meta)")
-    columns <- result$name
-    
-    if (!"download_args_json" %in% columns) {
-      DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN download_args_json VARCHAR")
-    }
-    if (!"is_valid" %in% columns) {
-      DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN is_valid BOOLEAN")
-    }
-    if (!"is_processed" %in% columns) {
-      DBI::dbExecute(con, "ALTER TABLE meta ADD COLUMN is_processed BOOLEAN")
-    }
   }
-  duckdb::dbDisconnect(con, shutdown = TRUE)
+  DBI::dbDisconnect(con)
 }
 
-# Close DuckDB connection on package unload
+# Close SQLite connection on package unload
 .onUnload <- function(libpath) {
   tryCatch({
     reg <- rb3_registry$get_instance()
-    if ("duck_db_connection" %in% names(reg) && duckdb::dbIsValid(reg$duck_db_connection)) {
-      cli::cli_inform(c("v" = "Closing DuckDB connection"))
-      duckdb::dbDisconnect(reg$duck_db_connection, shutdown = TRUE)
+    if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
+      cli::cli_inform(c("v" = "Closing SQLite connection"))
+      DBI::dbDisconnect(reg$sqlite_db_connection)
     }
   }, error = function(e) {
-    cli::cli_inform(c("x" = "Error closing DuckDB connection: {e$message}"))
+    cli::cli_inform(c("x" = "Error closing SQLite connection: {e$message}"))
   })
 }
 
@@ -112,8 +98,8 @@ meta_get <- function(checksum) {
     downloaded = .meta_deserialize_obj(query$downloaded),
     created = .meta_deserialize_obj(query$created),
     extra_arg = .meta_deserialize_obj(query$extra_arg),
-    is_valid = query$is_valid,
-    is_processed = query$is_processed
+    is_valid = as.logical(query$is_valid),
+    is_processed = as.logical(query$is_processed)
   ), class = "meta")
   
   meta

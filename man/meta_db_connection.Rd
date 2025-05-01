@@ -2,21 +2,21 @@
 % Please edit documentation in R/rb3-package.R
 \name{meta_db_connection}
 \alias{meta_db_connection}
-\title{Returns a DuckDB Database Connection for the RB3 Package Metadata}
+\title{Returns a SQLite Database Connection for the RB3 Package Metadata}
 \usage{
 meta_db_connection()
 }
 \value{
-A DuckDB connection object for metadata storage
+A SQLite connection object for metadata storage
 }
 \description{
-This function provides a consistent way to connect to the DuckDB database used for RB3 package metadata.
+This function provides a consistent way to connect to the SQLite database used for RB3 package metadata.
 It returns an existing connection if one is already established and valid, or creates a new
 connection if needed.
 }
 \details{
 The function first checks if a valid connection already exists in the package registry.
-If not, it establishes a new connection to a DuckDB database located in the configured
+If not, it establishes a new connection to a SQLite database located in the configured
 database folder and stores this connection in the package registry.
 }
 \examples{

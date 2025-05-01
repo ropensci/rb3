@@ -7,7 +7,7 @@ test_that("it should check rb3 folders", {
 
 test_that("it should check rb3 duckdb connection", {
   reg <- rb3_registry$get_instance()
-  expect_true("duck_db_connection" %in% names(reg))
+  expect_true("sqlite_db_connection" %in% names(reg))
   
   con <- meta_db_connection()
   expect_true(duckdb::dbIsValid(con))
