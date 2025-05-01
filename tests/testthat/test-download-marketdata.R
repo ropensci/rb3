@@ -145,8 +145,7 @@ test_that("it should download and read b3-reference-rates for an invalid date", 
 })
 
 test_that("it should fail to download b3-reference-rates with no curve name", {
-  .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"))
-  expect_true(is.null(.meta))
+  expect_error(download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15")))
 })
 
 test_that("it should fetch b3-reference-rates", {
@@ -164,9 +163,8 @@ test_that("it should fetch b3-reference-rates", {
 })
 
 test_that("it should fetch b3-reference-rates with fails", {
-  # download fail
-  suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12")))
-  expect_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12")))
+  # download fail because of missing argument curve_name
+  expect_error(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12")))
   
   # read fail
   suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))

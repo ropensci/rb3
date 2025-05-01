@@ -269,11 +269,23 @@ template_meta_load.default <- function(template, ...) {
 
 #' @export
 template_meta_load.template <- function(template, ...) {
+  tryCatch(
+    check_args(..., required_args = names(template$downloader$args)),
+    error = function(e) {
+      cli::cli_abort("Required arguments not provided", class = "error_template_missing_args", parent = e)
+    }
+  )
   extra_arg <- template_extra_arg(template)
   meta_load(template$id, ..., extra_arg = extra_arg)
 }
 
 template_meta_new <- function(template, ...) {
+  tryCatch(
+    check_args(..., required_args = names(template$downloader$args)),
+    error = function(e) {
+      cli::cli_abort("Required arguments not provided", class = "error_template_missing_args", parent = e)
+    }
+  )
   extra_arg <- template_extra_arg(template)
   meta_new(template$id, ..., extra_arg = extra_arg)
 }
@@ -283,5 +295,14 @@ template_extra_arg <- function(template) {
     NULL
   } else {
     eval(parse(text = template$downloader[["extra-arg"]]))
+  }
+}
+
+check_args <- function(..., required_args) {
+  args <- list(...)
+  for (arg_name in required_args) {
+    if (!utils::hasName(args, arg_name)) {
+      cli::cli_abort("{arg_name} argument not provided")
+    }
   }
 }
