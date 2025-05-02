@@ -42,13 +42,36 @@ download_marketdata_wrapper <- function(., dest, ...) {
   .$download_marketdata(., dest, ...)
 }
 
-# just_download_data ----
+# Helper function to handle SSL verification and encoding defaults
+prepare_request <- function(verifyssl, encoding) {
+  list(
+    verifyssl = if (is.null(verifyssl)) TRUE else verifyssl,
+    encoding = if (is.null(encoding)) "utf8" else encoding
+  )
+}
 
+# Helper function to perform GET requests
+perform_get_request <- function(url, verifyssl) {
+  httr::GET(url, httr::config(ssl_verifypeer = verifyssl))
+}
+
+# Helper function to perform POST requests
+perform_post_request <- function(url, verifyssl, ...) {
+  httr::POST(url, body = list(...), encode = "form", httr::config(ssl_verifypeer = verifyssl))
+}
+
+# Refactored just_download_data
 just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
-  verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
-  encoding <- if (is.null(encoding)) "utf8" else encoding
-  res <- httr::GET(url, httr::config(ssl_verifypeer = verifyssl))
-  handle_response(res, encoding, dest)
+  req <- prepare_request(verifyssl, encoding)
+  res <- perform_get_request(url, req$verifyssl)
+  handle_response(res, req$encoding, dest)
+}
+
+# Refactored post_download_data
+post_download_data <- function(url, encoding, dest, verifyssl, ...) {
+  req <- prepare_request(verifyssl, encoding)
+  res <- perform_post_request(url, req$verifyssl, ...)
+  handle_response(res, req$encoding, dest)
 }
 
 simple_download <- function(., dest, ...) {
@@ -116,14 +139,6 @@ stock_indexes_statistics_download <- function(., dest, ...) {
     year = args$year
   )
   just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
-}
-
-# post_download_data ----
-
-post_download_data <- function(url, encoding, dest, verifyssl, ...) {
-  verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
-  res <- httr::POST(url, body = list(...), encode = "form", httr::config(ssl_verifypeer = verifyssl))
-  handle_response(res, encoding, dest)
 }
 
 settlement_prices_download <- function(., dest, ...) {
