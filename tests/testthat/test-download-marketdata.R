@@ -61,8 +61,8 @@ test_that("it should download again and identifies that the file has changed", {
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
   
-  # Redownload with cache
-  .meta2 <- download_marketdata("template-test-small-file", do_cache = TRUE, size = 1024)
+  # Redownload with force_download
+  .meta2 <- download_marketdata("template-test-small-file", force_download = TRUE, size = 1024)
   expect_true(file.exists(.meta2$downloaded[[1]]))
   expect_false(.meta2$downloaded[[1]] == .meta$downloaded[[1]])
   
@@ -78,8 +78,8 @@ test_that("it should download again and identifies that the file is the same", {
   expect_true(length(.meta$downloaded) == 1)
   expect_true(file.exists(.meta$downloaded[[1]]))
   
-  # Redownload with cache
-  .meta2 <- download_marketdata("b3-cotahist-daily", do_cache = TRUE, refdate = as.Date("2018-01-02"))
+  # Redownload with force_download
+  .meta2 <- download_marketdata("b3-cotahist-daily", force_download = TRUE, refdate = as.Date("2018-01-02"))
   expect_true(file.exists(.meta2$downloaded[[1]]))
   expect_true(.meta2$downloaded[[1]] == .meta$downloaded[[1]])
   
@@ -145,8 +145,7 @@ test_that("it should download and read b3-reference-rates for an invalid date", 
 })
 
 test_that("it should fail to download b3-reference-rates with no curve name", {
-  .meta <- download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"))
-  expect_true(is.null(.meta))
+  expect_error(download_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15")))
 })
 
 test_that("it should fetch b3-reference-rates", {
@@ -164,9 +163,8 @@ test_that("it should fetch b3-reference-rates", {
 })
 
 test_that("it should fetch b3-reference-rates with fails", {
-  # download fail
-  suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12")))
-  expect_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12")))
+  # download fail because of missing argument curve_name
+  expect_error(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12")))
   
   # read fail
   suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))

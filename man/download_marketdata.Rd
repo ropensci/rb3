@@ -4,12 +4,12 @@
 \alias{download_marketdata}
 \title{Download Raw Market Data Files from B3}
 \usage{
-download_marketdata(template, do_cache = FALSE, ...)
+download_marketdata(template, force_download = FALSE, ...)
 }
 \arguments{
 \item{template}{character string specifying the template name}
 
-\item{do_cache}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
+\item{force_download}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
 
 \item{...}{additional arguments passed to template-specific download functions}
 }
@@ -56,14 +56,16 @@ Templates can be found using \code{list_templates()} and retrieved with \code{te
 \examples{
 \dontrun{
 # Download daily market data
-meta <- download_marketdata("b3-cotahist-daily", 
-                            refdate = as.Date("2024-04-05"))
+meta <- download_marketdata("b3-cotahist-daily",
+  refdate = as.Date("2024-04-05")
+)
 read_marketdata(meta)
 
 # Download reference rates
 meta <- download_marketdata("b3-reference-rates",
-                            refdate = as.Date("2024-04-05"),
-                            curve_name = "PRE")
+  refdate = as.Date("2024-04-05"),
+  curve_name = "PRE"
+)
 read_marketdata(meta)
 }
 

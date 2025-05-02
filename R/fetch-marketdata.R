@@ -4,9 +4,9 @@
 #' the data into a database.
 #'
 #' @param template A character string specifying the market data template to use
-#' @param do_cache A logical value indicating whether to cache the downloaded files
-#'   (default is `FALSE`). If `TRUE`, the downloaded files will be cached for future use.
-#'   This can be useful for avoiding repeated downloads of the same data.
+#' @param force_download A logical value indicating whether to force downloading files
+#'   even if they already exist in the cache (default is `FALSE`). If `TRUE`, the function
+#'   will download files again even if they were previously downloaded.
 #' @param throttle A logical value indicating whether to throttle the download requests
 #'   (default is `FALSE`). If `TRUE`, a 1-second delay is introduced between requests
 #'   to avoid overwhelming the server.
@@ -41,11 +41,11 @@
 #' }
 #'
 #' @export
-fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
+fetch_marketdata <- function(template, force_download = FALSE, throttle = FALSE, ...) {
   cli::cli_h2("Fetching market data for {.var {template}}")
 
   # Download phase
-  metadata_list <- download_market_files(template, do_cache, throttle, ...)
+  metadata_list <- download_market_files(template, force_download, throttle, ...)
 
   if (length(metadata_list) == 0) {
     cli::cli_alert_warning("No data downloaded")
@@ -61,14 +61,14 @@ fetch_marketdata <- function(template, do_cache = FALSE, throttle = FALSE, ...) 
 #' Download market data files based on template and parameters
 #'
 #' @param template Name of the template to use
-#' @param do_cache Whether to cache downloaded files
+#' @param force_download Whether to force download even if file exists in cache
 #' @param throttle Whether to introduce delay between downloads
 #' @param ... Parameter combinations for data to fetch
 #'
 #' @return List of metadata for successfully downloaded files
 #'
 #' @noRd
-download_market_files <- function(template, do_cache = FALSE, throttle = FALSE, ...) {
+download_market_files <- function(template, force_download = FALSE, throttle = FALSE, ...) {
   cli::cli_h3("Downloading data")
   start_time <- Sys.time()
 
@@ -77,11 +77,11 @@ download_market_files <- function(template, do_cache = FALSE, throttle = FALSE, 
   # Single download case (no parameters)
   if (nrow(parameter_grid) == 0) {
     pb <- cli::cli_progress_bar("Downloading data", total = 1)
-    metadata <- download_single_file(template, pb, do_cache, throttle)
+    metadata <- download_single_file(template, pb, force_download, throttle)
     metadata_list <- list(metadata)
   } else {
     # Multiple downloads case
-    metadata_list <- download_multiple_files(template, parameter_grid, do_cache, throttle)
+    metadata_list <- download_multiple_files(template, parameter_grid, force_download, throttle)
   }
 
   end_time <- Sys.time()
@@ -104,20 +104,20 @@ download_market_files <- function(template, do_cache = FALSE, throttle = FALSE, 
 #'
 #' @param template Template name
 #' @param pb Progress bar ID
-#' @param do_cache Whether to cache downloaded files
+#' @param force_download Whether to force download even if file exists in cache 
 #' @param throttle Whether to introduce delay between downloads
 #' @param ... Additional parameters for download
 #'
 #' @return Metadata for the downloaded file or NULL if download failed
 #'
 #' @noRd
-download_single_file <- function(template, pb, do_cache = FALSE, throttle = FALSE, ...) {
+download_single_file <- function(template, pb, force_download = FALSE, throttle = FALSE, ...) {
   cli::cli_progress_update(id = pb)
 
   metadata <- withCallingHandlers(
     tryCatch(
       {
-        m <- download_marketdata(template, do_cache = do_cache, ...)
+        m <- download_marketdata(template, force_download = force_download, ...)
         if (throttle) {
           Sys.sleep(1)
         }
@@ -145,17 +145,17 @@ download_single_file <- function(template, pb, do_cache = FALSE, throttle = FALS
 #'
 #' @param template Template name
 #' @param parameter_grid Data frame with parameter combinations
-#' @param do_cache Whether to cache downloaded files
+#' @param force_download Whether to force download even if file exists in cache
 #' @param throttle Whether to introduce delay between downloads
 #'
 #' @return List of metadata for successfully downloaded files
 #'
 #' @noRd
-download_multiple_files <- function(template, parameter_grid, do_cache = FALSE, throttle = FALSE) {
+download_multiple_files <- function(template, parameter_grid, force_download = FALSE, throttle = FALSE) {
   # Check for existing metadata to avoid redundant downloads
   existing_metadata <- purrr::pmap(parameter_grid, get_file_metadata, template = template)
 
-  if (do_cache) {
+  if (force_download) {
     download_indices <- seq_along(existing_metadata)
     skip_indices <- integer(0)
   } else {
@@ -179,7 +179,7 @@ download_multiple_files <- function(template, parameter_grid, do_cache = FALSE, 
 
     metadata_list <- purrr::pmap(download_grid, download_single_file,
       template = template, pb = pb,
-      do_cache = do_cache, throttle = throttle
+      force_download = force_download, throttle = throttle
     )
 
     cli::cli_process_done(id = pb)

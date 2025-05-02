@@ -1,14 +1,3 @@
-check_args <- function(..., required_args) {
-  args <- list(...)
-  for (arg_name in required_args) {
-    if (!utils::hasName(args, arg_name)) {
-      cli::cli_alert_danger("{arg_name} argument not provided")
-      return(FALSE)
-    }
-  }
-  TRUE
-}
-
 save_resource <- function(res, encoding, dest) {
   if (
     httr::headers(res)[["content-type"]] == "application/octet-stream" ||
@@ -49,38 +38,52 @@ url_encode <- function(url, ...) {
   url
 }
 
-download_marketdata_wrapper <- function(., dest, ...) {
-  if (
-    is.null(.$downloader$args) ||
-      (!is.null(.$downloader$args) && check_args(..., required_args = names(.$downloader$args)))) {
-    return(.$download_marketdata(., dest, ...))
-  }
-  FALSE
+# Helper function to handle SSL verification and encoding defaults
+prepare_request <- function(verifyssl, encoding) {
+  list(
+    verifyssl = if (is.null(verifyssl)) TRUE else verifyssl,
+    encoding = if (is.null(encoding)) "utf8" else encoding
+  )
 }
 
-# just_download_data ----
+# Helper function to perform GET requests
+perform_get_request <- function(url, verifyssl) {
+  httr::GET(url, httr::config(ssl_verifypeer = verifyssl))
+}
 
-just_download_data <- function(url, encoding, dest, verifyssl = TRUE) {
-  verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
-  encoding <- if (is.null(encoding)) "utf8" else encoding
-  res <- httr::GET(url, httr::config(ssl_verifypeer = verifyssl))
-  handle_response(res, encoding, dest)
+# Helper function to perform POST requests
+perform_post_request <- function(url, verifyssl, ...) {
+  httr::POST(url, body = list(...), encode = "form", httr::config(ssl_verifypeer = verifyssl))
+}
+
+# Refactored download_file_via_get (previously just_download_data)
+download_file_via_get <- function(url, encoding, dest, verifyssl = TRUE) {
+  req <- prepare_request(verifyssl, encoding)
+  res <- perform_get_request(url, req$verifyssl)
+  handle_response(res, req$encoding, dest)
+}
+
+# Refactored download_file_via_post (previously post_download_data)
+download_file_via_post <- function(url, encoding, dest, verifyssl, ...) {
+  req <- prepare_request(verifyssl, encoding)
+  res <- perform_post_request(url, req$verifyssl, ...)
+  handle_response(res, req$encoding, dest)
 }
 
 simple_download <- function(., dest, ...) {
-  just_download_data(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 datetime_download <- function(., dest, ...) {
   args <- list(...)
   url <- strftime(args$refdate, .$downloader$url)
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 sprintf_download <- function(., dest, ...) {
   args <- list(...)
   url <- do.call(sprintf, c(.$downloader$url, args))
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 curve_download <- function(., dest, ...) {
@@ -91,12 +94,12 @@ curve_download <- function(., dest, ...) {
     Data1 = format(as.Date(args$refdate), "%Y%m%d"),
     slcTaxa = args$curve_name
   )
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 stock_indexes_composition_download <- function(., dest, ...) {
   url <- url_encode(.$downloader$url, pageNumber = 1, pageSize = 9999)
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 stock_indexes_theo_portfolio_download <- function(., dest, ...) {
@@ -107,7 +110,7 @@ stock_indexes_theo_portfolio_download <- function(., dest, ...) {
     language = "en-us",
     index = args$index
   )
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 stock_indexes_current_portfolio_download <- function(., dest, ...) {
@@ -121,7 +124,7 @@ stock_indexes_current_portfolio_download <- function(., dest, ...) {
     index = args$index,
     segment = 2
   )
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 stock_indexes_statistics_download <- function(., dest, ...) {
@@ -131,21 +134,13 @@ stock_indexes_statistics_download <- function(., dest, ...) {
     index = args$index,
     year = args$year
   )
-  just_download_data(url, .$downloader$encoding, dest, .$downloader$verifyssl)
-}
-
-# post_download_data ----
-
-post_download_data <- function(url, encoding, dest, verifyssl, ...) {
-  verifyssl <- if (is.null(verifyssl)) TRUE else verifyssl
-  res <- httr::POST(url, body = list(...), encode = "form", httr::config(ssl_verifypeer = verifyssl))
-  handle_response(res, encoding, dest)
+  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
 settlement_prices_download <- function(., dest, ...) {
   args <- list(...)
   strdate <- format(as.Date(args$refdate), "%d/%m/%Y")
-  post_download_data(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl,
+  download_file_via_post(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl,
     dData1 = strdate
   )
 }
