@@ -38,10 +38,6 @@ url_encode <- function(url, ...) {
   url
 }
 
-download_marketdata_wrapper <- function(., dest, ...) {
-  .$download_marketdata(., dest, ...)
-}
-
 # Helper function to handle SSL verification and encoding defaults
 prepare_request <- function(verifyssl, encoding) {
   list(

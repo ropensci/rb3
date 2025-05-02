@@ -93,7 +93,7 @@ initialize_metadata <- function(template, do_cache, ...) {
 # Perform the actual download
 perform_download <- function(template, meta, ...) {
   dest <- tempfile(fileext = str_glue(".{template$downloader$format}"))
-  if (download_marketdata_wrapper(template, dest, ...)) {
+  if (template_download_marketdata(template, dest, ...)) {
     process_downloaded_file(dest, template, meta)
   }
 }

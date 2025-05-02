@@ -306,3 +306,7 @@ check_args <- function(..., required_args) {
     }
   }
 }
+
+template_download_marketdata <- function(template, dest, ...) {
+  template$download_marketdata(template, dest, ...)
+}
