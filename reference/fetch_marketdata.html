@@ -47,7 +47,7 @@ the data into a database.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_marketdata</span><span class="op">(</span><span class="va">template</span>, do_cache <span class="op">=</span> <span class="cn">FALSE</span>, throttle <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_marketdata</span><span class="op">(</span><span class="va">template</span>, force_download <span class="op">=</span> <span class="cn">FALSE</span>, throttle <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -58,10 +58,10 @@ the data into a database.</p>
 <dd><p>A character string specifying the market data template to use</p></dd>
 
 
-<dt id="arg-do-cache">do_cache<a class="anchor" aria-label="anchor" href="#arg-do-cache"></a></dt>
-<dd><p>A logical value indicating whether to cache the downloaded files
-(default is <code>FALSE</code>). If <code>TRUE</code>, the downloaded files will be cached for future use.
-This can be useful for avoiding repeated downloads of the same data.</p></dd>
+<dt id="arg-force-download">force_download<a class="anchor" aria-label="anchor" href="#arg-force-download"></a></dt>
+<dd><p>A logical value indicating whether to force downloading files
+even if they already exist in the cache (default is <code>FALSE</code>). If <code>TRUE</code>, the function
+will download files again even if they were previously downloaded.</p></dd>
 
 
 <dt id="arg-throttle">throttle<a class="anchor" aria-label="anchor" href="#arg-throttle"></a></dt>
