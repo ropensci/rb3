@@ -12,7 +12,8 @@
         created VARCHAR,
         extra_arg VARCHAR,
         is_valid INTEGER CHECK (is_valid IN (0, 1)),
-        is_processed BOOLEAN
+        is_processed INTEGER CHECK (is_processed IN (0, 1)),
+        is_downloaded INTEGER CHECK (is_downloaded IN (0, 1))
       )
     ")
   }
@@ -60,7 +61,8 @@ meta_new <- function(template, ..., extra_arg = NULL) {
     created = as.POSIXct(Sys.time(), tz = "UTC"),
     extra_arg = extra_arg,
     is_valid = FALSE,
-    is_processed = FALSE
+    is_processed = FALSE,
+    is_downloaded = FALSE
   ), class = "meta")
   
   meta_save(meta)
@@ -99,7 +101,8 @@ meta_get <- function(checksum) {
     created = .meta_deserialize_obj(query$created),
     extra_arg = .meta_deserialize_obj(query$extra_arg),
     is_valid = as.logical(query$is_valid),
-    is_processed = as.logical(query$is_processed)
+    is_processed = as.logical(query$is_processed),
+    is_downloaded = as.logical(query$is_downloaded)
   ), class = "meta")
   
   meta
@@ -166,7 +169,8 @@ meta_save <- function(meta) {
        created = ?, 
        extra_arg = ?,
        is_valid = ?,
-       is_processed = ?
+       is_processed = ?,
+       is_downloaded = ?
        WHERE download_checksum = ?",
       params = list(
         meta$template,
@@ -177,6 +181,7 @@ meta_save <- function(meta) {
         serialized_extra_arg,
         meta$is_valid,
         meta$is_processed,
+        meta$is_downloaded,
         meta$download_checksum
       )
     )
@@ -184,8 +189,8 @@ meta_save <- function(meta) {
     # Insert new record
     DBI::dbExecute(
       con,
-      "INSERT INTO meta (download_checksum, template, download_args, download_args_json, downloaded, created, extra_arg, is_valid, is_processed)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO meta (download_checksum, template, download_args, download_args_json, downloaded, created, extra_arg, is_valid, is_processed, is_downloaded)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       params = list(
         meta$download_checksum,
         meta$template,
@@ -195,7 +200,8 @@ meta_save <- function(meta) {
         serialized_created,
         serialized_extra_arg,
         meta$is_valid,
-        meta$is_processed
+        meta$is_processed,
+        meta$is_downloaded
       )
     )
   }
@@ -256,6 +262,12 @@ meta_clean <- function(meta) {
 
 `meta_set_processed<-` <- function(meta, value) {
   meta$is_processed <- value
+  meta_save(meta)
+  meta
+}
+
+`meta_set_downloaded<-` <- function(meta, value) {
+  meta$is_downloaded <- value
   meta_save(meta)
   meta
 }
