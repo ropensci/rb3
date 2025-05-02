@@ -67,8 +67,8 @@ download_file_via_get <- function(url, encoding, dest, verifyssl = TRUE) {
   handle_response(res, req$encoding, dest)
 }
 
-# Refactored post_download_data
-post_download_data <- function(url, encoding, dest, verifyssl, ...) {
+# Refactored download_file_via_post (previously post_download_data)
+download_file_via_post <- function(url, encoding, dest, verifyssl, ...) {
   req <- prepare_request(verifyssl, encoding)
   res <- perform_post_request(url, req$verifyssl, ...)
   handle_response(res, req$encoding, dest)
@@ -144,7 +144,7 @@ stock_indexes_statistics_download <- function(., dest, ...) {
 settlement_prices_download <- function(., dest, ...) {
   args <- list(...)
   strdate <- format(as.Date(args$refdate), "%d/%m/%Y")
-  post_download_data(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl,
+  download_file_via_post(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl,
     dData1 = strdate
   )
 }
