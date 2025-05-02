@@ -1,4 +1,3 @@
-
 library(rb3)
 library(bizdays)
 
@@ -17,9 +16,9 @@ fetch_marketdata("b3-indexes-current-portfolio", index = indexes_get(), throttle
 fetch_marketdata("b3-indexes-theoretical-portfolio", index = indexes_get(), throttle = TRUE)
 fetch_marketdata("b3-indexes-historical-data", index = indexes_get(), year = 2000:2025, throttle = TRUE)
 
-# Once you need to update the data, you can set the `do_cache` argument to TRUE
+# Once you need to update the data, you can set the `force_download` argument to TRUE
 # to force the update of the data. This will download the data again and
 # overwrite the existing data in the cache.
 
-fetch_marketdata('b3-cotahist-yearly', year = 2025, do_cache = TRUE)
-fetch_marketdata("b3-indexes-historical-data", index = indexes_get(), year = 2025, throttle = TRUE, do_cache = TRUE)
+fetch_marketdata('b3-cotahist-yearly', year = 2025, force_download = TRUE)
+fetch_marketdata("b3-indexes-historical-data", index = indexes_get(), year = 2025, throttle = TRUE, force_download = TRUE)

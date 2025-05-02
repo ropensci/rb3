@@ -4,12 +4,12 @@
 \alias{download_marketdata}
 \title{Download Raw Market Data Files from B3}
 \usage{
-download_marketdata(template, do_cache = FALSE, ...)
+download_marketdata(template, force_download = FALSE, ...)
 }
 \arguments{
 \item{template}{character string specifying the template name}
 
-\item{do_cache}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
+\item{force_download}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
 
 \item{...}{additional arguments passed to template-specific download functions}
 }

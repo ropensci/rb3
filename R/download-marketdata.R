@@ -5,7 +5,7 @@
 #' based on predefined templates. Handles file downloading and caching.
 #'
 #' @param template character string specifying the template name
-#' @param do_cache logical; if TRUE forces a new download even if cached file exists (default: FALSE)
+#' @param force_download logical; if TRUE forces a new download even if cached file exists (default: FALSE)
 #' @param ... additional arguments passed to template-specific download functions
 #'
 #' @return
@@ -62,9 +62,9 @@
 #' }
 #'
 #' @export
-download_marketdata <- function(template, do_cache = FALSE, ...) {
+download_marketdata <- function(template, force_download = FALSE, ...) {
   template <- template_retrieve(template)
-  meta <- initialize_metadata(template, do_cache, ...)
+  meta <- initialize_metadata(template, force_download, ...)
 
   tryCatch(
     {
@@ -77,11 +77,11 @@ download_marketdata <- function(template, do_cache = FALSE, ...) {
 }
 
 # Initialize metadata for the download
-initialize_metadata <- function(template, do_cache, ...) {
+initialize_metadata <- function(template, force_download, ...) {
   tryCatch(
     template_meta_new(template, ...),
     error = function(e) {
-      if (do_cache) {
+      if (force_download) {
         return(template_meta_load(template, ...))
       } else {
         cli::cli_abort("Error creating meta", parent = e)

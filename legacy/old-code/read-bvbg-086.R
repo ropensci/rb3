@@ -1,5 +1,5 @@
 t <- template_retrieve("b3-bvbg-086")
-.meta <- download_marketdata("b3-bvbg-086", do_cache = TRUE, refdate = "2025-03-10")
+.meta <- download_marketdata("b3-bvbg-086", force_download = TRUE, refdate = "2025-03-10")
 df <- read_marketdata(.meta)
 
 df <- pricereport_reader(t, .meta$downloaded[[1]])
