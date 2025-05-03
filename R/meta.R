@@ -101,7 +101,7 @@ meta_get <- function(checksum) {
     download_args = .meta_deserialize_obj(query$download_args),
     download_args_json = query$download_args_json,
     downloaded = .meta_deserialize_obj(query$downloaded),
-    created = .meta_deserialize_obj(query$created),
+    created = as.POSIXct(query$created, format = "%Y-%m-%d %H:%M:%OS", tz = "UTC"),
     extra_arg = .meta_deserialize_obj(query$extra_arg),
     is_valid = as.logical(query$is_valid),
     is_processed = as.logical(query$is_processed),
@@ -145,7 +145,7 @@ meta_save <- function(meta) {
   
   serialized_args <- .meta_serialize_obj(meta$download_args)
   serialized_downloaded <- .meta_serialize_obj(meta$downloaded)
-  serialized_created <- .meta_serialize_obj(meta$created)
+  serialized_created <- format(meta$created, format = "%Y-%m-%d %H:%M:%OS6")
   serialized_extra_arg <- .meta_serialize_obj(meta$extra_arg)
   
   # Ensure download_args_json is updated
