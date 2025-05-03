@@ -4,9 +4,8 @@
 #' Downloads and caches financial market datasets from B3 (Brazilian Stock Exchange)
 #' based on predefined templates. Handles file downloading and caching.
 #'
-#' @param template character string specifying the template name
+#' @param meta A metadata object created with `create_metadata()` containing download information
 #' @param force_download logical; if TRUE forces a new download even if cached file exists (default: FALSE)
-#' @param ... additional arguments passed to template-specific download functions
 #'
 #' @return
 #' Returns a meta object containing the downloaded file's metadata:
@@ -16,6 +15,7 @@
 #'   \item download_args - Arguments passed via ...
 #'   \item downloaded - Path to the downloaded file
 #'   \item created - Timestamp of file creation
+#'   \item is_downloaded - Whether the file was successfully downloaded
 #' }
 #'
 #' @details
@@ -35,10 +35,8 @@
 #'
 #' Templates can be found using `list_templates()` and retrieved with `template_retrieve()`.
 #'
-#' @return A meta object containing the downloaded file's metadata.
-#' This meta object is used with the `read_marketdata` function to read the downloaded file.
-#'
 #' @seealso
+#' * \code{\link{create_metadata}} for creating a metadata object
 #' * \code{\link{list_templates}} for listing available data templates
 #' * \code{\link{template_retrieve}} for retrieving specific template details
 #'
@@ -47,54 +45,52 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Download daily market data
-#' meta <- download_marketdata("b3-cotahist-daily",
+#' # Create metadata for daily market data
+#' meta <- create_metadata("b3-cotahist-daily",
 #'   refdate = as.Date("2024-04-05")
 #' )
+#'
+#' # Download using the metadata
+#' meta <- download_marketdata(meta)
+#'
+#' # Read the downloaded data
 #' read_marketdata(meta)
 #'
-#' # Download reference rates
-#' meta <- download_marketdata("b3-reference-rates",
+#' # For reference rates
+#' meta <- create_metadata("b3-reference-rates",
 #'   refdate = as.Date("2024-04-05"),
 #'   curve_name = "PRE"
 #' )
+#' meta <- download_marketdata(meta)
 #' read_marketdata(meta)
 #' }
 #'
 #' @export
-download_marketdata <- function(template, force_download = FALSE, ...) {
-  template <- template_retrieve(template)
-  meta <- initialize_metadata(template, force_download, ...)
+download_marketdata <- function(meta) {
+  template <- template_retrieve(meta$template)
 
   tryCatch(
-    {
-      perform_download(template, meta, ...)
-    },
+    perform_download(template, meta),
     error = function(e) {
       handle_download_error(e, meta)
     }
   )
 }
 
-# Initialize metadata for the download
-initialize_metadata <- function(template, force_download, ...) {
-  tryCatch(
-    template_meta_new(template, ...),
-    error = function(e) {
-      if (force_download) {
-        return(template_meta_load(template, ...))
-      } else {
-        cli::cli_abort("Error creating meta", parent = e)
-      }
-    }
-  )
-}
-
 # Perform the actual download
-perform_download <- function(template, meta, ...) {
+perform_download <- function(template, meta) {
   dest <- tempfile(fileext = str_glue(".{template$downloader$format}"))
-  if (template_download_marketdata(template, dest, ...)) {
+
+  # Extract arguments from metadata to use with the template's download function
+  args <- meta$download_args
+
+  # Call the template's download function with the arguments from metadata
+  if (do.call(template_download_marketdata, c(list(template, dest), args))) {
     process_downloaded_file(dest, template, meta)
+  } else {
+    cli::cli_abort("Download failed for meta {.strong {meta$download_checksum}}",
+      class = "error_download_fail"
+    )
   }
 }
 
@@ -102,10 +98,6 @@ perform_download <- function(template, meta, ...) {
 process_downloaded_file <- function(dest, template, meta) {
   filename <- unzip_recursive(dest)
   filename <- select_file_if_multiple(filename, template$downloader[["if-has-multiple-files-use"]])
-
-  if (file.size(filename) <= 2) {
-    cli::cli_abort("File is empty: {.file {filename}}", class = "error_download_empty_file")
-  }
 
   md5 <- tools::md5sum(filename)
   ext <- "gz"
@@ -130,18 +122,19 @@ finalize_download <- function(filename, dest_fname, meta, ext) {
     cli::cli_alert_info("Replacing file {.file {x}} with {.file {downloaded}}")
   }
   meta_add_download(meta) <- downloaded
+  meta_set_downloaded(meta) <- TRUE
   meta
 }
 
 # Handle errors during the download process
 handle_download_error <- function(e, meta) {
-  if (inherits(e, "error_download_fail") || inherits(e, "error_download_empty_file")) {
-    meta_clean(meta)
-    return(NULL)
+  if (inherits(e, "error_download_fail")) {
+    meta_set_downloaded(meta) <- FALSE
+    return(meta)
   } else if (inherits(e, "error_download_file_exists")) {
     return(meta)
   } else {
-    cli::cli_alert("Unknown error")
+    cli::cli_abort("Unknown error", class = "error_download_unknown", parent = e)
   }
 }
 

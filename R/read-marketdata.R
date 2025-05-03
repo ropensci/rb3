@@ -38,15 +38,28 @@
 #'
 #' @export
 read_marketdata <- function(meta) {
+  # Check if file was successfully downloaded
+  if (!isTRUE(meta$is_downloaded)) {
+    cli::cli_alert_warning("File was not successfully downloaded for meta {.strong {meta$download_checksum}}")
+    return(invisible(meta))
+  }
+  
   filename <- try(meta$downloaded[[1]], silent = TRUE)
   if (inherits(filename, "try-error")) {
-    cli::cli_alert_warning("File could not be read for meta {.strong {meta$download_checksum}}")
-    return(invisible(NULL))
+    cli::cli_alert_warning("No downloaded file found for meta {.strong {meta$download_checksum}}")
+    return(invisible(meta))
   }
+  
+  if (!file.exists(filename)) {
+    cli::cli_alert_warning("File could not be read for meta {.strong {meta$download_checksum}}")
+    return(invisible(meta))
+  }
+  
   template <- template_retrieve(meta$template)
   df <- read_file_wrapper(template, filename, meta)
   if (is.null(df) || nrow(df) == 0) {
     cli::cli_alert_warning("File could not be read: {.file {filename}}")
+    meta_set_processed(meta) <- TRUE
     meta_set_valid(meta) <- FALSE
     return(invisible(meta))
   }

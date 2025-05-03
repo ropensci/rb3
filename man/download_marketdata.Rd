@@ -4,14 +4,12 @@
 \alias{download_marketdata}
 \title{Download Raw Market Data Files from B3}
 \usage{
-download_marketdata(template, force_download = FALSE, ...)
+download_marketdata(meta)
 }
 \arguments{
-\item{template}{character string specifying the template name}
+\item{meta}{A metadata object created with \code{create_metadata()} containing download information}
 
 \item{force_download}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
-
-\item{...}{additional arguments passed to template-specific download functions}
 }
 \value{
 Returns a meta object containing the downloaded file's metadata:
@@ -21,10 +19,8 @@ Returns a meta object containing the downloaded file's metadata:
 \item download_args - Arguments passed via ...
 \item downloaded - Path to the downloaded file
 \item created - Timestamp of file creation
+\item is_downloaded - Whether the file was successfully downloaded
 }
-
-A meta object containing the downloaded file's metadata.
-This meta object is used with the \code{read_marketdata} function to read the downloaded file.
 }
 \description{
 Downloads and caches financial market datasets from B3 (Brazilian Stock Exchange)
@@ -55,23 +51,30 @@ Templates can be found using \code{list_templates()} and retrieved with \code{te
 }
 \examples{
 \dontrun{
-# Download daily market data
-meta <- download_marketdata("b3-cotahist-daily",
+# Create metadata for daily market data
+meta <- create_metadata("b3-cotahist-daily",
   refdate = as.Date("2024-04-05")
 )
+
+# Download using the metadata
+meta <- download_marketdata(meta)
+
+# Read the downloaded data
 read_marketdata(meta)
 
-# Download reference rates
-meta <- download_marketdata("b3-reference-rates",
+# For reference rates
+meta <- create_metadata("b3-reference-rates",
   refdate = as.Date("2024-04-05"),
   curve_name = "PRE"
 )
+meta <- download_marketdata(meta)
 read_marketdata(meta)
 }
 
 }
 \seealso{
 \itemize{
+\item \code{\link{create_metadata}} for creating a metadata object
 \item \code{\link{list_templates}} for listing available data templates
 \item \code{\link{template_retrieve}} for retrieving specific template details
 }

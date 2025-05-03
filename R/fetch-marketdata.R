@@ -104,7 +104,7 @@ download_market_files <- function(template, force_download = FALSE, throttle = F
 #'
 #' @param template Template name
 #' @param pb Progress bar ID
-#' @param force_download Whether to force download even if file exists in cache 
+#' @param force_download Whether to force download even if file exists in cache
 #' @param throttle Whether to introduce delay between downloads
 #' @param ... Additional parameters for download
 #'
@@ -112,30 +112,30 @@ download_market_files <- function(template, force_download = FALSE, throttle = F
 #'
 #' @noRd
 download_single_file <- function(template, pb, force_download = FALSE, throttle = FALSE, ...) {
-  cli::cli_progress_update(id = pb)
+  on.exit(cli::cli_progress_update(id = pb))
 
+  # Check for existing metadata to avoid redundant downloads
+  metadata <- template_meta_create_or_load(template, ...)
+  # Download the file if it doesn't exist or if forced
   metadata <- withCallingHandlers(
-    tryCatch(
-      {
-        m <- download_marketdata(template, force_download = force_download, ...)
+    {
+      if (!metadata$is_downloaded || force_download) {
+        metadata <- download_marketdata(metadata)
         if (throttle) {
           Sys.sleep(1)
         }
-        m
-      },
-      error = function(e) {
-        template_meta_load(template, ...)
       }
-    ),
+      metadata
+    },
     message = function(m) {
       invokeRestart("muffleMessage")
     }
   )
 
-  if (is.null(metadata)) {
-    args <- list(...)
-    arg_str <- paste(names(args), args, sep = " = ", collapse = ", ")
-    cli::cli_inform(c(x = "No data downloaded for args {.val {arg_str}}"))
+  if (!metadata$is_downloaded) {
+    args <- metadata$download_args
+    arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
+    cli::cli_progress_output("Failed to download file for args: {.val {arg_str}}", id = pb)
   }
 
   return(metadata)
@@ -280,7 +280,7 @@ create_staging_layer <- function(template) {
 #'
 #' @noRd
 process_file <- function(metadata, pb) {
-  cli::cli_progress_update(id = pb)
+  on.exit(cli::cli_progress_update(id = pb))
 
   result <- withCallingHandlers(
     {
