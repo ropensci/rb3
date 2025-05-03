@@ -279,7 +279,18 @@ template_meta_load.template <- function(template, ...) {
   meta_load(template$id, ..., extra_arg = extra_arg)
 }
 
+#' @export
 template_meta_new <- function(template, ...) {
+  UseMethod("template_meta_new")
+}
+
+#' @export
+template_meta_new.default <- function(template, ...) {
+  template_retrieve(template) |> template_meta_new.template(...)
+}
+
+#' @export
+template_meta_new.template <- function(template, ...) {
   tryCatch(
     check_args(..., required_args = names(template$downloader$args)),
     error = function(e) {
@@ -296,6 +307,15 @@ template_extra_arg <- function(template) {
   } else {
     eval(parse(text = template$downloader[["extra-arg"]]))
   }
+}
+
+template_meta_create_or_load <- function(template, ...) {
+  tryCatch(
+    template_meta_new(template, ...),
+    error = function(e) {
+      template_meta_load(template, ...)
+    }
+  )
 }
 
 check_args <- function(..., required_args) {
