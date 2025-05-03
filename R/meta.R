@@ -160,7 +160,7 @@ meta_save <- function(meta) {
     params = list(meta$download_checksum)
   )
   
-  if (exists_query$count > 0) {
+  if (length(exists_query$count) == 1 && exists_query$count > 0) {
     # Update existing record
     DBI::dbExecute(
       con,
