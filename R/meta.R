@@ -22,15 +22,18 @@
 
 # Close SQLite connection on package unload
 .onUnload <- function(libpath) {
-  tryCatch({
-    reg <- rb3_registry$get_instance()
-    if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
-      cli::cli_inform(c("v" = "Closing SQLite connection"))
-      DBI::dbDisconnect(reg$sqlite_db_connection)
+  tryCatch(
+    {
+      reg <- rb3_registry$get_instance()
+      if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
+        cli::cli_inform(c("v" = "Closing SQLite connection"))
+        DBI::dbDisconnect(reg$sqlite_db_connection)
+      }
+    },
+    error = function(e) {
+      cli::cli_inform(c("x" = "Error closing SQLite connection: {e$message}"))
     }
-  }, error = function(e) {
-    cli::cli_inform(c("x" = "Error closing SQLite connection: {e$message}"))
-  })
+  )
 }
 
 meta_new <- function(template, ..., extra_arg = NULL) {
