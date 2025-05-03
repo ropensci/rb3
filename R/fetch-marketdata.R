@@ -45,7 +45,7 @@
 #'
 #' @export
 fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE, throttle = FALSE, ...) {
-  cli::cli_h2("Fetching market data for {.var {template}}")
+  cli::cli_h1("Fetching market data for {.var {template}}")
 
   # Download phase
   metadata_list <- download_market_files(template, force_download, throttle, ...)
@@ -72,7 +72,7 @@ fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE
 #'
 #' @noRd
 download_market_files <- function(template, force_download = FALSE, throttle = FALSE, ...) {
-  cli::cli_h3("Downloading data")
+  cli::cli_text("── {.strong Downloading data}")
   start_time <- Sys.time()
 
   parameter_grid <- expand.grid(..., stringsAsFactors = FALSE)
@@ -201,7 +201,7 @@ download_multiple_files <- function(template, parameter_grid, force_download = F
 #'
 #' @noRd
 process_market_files <- function(template, metadata_list, reprocess) {
-  cli::cli_h3("Processing {length(metadata_list)} file{?s}")
+  cli::cli_text("── {.strong Processing {length(metadata_list)} file{?s}}")
 
   # Process input layer
   input_layer_changed <- create_input_layer(metadata_list, reprocess)
@@ -209,7 +209,7 @@ process_market_files <- function(template, metadata_list, reprocess) {
   # Process staging layer if configured
   template_obj <- template_retrieve(template)
   if (!is.null(template_obj$writers$staging) && input_layer_changed) {
-    cli::cli_alert_info("Input layer changed, creating staging layer")
+    cli::cli_alert_info("input layer changed")
     # Create staging layer
     create_staging_layer(template_obj)
   }
@@ -226,8 +226,8 @@ process_market_files <- function(template, metadata_list, reprocess) {
 #'
 #' @noRd
 create_input_layer <- function(metadata_list, reprocess) {
-  cli::cli_alert_info("Creating {.strong input} layer")
-  pb <- cli::cli_progress_bar("Creating input layer", total = length(metadata_list))
+  cli::cli_alert_info("Updating {.strong input} layer")
+  pb <- cli::cli_progress_bar("Updating input layer", total = length(metadata_list))
 
   # count valid files before processing
   valid_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
@@ -241,7 +241,9 @@ create_input_layer <- function(metadata_list, reprocess) {
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
   cli::cli_process_done(id = pb)
   if (valid_count_before != valid_count_after) {
-    cli::cli_inform(c(v = "{.strong input} layer created [{round(elapsed, 2)}s]"))
+    cli::cli_inform(c(v = "{.strong input} layer updated [{round(elapsed, 2)}s]"))
+  } else if (reprocess) {
+    cli::cli_inform(c(v = "{.strong input} layer reprocessed [{round(elapsed, 2)}s]"))
   } else {
     cli::cli_inform(c(v = "{.strong input} layer not updated - no new files detected [{round(elapsed, 2)}s]"))
   }
@@ -249,7 +251,7 @@ create_input_layer <- function(metadata_list, reprocess) {
   # Check if the number of valid files has changed
   # It indicates that the input layer has been updated
   # and the staging layer needs to be recreated
-  return(valid_count_before != valid_count_after)
+  return(valid_count_before != valid_count_after || reprocess)
 }
 
 #' Create staging layer from input layer
