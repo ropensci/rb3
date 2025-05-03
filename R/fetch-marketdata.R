@@ -7,6 +7,9 @@
 #' @param force_download A logical value indicating whether to force downloading files
 #'   even if they already exist in the cache (default is `FALSE`). If `TRUE`, the function
 #'   will download files again even if they were previously downloaded.
+#' @param reprocess A logical value indicating whether to reprocess files even if they
+#'  are already processed (default is `FALSE`). If `TRUE`, the function will reprocess
+#'  the files in the input layer, even if they were previously processed.
 #' @param throttle A logical value indicating whether to throttle the download requests
 #'   (default is `FALSE`). If `TRUE`, a 1-second delay is introduced between requests
 #'   to avoid overwhelming the server.
@@ -41,7 +44,7 @@
 #' }
 #'
 #' @export
-fetch_marketdata <- function(template, force_download = FALSE, throttle = FALSE, ...) {
+fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE, throttle = FALSE, ...) {
   cli::cli_h2("Fetching market data for {.var {template}}")
 
   # Download phase
@@ -53,7 +56,7 @@ fetch_marketdata <- function(template, force_download = FALSE, throttle = FALSE,
   }
 
   # Process phase
-  process_market_files(template, metadata_list)
+  process_market_files(template, metadata_list, reprocess)
 
   invisible(NULL)
 }
@@ -192,19 +195,22 @@ download_multiple_files <- function(template, parameter_grid, force_download = F
 #'
 #' @param template Template name
 #' @param metadata_list List of metadata for downloaded files
+#' @param reprocess Whether to reprocess files even if they are already processed
 #'
 #' @return NULL (invisibly)
 #'
 #' @noRd
-process_market_files <- function(template, metadata_list) {
+process_market_files <- function(template, metadata_list, reprocess) {
   cli::cli_h3("Processing {length(metadata_list)} file{?s}")
 
   # Process input layer
-  create_input_layer(metadata_list)
+  input_layer_changed <- create_input_layer(metadata_list, reprocess)
 
   # Process staging layer if configured
   template_obj <- template_retrieve(template)
-  if (!is.null(template_obj$writers$staging)) {
+  if (!is.null(template_obj$writers$staging) && input_layer_changed) {
+    cli::cli_alert_info("Input layer changed, creating staging layer")
+    # Create staging layer
     create_staging_layer(template_obj)
   }
 
@@ -214,23 +220,36 @@ process_market_files <- function(template, metadata_list) {
 #' Create input layer from downloaded files
 #'
 #' @param metadata_list List of metadata for downloaded files
+#' @param reprocess Whether to reprocess files even if they are already processed
 #'
 #' @return NULL (invisibly)
 #'
 #' @noRd
-create_input_layer <- function(metadata_list) {
+create_input_layer <- function(metadata_list, reprocess) {
   cli::cli_alert_info("Creating {.strong input} layer")
   pb <- cli::cli_progress_bar("Creating input layer", total = length(metadata_list))
 
+  # count valid files before processing
+  valid_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
+  # process file
   start_time <- Sys.time()
-  purrr::map(metadata_list, process_file, pb = pb)
+  metadata_list <- purrr::map(metadata_list, process_file, pb = pb, reprocess = reprocess)
   end_time <- Sys.time()
+  # count valid files after processing
+  valid_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
 
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
   cli::cli_process_done(id = pb)
-  cli::cli_inform(c(v = "{.strong input} layer created [{round(elapsed, 2)}s]"))
+  if (valid_count_before != valid_count_after) {
+    cli::cli_inform(c(v = "{.strong input} layer created [{round(elapsed, 2)}s]"))
+  } else {
+    cli::cli_inform(c(v = "{.strong input} layer not updated - no new files detected [{round(elapsed, 2)}s]"))
+  }
 
-  return(invisible(NULL))
+  # Check if the number of valid files has changed
+  # It indicates that the input layer has been updated
+  # and the staging layer needs to be recreated
+  return(valid_count_before != valid_count_after)
 }
 
 #' Create staging layer from input layer
@@ -279,12 +298,15 @@ create_staging_layer <- function(template) {
 #' @return Result of read_marketdata operation
 #'
 #' @noRd
-process_file <- function(metadata, pb) {
+process_file <- function(metadata, pb, reprocess = FALSE) {
   on.exit(cli::cli_progress_update(id = pb))
 
   result <- withCallingHandlers(
     {
-      read_marketdata(metadata)
+      if (!metadata$is_processed || reprocess) {
+        metadata <- read_marketdata(metadata)
+      }
+      metadata
     },
     message = function(m) {
       invokeRestart("muffleMessage")
