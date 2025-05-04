@@ -169,7 +169,7 @@ process_staging_layer <- function(template, input_layer_changed, reprocess) {
 #'
 #' @noRd
 process_input_layer <- function(metadata_list, reprocess) {
-  cli::cli_text("── {.strong Processing {length(metadata_list)} file{?s}}")
+  cli::cli_text("── {.strong Processing data layers}")
   cli::cli_alert_info("Updating {.strong input} layer")
   pb <- cli::cli_progress_bar("Updating input layer", total = length(metadata_list))
   on.exit(cli::cli_process_done(id = pb))
@@ -187,11 +187,12 @@ process_input_layer <- function(metadata_list, reprocess) {
   # It indicates that the input layer has been updated
   # and the staging layer needs to be recreated
   input_layer_changed <- valid_count_before != valid_count_after
+  files_processed <- valid_count_after - valid_count_before
 
   if (input_layer_changed) {
-    cli::cli_inform(c(v = "{.strong input} layer updated [{round(elapsed, 2)}s]"))
+    cli::cli_inform(c(v = "{.strong input} layer updated - {files_processed} file{?s} processed [{round(elapsed, 2)}s]"))
   } else if (reprocess) {
-    cli::cli_inform(c(v = "{.strong input} layer reprocessed [{round(elapsed, 2)}s]"))
+    cli::cli_inform(c(v = "{.strong input} layer reprocessed - {length(metadata_list)} file{?s} processed [{round(elapsed, 2)}s]"))
   } else {
     cli::cli_inform(c(v = "{.strong input} layer not updated - no new files detected [{round(elapsed, 2)}s]"))
   }
