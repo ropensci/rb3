@@ -42,7 +42,7 @@ reference:
       - list_templates
       - template_retrieve
       - template_dataset
-      - template_meta_load
+      - starts_with("template_meta")
 
   - title: Equity Data (COTAHIST files)
     desc: >
