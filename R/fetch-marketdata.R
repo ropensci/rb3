@@ -17,17 +17,24 @@
 #'   to fetch data for
 #'
 #' @details
-#' This function performs two main steps:
-#' 1. Downloads market data files by creating all combinations of the provided parameters
-#'    and calling `download_marketdata()` for each combination
-#' 2. Processes the downloaded files by reading them into a database using `read_marketdata()`
+#' This function performs three main steps:
+#' 1. Downloads market data files by creating all combinations of the provided parameters.
+#' 2. Processes the downloaded files by reading them into the input layer of the database.
+#' 3. Creates the staging layer if configured in the template.
 #'
 #' Progress indicators are displayed during both steps, and warnings are shown for
 #' combinations that failed to download or produced invalid files.
 #'
-#' The throttle parameter is useful for avoiding server overload and ensuring
+#' The `throttle` parameter is useful for avoiding server overload and ensuring
 #' that the requests are sent at a reasonable rate. If set to `TRUE`, a 1-second
 #' delay is introduced between each download request.
+#' 
+#' The `force_download` parameter allows you to re-download files even if they already exist
+#' in the cache. This can be useful if you want to ensure that you have the latest version
+#' of the data or if the files have been modified on the server.
+#' 
+#' The `reprocess` parameter allows you to reprocess files even if they have already been processed.
+#' This can be useful if you want to ensure that the data is up-to-date.
 #'
 #' @examples
 #' \dontrun{
@@ -71,7 +78,7 @@ fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE
 #'
 #' @noRd
 download_market_files <- function(metadata_list, force_download = FALSE, throttle = FALSE) {
-  cli::cli_text("── {.strong Downloading data}")
+  cli::cli_text("\u2501\u2501 {.strong Downloading data}")
   pb <- cli::cli_progress_bar("Downloading data", total = length(metadata_list))
   on.exit(cli::cli_process_done(id = pb))
 
@@ -169,7 +176,7 @@ process_staging_layer <- function(template, input_layer_changed, reprocess) {
 #'
 #' @noRd
 process_input_layer <- function(metadata_list, reprocess) {
-  cli::cli_text("── {.strong Processing data layers}")
+  cli::cli_text("\u2501\u2501 {.strong Processing data layers}")
   cli::cli_alert_info("Updating {.strong input} layer")
   pb <- cli::cli_progress_bar("Updating input layer", total = length(metadata_list))
   on.exit(cli::cli_process_done(id = pb))

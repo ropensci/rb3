@@ -8,7 +8,7 @@
 #' files and parses their content according to the specifications
 #' defined in a template.
 #'
-#' @param meta A list containing the downloaded file's metadata, typically returned by \code{\link{download_marketdata}}.
+#' @param meta A metadata object.
 #'
 #' @details
 #' This function reads the downloaded file and parses its content according
@@ -24,7 +24,23 @@
 #' If an error occurs during file processing, the function issues a warning,
 #' removes the downloaded file and its metadata, and returns `NULL`.
 #'
-#' @return This function invisibly returns the parsed `data.frame` if successful, or `NULL` if an error occurred.
+#' @return
+#' Returns a meta object containing the downloaded file's metadata:
+#' \itemize{
+#'   \item template - Name of the template used
+#'   \item download_checksum - Unique hash code for the download
+#'   \item download_args - Arguments used for the download
+#'   \item downloaded - Path to the downloaded file
+#'   \item created - Timestamp of file creation
+#'   \item is_downloaded - Whether the file was successfully downloaded
+#'   \item is_processed - Whether the file was successfully processed
+#'   \item is_valid - Whether the file is valid
+#' }
+#' 
+#' The `meta` object can be interpreted as a ticket for the download process.
+#' It contains all the necessary information to identify the data, if it has been
+#' downloaded, if it has been processed, and ince it is processed,
+#' if the downloaded file is valid.
 #'
 #' @seealso \code{\link{list_templates}}
 #' @seealso \code{\link{rb3.cachedir}}
@@ -32,8 +48,22 @@
 #'
 #' @examples
 #' \dontrun{
-#' meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2024-04-05"))
-#' read_marketdata(meta)
+#' # Create metadata for daily market data
+#' meta <- template_meta_create_or_load("b3-cotahist-daily",
+#'   refdate = as.Date("2024-04-05")
+#' )
+#' # Download using the metadata
+#' meta <- download_marketdata(meta)
+#' meta <- read_marketdata(meta)
+#' 
+#' # For reference rates
+#' meta <- template_meta_create_or_load("b3-reference-rates",
+#'   refdate = as.Date("2024-04-05"),
+#'   curve_name = "PRE"
+#' )
+#' # Download using the metadata
+#' meta <- download_marketdata(meta)
+#' meta <- read_marketdata(meta)
 #' }
 #'
 #' @export
