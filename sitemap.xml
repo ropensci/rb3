@@ -32,7 +32,7 @@
 <url><loc>https://ropensci.github.io/rb3/reference/read_marketdata.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/superdataset.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/template_dataset.html</loc></url>
-<url><loc>https://ropensci.github.io/rb3/reference/template_meta_load.html</loc></url>
+<url><loc>https://ropensci.github.io/rb3/reference/template_meta_create_or_load.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/template_retrieve.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/yc_xxx_get.html</loc></url>
 </urlset>

@@ -67,12 +67,23 @@ defined in a template.</p>
 
 
 <dl><dt id="arg-meta">meta<a class="anchor" aria-label="anchor" href="#arg-meta"></a></dt>
-<dd><p>A list containing the downloaded file's metadata, typically returned by <code><a href="download_marketdata.html">download_marketdata</a></code>.</p></dd>
+<dd><p>A metadata object.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>This function invisibly returns the parsed <code>data.frame</code> if successful, or <code>NULL</code> if an error occurred.</p>
+    <p>Returns a meta object containing the downloaded file's metadata:</p><ul><li><p>template - Name of the template used</p></li>
+<li><p>download_checksum - Unique hash code for the download</p></li>
+<li><p>download_args - Arguments used for the download</p></li>
+<li><p>downloaded - Path to the downloaded file</p></li>
+<li><p>created - Timestamp of file creation</p></li>
+<li><p>is_downloaded - Whether the file was successfully downloaded</p></li>
+<li><p>is_processed - Whether the file was successfully processed</p></li>
+<li><p>is_valid - Whether the file is valid</p></li>
+</ul><p>The <code>meta</code> object can be interpreted as a ticket for the download process.
+It contains all the necessary information to identify the data, if it has been
+downloaded, if it has been processed, and ince it is processed,
+if the downloaded file is valid.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -97,8 +108,22 @@ removes the downloaded file and its metadata, and returns <code>NULL</code>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_marketdata.html">download_marketdata</a></span><span class="op">(</span><span class="st">"b3-cotahist-daily"</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-04-05"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">read_marketdata</span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Create metadata for daily market data</span></span></span>
+<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="template_meta_create_or_load.html">template_meta_create_or_load</a></span><span class="op">(</span><span class="st">"b3-cotahist-daily"</span>,</span></span>
+<span class="r-in"><span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-04-05"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Download using the metadata</span></span></span>
+<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_marketdata.html">download_marketdata</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu">read_marketdata</span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For reference rates</span></span></span>
+<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="template_meta_create_or_load.html">template_meta_create_or_load</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>,</span></span>
+<span class="r-in"><span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-04-05"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  curve_name <span class="op">=</span> <span class="st">"PRE"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Download using the metadata</span></span></span>
+<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_marketdata.html">download_marketdata</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu">read_marketdata</span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

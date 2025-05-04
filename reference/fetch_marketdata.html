@@ -47,7 +47,13 @@ the data into a database.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_marketdata</span><span class="op">(</span><span class="va">template</span>, force_download <span class="op">=</span> <span class="cn">FALSE</span>, throttle <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_marketdata</span><span class="op">(</span></span>
+<span>  <span class="va">template</span>,</span>
+<span>  force_download <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reprocess <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  throttle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,6 +70,12 @@ even if they already exist in the cache (default is <code>FALSE</code>). If <cod
 will download files again even if they were previously downloaded.</p></dd>
 
 
+<dt id="arg-reprocess">reprocess<a class="anchor" aria-label="anchor" href="#arg-reprocess"></a></dt>
+<dd><p>A logical value indicating whether to reprocess files even if they
+are already processed (default is <code>FALSE</code>). If <code>TRUE</code>, the function will reprocess
+the files in the input layer, even if they were previously processed.</p></dd>
+
+
 <dt id="arg-throttle">throttle<a class="anchor" aria-label="anchor" href="#arg-throttle"></a></dt>
 <dd><p>A logical value indicating whether to throttle the download requests
 (default is <code>FALSE</code>). If <code>TRUE</code>, a 1-second delay is introduced between requests
@@ -77,14 +89,19 @@ to fetch data for</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function performs two main steps:</p><ol><li><p>Downloads market data files by creating all combinations of the provided parameters
-and calling <code><a href="download_marketdata.html">download_marketdata()</a></code> for each combination</p></li>
-<li><p>Processes the downloaded files by reading them into a database using <code><a href="read_marketdata.html">read_marketdata()</a></code></p></li>
+    <p>This function performs three main steps:</p><ol><li><p>Downloads market data files by creating all combinations of the provided parameters.</p></li>
+<li><p>Processes the downloaded files by reading them into the input layer of the database.</p></li>
+<li><p>Creates the staging layer if configured in the template.</p></li>
 </ol><p>Progress indicators are displayed during both steps, and warnings are shown for
 combinations that failed to download or produced invalid files.</p>
-<p>The throttle parameter is useful for avoiding server overload and ensuring
+<p>The <code>throttle</code> parameter is useful for avoiding server overload and ensuring
 that the requests are sent at a reasonable rate. If set to <code>TRUE</code>, a 1-second
 delay is introduced between each download request.</p>
+<p>The <code>force_download</code> parameter allows you to re-download files even if they already exist
+in the cache. This can be useful if you want to ensure that you have the latest version
+of the data or if the files have been modified on the server.</p>
+<p>The <code>reprocess</code> parameter allows you to reprocess files even if they have already been processed.
+This can be useful if you want to ensure that the data is up-to-date.</p>
     </div>
 
     <div class="section level2">
