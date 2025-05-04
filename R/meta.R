@@ -12,7 +12,8 @@
         created VARCHAR,
         extra_arg VARCHAR,
         is_valid INTEGER CHECK (is_valid IN (0, 1)),
-        is_processed BOOLEAN
+        is_processed INTEGER CHECK (is_processed IN (0, 1)),
+        is_downloaded INTEGER CHECK (is_downloaded IN (0, 1))
       )
     ")
   }
@@ -21,15 +22,18 @@
 
 # Close SQLite connection on package unload
 .onUnload <- function(libpath) {
-  tryCatch({
-    reg <- rb3_registry$get_instance()
-    if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
-      cli::cli_inform(c("v" = "Closing SQLite connection"))
-      DBI::dbDisconnect(reg$sqlite_db_connection)
+  tryCatch(
+    {
+      reg <- rb3_registry$get_instance()
+      if ("sqlite_db_connection" %in% names(reg) && DBI::dbIsValid(reg$sqlite_db_connection)) {
+        cli::cli_inform(c("v" = "Closing SQLite connection"))
+        DBI::dbDisconnect(reg$sqlite_db_connection)
+      }
+    },
+    error = function(e) {
+      cli::cli_inform(c("x" = "Error closing SQLite connection: {e$message}"))
     }
-  }, error = function(e) {
-    cli::cli_inform(c("x" = "Error closing SQLite connection: {e$message}"))
-  })
+  )
 }
 
 meta_new <- function(template, ..., extra_arg = NULL) {
@@ -60,7 +64,8 @@ meta_new <- function(template, ..., extra_arg = NULL) {
     created = as.POSIXct(Sys.time(), tz = "UTC"),
     extra_arg = extra_arg,
     is_valid = FALSE,
-    is_processed = FALSE
+    is_processed = FALSE,
+    is_downloaded = FALSE
   ), class = "meta")
   
   meta_save(meta)
@@ -96,10 +101,11 @@ meta_get <- function(checksum) {
     download_args = .meta_deserialize_obj(query$download_args),
     download_args_json = query$download_args_json,
     downloaded = .meta_deserialize_obj(query$downloaded),
-    created = .meta_deserialize_obj(query$created),
+    created = as.POSIXct(query$created, format = "%Y-%m-%d %H:%M:%OS", tz = "UTC"),
     extra_arg = .meta_deserialize_obj(query$extra_arg),
     is_valid = as.logical(query$is_valid),
-    is_processed = as.logical(query$is_processed)
+    is_processed = as.logical(query$is_processed),
+    is_downloaded = as.logical(query$is_downloaded)
   ), class = "meta")
   
   meta
@@ -139,7 +145,7 @@ meta_save <- function(meta) {
   
   serialized_args <- .meta_serialize_obj(meta$download_args)
   serialized_downloaded <- .meta_serialize_obj(meta$downloaded)
-  serialized_created <- .meta_serialize_obj(meta$created)
+  serialized_created <- format(meta$created, format = "%Y-%m-%d %H:%M:%OS6")
   serialized_extra_arg <- .meta_serialize_obj(meta$extra_arg)
   
   # Ensure download_args_json is updated
@@ -154,7 +160,7 @@ meta_save <- function(meta) {
     params = list(meta$download_checksum)
   )
   
-  if (exists_query$count > 0) {
+  if (length(exists_query$count) == 1 && exists_query$count > 0) {
     # Update existing record
     DBI::dbExecute(
       con,
@@ -166,7 +172,8 @@ meta_save <- function(meta) {
        created = ?, 
        extra_arg = ?,
        is_valid = ?,
-       is_processed = ?
+       is_processed = ?,
+       is_downloaded = ?
        WHERE download_checksum = ?",
       params = list(
         meta$template,
@@ -177,6 +184,7 @@ meta_save <- function(meta) {
         serialized_extra_arg,
         meta$is_valid,
         meta$is_processed,
+        meta$is_downloaded,
         meta$download_checksum
       )
     )
@@ -184,8 +192,8 @@ meta_save <- function(meta) {
     # Insert new record
     DBI::dbExecute(
       con,
-      "INSERT INTO meta (download_checksum, template, download_args, download_args_json, downloaded, created, extra_arg, is_valid, is_processed)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO meta (download_checksum, template, download_args, download_args_json, downloaded, created, extra_arg, is_valid, is_processed, is_downloaded)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       params = list(
         meta$download_checksum,
         meta$template,
@@ -195,7 +203,8 @@ meta_save <- function(meta) {
         serialized_created,
         serialized_extra_arg,
         meta$is_valid,
-        meta$is_processed
+        meta$is_processed,
+        meta$is_downloaded
       )
     )
   }
@@ -260,6 +269,12 @@ meta_clean <- function(meta) {
   meta
 }
 
+`meta_set_downloaded<-` <- function(meta, value) {
+  meta$is_downloaded <- value
+  meta_save(meta)
+  meta
+}
+
 meta_query_status <- function(valid = NULL, processed = NULL) {
   con <- meta_db_connection()
   
@@ -298,6 +313,6 @@ meta_query_status <- function(valid = NULL, processed = NULL) {
 
 #' @exportS3Method base::print
 print.meta <- function(x, ...) {
-  cli::cli_inform("<meta {x$download_checksum} {x$download_args_json}>\n")
+  cli::cli_inform("<meta {x$download_checksum}>\n")
   x
 }

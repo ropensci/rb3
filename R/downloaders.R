@@ -12,21 +12,12 @@ save_resource <- function(res, encoding, dest) {
 }
 
 handle_response <- function(res, encoding, dest) {
-  if (httr::status_code(res) != 200 || !.safecontent(res)) {
+  if (httr::status_code(res) != 200) {
     cli::cli_alert_danger("Failed to download file: {.url {res$url}}, status code = {httr::status_code(res)}")
     return(FALSE)
   }
   save_resource(res, encoding, dest)
   TRUE
-}
-
-.safecontent <- function(x) {
-  cl <- httr::headers(x)[["content-length"]]
-  if (is.null(cl)) {
-    TRUE
-  } else {
-    cl != 0
-  }
 }
 
 url_encode <- function(url, ...) {

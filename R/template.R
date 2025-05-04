@@ -231,32 +231,14 @@ new_part <- function(x) {
   part
 }
 
-#' Load Metadata for a Template Download
-#'
-#' These functions provide methods to load metadata associated with a template and the arguments used to a
-#' specific download.
-#'
-#' @param template An object representing the template. Can be of class `character`
-#'   (template ID) or `template` (template object).
-#' @param ... Additional arguments used in a specific download.
-#'
-#' @return The metadata associated with the download.
-#'
 #' @details
-#' The `download_marketdata()` function returns a meta object that refers to a specific download.
-#' If the meta object does not exist, it is created.
-#' If the specific download has already been performed in the past, a meta file will exist, and
-#' `download_marketdata()` will raise an error upon detecting it.
-#' In such cases, the `template_meta_load()` function should be used to load the meta object
-#' associated with the existing meta file.
-#'
-#' @examples
-#' # Example usage with a template ID
-#' m <- tryCatch(download_marketdata("b3-indexes-composition"), error = function(e) {
-#'   template_meta_load("b3-indexes-composition")
-#' })
-#' read_marketdata(m)
-#'
+#' The `template_meta_load` function checks that all required arguments for the template
+#' are provided. If any required arguments are missing, it will abort with
+#' an error of class "error_template_missing_args".
+#' It raises an error if the template is not found or if the required arguments are not
+#' provided. The error message will indicate which arguments are missing.
+#' 
+#' @rdname template_meta_create_or_load
 #' @export
 template_meta_load <- function(template, ...) {
   UseMethod("template_meta_load")
@@ -279,7 +261,25 @@ template_meta_load.template <- function(template, ...) {
   meta_load(template$id, ..., extra_arg = extra_arg)
 }
 
+#' @details
+#' The `template_meta_new` function checks that all required arguments for the template
+#' are provided. If any required arguments are missing, it will abort with
+#' an error of class "error_template_missing_args".
+#' It raises an error if the template already exists in the database.
+#'   
+#' @rdname template_meta_create_or_load
+#' @export
 template_meta_new <- function(template, ...) {
+  UseMethod("template_meta_new")
+}
+
+#' @export
+template_meta_new.default <- function(template, ...) {
+  template_retrieve(template) |> template_meta_new.template(...)
+}
+
+#' @export
+template_meta_new.template <- function(template, ...) {
   tryCatch(
     check_args(..., required_args = names(template$downloader$args)),
     error = function(e) {
@@ -296,6 +296,44 @@ template_extra_arg <- function(template) {
   } else {
     eval(parse(text = template$downloader[["extra-arg"]]))
   }
+}
+
+#' Create or Load Template Metadata
+#'
+#' @description
+#' These functions attempt to create new template metadata objects or load existing ones.
+#'
+#' @param template An object representing the template. Can be of class `character`
+#'   (template ID) or `template` (template object).
+#' @param template_name Character string specifying the template ID.
+#' @param ... Additional arguments to be passed to the metadata creation process.
+#'   These should include all required arguments specified in the template definition.
+#'
+#' @return The created or loaded template metadata object
+#' 
+#' @details The `template_meta_create_or_load` function is a safe way to create
+#' or load template metadata. It first attempts to create a new metadata object
+#' using the provided arguments. If that fails (e.g., if the template already exists),
+#' it will attempt to load the existing metadata object. This is useful for ensuring
+#' that you always have access to the latest metadata for a given template.
+#' 
+#' @examples
+#' \dontrun{
+#' # Create or load metadata for a template
+#' meta <- template_meta_create_or_load("b3-reference-rates",
+#'   refdate = as.Date("2024-04-05"),
+#'   curve_name = "PRE"
+#' )
+#' }
+#'
+#' @export
+template_meta_create_or_load <- function(template_name, ...) {
+  tryCatch(
+    template_meta_new(template_name, ...),
+    error = function(e) {
+      template_meta_load(template_name, ...)
+    }
+  )
 }
 
 check_args <- function(..., required_args) {

@@ -4,7 +4,13 @@
 \alias{fetch_marketdata}
 \title{Fetch and process market data}
 \usage{
-fetch_marketdata(template, force_download = FALSE, throttle = FALSE, ...)
+fetch_marketdata(
+  template,
+  force_download = FALSE,
+  reprocess = FALSE,
+  throttle = FALSE,
+  ...
+)
 }
 \arguments{
 \item{template}{A character string specifying the market data template to use}
@@ -12,6 +18,10 @@ fetch_marketdata(template, force_download = FALSE, throttle = FALSE, ...)
 \item{force_download}{A logical value indicating whether to force downloading files
 even if they already exist in the cache (default is \code{FALSE}). If \code{TRUE}, the function
 will download files again even if they were previously downloaded.}
+
+\item{reprocess}{A logical value indicating whether to reprocess files even if they
+are already processed (default is \code{FALSE}). If \code{TRUE}, the function will reprocess
+the files in the input layer, even if they were previously processed.}
 
 \item{throttle}{A logical value indicating whether to throttle the download requests
 (default is \code{FALSE}). If \code{TRUE}, a 1-second delay is introduced between requests
@@ -25,19 +35,26 @@ Downloads market data based on a template and parameter combinations, then reads
 the data into a database.
 }
 \details{
-This function performs two main steps:
+This function performs three main steps:
 \enumerate{
-\item Downloads market data files by creating all combinations of the provided parameters
-and calling \code{download_marketdata()} for each combination
-\item Processes the downloaded files by reading them into a database using \code{read_marketdata()}
+\item Downloads market data files by creating all combinations of the provided parameters.
+\item Processes the downloaded files by reading them into the input layer of the database.
+\item Creates the staging layer if configured in the template.
 }
 
 Progress indicators are displayed during both steps, and warnings are shown for
 combinations that failed to download or produced invalid files.
 
-The throttle parameter is useful for avoiding server overload and ensuring
+The \code{throttle} parameter is useful for avoiding server overload and ensuring
 that the requests are sent at a reasonable rate. If set to \code{TRUE}, a 1-second
 delay is introduced between each download request.
+
+The \code{force_download} parameter allows you to re-download files even if they already exist
+in the cache. This can be useful if you want to ensure that you have the latest version
+of the data or if the files have been modified on the server.
+
+The \code{reprocess} parameter allows you to reprocess files even if they have already been processed.
+This can be useful if you want to ensure that the data is up-to-date.
 }
 \examples{
 \dontrun{

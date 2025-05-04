@@ -4,27 +4,28 @@
 \alias{download_marketdata}
 \title{Download Raw Market Data Files from B3}
 \usage{
-download_marketdata(template, force_download = FALSE, ...)
+download_marketdata(meta)
 }
 \arguments{
-\item{template}{character string specifying the template name}
-
-\item{force_download}{logical; if TRUE forces a new download even if cached file exists (default: FALSE)}
-
-\item{...}{additional arguments passed to template-specific download functions}
+\item{meta}{A metadata object.}
 }
 \value{
 Returns a meta object containing the downloaded file's metadata:
 \itemize{
 \item template - Name of the template used
 \item download_checksum - Unique hash code for the download
-\item download_args - Arguments passed via ...
+\item download_args - Arguments used for the download
 \item downloaded - Path to the downloaded file
 \item created - Timestamp of file creation
+\item is_downloaded - Whether the file was successfully downloaded
+\item is_processed - Whether the file was successfully processed
+\item is_valid - Whether the file is valid
 }
 
-A meta object containing the downloaded file's metadata.
-This meta object is used with the \code{read_marketdata} function to read the downloaded file.
+The \code{meta} object can be interpreted as a ticket for the download process.
+It contains all the necessary information to identify the data, if it has been
+downloaded, if it has been processed, and ince it is processed,
+if the downloaded file is valid.
 }
 \description{
 Downloads and caches financial market datasets from B3 (Brazilian Stock Exchange)
@@ -55,23 +56,26 @@ Templates can be found using \code{list_templates()} and retrieved with \code{te
 }
 \examples{
 \dontrun{
-# Download daily market data
-meta <- download_marketdata("b3-cotahist-daily",
+# Create metadata for daily market data
+meta <- template_meta_create_or_load("b3-cotahist-daily",
   refdate = as.Date("2024-04-05")
 )
-read_marketdata(meta)
+# Download using the metadata
+meta <- download_marketdata(meta)
 
-# Download reference rates
-meta <- download_marketdata("b3-reference-rates",
+# For reference rates
+meta <- template_meta_create_or_load("b3-reference-rates",
   refdate = as.Date("2024-04-05"),
   curve_name = "PRE"
 )
-read_marketdata(meta)
+# Download using the metadata
+meta <- download_marketdata(meta)
 }
 
 }
 \seealso{
 \itemize{
+\item \code{\link{template_meta_create_or_load}} for creating a metadata object
 \item \code{\link{list_templates}} for listing available data templates
 \item \code{\link{template_retrieve}} for retrieving specific template details
 }

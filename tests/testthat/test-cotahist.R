@@ -6,14 +6,19 @@ if (Sys.info()["sysname"] == "Linux") {
 }
 
 test_that("it should download cotahist file", {
-  meta <- download_marketdata("b3-cotahist-yearly", year = 2000)
+  meta <- template_meta_create_or_load("b3-cotahist-yearly", year = 2000)
+  meta <- download_marketdata(meta)
   expect_true(file.exists(meta$downloaded[[1]]))
   expect_true(file.size(meta$downloaded[[1]]) > 1e6)
 })
 
 test_that("it should fail the download for cotahist file", {
-  expect_true(is.null(meta <- download_marketdata("b3-cotahist-yearly", year = 1900)))
-  expect_true(is.null(meta <- download_marketdata("b3-cotahist-daily", refdate = as.Date("2000-01-01"))))
+  meta <- template_meta_create_or_load("b3-cotahist-yearly", year = 1900)
+  meta <- download_marketdata(meta)
+  expect_false(meta$is_downloaded)
+  meta <- template_meta_create_or_load("b3-cotahist-daily", refdate = as.Date("2000-01-01"))
+  meta <- download_marketdata(meta)
+  expect_false(meta$is_downloaded)
 })
 
 .date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
