@@ -47,23 +47,22 @@
 fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE, throttle = FALSE, ...) {
   cli::cli_h1("Fetching market data for {.var {template}}")
 
-  # Download phase
-  metadata_list <- download_market_files(template, force_download, throttle, ...)
+  metadata_list <- create_meta_list(template, ...)
 
-  if (length(metadata_list) == 0) {
-    cli::cli_alert_warning("No data downloaded")
-    return(invisible(NULL))
-  }
+  # Download phase
+  metadata_list <- download_market_files(metadata_list, force_download, throttle)
 
   # Process phase
-  process_market_files(template, metadata_list, reprocess)
+  ## Process input layer
+  input_layer_changed <- process_input_layer(metadata_list, reprocess)
+  ## Process staging layer
+  process_staging_layer(template, input_layer_changed, reprocess)
 
   invisible(NULL)
 }
 
 #' Download market data files based on template and parameters
 #'
-#' @param template Name of the template to use
 #' @param force_download Whether to force download even if file exists in cache
 #' @param throttle Whether to introduce delay between downloads
 #' @param ... Parameter combinations for data to fetch
@@ -71,41 +70,21 @@ fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE
 #' @return List of metadata for successfully downloaded files
 #'
 #' @noRd
-download_market_files <- function(template, force_download = FALSE, throttle = FALSE, ...) {
+download_market_files <- function(metadata_list, force_download = FALSE, throttle = FALSE) {
   cli::cli_text("── {.strong Downloading data}")
   start_time <- Sys.time()
-
-  parameter_grid <- expand.grid(..., stringsAsFactors = FALSE)
-
-  # Single download case (no parameters)
-  if (nrow(parameter_grid) == 0) {
-    pb <- cli::cli_progress_bar("Downloading data", total = 1)
-    metadata <- download_single_file(template, pb, force_download, throttle)
-    metadata_list <- list(metadata)
-  } else {
-    # Multiple downloads case
-    metadata_list <- download_multiple_files(template, parameter_grid, force_download, throttle)
-  }
-
+  metadata_list <- download_multiple_files(metadata_list, force_download, throttle)
   end_time <- Sys.time()
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
-
-  # Filter out NULL entries (failed downloads)
-  initial_count <- length(metadata_list)
-  metadata_list <- purrr::keep(metadata_list, ~ !is.null(.x))
-
   # Report results
   cli::cli_inform(c(v = "{length(metadata_list)} file{?s} downloaded [{round(elapsed, 2)}s]"))
-  if (length(metadata_list) < initial_count) {
-    cli::cli_alert_warning("{initial_count - length(metadata_list)} file{?s} could not be downloaded - check messages above")
-  }
 
   return(metadata_list)
 }
 
 #' Download a single market data file
 #'
-#' @param template Template name
+#' @param metadata Metadata for the file to download
 #' @param pb Progress bar ID
 #' @param force_download Whether to force download even if file exists in cache
 #' @param throttle Whether to introduce delay between downloads
@@ -114,11 +93,9 @@ download_market_files <- function(template, force_download = FALSE, throttle = F
 #' @return Metadata for the downloaded file or NULL if download failed
 #'
 #' @noRd
-download_single_file <- function(template, pb, force_download = FALSE, throttle = FALSE, ...) {
+download_single_file <- function(metadata, pb = NULL, force_download = FALSE, throttle = FALSE) {
   on.exit(cli::cli_progress_update(id = pb))
 
-  # Check for existing metadata to avoid redundant downloads
-  metadata <- template_meta_create_or_load(template, ...)
   # Download the file if it doesn't exist or if forced
   metadata <- withCallingHandlers(
     {
@@ -146,75 +123,53 @@ download_single_file <- function(template, pb, force_download = FALSE, throttle 
 
 #' Download multiple market data files
 #'
-#' @param template Template name
-#' @param parameter_grid Data frame with parameter combinations
+#' @param metadata_list List of metadata for files to download
 #' @param force_download Whether to force download even if file exists in cache
 #' @param throttle Whether to introduce delay between downloads
 #'
 #' @return List of metadata for successfully downloaded files
 #'
 #' @noRd
-download_multiple_files <- function(template, parameter_grid, force_download = FALSE, throttle = FALSE) {
-  # Check for existing metadata to avoid redundant downloads
-  existing_metadata <- purrr::pmap(parameter_grid, get_file_metadata, template = template)
+download_multiple_files <- function(metadata_list, force_download = FALSE, throttle = FALSE) {
 
-  if (force_download) {
-    download_indices <- seq_along(existing_metadata)
-    skip_indices <- integer(0)
-  } else {
-    skip_indices <- which(purrr::map_lgl(existing_metadata, ~ !is.null(.x)))
-    download_indices <- which(purrr::map_lgl(existing_metadata, is.null))
-  }
-
+  downloaded_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
   # Report on files to download vs. skip
-  if (length(skip_indices) > 0) {
-    cli::cli_alert_info("Downloading {length(download_indices)}/{length(existing_metadata)} file{?s}, skipping {length(skip_indices)}/{length(existing_metadata)}")
+  if (force_download) {
+    cli::cli_alert_info("Downloading {length(metadata_list)} file{?s}")
   } else {
-    cli::cli_alert_info("Downloading {length(download_indices)}/{length(existing_metadata)} file{?s}")
+    cli::cli_alert_info("Downloading {length(metadata_list) - downloaded_count_before} file{?s}, skipping {downloaded_count_before}")
   }
 
-  metadata_list <- list()
+  # Downloading files
+  pb <- cli::cli_progress_bar("Downloading data", total = length(metadata_list))
+  metadata_list <- purrr::map(metadata_list, download_single_file,
+    pb = pb, force_download = force_download, throttle = throttle
+  )
+  cli::cli_process_done(id = pb)
 
-  # Download files that need downloading
-  if (length(download_indices) > 0) {
-    download_grid <- parameter_grid[download_indices, , drop = FALSE]
-    pb <- cli::cli_progress_bar("Downloading data", total = nrow(download_grid))
-
-    metadata_list <- purrr::pmap(download_grid, download_single_file,
-      template = template, pb = pb,
-      force_download = force_download, throttle = throttle
-    )
-
-    cli::cli_process_done(id = pb)
-  }
+  downloaded_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
+  cli::cli_alert_info("Downloaded {downloaded_count_after - downloaded_count_before} file{?s}")
 
   return(metadata_list)
 }
 
-#' Process downloaded market data files
+#' Process staging layer if configured
 #'
 #' @param template Template name
-#' @param metadata_list List of metadata for downloaded files
+#' @param input_layer_changed Whether the input layer has changed
 #' @param reprocess Whether to reprocess files even if they are already processed
 #'
 #' @return NULL (invisibly)
 #'
 #' @noRd
-process_market_files <- function(template, metadata_list, reprocess) {
-  cli::cli_text("── {.strong Processing {length(metadata_list)} file{?s}}")
-
-  # Process input layer
-  input_layer_changed <- create_input_layer(metadata_list, reprocess)
-
+process_staging_layer <- function(template, input_layer_changed, reprocess) {
   # Process staging layer if configured
   template_obj <- template_retrieve(template)
-  if (!is.null(template_obj$writers$staging) && input_layer_changed) {
+  if (!is.null(template_obj$writers$staging) && (input_layer_changed || reprocess)) {
     cli::cli_alert_info("input layer changed")
     # Create staging layer
     create_staging_layer(template_obj)
   }
-
-  return(invisible(NULL))
 }
 
 #' Create input layer from downloaded files
@@ -225,22 +180,27 @@ process_market_files <- function(template, metadata_list, reprocess) {
 #' @return NULL (invisibly)
 #'
 #' @noRd
-create_input_layer <- function(metadata_list, reprocess) {
+process_input_layer <- function(metadata_list, reprocess) {
+  cli::cli_text("── {.strong Processing {length(metadata_list)} file{?s}}")
   cli::cli_alert_info("Updating {.strong input} layer")
   pb <- cli::cli_progress_bar("Updating input layer", total = length(metadata_list))
+  on.exit(cli::cli_process_done(id = pb))
 
-  # count valid files before processing
+  # Count valid files before processing
   valid_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
   # process file
   start_time <- Sys.time()
   metadata_list <- purrr::map(metadata_list, process_file, pb = pb, reprocess = reprocess)
   end_time <- Sys.time()
-  # count valid files after processing
-  valid_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
-
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
-  cli::cli_process_done(id = pb)
-  if (valid_count_before != valid_count_after) {
+  # Count valid files after processing
+  valid_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
+  # Check if the number of valid files has changed
+  # It indicates that the input layer has been updated
+  # and the staging layer needs to be recreated
+  input_layer_changed <- valid_count_before != valid_count_after
+
+  if (input_layer_changed) {
     cli::cli_inform(c(v = "{.strong input} layer updated [{round(elapsed, 2)}s]"))
   } else if (reprocess) {
     cli::cli_inform(c(v = "{.strong input} layer reprocessed [{round(elapsed, 2)}s]"))
@@ -248,10 +208,7 @@ create_input_layer <- function(metadata_list, reprocess) {
     cli::cli_inform(c(v = "{.strong input} layer not updated - no new files detected [{round(elapsed, 2)}s]"))
   }
 
-  # Check if the number of valid files has changed
-  # It indicates that the input layer has been updated
-  # and the staging layer needs to be recreated
-  return(valid_count_before != valid_count_after || reprocess)
+  return(input_layer_changed)
 }
 
 #' Create staging layer from input layer
@@ -324,29 +281,19 @@ process_file <- function(metadata, pb, reprocess = FALSE) {
   return(result)
 }
 
-#' Get metadata for a file with specific parameters
+#' Get/create meta for a template with specific parameters
 #'
 #' @param ... Parameters for the file
 #' @param template Template name
 #'
-#' @return Metadata for the file or NULL if not found
+#' @return list of meta objects
 #'
 #' @noRd
-get_file_metadata <- function(..., template) {
-  template_obj <- template_retrieve(template)
-  checksum <- meta_checksum(template_obj$id, ..., extra_arg = template_extra_arg(template_obj))
-  tryCatch(meta_get(checksum), error = function(e) NULL)
-}
-
-#' Get existing metadata for all parameter combinations
-#'
-#' @param template Template name
-#' @param ... Parameters to expand into combinations
-#'
-#' @return List of metadata objects
-#'
-#' @noRd
-get_existing_meta <- function(template, ...) {
-  df <- expand.grid(..., stringsAsFactors = FALSE)
-  purrr::pmap(df, get_file_metadata, template = template)
+create_meta_list <- function(template, ...) {
+  parameter_grid <- expand.grid(..., stringsAsFactors = FALSE)
+  if (nrow(parameter_grid) == 0) {
+    list(template_meta_create_or_load(template))
+  } else {
+    purrr::pmap(parameter_grid, function(...) template_meta_create_or_load(template, ...))
+  }
 }
