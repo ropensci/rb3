@@ -72,12 +72,32 @@ fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE
 #' @noRd
 download_market_files <- function(metadata_list, force_download = FALSE, throttle = FALSE) {
   cli::cli_text("── {.strong Downloading data}")
+  pb <- cli::cli_progress_bar("Downloading data", total = length(metadata_list))
+  on.exit(cli::cli_process_done(id = pb))
+
+  # Count files already downloaded
+  downloaded_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
+  # Report on files to download vs. skip
+  if (force_download) {
+    cli::cli_alert_info("Downloading {length(metadata_list)} file{?s}")
+  } else {
+    cli::cli_alert_info("Downloading {length(metadata_list) - downloaded_count_before} file{?s}, skipping {downloaded_count_before}")
+  }
+
   start_time <- Sys.time()
-  metadata_list <- download_multiple_files(metadata_list, force_download, throttle)
+  metadata_list <- purrr::map(metadata_list, download_single_file,
+    pb = pb, force_download = force_download, throttle = throttle
+  )
   end_time <- Sys.time()
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
+
   # Report results
-  cli::cli_inform(c(v = "{length(metadata_list)} file{?s} downloaded [{round(elapsed, 2)}s]"))
+  downloaded_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
+  if (force_download) {
+    cli::cli_inform(c(v = "{.strong Downloaded} {length(metadata_list)} file{?s} [{round(elapsed, 2)}s]"))
+  } else {
+    cli::cli_inform(c(v = "{downloaded_count_after - downloaded_count_before} file{?s} downloaded [{round(elapsed, 2)}s]"))
+  }
 
   return(metadata_list)
 }
@@ -119,38 +139,6 @@ download_single_file <- function(metadata, pb = NULL, force_download = FALSE, th
   }
 
   return(metadata)
-}
-
-#' Download multiple market data files
-#'
-#' @param metadata_list List of metadata for files to download
-#' @param force_download Whether to force download even if file exists in cache
-#' @param throttle Whether to introduce delay between downloads
-#'
-#' @return List of metadata for successfully downloaded files
-#'
-#' @noRd
-download_multiple_files <- function(metadata_list, force_download = FALSE, throttle = FALSE) {
-
-  downloaded_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
-  # Report on files to download vs. skip
-  if (force_download) {
-    cli::cli_alert_info("Downloading {length(metadata_list)} file{?s}")
-  } else {
-    cli::cli_alert_info("Downloading {length(metadata_list) - downloaded_count_before} file{?s}, skipping {downloaded_count_before}")
-  }
-
-  # Downloading files
-  pb <- cli::cli_progress_bar("Downloading data", total = length(metadata_list))
-  metadata_list <- purrr::map(metadata_list, download_single_file,
-    pb = pb, force_download = force_download, throttle = throttle
-  )
-  cli::cli_process_done(id = pb)
-
-  downloaded_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
-  cli::cli_alert_info("Downloaded {downloaded_count_after - downloaded_count_before} file{?s}")
-
-  return(metadata_list)
 }
 
 #' Process staging layer if configured
