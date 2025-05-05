@@ -125,7 +125,7 @@ fields:
 - name: strike_price
   description: Preço de exercício para o mercado de opções ou valor do contrato
     para o mercado de termo secundário
-  type: numeric
+  type: numeric(dec=2.0, sign='')
   width: 13
 - name: strike_price_adjustment_indicator
   description: Indicador de correção de preços de exercícios ou valores de contrato
