@@ -28,11 +28,11 @@
 #' The `throttle` parameter is useful for avoiding server overload and ensuring
 #' that the requests are sent at a reasonable rate. If set to `TRUE`, a 1-second
 #' delay is introduced between each download request.
-#' 
+#'
 #' The `force_download` parameter allows you to re-download files even if they already exist
 #' in the cache. This can be useful if you want to ensure that you have the latest version
 #' of the data or if the files have been modified on the server.
-#' 
+#'
 #' The `reprocess` parameter allows you to reprocess files even if they have already been processed.
 #' This can be useful if you want to ensure that the data is up-to-date.
 #'
@@ -124,26 +124,23 @@ download_single_file <- function(metadata, pb = NULL, force_download = FALSE, th
   on.exit(cli::cli_progress_update(id = pb))
 
   # Download the file if it doesn't exist or if forced
-  metadata <- withCallingHandlers(
-    {
-      if (!metadata$is_downloaded || force_download) {
-        metadata <- download_marketdata(metadata)
-        if (throttle) {
-          Sys.sleep(1)
-        }
+  if (!metadata$is_downloaded || force_download) {
+    metadata <- withCallingHandlers(
+      download_marketdata(metadata),
+      message = function(m) {
+        invokeRestart("muffleMessage")
       }
-      metadata
-    },
-    message = function(m) {
-      invokeRestart("muffleMessage")
+    )
+    if (throttle) {
+      Sys.sleep(1)
     }
-  )
-
-  if (!metadata$is_downloaded) {
-    args <- metadata$download_args
-    arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
-    cli::cli_progress_output("Failed to download file for args: {.val {arg_str}}", id = pb)
+    if (!metadata$is_downloaded) {
+      args <- metadata$download_args
+      arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
+      cli::cli_progress_output("Failed to download file for args: {.val {arg_str}}", id = pb)
+    }
   }
+
 
   return(metadata)
 }
@@ -182,19 +179,19 @@ process_input_layer <- function(metadata_list, reprocess) {
   on.exit(cli::cli_process_done(id = pb))
 
   # Count valid files before processing
-  valid_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
+  processed_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_processed))
   # process file
   start_time <- Sys.time()
   metadata_list <- purrr::map(metadata_list, process_file, pb = pb, reprocess = reprocess)
   end_time <- Sys.time()
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))
   # Count valid files after processing
-  valid_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_valid))
+  processed_count_after <- sum(purrr::map_lgl(metadata_list, ~ .x$is_processed))
   # Check if the number of valid files has changed
   # It indicates that the input layer has been updated
   # and the staging layer needs to be recreated
-  input_layer_changed <- valid_count_before != valid_count_after
-  files_processed <- valid_count_after - valid_count_before
+  input_layer_changed <- processed_count_before != processed_count_after
+  files_processed <- processed_count_after - processed_count_before
 
   if (input_layer_changed) {
     cli::cli_inform(c(v = "{.strong input} layer updated - {files_processed} file{?s} processed [{round(elapsed, 2)}s]"))
@@ -256,25 +253,21 @@ create_staging_layer <- function(template) {
 process_file <- function(metadata, pb, reprocess = FALSE) {
   on.exit(cli::cli_progress_update(id = pb))
 
-  result <- withCallingHandlers(
-    {
-      if (!metadata$is_processed || reprocess) {
-        metadata <- read_marketdata(metadata)
+  if (!metadata$is_processed || reprocess) {
+    metadata <- withCallingHandlers(
+      read_marketdata(metadata),
+      message = function(m) {
+        invokeRestart("muffleMessage")
       }
-      metadata
-    },
-    message = function(m) {
-      invokeRestart("muffleMessage")
+    )
+    if (!metadata$is_valid) {
+      args <- metadata$download_args
+      arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
+      cli::cli_progress_output("Invalid file for args: {.val {arg_str}}", id = pb)
     }
-  )
-
-  if (!result$is_valid) {
-    args <- metadata$download_args
-    arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
-    cli::cli_progress_output("Invalid file for args: {.val {arg_str}}", id = pb)
   }
 
-  return(result)
+  return(metadata)
 }
 
 #' Get/create meta for a template with specific parameters

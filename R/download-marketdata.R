@@ -125,6 +125,8 @@ finalize_download <- function(filename, dest_fname, meta, ext) {
   }
   meta_add_download(meta) <- downloaded
   meta_set_downloaded(meta) <- TRUE
+  meta_set_processed(meta) <- FALSE
+  meta_set_valid(meta) <- FALSE
   meta
 }
 
