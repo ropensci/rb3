@@ -25,6 +25,7 @@ packages = [{include = "pyrb3", from = "src"}]
 pytest = ">=7.4"
 ruff = ">=0.1.6"
 mypy = ">=1.7.1"
+requests-mock = ">=1.11.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
