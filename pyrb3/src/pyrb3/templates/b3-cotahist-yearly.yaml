@@ -1,0 +1,156 @@
+id: b3-cotahist-yearly
+filename: COTAHIST
+filetype: CUSTOM
+description: Cotações Históricas do Pregão de Ações - Arquivo Anual
+downloader:
+  function: sprintf_download
+  url: https://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A%s.ZIP
+  verifyssl: false
+  format: zip
+  args:
+    year: Ano de referência
+reader:
+  function: fwf_read_file
+  encoding: latin1
+writers:
+  input:
+    partition: refdate
+  staging:
+    function: process_cotahist
+    partition: year
+    fields:
+      year: integer
+      refdate: date
+      bdi_code: integer
+      symbol: character
+      instrument_market: integer
+      corporation_name: character
+      specification_code: character
+      days_to_settlement: integer
+      trading_currency: character
+      open: numeric
+      high: numeric
+      low: numeric
+      average: numeric
+      close: numeric
+      best_bid: numeric
+      best_ask: numeric
+      trade_quantity: integer
+      traded_contracts: integer
+      volume: numeric
+      strike_price: numeric
+      strike_price_adjustment_indicator: character
+      maturity_date: date
+      allocation_lot_size: integer
+      strike_price_in_points: numeric
+      isin: character
+      distribution_id: integer
+fields:
+- name: regtype
+  description: Tipo de registro
+  type: integer
+  width: 2
+- name: refdate
+  description: Data do pregão
+  type: date(format='%Y%m%d')
+  width: 8
+- name: bdi_code
+  description: Código BDI
+  type: integer
+  width: 2
+- name: symbol
+  description: Código de negociação do papel
+  type: character
+  width: 12
+- name: instrument_market
+  description: Tipo de mercado
+  type: integer
+  width: 3
+- name: corporation_name
+  description: Nome resumido da empresa emissora do papel
+  type: character
+  width: 12
+- name: specification_code
+  description: Especificação do papel
+  type: character
+  width: 10
+- name: days_to_settlement
+  description: Prazo em dias do mercado a termo
+  type: integer
+  width: 3
+- name: trading_currency
+  description: Moeda de referência
+  type: character
+  width: 4
+- name: open
+  description: Preço de abertura do papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: high
+  description: Preço máximo do papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: low
+  description: Preço mínimo do papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: average
+  description: Preço médio do papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: close
+  description: Preço último negócio efetuado com o papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: best_bid
+  description: Preço da melhor oferta de compra do papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: best_ask
+  description: Preço da melhor oferta de venda do papel
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: trade_quantity
+  description: Número de negócios efetuados com o papel
+  type: integer
+  width: 5
+- name: traded_contracts
+  description: Quantidade total de títulos negociados neste papel
+  type: integer
+  width: 18
+- name: volume
+  description: Volume total de títulos negociados neste papel
+  type: numeric(dec=2.0, sign='')
+  width: 18
+- name: strike_price
+  description: Preço de exercício para o mercado de opções ou valor do contrato
+    para o mercado de termo secundário
+  type: numeric(dec=2.0, sign='')
+  width: 13
+- name: strike_price_adjustment_indicator
+  description: Indicador de correção de preços de exercícios ou valores de contrato
+    para os mercados de opções, termo secundário ou futuro
+  type: character
+  width: 1
+- name: maturity_date
+  description: Data do vencimento para os mercados de opções, termo secundário
+    ou futuro
+  type: date(format='%Y%m%d')
+  width: 8
+- name: allocation_lot_size
+  description: Fator de cotação do papel
+  type: integer
+  width: 7
+- name: strike_price_in_points
+  description: Preço de exercício em pontos para opções referenciadas em dólar
+    ou valor de contrato em pontos para termo secundário
+  type: numeric(dec=6.0, sign='')
+  width: 13
+- name: isin
+  description: Código do papel no sistema ISIN
+  type: character
+  width: 12
+- name: distribution_id
+  description: Número de distribuição do papel
+  type: integer
+  width: 3
