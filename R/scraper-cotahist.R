@@ -219,6 +219,16 @@ cotahist_filter_index_options <- function(x) {
 #' @rdname cotahist-extracts
 #' @examples
 #' \dontrun{
+#' df <- cotahist_get() |> cotahist_filter_etf_options()
+#' }
+#' @export
+cotahist_filter_etf_options <- function(x) {
+  .filter_option_data(x, "CTF")
+}
+
+#' @rdname cotahist-extracts
+#' @examples
+#' \dontrun{
 #' df <- cotahist_get() |> cotahist_filter_fund_options()
 #' }
 #' @export
