@@ -33,89 +33,52 @@ fwf_read_file <- function(., filename, ...) {
   df
 }
 
-flatten_names <- function(nx) {
-  for (ix in seq_along(nx)) {
-    if (!is.na(nx[ix])) {
-      last_name <- nx[ix]
-    }
-    nx[ix] <- last_name
-  }
-  x <- nx |> str_match("^(\\w+)")
-  as.vector(x[, 2])
-}
-
 settlement_prices_read <- function(., filename, ...) {
-  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
-  refdate_ns <- XML::getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
-  if (length(refdate_ns) > 0) {
-    refdate <- str_match(XML::xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")[1, 1]
-  }
-  xpath <- "//table[contains(@id, 'tblDadosAjustes')]"
-  table <- XML::getNodeSet(doc, xpath)
-  if (inherits(table, "XMLNodeSet") && length(table) == 1) {
-    tb <- table[[1]]
-    vals <- sapply(tb[["tbody"]]["tr"], \(x) sapply(x["td"], XML::xmlValue))
-    dm <- matrix(vals, nrow = ncol(vals), byrow = TRUE)
-  } else {
+  args <- list(...)
+  lines <- readr::read_lines(filename)
+  header <- which(str_starts(lines, "Ticker symbol"))
+  if (length(header) == 0) {
     return(NULL)
   }
-  dm <- cbind(dm, refdate)
-  colnames(dm) <- .$colnames
-  df <- dplyr::as_tibble(dm)
-
-  df <- .parse_columns(., df)
-  df[["commodity"]] <- flatten_names(df[["commodity"]])
-  df
+  df <- suppressWarnings(readr::read_delim(filename,
+    delim = ";", skip = header - 1, na = c("", "-"),
+    col_types = readr::cols(.default = readr::col_character()), show_col_types = FALSE
+  ))
+  # only futures carry a settlement price ("Adjusted quote")
+  df <- df[!is.na(df[["Adjusted quote"]]), ]
+  symbol <- df[["Ticker symbol"]]
+  dplyr::tibble(
+    commodity = str_sub(symbol, 1, -4),
+    maturity_code = str_sub(symbol, -3),
+    # mislabeled in the english export: it holds the previous settlement price
+    previous_price = readr::parse_number(df[["Previous adjusted quote tax"]]),
+    price = readr::parse_number(df[["Adjusted quote"]]),
+    price_change = readr::parse_number(df[["Variation"]]),
+    settlement_value = readr::parse_number(df[["Settlement value per contract (R$)"]]),
+    refdate = as.Date(args$refdate)
+  )
 }
 
-cols_number <- c(
-  ACC = 2, BRP = 2, DCO = 2, DIC = 2, DIM = 2, DOC = 2, DOL = 2, EUC = 2,
-  EUR = 2, INP = 2, JPY = 2, LIB = 2, PTX = 2, SDE = 2, SLP = 2, APR = 3,
-  DP = 3, PRE = 3, TFP = 3, TP = 3, TR = 3
-)
-
+# B3 file "Mercado de Derivativos - Taxas de Mercado para Swaps" (TaxaSwap.txt, fixed width)
 curve_read <- function(., filename, ...) {
-  text <- readr::read_file(filename)
-  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
-  char_vec <- XML::xmlSApply(XML::getNodeSet(doc, "//table/td"), XML::xmlValue)
-
-  if (length(char_vec) == 0) {
-    return(NULL)
-  }
-
-  ctx <- str_match(text, "\"([A-Z]+)\"\\s+selected")
-  curve_name <- ctx[1, 2]
-
-  mtx <- str_match(text, "Atualizado em: (\\d{2}/\\d{2}/\\d{4})")
-  refdate <- mtx[1, 2]
-
-  if (cols_number[curve_name] == 2) {
-    idx1 <- seq(1, length(char_vec), by = 2)
-    idx2 <- seq(2, length(char_vec), by = 2)
-
-    cur_days <- char_vec[idx1]
-    col1 <- char_vec[idx2]
-    col2 <- NA_character_
-  } else {
-    idx1 <- seq(1, length(char_vec), by = 3)
-    idx2 <- seq(2, length(char_vec), by = 3)
-    idx3 <- seq(3, length(char_vec), by = 3)
-
-    cur_days <- char_vec[idx1]
-    col1 <- char_vec[idx2]
-    col2 <- char_vec[idx3]
-  }
-
-  df <- dplyr::tibble(
-    refdate,
-    curve_name,
-    cur_days,
-    col1,
-    col2
+  cols <- readr::fwf_widths(
+    c(6, 3, 2, 8, 2, 5, 15, 5, 5, 1, 14, 1, 5),
+    c(
+      "seq", "seq_compl", "regtype", "refdate", "curve_type", "curve_name", "description",
+      "cur_days", "biz_days", "sign", "rate", "vertex_type", "vertex_code"
+    )
   )
-  colnames(df) <- .$colnames
-
-  .parse_columns(., df)
+  df <- readr::read_fwf(filename, cols,
+    col_types = readr::cols(.default = readr::col_character()),
+    locale = readr::locale(encoding = .$reader$encoding)
+  )
+  dplyr::tibble(
+    refdate = as.Date(df$refdate, "%Y%m%d"),
+    curve_name = df$curve_name,
+    cur_days = as.integer(df$cur_days),
+    biz_days = as.integer(df$biz_days),
+    rate = as.numeric(paste0(df$sign, df$rate)) / 1e7 # 7 decimals, in percent
+  )
 }
 
 pricereport_reader <- function(., filename, ...) {

@@ -69,10 +69,7 @@ fetch_marketdata("b3-cotahist-yearly", year = 2000:2025)
 # download futures settlement prices from 2000 to 2025
 fetch_marketdata("b3-futures-settlement-prices", refdate = bizseq("2000-01-01", Sys.Date(), "Brazil/B3"))
 # download yield curves from 2018 to 2025
-fetch_marketdata("b3-reference-rates",
-  refdate = bizseq("2018-01-01", Sys.Date(), "Brazil/B3"),
-  curve_name = c("DIC", "DOC", "PRE")
-)
+fetch_marketdata("b3-reference-rates", refdate = bizseq("2018-01-01", Sys.Date(), "Brazil/B3"))
 # download indexes composition data - it is necessary to execute `indexes_get()`
 fetch_marketdata("b3-indexes-composition")
 # download current portfolio for all indexes
@@ -102,10 +99,7 @@ The main function for fetching data is `fetch_marketdata()`, which downloads dat
 
 ```{r, eval=FALSE}
 # Download yield curve data for specific dates
-fetch_marketdata("b3-reference-rates",
-  refdate = as.Date("2024-01-31"),
-  curve_name = "PRE"
-)
+fetch_marketdata("b3-reference-rates", refdate = as.Date("2024-01-31"))
 
 # Download futures settlement prices
 fetch_marketdata("b3-futures-settlement-prices",

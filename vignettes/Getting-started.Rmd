@@ -108,10 +108,7 @@ The code below shows an example on how to download and process data using the `f
 
 ```{r fetch-reference-rates, eval=FALSE}
 # Download daily historical data for a specific date range
-fetch_marketdata("b3-reference-rates",
-  refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"),
-  curve_name = c("PRE", "DIC")
-)
+fetch_marketdata("b3-reference-rates", refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"))
 #> ✔ Downloading data [53s]
 #> ℹ 44 files downloaded
 #> ✔ Reading data into DB [6s]

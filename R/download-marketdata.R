@@ -59,10 +59,7 @@
 #' meta <- download_marketdata(meta)
 #'
 #' # For reference rates
-#' meta <- template_meta_create_or_load("b3-reference-rates",
-#'   refdate = as.Date("2024-04-05"),
-#'   curve_name = "PRE"
-#' )
+#' meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2024-04-05"))
 #' # Download using the metadata
 #' meta <- download_marketdata(meta)
 #' }
@@ -99,6 +96,11 @@ perform_download <- function(template, meta) {
 # Process the downloaded file
 process_downloaded_file <- function(dest, template, meta) {
   filename <- unzip_recursive(dest)
+  if (length(filename) == 0) {
+    cli::cli_abort("Downloaded file is empty for meta {.strong {meta$download_checksum}}",
+      class = "error_download_fail"
+    )
+  }
   filename <- select_file_if_multiple(filename, template$downloader[["if-has-multiple-files-use"]])
 
   md5 <- tools::md5sum(filename)
@@ -142,10 +144,16 @@ handle_download_error <- function(e, meta) {
   }
 }
 
+is_zip_file <- function(fname) {
+  # B3 nests self-extracting archives (.ex_, "MZ" header + zip) inside its zips, so check both
+  identical(readBin(fname, "raw", 2), charToRaw("PK")) ||
+    !inherits(try(utils::unzip(fname, list = TRUE), silent = TRUE), "try-error")
+}
+
 unzip_recursive <- function(fname) {
-  if (length(fname) == 1 && str_ends(str_to_lower(fname), ".zip")) {
-    exdir <- str_replace(fname, "\\.zip$", "")
-    l <- utils::unzip(fname, exdir = exdir)
+  if (length(fname) == 1 && is_zip_file(fname)) {
+    exdir <- paste0(fname, ".d")
+    l <- suppressWarnings(utils::unzip(fname, exdir = exdir)) # NULL for an empty archive
     unzip_recursive(l)
   } else {
     fname

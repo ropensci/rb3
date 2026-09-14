@@ -4,7 +4,9 @@
 \alias{futures_get}
 \title{Retrieves B3 Futures Settlement Prices}
 \source{
-\href{https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/}{B3 Market Data}
+\href{https://arquivos.b3.com.br/bdi/}{B3 Daily Market Bulletin}, table "Consolidated trades of the
+session" (Derivatives). B3 discontinued the former "Ajustes do pregão" page in December 2025.
+The bulletin keeps roughly the last 21 sessions; use the \code{b3-bvbg-086} template for older data.
 }
 \usage{
 futures_get()

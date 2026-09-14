@@ -320,10 +320,7 @@ template_extra_arg <- function(template) {
 #' @examples
 #' \dontrun{
 #' # Create or load metadata for a template
-#' meta <- template_meta_create_or_load("b3-reference-rates",
-#'   refdate = as.Date("2024-04-05"),
-#'   curve_name = "PRE"
-#' )
+#' meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2024-04-05"))
 #' }
 #'
 #' @export

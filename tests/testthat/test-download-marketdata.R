@@ -57,7 +57,7 @@ test_that("it should download file and return meta", {
 })
 
 test_that("it should clean meta and its dependencies", {
-  meta <- template_meta_create_or_load("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
+  meta <- template_meta_create_or_load("b3-futures-settlement-prices", refdate = bizdays::offset(Sys.Date(), -10, "Brazil/ANBIMA"))
   meta <- download_marketdata(meta)
   meta <- read_marketdata(meta)
 
@@ -132,7 +132,7 @@ test_that("it should clean meta when reading invalid file", {
 })
 
 test_that("it should download and read b3-futures-settlement-prices", {
-  meta <- template_meta_create_or_load("b3-futures-settlement-prices", refdate = as.Date("2023-01-02"))
+  meta <- template_meta_create_or_load("b3-futures-settlement-prices", refdate = bizdays::offset(Sys.Date(), -10, "Brazil/ANBIMA"))
   meta <- download_marketdata(meta)
   meta <- read_marketdata(meta)
 
@@ -162,7 +162,7 @@ test_that("it should download and read b3-cotahist-daily", {
 })
 
 test_that("it should download and read b3-reference-rates", {
-  meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2018-01-02"), curve_name = "PRE")
+  meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2018-01-02"))
   meta <- download_marketdata(meta)
   meta <- read_marketdata(meta)
 
@@ -177,42 +177,38 @@ test_that("it should download and read b3-reference-rates", {
 })
 
 test_that("it should download and read b3-reference-rates for an invalid date", {
-  meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE")
+  # B3 serves an empty archive for non trading days: treated as a failed download
+  meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2025-03-15"))
   meta <- download_marketdata(meta)
   meta <- read_marketdata(meta)
 
-  expect_true(meta$is_downloaded)
-  expect_true(meta$is_processed)
+  expect_false(meta$is_downloaded)
+  expect_false(meta$is_processed)
   expect_false(meta$is_valid)
   expect_true(meta_exists_in_db(meta$download_checksum))
-  expect_true(file.exists(meta$downloaded[[1]]))
+  expect_true(length(meta$downloaded) == 0)
 })
 
-test_that("it should fail to create meta for b3-reference-rates with no curve name", {
-  expect_error(template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2025-03-15")))
+test_that("it should fail to create meta for b3-reference-rates with no refdate", {
+  expect_error(template_meta_create_or_load("b3-reference-rates"))
 })
 
 test_that("it should fetch b3-reference-rates", {
   suppressMessages({
-    fetch_marketdata("b3-reference-rates",
-      refdate = c(as.Date("2025-03-12"), as.Date("2025-03-13")),
-      curve_name = c("PRE", "DIC")
-    )
+    fetch_marketdata("b3-reference-rates", refdate = c(as.Date("2025-03-12"), as.Date("2025-03-13")))
   })
-  # Should be able to load the meta for each combination
-  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12"), curve_name = "PRE"))
-  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-13"), curve_name = "PRE"))
-  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12"), curve_name = "DIC"))
-  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-13"), curve_name = "DIC"))
+  # Should be able to load the meta for each date
+  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-12")))
+  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-13")))
 })
 
 test_that("it should fetch b3-reference-rates with fails", {
-  # download fail because of missing argument curve_name
-  expect_error(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-12")))
+  # download fail because of missing argument refdate
+  expect_error(fetch_marketdata("b3-reference-rates"))
 
-  # read fail
-  suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))
-  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-15"), curve_name = "PRE"))
+  # download fail (empty archive) must not stop the fetch
+  suppressMessages(fetch_marketdata("b3-reference-rates", refdate = as.Date("2025-03-15")))
+  expect_no_error(meta_load("b3-reference-rates", refdate = as.Date("2025-03-15")))
 })
 
 test_that("it should download and read b3-bvbg-086", {

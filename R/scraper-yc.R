@@ -1,15 +1,10 @@
 process_yc <- function(ds) {
-  template <- template_retrieve("b3-reference-rates")
-  ds <- ds |>
+  ds |>
     mutate(
       dur = lubridate::ddays(.data$cur_days),
       forward_date = lubridate::as_date(.data$refdate + .data$dur),
-      col1 = .data$col1 / 100,
-      col2 = .data$col2 / 100
-    ) |>
-    collect() |>
-    mutate(
-      biz_days = bizdays::bizdayse(.data$refdate, .data$cur_days, template$calendar)
+      col1 = .data$rate / 100,
+      col2 = NA_real_
     ) |>
     select(
       "curve_name",
@@ -20,7 +15,6 @@ process_yc <- function(ds) {
       "col1",
       "col2",
     )
-  ds
 }
 
 .yield_curve_get <- function(.curve_name = NULL) {
@@ -41,9 +35,13 @@ process_yc <- function(ds) {
 #' - the nominal rates curve for USD in Brazil - Cupom Cambial Limpo (`yc_usd_get`).
 #' - the real rates curve (`yc_ipca_get`).
 #'
-#' @details 
-#' The yield curve data is downloaded from the B3 website
-#' <https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp>.
+#' @details
+#' The yield curve data comes from the file "Mercado de Derivativos - Taxas de Mercado para Swaps"
+#' (`TS<yymmdd>.ex_`) published daily on B3's "Pesquisa por pregão" page
+#' <https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/>.
+#' It replaced the former "Taxas Referenciais" page, discontinued by B3, and holds every curve
+#' (around 120) for the reference date, so `fetch_marketdata("b3-reference-rates", refdate = ...)`
+#' needs no `curve_name` argument.
 #' See the Curve Manual in this link
 #' <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
@@ -61,7 +59,8 @@ process_yc <- function(ds) {
 #' - `biz_days`: Number of business days between `refdate` and `forward_date`.
 #' - `cur_days`: Number of calendar days between `refdate` and `forward_date`.
 #' - `r_252`: Annualized interest rate based on 252 business days.
-#' - `r_360`: Annualized interest rate based on 360 calendar days.
+#' - `r_360`: Annualized interest rate based on 360 calendar days (`NA` in `yc_brl_get()`,
+#'   the swap rates file publishes only the 252-based rate for PRE).
 #'
 #' @name yc_xxx_get
 NULL

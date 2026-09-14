@@ -1,3 +1,17 @@
+# rb3 (development version)
+
+* `b3-reference-rates` now downloads B3's "Taxas de Mercado para Swaps" file (`TS<yymmdd>.ex_` on the
+  "Pesquisa por pregão" page) because the "Taxas Referenciais" page was discontinued (#125).
+  The `curve_name` argument is gone: one file holds every curve (about 120). The input layer schema
+  changed (`refdate`, `curve_name`, `cur_days`, `biz_days`, `rate`, partitioned by `refdate`), so delete
+  `<cachedir>/db/input/b3-reference-rates` and `<cachedir>/db/staging/b3-reference-rates` before
+  fetching again. `yc_brl_get()` now returns `NA` for `r_360`.
+* `b3-futures-settlement-prices` now reads the "Consolidated trades of the session" table of the
+  Daily Market Bulletin (<https://arquivos.b3.com.br/bdi/>) because the "Ajustes do pregão" page was
+  discontinued (#125). The bulletin keeps only about the last 21 sessions.
+* Zip archives are detected by content, so nested self-extracting archives such as B3's `.ex_` files are unpacked;
+  an empty archive is now reported as a failed download instead of stopping `fetch_marketdata()`.
+
 # rb3 0.1.0
 
 * Introduced a new template framework that no longer uses `proto` and is fully adapted to downloader and reader functions.

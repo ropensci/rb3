@@ -30,7 +30,8 @@ The returned data includes the following columns:
 \item \code{biz_days}: Number of business days between \code{refdate} and \code{forward_date}.
 \item \code{cur_days}: Number of calendar days between \code{refdate} and \code{forward_date}.
 \item \code{r_252}: Annualized interest rate based on 252 business days.
-\item \code{r_360}: Annualized interest rate based on 360 calendar days.
+\item \code{r_360}: Annualized interest rate based on 360 calendar days (\code{NA} in \code{yc_brl_get()},
+the swap rates file publishes only the 252-based rate for PRE).
 }
 }
 \description{
@@ -43,8 +44,12 @@ specifically for:
 }
 }
 \details{
-The yield curve data is downloaded from the B3 website
-\url{https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp}.
+The yield curve data comes from the file "Mercado de Derivativos - Taxas de Mercado para Swaps"
+(\verb{TS<yymmdd>.ex_}) published daily on B3's "Pesquisa por pregão" page
+\url{https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/}.
+It replaced the former "Taxas Referenciais" page, discontinued by B3, and holds every curve
+(around 120) for the reference date, so \code{fetch_marketdata("b3-reference-rates", refdate = ...)}
+needs no \code{curve_name} argument.
 See the Curve Manual in this link
 \url{https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf}
 for more details.
