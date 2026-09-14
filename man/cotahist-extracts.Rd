@@ -12,6 +12,7 @@
 \alias{cotahist_filter_index}
 \alias{cotahist_filter_equity_options}
 \alias{cotahist_filter_index_options}
+\alias{cotahist_filter_etf_options}
 \alias{cotahist_filter_fund_options}
 \title{Filtering data from COTAHIST datasets}
 \usage{
@@ -34,6 +35,8 @@ cotahist_filter_index(x)
 cotahist_filter_equity_options(x)
 
 cotahist_filter_index_options(x)
+
+cotahist_filter_etf_options(x)
 
 cotahist_filter_fund_options(x)
 }
@@ -99,6 +102,9 @@ df <- cotahist_get() |> cotahist_filter_equity_options()
 }
 \dontrun{
 df <- cotahist_get() |> cotahist_filter_index_options()
+}
+\dontrun{
+df <- cotahist_get() |> cotahist_filter_etf_options()
 }
 \dontrun{
 df <- cotahist_get() |> cotahist_filter_fund_options()

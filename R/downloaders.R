@@ -43,8 +43,8 @@ perform_get_request <- function(url, verifyssl) {
 }
 
 # Helper function to perform POST requests
-perform_post_request <- function(url, verifyssl, ...) {
-  httr::POST(url, body = list(...), encode = "form", httr::config(ssl_verifypeer = verifyssl))
+perform_post_request <- function(url, verifyssl, ..., encode = "form") {
+  httr::POST(url, body = list(...), encode = encode, httr::config(ssl_verifypeer = verifyssl))
 }
 
 # Refactored download_file_via_get (previously just_download_data)
@@ -55,9 +55,9 @@ download_file_via_get <- function(url, encoding, dest, verifyssl = TRUE) {
 }
 
 # Refactored download_file_via_post (previously post_download_data)
-download_file_via_post <- function(url, encoding, dest, verifyssl, ...) {
+download_file_via_post <- function(url, encoding, dest, verifyssl, ..., encode = "form") {
   req <- prepare_request(verifyssl, encoding)
-  res <- perform_post_request(url, req$verifyssl, ...)
+  res <- perform_post_request(url, req$verifyssl, ..., encode = encode)
   handle_response(res, req$encoding, dest)
 }
 
@@ -74,17 +74,6 @@ datetime_download <- function(., dest, ...) {
 sprintf_download <- function(., dest, ...) {
   args <- list(...)
   url <- do.call(sprintf, c(.$downloader$url, args))
-  download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
-}
-
-curve_download <- function(., dest, ...) {
-  args <- list(...)
-  url <- httr::parse_url(.$downloader$url)
-  url$query <- list(
-    Data = format(as.Date(args$refdate), "%d/%m/%Y"),
-    Data1 = format(as.Date(args$refdate), "%Y%m%d"),
-    slcTaxa = args$curve_name
-  )
   download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
@@ -128,10 +117,12 @@ stock_indexes_statistics_download <- function(., dest, ...) {
   download_file_via_get(url, .$downloader$encoding, dest, .$downloader$verifyssl)
 }
 
+# Daily Market Bulletin (Boletim Diario do Mercado) table export, JSON body
 settlement_prices_download <- function(., dest, ...) {
   args <- list(...)
-  strdate <- format(as.Date(args$refdate), "%d/%m/%Y")
+  refdate <- format(as.Date(args$refdate), "%Y-%m-%d")
   download_file_via_post(.$downloader$url, .$downloader$encoding, dest, .$downloader$verifyssl,
-    dData1 = strdate
+    Name = "ConsolidatedTradesDerivatives", Date = refdate, FinalDate = refdate,
+    encode = "json"
   )
 }

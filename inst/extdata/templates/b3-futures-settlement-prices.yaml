@@ -1,20 +1,16 @@
 id: b3-futures-settlement-prices
 filename: ~
 filetype: CUSTOM
-description: Preços de Ajustes Diários de Contratos Futuros
+description: Preços de Ajustes Diários de Contratos Futuros (Boletim Diário do Mercado)
 downloader:
   function: settlement_prices_download
-  url: https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-ajustes-do-pregao-ptBR.asp
-  verifyssl: false
-  format: html
-  encoding: latin1
+  url: https://arquivos.b3.com.br/bdi/table/export/csv?lang=en-us
+  verifyssl: true
+  format: csv
   args:
     refdate: Data de referência
 reader:
   function: settlement_prices_read
-  locale:
-    decimal_mark: ','
-    grouping_mark: '.'
 writers:
   input:
     partition: refdate
@@ -50,4 +46,4 @@ fields:
   type: number
 - name: refdate
   description: Data de referência
-  type: date(format="%d/%m/%Y")
+  type: date

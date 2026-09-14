@@ -11,14 +11,14 @@ test_df <- function(df_in) {
 
 .refdate <- bizdays::offset(Sys.Date(), -5, "Brazil/ANBIMA")
 suppressMessages(fetch_marketdata("b3-futures-settlement-prices", refdate = .refdate))
-suppressMessages(fetch_marketdata("b3-reference-rates", refdate = .refdate, curve_name = c("PRE", "DIC", "DOC")))
+suppressMessages(fetch_marketdata("b3-reference-rates", refdate = .refdate))
 
 test_that("Test of yc_get function", {
   df_yc_1 <- yc_get()
   expect_true(is(df_yc_1, "arrow_dplyr_query") || is(df_yc_1, "ArrowObject"))
   df <- df_yc_1 |> collect()
   test_df(df)
-  expect_equal(df$curve_name |> unique() |> sort(), c("DIC", "DOC", "PRE"))
+  expect_true(all(c("DIC", "DOC", "PRE") %in% df$curve_name))
 })
 
 test_that("it should check if curve name is correct", {

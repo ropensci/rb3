@@ -48,10 +48,7 @@ that you always have access to the latest metadata for a given template.
 \examples{
 \dontrun{
 # Create or load metadata for a template
-meta <- template_meta_create_or_load("b3-reference-rates",
-  refdate = as.Date("2024-04-05"),
-  curve_name = "PRE"
-)
+meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2024-04-05"))
 }
 
 }

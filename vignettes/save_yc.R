@@ -4,7 +4,7 @@ library(bizdays)
 devtools::load_all()
 
 dates <- getdate("first bizday", 2021:2025, "Brazil/B3")
-fetch_marketdata("b3-reference-rates", refdate = dates, curve_name = c("DIC", "DOC", "PRE"))
+fetch_marketdata("b3-reference-rates", refdate = dates)
 
 df_yc_brl <- yc_brl_get() |>
   filter(forward_date < "2035-01-01") |>

@@ -40,10 +40,7 @@
 #' \dontrun{
 #' fetch_marketdata("b3-cotahist-yearly", year = 2020:2024)
 #' fetch_marketdata("b3-cotahist-daily", refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"))
-#' fetch_marketdata("b3-reference-rates",
-#'   refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"),
-#'   curve_name = c("DIC", "DOC", "PRE")
-#' )
+#' fetch_marketdata("b3-reference-rates", refdate = bizseq("2025-01-01", "2025-03-10", "Brazil/B3"))
 #' fetch_marketdata("b3-indexes-historical-data",
 #'   throttle = TRUE, index = c("IBOV", "IBXX", "IBXL"),
 #'   year = 2000:2025

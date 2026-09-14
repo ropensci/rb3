@@ -135,7 +135,10 @@ maturitycode2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
 #'   \item \code{settlement_value}: Settlement value of the futures contract.
 #' }
 #'
-#' @source [B3 Market Data](https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/)
+#' @source
+#' [B3 Daily Market Bulletin](https://arquivos.b3.com.br/bdi/), table "Consolidated trades of the
+#' session" (Derivatives). B3 discontinued the former "Ajustes do pregão" page in December 2025.
+#' The bulletin keeps roughly the last 21 sessions; use the `b3-bvbg-086` template for older data.
 #' 
 #' @examples
 #' \dontrun{
