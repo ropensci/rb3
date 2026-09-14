@@ -76,7 +76,7 @@ structured format within the rb3 package database.
 The data is stored locally in an optimized structure,
 allowing for efficient querying and analysis in subsequent steps.
 
-We specify the `curve_name` argument to request data for three different yield curves:
+Each daily file holds every curve B3 publishes. We will work with three of them:
 
 - **PRE**: The **Nominal Interest Rate** curve.
   This curve represents the market's expectations for
@@ -98,13 +98,12 @@ We specify the `curve_name` argument to request data for three different yield c
   It is used to assess the market's expectation of real returns and is essential
   for pricing inflation-linked bonds (like NTN-B).
 
-The `curve_name` argument allows us to specify which of these three curves we want data for.
-By passing a vector like `c("DIC", "DOC", "PRE")`, we are telling the function to retrieve data
-for all three curves for the selected reference dates.
+All curves are stored, so `yc_get()` can be filtered by `curve_name` later on; the helpers
+`yc_brl_get()`, `yc_ipca_get()` and `yc_usd_get()` select PRE, DIC and DOC for us.
 
 ```{r fetch-data, message=FALSE, eval=FALSE}
 dates <- getdate("first bizday", 2021:2025, "Brazil/B3")
-fetch_marketdata("b3-reference-rates", refdate = dates, curve_name = c("DIC", "DOC", "PRE"))
+fetch_marketdata("b3-reference-rates", refdate = dates)
 ```
 
 After the data is stored, it becomes available for querying through the following functions:

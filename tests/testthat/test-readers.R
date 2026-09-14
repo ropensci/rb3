@@ -1,0 +1,25 @@
+test_that("curve_read parses the TS swap rates file", {
+  tpl <- template_retrieve("b3-reference-rates")
+  df <- curve_read(tpl, test_path("testdata", "TaxaSwap-sample.txt"))
+  expect_equal(nrow(df), 4)
+  expect_equal(df$refdate, rep(as.Date("2026-09-11"), 4))
+  expect_equal(df$curve_name, c("DOC", "DOC", "PRE", "PRE"))
+  expect_equal(df$cur_days[1], 3L)
+  expect_equal(df$biz_days[1], 1L)
+  expect_equal(df$rate[3], 13.9)
+})
+
+test_that("settlement_prices_read keeps only instruments with a settlement price", {
+  tpl <- template_retrieve("b3-futures-settlement-prices")
+  df <- settlement_prices_read(tpl, test_path("testdata", "bdm-derivatives-sample.csv"),
+    refdate = as.Date("2026-09-11")
+  )
+  expect_equal(nrow(df), 2)
+  expect_equal(df$commodity, c("DI1", "DI1"))
+  expect_equal(df$maturity_code, c("F27", "F28"))
+  expect_equal(df$price[1], 96230.69)
+  expect_equal(df$previous_price[1], 96230.96)
+  expect_equal(df$price_change[1], -0.27)
+  expect_equal(df$settlement_value[1], -0.27)
+  expect_equal(df$refdate, rep(as.Date("2026-09-11"), 2))
+})

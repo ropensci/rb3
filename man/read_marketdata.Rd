@@ -60,10 +60,7 @@ meta <- download_marketdata(meta)
 meta <- read_marketdata(meta)
 
 # For reference rates
-meta <- template_meta_create_or_load("b3-reference-rates",
-  refdate = as.Date("2024-04-05"),
-  curve_name = "PRE"
-)
+meta <- template_meta_create_or_load("b3-reference-rates", refdate = as.Date("2024-04-05"))
 # Download using the metadata
 meta <- download_marketdata(meta)
 meta <- read_marketdata(meta)

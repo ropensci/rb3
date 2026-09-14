@@ -1,0 +1,6 @@
+﻿It summarizes the transactions executed in derivatives during a trading session, including volumes and values.
+
+Ticker symbol;ISIN code;Segment;Opening price;Minimum price;Maximum price;Trade average price;Last price;Oscillation;Adjusted quote;Adjusted quote tax;Previous adjusted quote tax;Reference price;Variation;Settlement value per contract (R$);Last buy order;Last sell order;Trade quantity;Financial instrument quantity;National financial volume
+BGIU26C032400;BRBMEFCBUUD9;AGRIBUSINESS;-;-;-;-;-;-;-;-;-;34.32;-;-;-;-;-;-;-
+DI1F27;BRBMEFD1I4Z0;FINANCIAL;13.58;13.57;13.59;13.578;13.585;0;96230.69;13.587;96230.96;-;-0.27;-0.27;13.58;13.585;3,666;380,324;36599672680
+DI1F28;BRBMEFD1I4Y3;FINANCIAL;13.595;13.505;13.65;13.575;13.62;-0.08;84725.87;13.625;84718.91;-;6.96;6.96;13.615;13.62;29,794;603,864;51191776839.8
