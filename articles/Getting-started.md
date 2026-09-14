@@ -1,0 +1,306 @@
+# Getting Started
+
+## Introduction
+
+The `rb3` package provides tools for downloading, processing, and
+analyzing market data from B3 (the Brazilian stock exchange). This
+vignette will guide you through the basics of using the package to
+download various types of market data and perform common analyses.
+
+``` r
+
+library(rb3)
+library(dplyr)
+library(bizdays)
+```
+
+## Downloading Market Data
+
+The main function for fetching market data is
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md).
+This function downloads data based on a template and parameter
+combinations, then processes the data into a structured database format.
+
+### Templates
+
+Templates are predefined configurations that specify the type of data to
+download and how to process it. Each template corresponds to a specific
+dataset or file type available from B3. For example:
+
+- `"b3-cotahist-yearly"`: Downloads and reads COTAHIST file that are
+  available by year.
+- `"b3-futures-settlement-prices"`: Downloads and reads settlement
+  prices web page.
+- `"b3-reference-rates"`: Downloads and reades the web page of reference
+  interest rates.
+- `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading
+  instruments information.
+
+``` r
+
+# List available templates
+list_templates()
+#> # A tibble: 9 × 2
+#>   Template                         Description                                  
+#>   <chr>                            <chr>                                        
+#> 1 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086      
+#> 2 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Arq…
+#> 3 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Arq…
+#> 4 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futur…
+#> 5 b3-indexes-composition           Composição dos índices da B3                 
+#> 6 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3 …
+#> 7 b3-indexes-historical-data       Dados históricos e estatísticas dos índices …
+#> 8 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com pesos…
+#> 9 b3-reference-rates               Taxas referenciais (Mercado de Derivativos -…
+```
+
+Additional information about templates can be obtained by calling the
+[`template_retrieve()`](https://ropensci.github.io/rb3/reference/template_retrieve.md)
+function:
+
+``` r
+
+# Get a specific template
+template_retrieve("b3-cotahist-yearly")
+#> Template: b3-cotahist-yearly
+#> Description: Cotações Históricas do Pregão de Ações - Arquivo Anual
+#> Required arguments:
+#> • year: Ano de referência
+#> Fields:
+#> • regtype (numeric): Tipo de registro
+#> • refdate (Date): Data do pregão
+#> • bdi_code (numeric): Código BDI
+#> • symbol (character): Código de negociação do papel
+#> • instrument_market (numeric): Tipo de mercado
+#> • corporation_name (character): Nome resumido da empresa emissora do papel
+#> • specification_code (character): Especificação do papel
+#> • days_to_settlement (numeric): Prazo em dias do mercado a termo
+#> • trading_currency (character): Moeda de referência
+#> • open (numeric): Preço de abertura do papel
+#> • high (numeric): Preço máximo do papel
+#> • low (numeric): Preço mínimo do papel
+#> • average (numeric): Preço médio do papel
+#> • close (numeric): Preço último negócio efetuado com o papel
+#> • best_bid (numeric): Preço da melhor oferta de compra do papel
+#> • best_ask (numeric): Preço da melhor oferta de venda do papel
+#> • trade_quantity (numeric): Número de negócios efetuados com o papel
+#> • traded_contracts (numeric): Quantidade total de títulos negociados neste
+#> papel
+#> • volume (numeric): Volume total de títulos negociados neste papel
+#> • strike_price (numeric): Preço de exercício para o mercado de opções ou valor
+#> do contrato para o mercado de termo secundário
+#> • strike_price_adjustment_indicator (character): Indicador de correção de
+#> preços de exercícios ou valores de contrato para os mercados de opções, termo
+#> secundário ou futuro
+#> • maturity_date (Date): Data do vencimento para os mercados de opções, termo
+#> secundário ou futuro
+#> • allocation_lot_size (numeric): Fator de cotação do papel
+#> • strike_price_in_points (numeric): Preço de exercício em pontos para opções
+#> referenciadas em dólar ou valor de contrato em pontos para termo secundário
+#> • isin (character): Código do papel no sistema ISIN
+#> • distribution_id (numeric): Número de distribuição do papel
+```
+
+Once you know the template you want to use, you can download the data by
+calling
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md).
+The function takes the template name and additional parameters as
+arguments.
+
+### Fetching market data
+
+The
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+function downloads and processes market data based on the specified
+template and parameters. The data is stored in a local database, which
+can be queried using specialized functions. The code below shows an
+example on how to download and process data using the
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md).
+
+``` r
+
+# Download daily historical data for a specific date range
+fetch_marketdata("b3-reference-rates", refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"))
+#> ✔ Downloading data [53s]
+#> ℹ 44 files downloaded
+#> ✔ Reading data into DB [6s]
+```
+
+The total time taken to download and process the data is shown in the
+console output, and also the number of downloaded files is shown. This
+code downloads 44 files containing reference rates for the PRE and DIC
+curves for January 2024. The files are read and stored as parquet files
+forming a local database inside the `rb3.cachedir` folder.
+
+### `rb3.cachedir` folder
+
+The `rb3.cachedir` folder is where the downloaded data is stored. It is
+set as an option in R, and you can check its current value using:
+
+``` r
+
+getOption("rb3.cachedir")
+#> [1] "/home/wilson/dev/rb3/rb3-cache"
+```
+
+You can change the location of the `rb3.cachedir` folder by setting the
+option `rb3.cachedir` to a different path.
+
+``` r
+
+# Set the rb3.cachedir folder to a different path
+options(rb3.cachedir = "/path/to/your/custom/folder")
+```
+
+> #### Note
+>
+> It is strongly recommended to set the `rb3.cachedir` folder in the
+> .Rprofile file.
+
+Inside this folder it has the 3 folders:
+
+- raw: for raw downloaded files
+- db: where the processed files are stored as datasets (parquet files)
+
+The folder structure looks like this:
+
+``` text
+rb3.cachedir
+├── raw
+└── db
+```
+
+The raw files are initially downloaded and stored in the `raw` folder.
+These files are then processed and saved as parquet files in the `db`
+folder, forming structured datasets that can be queried using the `rb3`
+package functions. The data processing occurs in two stages: first, the
+raw files are transformed and stored in the `input` layer within the
+`db` folder. Next, the data undergoes further refinement and is saved in
+the `staging` layer, also within the `db` folder. The dataset cam be
+accessed using the function
+[`rb3::template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md).
+
+``` r
+
+# Get the dataset for the template "b3-reference-rates"
+template_dataset("b3-reference-rates")
+#> FileSystemDataset with 47 Parquet files
+#> 5 columns
+#> refdate: date32[day]
+#> curve_name: string
+#> cur_days: int64
+#> col1: double
+#> col2: double
+```
+
+This function defaults to the `input` layer, but you can specify the
+`layer` argument to access the `staging` layer if needed.
+
+``` r
+
+# Get the dataset for the template "b3-reference-rates" in the input layer
+template_dataset("b3-reference-rates", layer = "staging")
+#> FileSystemDataset with 47 Parquet files
+#> 7 columns
+#> curve_name: string
+#> refdate: date32[day]
+#> forward_date: date32[day]
+#> cur_days: int64
+#> biz_days: int64
+#> col1: double
+#> col2: double
+```
+
+We can observe that the dataset in the `input` layer has 5 columns,
+while the dataset in the `staging` layer has 7 columns. The datasets in
+the `staging` layer are enriched with formatted columns and additional
+data.
+
+## Accessing the data
+
+In the previous sections we have seen how to download and process data
+using the
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+function and how to access the downloaded data using the
+[`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
+function. Each template has custom functions to access the data. These
+functions have the suffix `_get()`.
+
+- [`cotahist_get()`](https://ropensci.github.io/rb3/reference/cotahist_get.md):
+  Retrieves historical stock market data.
+- [`futures_get()`](https://ropensci.github.io/rb3/reference/futures_get.md):
+  Retrieves futures settlement prices.
+- [`yc_brl_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md):
+  Retrieves the Brazilian nominal yield curve (PRE).
+- [`yc_ipca_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md):
+  Retrieves the Brazilian real interest rate curve (DIC).
+- [`yc_usd_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md):
+  Retrieves the FX-linked yield curve (DOC).
+
+and many others. For example, to access the data downloaded using the
+`b3-reference-rates` template, you can use the
+[`yc_brl_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+function:
+
+``` r
+
+# Get the Brazilian nominal yield curve (PRE)
+yc_brl_get() |>
+  filter(refdate == "2024-01-31") |>
+  collect()
+#> # A tibble: 257 × 7
+#>    curve_name refdate    forward_date cur_days biz_days r_252  r_360
+#>    <chr>      <date>     <date>          <int>    <int> <dbl>  <dbl>
+#>  1 PRE        2024-01-31 2024-02-01          1        1 0.116 0
+#>  2 PRE        2024-01-31 2024-02-07          7        5 0.112 0.115
+#>  3 PRE        2024-01-31 2024-02-14         14        8 0.112 0.0906
+#>  4 PRE        2024-01-31 2024-02-15         15        9 0.112 0.0953
+#>  5 PRE        2024-01-31 2024-02-16         16       10 0.112 0.0994
+#>  6 PRE        2024-01-31 2024-02-21         21       13 0.112 0.0983
+#>  7 PRE        2024-01-31 2024-02-28         28       18 0.112 0.102
+#>  8 PRE        2024-01-31 2024-02-29         29       19 0.112 0.104
+#>  9 PRE        2024-01-31 2024-03-01         30       20 0.112 0.106
+#> 10 PRE        2024-01-31 2024-03-04         33       21 0.112 0.101
+#> # ℹ 247 more rows
+```
+
+The columns `r_252` and `r_360` have been renamed in the function
+[`yc_brl_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md).
+This happens because the dataset `b3-reference-rates` attends to the
+three curves PRE, DIC, and DOC, but the columns `col1` and `col2` have
+different meanings for each curve. For this reason we strongly recommend
+using the custom functions to access the data instead of using the
+[`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
+function directly.
+
+## Conclusion
+
+The `rb3` package provides a comprehensive and efficient framework for
+accessing, processing, and analyzing market data from B3 (the Brazilian
+stock exchange). In this vignette, we explored the key functionalities
+of the package, including:
+
+1.  **Downloading Market Data**: Using templates and the
+    [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+    function, we demonstrated how to download and process various types
+    of market data, such as reference rates and futures settlement
+    prices.
+2.  **Data Storage and Organization**: We reviewed the structure of the
+    `rb3.cachedir` folder, which organizes raw files, metadata, and
+    processed datasets for efficient access and management.
+3.  **Accessing Processed Data**: We showcased how to query the
+    processed datasets using template-specific functions like
+    [`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
+    and custom access functions such as
+    [`yc_brl_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+    and
+    [`futures_get()`](https://ropensci.github.io/rb3/reference/futures_get.md).
+
+By combining the power of templates, efficient data storage, and
+specialized query functions, the `rb3` package simplifies the process of
+working with B3 market data. Whether you are analyzing yield curves,
+futures prices, or other financial datasets, `rb3` provides the tools
+needed to streamline your workflow and focus on generating insights.
+
+We encourage you to explore the package further and adapt its
+functionalities to your specific use cases in financial analysis.

@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fetching B3 Yield Curves">
 </head>
@@ -131,8 +131,8 @@ reference rates from B3’s systems. This function fetches data directly
 from B3’s systems and stores it in a structured format within the rb3
 package database. The data is stored locally in an optimized structure,
 allowing for efficient querying and analysis in subsequent steps.</p>
-<p>We specify the <code>curve_name</code> argument to request data for
-three different yield curves:</p>
+<p>Each daily file holds every curve B3 publishes. We will work with
+three of them:</p>
 <ul>
 <li>
 <strong>PRE</strong>: The <strong>Nominal Interest Rate</strong>
@@ -159,13 +159,13 @@ consumer price index (IPCA). It is used to assess the market’s
 expectation of real returns and is essential for pricing
 inflation-linked bonds (like NTN-B).</li>
 </ul>
-<p>The <code>curve_name</code> argument allows us to specify which of
-these three curves we want data for. By passing a vector like
-<code>c("DIC", "DOC", "PRE")</code>, we are telling the function to
-retrieve data for all three curves for the selected reference dates.</p>
+<p>All curves are stored, so <code><a href="../reference/yc_xxx_get.html">yc_get()</a></code> can be filtered by
+<code>curve_name</code> later on; the helpers <code><a href="../reference/yc_xxx_get.html">yc_brl_get()</a></code>,
+<code><a href="../reference/yc_xxx_get.html">yc_ipca_get()</a></code> and <code><a href="../reference/yc_xxx_get.html">yc_usd_get()</a></code> select PRE, DIC
+and DOC for us.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/getdate.html" class="external-link">getdate</a></span><span class="op">(</span><span class="st">"first bizday"</span>, <span class="fl">2021</span><span class="op">:</span><span class="fl">2025</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="va">dates</span>, curve_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIC"</span>, <span class="st">"DOC"</span>, <span class="st">"PRE"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="va">dates</span><span class="op">)</span></span></code></pre></div>
 <p>After the data is stored, it becomes available for querying through
 the following functions:</p>
 <ul>
@@ -231,7 +231,7 @@ false sense of precision beyond what the market actually supports.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="Fetching-historical-yield-curve_files/figure-html/yc-brl-plot-1.png" alt="Yield Curves for Brazil" width="100%"><p class="caption">
+<img src="Fetching-historical-yield-curve_files/figure-html/yc-brl-plot-1.png" class="r-plt" alt="Yield Curves for Brazil" width="100%"><p class="caption">
 Yield Curves for Brazil
 </p>
 </div>
@@ -280,7 +280,7 @@ long-term inflation dynamics.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="Fetching-historical-yield-curve_files/figure-html/yc-ipca-plot-1.png" alt="DIxIPCA Yield Curves for Brazil" width="100%"><p class="caption">
+<img src="Fetching-historical-yield-curve_files/figure-html/yc-ipca-plot-1.png" class="r-plt" alt="DIxIPCA Yield Curves for Brazil" width="100%"><p class="caption">
 DIxIPCA Yield Curves for Brazil
 </p>
 </div>
@@ -331,7 +331,7 @@ pricing.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="Fetching-historical-yield-curve_files/figure-html/plot-cupom-limpo-1.png" alt="Cupom Limpo (USD) Yield Curves for Brazil" width="100%"><p class="caption">
+<img src="Fetching-historical-yield-curve_files/figure-html/plot-cupom-limpo-1.png" class="r-plt" alt="Cupom Limpo (USD) Yield Curves for Brazil" width="100%"><p class="caption">
 Cupom Limpo (USD) Yield Curves for Brazil
 </p>
 </div>
@@ -350,7 +350,7 @@ This difference, known as <strong>break-even inflation</strong>,
 represents the inflation rate that would make an investor indifferent
 between holding nominal versus inflation-linked instruments.</p>
 <p>The formula is straightforward:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Implied Inflation</mtext><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>r</mi><mtext mathvariant="normal">nominal</mtext></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>r</mi><mtext mathvariant="normal">real</mtext></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Implied Inflation</mtext><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>r</mi><mtext mathvariant="normal">nominal</mtext></msub><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><msub><mi>r</mi><mtext mathvariant="normal">real</mtext></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">
 \text{Implied Inflation} = (1 + r_{\text{nominal}}) / (1 + r_{\text{real}}) - 1
 </annotation></semantics></math></p>
 <p>Where
@@ -396,7 +396,7 @@ from the DIC curve. For simplicity, we use the approximation:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="Fetching-historical-yield-curve_files/figure-html/break-even-inflation-plot-1.png" alt="Break-even Inflation" width="100%"><p class="caption">
+<img src="Fetching-historical-yield-curve_files/figure-html/break-even-inflation-plot-1.png" class="r-plt" alt="Break-even Inflation" width="100%"><p class="caption">
 Break-even Inflation
 </p>
 </div>
@@ -464,7 +464,7 @@ more advanced features and use cases.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

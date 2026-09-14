@@ -1,0 +1,403 @@
+# rb3
+
+## Overview
+
+[B3](https://www.b3.com.br) is the main financial exchange in Brazil,
+offering access to trading systems for stocks, futures, options, and
+other financial instruments. The `rb3` package provides tools for
+downloading, processing, and analyzing market data from B3, including:
+
+- **Stocks & Equities**: Historical price data through COTAHIST files
+- **Futures Contracts**: Settlement prices for futures contracts
+- **Yield Curves**: Historical yield curves calculated from futures
+  contracts
+- **ETFs & BDRs**: Data for Exchange Traded Funds and Brazilian
+  Depositary Receipts
+- **REITs (FIIs)**: Data for Brazilian Real Estate Investment Trusts
+- **Options**: Equity and index options contracts
+- **Market Indices**: B3 indices composition and historical data
+
+The package uses webscraping tools to obtain data directly from [B3’s
+website](https://www.b3.com.br), making it accessible in R as structured
+datasets. These datasets are valuable for financial analysis, academic
+research, and investment decision-making.
+
+## Installation
+
+``` r
+
+# From CRAN (stable version)
+install.packages("rb3")
+
+# Development version from GitHub
+if (!require(devtools)) install.packages("devtools")
+devtools::install_github("ropensci/rb3")
+```
+
+## Basic Usage
+
+### Downloading Data
+
+Execute the following code to download all data you need to start
+working with `rb3`:
+
+``` r
+
+# Set the rb3.cachedir folder - it must be executed before loading rb3 package
+options(rb3.cachedir = "/path/to/your/custom/folder")
+
+library(rb3)
+library(bizdays)
+
+# download COTAHIST data from 2000 to 2025
+fetch_marketdata("b3-cotahist-yearly", year = 2000:2025)
+# download futures settlement prices from 2000 to 2025
+fetch_marketdata("b3-futures-settlement-prices", refdate = bizseq("2000-01-01", Sys.Date(), "Brazil/B3"))
+# download yield curves from 2018 to 2025
+fetch_marketdata("b3-reference-rates",
+  refdate = bizseq("2018-01-01", Sys.Date(), "Brazil/B3"),
+  curve_name = c("DIC", "DOC", "PRE")
+)
+# download indexes composition data - it is necessary to execute `indexes_get()`
+fetch_marketdata("b3-indexes-composition")
+# download current portfolio for all indexes
+fetch_marketdata("b3-indexes-current-portfolio", index = indexes_get(), throttle = TRUE)
+# download theoretical portfolio for all indexes
+fetch_marketdata("b3-indexes-theoretical-portfolio", index = indexes_get(), throttle = TRUE)
+# download historical data for all indexes
+fetch_marketdata("b3-indexes-historical-data", index = indexes_get(), year = 2000:2025, throttle = TRUE)
+```
+
+### Market Data Templates
+
+The `rb3` package uses a template system to standardize the downloading
+and processing of different data types. To see available templates:
+
+``` r
+
+library(tidyverse)
+library(bizdays)
+library(rb3)
+
+# List available templates
+list_templates()
+#> # A tibble: 9 × 2
+#>   Template                         Description                                  
+#>   <chr>                            <chr>                                        
+#> 1 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086      
+#> 2 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Arq…
+#> 3 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Arq…
+#> 4 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futur…
+#> 5 b3-indexes-composition           Composição dos índices da B3                 
+#> 6 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3 …
+#> 7 b3-indexes-historical-data       Dados históricos e estatísticas dos índices …
+#> 8 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com pesos…
+#> 9 b3-reference-rates               Taxas referenciais
+```
+
+### Downloading Market Data
+
+The main function for fetching data is
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md),
+which downloads data based on a template and parameters:
+
+``` r
+
+# Download yield curve data for specific dates
+fetch_marketdata("b3-reference-rates",
+  refdate = as.Date("2024-01-31"),
+  curve_name = "PRE"
+)
+
+# Download futures settlement prices
+fetch_marketdata("b3-futures-settlement-prices",
+  refdate = as.Date("2024-01-31")
+)
+
+# Download yearly COTAHIST files
+fetch_marketdata("b3-cotahist-yearly", year = 2023)
+```
+
+### Working with Historical Equity Data
+
+``` r
+
+# Access the data
+ch <- cotahist_get("yearly")
+
+# Filter for stocks
+eq <- ch |>
+  filter(year(refdate) == 2023) |>
+  cotahist_filter_equity() |>
+  collect()
+```
+
+``` r
+
+# Get top 10 most traded stocks
+symbols <- eq |>
+  group_by(symbol) |>
+  summarise(volume = sum(volume)) |>
+  arrange(desc(volume)) |>
+  head(10) |>
+  pull(symbol)
+
+# show top 10 most traded stocks
+symbols
+#>  [1] "VALE3" "PETR4" "ITUB4" "BBDC4" "BBAS3" "B3SA3" "PRIO3" "PETR3" "RENT3"
+#> [10] "MGLU3"
+```
+
+``` r
+
+# Plot the most traded stocks grouped by month
+eq |>
+  filter(symbol %in% symbols) |>
+  mutate(refdate = floor_date(refdate, "month")) |>
+  group_by(refdate, symbol) |>
+  summarise(volume = sum(volume)) |>
+  # Plot
+  ggplot(aes(x = refdate, y = volume, color = symbol)) +
+  geom_line() +
+  labs(
+    title = "Top 10 Most Traded Stocks in 2023",
+    x = "Date",
+    y = "Volume"
+  ) +
+  scale_y_continuous(labels = scales::comma)
+#> `summarise()` has grouped output by 'refdate'. You can override using the
+#> `.groups` argument.
+```
+
+![](reference/figures/README-plot-cotahist-1.png)
+
+### Yield Curve Analysis
+
+``` r
+
+# Get Brazilian nominal yield curve (PRE)
+yc_data <- yc_brl_get() |>
+  filter(refdate == "2024-01-31") |>
+  collect()
+```
+
+``` r
+
+# Plot the yield curve
+ggplot(yc_data, aes(x = forward_date, y = r_252)) +
+  geom_line() +
+  labs(
+    title = "Brazilian Yield Curve (PRE)",
+    x = "Forward Date",
+    y = "Annual Interest Rate"
+  ) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+![](reference/figures/README-plot-yc-1.png)
+
+### Futures Contracts
+
+``` r
+
+# Get futures settlement prices
+futures_data <- futures_get() |>
+  filter(commodity == "DI1") |>
+  collect()
+```
+
+``` r
+
+# Calculate implied rates
+di1_futures <- futures_data |>
+  mutate(
+    maturity_date = maturitycode2date(maturity_code),
+    business_days = bizdays(refdate, maturity_date, "Brazil/ANBIMA"),
+    implied_rate = (100000 / price)^(252 / business_days) - 1
+  )
+
+# Plot the implied rates
+ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Implied Rates for DI1 Futures",
+    x = "Maturity Date",
+    y = "Implied Rate"
+  ) +
+  scale_y_continuous(labels = scales::percent)
+```
+
+![](reference/figures/README-plot-futures-1.png)
+
+## Documentation
+
+For comprehensive documentation and examples, visit:
+
+- [Package Website](https://ropensci.github.io/rb3/)
+- Vignettes (in-depth tutorials):
+  - [Getting
+    Started](https://ropensci.github.io/rb3/articles/Getting-started.html)
+  - [Fetching Historical Equity
+    Data](https://ropensci.github.io/rb3/articles/Fetching-historical-equity-data.html)
+  - [Analyzing B3 Index
+    Data](https://ropensci.github.io/rb3/articles/Fetching-historical-index-data.html)
+  - [How to Compute Historical Rates from B3 Future
+    Prices](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html)
+  - [Fetching B3 Yield
+    Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html)
+
+## Citation
+
+If you use `rb3` in your research, please cite it:
+
+``` R
+To cite rb3 in publications use:
+
+  Download and parse public files released by B3 and convert them into
+  useful formats and data structures common to data analysis
+  practitioners.
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{rb3-package,
+    title = {Download and Parse Public Data Released by B3 Exchange},
+    author = {Wilson Freitas and Marcelo Perlin},
+    year = {2023},
+    note = {R package version 0.0.8},
+    url = {https://github.com/ropensci/rb3},
+  }
+```
+
+# Package index
+
+## rb3 Package
+
+Package overview and core functionality
+
+- [`rb3`](https://ropensci.github.io/rb3/reference/rb3-package.md)
+  [`rb3-package`](https://ropensci.github.io/rb3/reference/rb3-package.md)
+  : Access and Process B3 Data
+
+- [`rb3_bootstrap()`](https://ropensci.github.io/rb3/reference/rb3_bootstrap.md)
+  : Initialize the rb3 package cache folders
+
+- [`rb3.cachedir`](https://ropensci.github.io/rb3/reference/rb3.cachedir.md)
+  :
+
+  `rb3.cachedir` Option
+
+- [`meta_db_connection()`](https://ropensci.github.io/rb3/reference/meta_db_connection.md)
+  : Returns a SQLite Database Connection for the RB3 Package Metadata
+
+## Marketdata Access
+
+Functions for downloading and reading market data from B3
+
+- [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+  : Fetch and process market data
+- [`download_marketdata()`](https://ropensci.github.io/rb3/reference/download_marketdata.md)
+  : Download Raw Market Data Files from B3
+- [`read_marketdata()`](https://ropensci.github.io/rb3/reference/read_marketdata.md)
+  : Read and parse raw market data files downloaded from the B3 website.
+- [`list_templates()`](https://ropensci.github.io/rb3/reference/list_templates.md)
+  : List Available Templates
+- [`template_retrieve()`](https://ropensci.github.io/rb3/reference/template_retrieve.md)
+  : Retrieve a template by its name
+- [`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
+  : Access a Dataset for a Template
+- [`template_meta_load()`](https://ropensci.github.io/rb3/reference/template_meta_create_or_load.md)
+  [`template_meta_new()`](https://ropensci.github.io/rb3/reference/template_meta_create_or_load.md)
+  [`template_meta_create_or_load()`](https://ropensci.github.io/rb3/reference/template_meta_create_or_load.md)
+  : Create or Load Template Metadata
+
+## Equity Data (COTAHIST files)
+
+Functions to access and filter equity historical data (COTAHIST files)
+
+- [`cotahist_filter_equity()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_etf()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_bdr()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_unit()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_fii()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_fidc()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_fiagro()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_index()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_equity_options()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_index_options()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_etf_options()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  [`cotahist_filter_fund_options()`](https://ropensci.github.io/rb3/reference/cotahist-extracts.md)
+  : Filtering data from COTAHIST datasets
+- [`cotahist_get()`](https://ropensci.github.io/rb3/reference/cotahist_get.md)
+  : Access COTAHIST datasets
+- [`cotahist_options_by_symbols_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_brl_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_usd_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_ipca_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  : Enhanced Dataset Creation
+
+## B3 Indexes Data
+
+Functions to access and filter B3 indexes composition, weights and
+historical data
+
+- [`indexes_current_portfolio_get()`](https://ropensci.github.io/rb3/reference/indexes-portfolio.md)
+  [`indexes_theoretical_portfolio_get()`](https://ropensci.github.io/rb3/reference/indexes-portfolio.md)
+  : Retrieve Portfolio of B3 Indexes
+- [`indexes_composition_get()`](https://ropensci.github.io/rb3/reference/indexes_composition_get.md)
+  : Retrieve Composition of B3 Indexes
+- [`indexes_get()`](https://ropensci.github.io/rb3/reference/indexes_get.md)
+  : Get B3 indexes available
+- [`indexes_historical_data_get()`](https://ropensci.github.io/rb3/reference/indexes_historical_data_get.md)
+  : Get historical data from B3 indexes
+
+## Yield Curves Data
+
+Functions to access yield curve data
+
+- [`cotahist_options_by_symbols_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_brl_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_usd_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_ipca_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  : Enhanced Dataset Creation
+- [`yc_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+  [`yc_brl_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+  [`yc_ipca_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+  [`yc_usd_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+  : Retrieve Yield Curve Data
+
+## Futures Data
+
+Functions for accessing and working with futures data
+
+- [`futures_get()`](https://ropensci.github.io/rb3/reference/futures_get.md)
+  : Retrieves B3 Futures Settlement Prices
+
+## Utilities
+
+Helper functions for working with rb3 data
+
+- [`cotahist_options_by_symbols_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_brl_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_usd_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  [`yc_ipca_with_futures_get()`](https://ropensci.github.io/rb3/reference/superdataset.md)
+  : Enhanced Dataset Creation
+- [`maturitycode2date()`](https://ropensci.github.io/rb3/reference/maturitycode2date.md)
+  : Convert Maturity Code to Date
+- [`code2month()`](https://ropensci.github.io/rb3/reference/code2month.md)
+  : Convert Maturity Code to Corresponding Month
+
+# Articles
+
+### All vignettes
+
+- [Fetching Historical Equity
+  Data](https://ropensci.github.io/rb3/articles/Fetching-historical-equity-data.md):
+- [How to Compute Historical Rates from B3 Future
+  Prices](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.md):
+- [Analyzing B3 Index
+  Data](https://ropensci.github.io/rb3/articles/Fetching-historical-index-data.md):
+- [Fetching B3 Yield
+  Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.md):
+- [Getting
+  Started](https://ropensci.github.io/rb3/articles/Getting-started.md):
