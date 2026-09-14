@@ -45,7 +45,7 @@ Suggests:
     tibble,
     withr,
     tidyr,
-    vcr (>= 0.6.0)
+    vcr (>= 2.0.0)
 Collate:
     'types.R'
     'fields.R'
