@@ -128,6 +128,10 @@ rb3_bootstrap <- function() {
   }
 
   .reg <- rb3_registry$get_instance()
+  # drop the cached connection: it may point to the previous cache folder (#103)
+  if ("sqlite_db_connection" %in% names(.reg) && DBI::dbIsValid(.reg$sqlite_db_connection)) {
+    DBI::dbDisconnect(.reg$sqlite_db_connection)
+  }
   .reg[["rb3_folder"]] <- cache_folder
   .reg[["raw_folder"]] <- raw_folder
   .reg[["db_folder"]] <- db_folder
