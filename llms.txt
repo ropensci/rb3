@@ -290,6 +290,9 @@ Package overview and core functionality
 - [`meta_db_connection()`](https://ropensci.github.io/rb3/reference/meta_db_connection.md)
   : Returns a SQLite Database Connection for the RB3 Package Metadata
 
+- [`rb3_clear_cache()`](https://ropensci.github.io/rb3/reference/rb3_clear_cache.md)
+  : Clear the rb3 Cache
+
 ## Marketdata Access
 
 Functions for downloading and reading market data from B3
