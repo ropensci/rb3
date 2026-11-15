@@ -31,6 +31,10 @@ indexes_get <- function() {
 #' This function fetches the composition of B3 indexes.
 #' It uses the template dataset "b3-indexes-composition" to retrieve the data.
 #'
+#' @section Data availability:
+#' B3 publishes only the current composition. Each `fetch_marketdata()` call stores a snapshot with
+#' `refdate` equal to the day it was fetched, so history only builds up if you fetch it regularly.
+#'
 #' @return A data frame containing the columns:
 #'   \describe{
 #'     \item{update_date}{The date when the data was last updated.}
@@ -89,6 +93,11 @@ process_indexes_current_portfolio <- function(ds) {
 #' These functions fetch the current and theoretical portfolio of B3 indexes using predefined
 #' dataset templates.
 #' The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theoretical-portfolio".
+#'
+#' @section Data availability:
+#' B3 publishes only the current portfolio and the theoretical portfolio of the next period. Each
+#' `fetch_marketdata()` call stores a snapshot with `refdate` equal to the day it was fetched, so
+#' history only builds up if you fetch them every day.
 #'
 #' @return
 #' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
@@ -149,6 +158,11 @@ process_index_historical_data <- function(ds) {
 #' Get historical data from B3 indexes
 #'
 #' Fetches historical data from B3 indexes.
+#'
+#' @section Data availability:
+#' One file per index and year, from the first year of each index (IBOV since 1968). The file of the
+#' current year is updated by B3 every day, but rb3 downloads it only once: use
+#' `fetch_marketdata(..., force_download = TRUE)` to update it.
 #'
 #' @return
 #' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not

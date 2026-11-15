@@ -23,6 +23,12 @@ To trigger evaluation and return the results as an R \code{tibble}, use \code{co
 This function fetches the composition of B3 indexes.
 It uses the template dataset "b3-indexes-composition" to retrieve the data.
 }
+\section{Data availability}{
+
+B3 publishes only the current composition. Each \code{fetch_marketdata()} call stores a snapshot with
+\code{refdate} equal to the day it was fetched, so history only builds up if you fetch it regularly.
+}
+
 \examples{
 \dontrun{
   indexes_composition <- indexes_composition_get()

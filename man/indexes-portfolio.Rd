@@ -21,6 +21,13 @@ These functions fetch the current and theoretical portfolio of B3 indexes using 
 dataset templates.
 The data is retrieved from the datasets "b3-indexes-current-portfolio" and "b3-indexes-theoretical-portfolio".
 }
+\section{Data availability}{
+
+B3 publishes only the current portfolio and the theoretical portfolio of the next period. Each
+\code{fetch_marketdata()} call stores a snapshot with \code{refdate} equal to the day it was fetched, so
+history only builds up if you fetch them every day.
+}
+
 \examples{
 \dontrun{
 template_dataset("b3-indexes-current-portfolio", layer = 2) |>
