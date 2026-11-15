@@ -8,7 +8,9 @@
   fetching again. `yc_brl_get()` now returns `NA` for `r_360`.
 * `b3-futures-settlement-prices` now reads the "Consolidated trades of the session" table of the
   Daily Market Bulletin (<https://arquivos.b3.com.br/bdi/>) because the "Ajustes do pregão" page was
-  discontinued (#125). The bulletin keeps only about the last 21 sessions.
+  discontinued (#125). The bulletin keeps only about the last 21 sessions. Raw files of the old
+  "Ajustes do pregão" HTML page already in the cache are still read, so `reprocess = TRUE` keeps the
+  history back to 2000.
 * New template `b3-bdi-derivatives-trades`: the same Daily Market Bulletin table used by
   `b3-futures-settlement-prices`, with every column (open, high, low, close, average and settlement prices,
   number of trades, contracts, financial volume, best bid/ask, ...) and every instrument, options included.
