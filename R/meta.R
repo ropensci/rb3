@@ -129,12 +129,14 @@ meta_dest_file <- function(meta, checksum, ext = "gz") {
 
 # Raw files are named by content md5, so several metas can share one file:
 # delete it only when no other meta points to it.
+# Match the file name only: `downloaded` is stored with dput(), which doubles the
+# backslashes of Windows paths.
 meta_unlink_raw <- function(file, checksum) {
   con <- meta_db_connection()
   others <- DBI::dbGetQuery(
     con,
     "SELECT COUNT(*) AS n FROM meta WHERE download_checksum != ? AND instr(downloaded, ?) > 0",
-    params = list(checksum, file)
+    params = list(checksum, basename(file))
   )$n
   if (others == 0) unlink(file)
   invisible(others == 0)

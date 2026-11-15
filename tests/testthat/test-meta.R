@@ -180,3 +180,21 @@ test_that("meta_clean keeps a raw file still used by another meta", {
   meta_clean(meta2)
   expect_false(file.exists(shared))
 })
+
+test_that("meta_clean keeps a shared raw file whose path has backslashes", {
+  skip_on_os("windows") # on Windows tempdir() already has backslashes, covered by the test above
+  dir <- file.path(tempdir(), "Temp\\Rtmp") # a folder name with backslashes, as in Windows paths
+  dir.create(dir, showWarnings = FALSE)
+  shared <- file.path(dir, "shared.gz")
+  writeLines("x", shared)
+  meta1 <- meta_new("template-test", var1 = "backslash-1")
+  meta2 <- meta_new("template-test", var1 = "backslash-2")
+  meta_add_download(meta1) <- shared
+  meta_add_download(meta2) <- shared
+
+  meta_clean(meta1)
+  expect_true(file.exists(shared))
+
+  meta_clean(meta2)
+  expect_false(file.exists(shared))
+})
