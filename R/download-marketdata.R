@@ -121,7 +121,7 @@ finalize_download <- function(filename, dest_fname, meta, ext) {
   downloaded <- R.utils::compressFile(filename, dest_fname, ext, gzfile, overwrite = TRUE)
   if (length(meta[["downloaded"]]) > 0) {
     x <- meta$downloaded[[1]]
-    unlink(x)
+    if (x != downloaded) meta_unlink_raw(x, meta$download_checksum)
     meta_add_download(meta) <- NULL
     cli::cli_alert_info("Replacing file {.file {x}} with {.file {downloaded}}")
   }
