@@ -23,3 +23,28 @@ test_that("settlement_prices_read keeps only instruments with a settlement price
   expect_equal(df$settlement_value[1], -0.27)
   expect_equal(df$refdate, rep(as.Date("2026-09-11"), 2))
 })
+
+test_that("bdi_derivatives_read keeps every row and column of the BDI export", {
+  tpl <- template_retrieve("b3-bdi-derivatives-trades")
+  df <- bdi_derivatives_read(tpl, test_path("testdata", "bdm-derivatives-sample.csv"),
+    refdate = as.Date("2026-09-11")
+  )
+  expect_equal(nrow(df), 3)
+  expect_equal(names(df), tpl$colnames)
+  expect_equal(df$symbol, c("BGIU26C032400", "DI1F27", "DI1F28"))
+  expect_equal(df$reference_price[1], 34.32)
+  expect_true(is.na(df$adjusted_quote[1]))
+  di1 <- df[2, ]
+  expect_equal(di1$isin, "BRBMEFD1I4Z0")
+  expect_equal(di1$segment, "FINANCIAL")
+  expect_equal(di1$open, 13.58)
+  expect_equal(di1$close, 13.585)
+  expect_equal(di1$adjusted_quote, 96230.69)
+  expect_equal(di1$adjusted_tax, 13.587)
+  expect_equal(di1$previous_adjusted_quote, 96230.96)
+  expect_equal(di1$transactions_quantity, 3666)
+  expect_equal(di1$traded_contracts, 380324)
+  expect_equal(di1$volume, 36599672680)
+  expect_equal(df$volume[3], 51191776839.8)
+  expect_equal(df$refdate, rep(as.Date("2026-09-11"), 3))
+})

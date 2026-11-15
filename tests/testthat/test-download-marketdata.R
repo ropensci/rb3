@@ -146,6 +146,16 @@ test_that("it should download and read b3-futures-settlement-prices", {
   expect_s3_class(meta, "meta")
 })
 
+test_that("it should download and read b3-bdi-derivatives-trades", {
+  meta <- template_meta_create_or_load("b3-bdi-derivatives-trades", refdate = bizdays::offset(Sys.Date(), -10, "Brazil/ANBIMA"))
+  meta <- download_marketdata(meta)
+  meta <- read_marketdata(meta)
+
+  expect_true(meta$is_downloaded)
+  expect_true(meta$is_valid)
+  expect_true(file.exists(meta$downloaded[[1]]))
+})
+
 test_that("it should download and read b3-cotahist-daily", {
   meta <- template_meta_create_or_load("b3-cotahist-daily", refdate = as.Date("2018-01-02"))
   meta <- download_marketdata(meta)

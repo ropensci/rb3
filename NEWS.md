@@ -9,6 +9,11 @@
 * `b3-futures-settlement-prices` now reads the "Consolidated trades of the session" table of the
   Daily Market Bulletin (<https://arquivos.b3.com.br/bdi/>) because the "Ajustes do pregão" page was
   discontinued (#125). The bulletin keeps only about the last 21 sessions.
+* New template `b3-bdi-derivatives-trades`: the same Daily Market Bulletin table used by
+  `b3-futures-settlement-prices`, with every column (open, high, low, close, average and settlement prices,
+  number of trades, contracts, financial volume, best bid/ask, ...) and every instrument, options included.
+  Like its source, it covers only about the last 21 sessions; use `b3-bvbg-086` for older dates.
+  `b3-futures-settlement-prices` is unchanged.
 * Zip archives are detected by content, so nested self-extracting archives such as B3's `.ex_` files are unpacked;
   an empty archive is now reported as a failed download instead of stopping `fetch_marketdata()`.
 
