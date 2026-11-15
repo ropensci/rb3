@@ -41,10 +41,16 @@ Each template corresponds to a specific dataset or file type available from B3.
 For example:
 
 - `"b3-cotahist-yearly"`: Downloads and reads COTAHIST file that are available by year.
-- `"b3-futures-settlement-prices"`: Downloads and reads settlement prices web page.
+- `"b3-futures-settlement-prices"`: Downloads and reads futures settlement prices from the Daily Market Bulletin.
+  Only the **last 21 sessions** are available.
 - `"b3-bdi-derivatives-trades"`: Downloads and reads all trades data of derivatives from the Daily Market Bulletin.
-- `"b3-reference-rates"`: Downloads and reades the web page of reference interest rates.
+  Only the **last 21 sessions** are available.
+- `"b3-reference-rates"`: Downloads and reads the swap rates file (`TS<yymmdd>.ex_`) with every reference
+  interest rate curve. Available since **2000-01-14**.
 - `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading instruments information.
+
+Some B3 sources keep only recent data. Data that is no longer available can't be downloaded again,
+so fetch these templates regularly to keep a complete history in your cache.
 
 ```{r list-templates, eval=TRUE}
 # List available templates

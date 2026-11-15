@@ -73,6 +73,10 @@ providing insight into the term structure of interest rates.
 
 Each function requires a specific reference date to prevent excessive memory usage and
 ensure optimal performance.
+
+The futures data comes from \code{b3-futures-settlement-prices}, whose source keeps only the last
+21 sessions (see \code{\link[=futures_get]{futures_get()}}). For dates without settlement prices in the cache, \code{symbol} is
+\code{NA} in every row.
 }
 \examples{
 \dontrun{
