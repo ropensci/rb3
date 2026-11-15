@@ -167,3 +167,41 @@ meta_db_connection <- function() {
     con
   }
 }
+
+#' Clear the rb3 Cache
+#'
+#' Deletes every downloaded file (`raw` folder), every dataset (`db` folder)
+#' and every row of the metadata table in the cache folder set by
+#' [rb3.cachedir]. The folders and the empty metadata table are kept, so the
+#' package can be used right away without calling [rb3_bootstrap()].
+#'
+#' This cannot be undone.
+#'
+#' @param ask If `TRUE` (the default in interactive sessions), asks for
+#'   confirmation before deleting anything.
+#'
+#' @return Invisibly, `TRUE` if the cache was cleared, `FALSE` if the user
+#'   cancelled.
+#'
+#' @examples
+#' \dontrun{
+#' rb3_clear_cache()
+#' }
+#'
+#' @export
+rb3_clear_cache <- function(ask = interactive()) {
+  reg <- rb3_registry$get_instance()
+  if (ask && !isTRUE(utils::askYesNo(
+    paste0("Delete all downloaded files, datasets and metadata in ", reg$rb3_folder, "?"),
+    default = FALSE
+  ))) {
+    cli::cli_alert_info("Cache not cleared")
+    return(invisible(FALSE))
+  }
+  for (folder in c(reg$raw_folder, reg$db_folder)) {
+    unlink(list.files(folder, full.names = TRUE, all.files = TRUE, no.. = TRUE), recursive = TRUE)
+  }
+  DBI::dbExecute(meta_db_connection(), "DELETE FROM meta")
+  cli::cli_alert_success("rb3 cache cleared: {.file {reg$rb3_folder}}")
+  invisible(TRUE)
+}
