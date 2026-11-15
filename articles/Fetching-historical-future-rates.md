@@ -37,7 +37,7 @@ over a two-year period (2021-2022).
 
 First, we generate a sequence of dates representing first Mondays from
 January 2021 through December 2022. We then adjust these dates using the
-[`following()`](https://rdrr.io/pkg/bizdays/man/adjust.date.html)
+[`following()`](http://wilsonfreitas.github.io/R-bizdays/reference/adjust.date.md)
 function from the `bizdays` package to ensure we only get valid trading
 days on the B3 calendar. We use “first mon” to select Mondays and a
 7-day interval for weekly samples. This provides regular sampling points

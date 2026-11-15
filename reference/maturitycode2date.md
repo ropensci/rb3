@@ -19,8 +19,8 @@ maturitycode2date(x, expr = "first day", refdate = NULL)
 
   a string which indicates the day to use in maturity date, default is
   "first day". See
-  [`bizdays::getdate`](https://rdrr.io/pkg/bizdays/man/getdate.html) for
-  more details on this argument
+  [`bizdays::getdate`](http://wilsonfreitas.github.io/R-bizdays/reference/getdate.md)
+  for more details on this argument
 
 - refdate:
 

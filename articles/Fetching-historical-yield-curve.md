@@ -49,10 +49,10 @@ these two main steps:
 
 We begin by selecting the first business day of each year between 2021
 and 2025 using the
-[`getdate()`](https://rdrr.io/pkg/bizdays/man/getdate.html) function.
-This provides a set of consistent reference points, free from seasonal
-distortions or holiday effects, which are ideal for comparing yield
-curves over time.
+[`getdate()`](http://wilsonfreitas.github.io/R-bizdays/reference/getdate.md)
+function. This provides a set of consistent reference points, free from
+seasonal distortions or holiday effects, which are ideal for comparing
+yield curves over time.
 
 ### 2. Fetching and Storing Market Data
 
