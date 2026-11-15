@@ -66,6 +66,10 @@ bdi_derivatives_read <- function(., filename, ...) {
 }
 
 settlement_prices_read <- function(., filename, ...) {
+  # raw files downloaded before #125 are the old "Ajustes do pregão" HTML page
+  if (startsWith(trimws(readr::read_file(filename)), "<")) {
+    return(settlement_prices_html_read(filename, ...))
+  }
   df <- bdi_derivatives_read(., filename, ...)
   if (is.null(df)) {
     return(NULL)
@@ -81,6 +85,46 @@ settlement_prices_read <- function(., filename, ...) {
     settlement_value = df$adjusted_value_contract,
     refdate = df$refdate
   )
+}
+
+# Old www2.bmf.com.br "Ajustes do pregão" page (discontinued, #125): kept to read cached raw files
+settlement_prices_html_read <- function(filename, ...) {
+  args <- list(...)
+  doc <- XML::htmlTreeParse(filename, encoding = "UTF8", useInternalNodes = TRUE)
+  table <- XML::getNodeSet(doc, "//table[contains(@id, 'tblDadosAjustes')]")
+  if (length(table) != 1) {
+    return(NULL)
+  }
+  vals <- sapply(table[[1]][["tbody"]]["tr"], \(x) sapply(x["td"], XML::xmlValue))
+  dm <- matrix(vals, nrow = ncol(vals), byrow = TRUE)
+  refdate_ns <- XML::getNodeSet(doc, "//p[contains(@class, 'small-text-left legenda')]")
+  refdate <- if (length(refdate_ns) > 0) {
+    as.Date(str_match(XML::xmlValue(refdate_ns[[1]]), "\\d{2}/\\d{2}/\\d{4}")[1, 1], "%d/%m/%Y")
+  } else {
+    as.Date(args$refdate)
+  }
+  chr <- function(x) readr::parse_character(x, na = c("", "NA"))
+  num <- function(x) readr::parse_number(x, locale = readr::locale(decimal_mark = ",", grouping_mark = "."))
+  dplyr::tibble(
+    commodity = flatten_names(chr(dm[, 1])),
+    maturity_code = chr(dm[, 2]),
+    previous_price = num(dm[, 3]),
+    price = num(dm[, 4]),
+    price_change = num(dm[, 5]),
+    settlement_value = num(dm[, 6]),
+    refdate = refdate
+  )
+}
+
+# commodity is only filled on the first row of each group: carry it down and keep the code
+flatten_names <- function(nx) {
+  for (ix in seq_along(nx)) {
+    if (!is.na(nx[ix])) {
+      last_name <- nx[ix]
+    }
+    nx[ix] <- last_name
+  }
+  as.vector(str_match(nx, "^(\\w+)")[, 2])
 }
 
 # B3 file "Mercado de Derivativos - Taxas de Mercado para Swaps" (TaxaSwap.txt, fixed width)
