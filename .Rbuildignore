@@ -29,3 +29,5 @@ vignettes/*.R
 Makefile
 ^CLAUDE\.md$
 ^\.claude$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
