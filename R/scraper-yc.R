@@ -41,7 +41,7 @@ process_yc <- function(ds) {
 #' <https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/>.
 #' It replaced the former "Taxas Referenciais" page, discontinued by B3, and holds every curve
 #' (around 120) for the reference date, so `fetch_marketdata("b3-reference-rates", refdate = ...)`
-#' needs no `curve_name` argument.
+#' needs no `curve_name` argument. Files are available for every session since 2000-01-14.
 #' See the Curve Manual in this link
 #' <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
@@ -175,6 +175,10 @@ yc_usd_get <- function() {
 #'
 #' Each function requires a specific reference date to prevent excessive memory usage and
 #' ensure optimal performance.
+#'
+#' The futures data comes from `b3-futures-settlement-prices`, whose source keeps only the last
+#' 21 sessions (see [futures_get()]). For dates without settlement prices in the cache, `symbol` is
+#' `NA` in every row.
 #'
 #' @param refdate A Date object specifying the reference date for which to retrieve data
 #'

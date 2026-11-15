@@ -38,6 +38,16 @@ Before using the dataset, it is necessary to download the files
 using the \code{\link{download_marketdata}} function and create the datasets
 with the \code{\link{read_marketdata}} function.
 }
+\section{Data availability}{
+
+\itemize{
+\item \code{b3-cotahist-yearly}: one file per year since 1986. The file of the current year is updated by B3
+every day, but rb3 downloads it only once: use \code{fetch_marketdata(..., force_download = TRUE)} to
+update it.
+\item \code{b3-cotahist-daily}: one file per session since 2014-01-02.
+}
+}
+
 \examples{
 \dontrun{
 # get all data to the year of 2001

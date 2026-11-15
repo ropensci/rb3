@@ -32,9 +32,14 @@ The futures contract settlement prices are published daily by B3.
 These settlement prices represent the official daily closing values used for marking
 positions to market and calculating margin requirements.
 
-The data is publicly available on the B3 website through their
-[Trading session settlements][settlement_prices] page.
-This page provides one of the longest available historical records of futures contract prices.
+The data is publicly available on the B3 website.
+The template reads it from the Daily Market Bulletin, which keeps only the **last 21 sessions**:
+older sessions can't be downloaded again from this source.
+Settlement prices already in your cache are kept, including files of the former
+[Trading session settlements][settlement_prices] page (back to 2000), discontinued by B3.
+For older dates, the `b3-bvbg-086` template has the settlement prices of every session.
+
+The example below uses 2021-2022 data downloaded before the former page was discontinued.
 We'll use this historical pricing data to analyze trends, term structures,
 and other patterns in Brazilian futures markets.
 
