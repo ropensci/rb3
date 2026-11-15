@@ -80,10 +80,17 @@ and analyze this data using the <code>rb3</code> package.</p>
 <p>The futures contract settlement prices are published daily by B3.
 These settlement prices represent the official daily closing values used
 for marking positions to market and calculating margin requirements.</p>
-<p>The data is publicly available on the B3 website through their <a href="https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/" title="Trading session settlements" class="external-link">Trading session settlements</a>
-page. This page provides one of the longest available historical records
-of futures contract prices. We’ll use this historical pricing data to
-analyze trends, term structures, and other patterns in Brazilian futures
+<p>The data is publicly available on the B3 website. The template reads
+it from the Daily Market Bulletin, which keeps only the <strong>last 21
+sessions</strong>: older sessions can’t be downloaded again from this
+source. Settlement prices already in your cache are kept, including
+files of the former <a href="https://www.b3.com.br/en_us/market-data-and-indices/data-services/market-data/historical-data/derivatives/trading-session-settlements/" title="Trading session settlements" class="external-link">Trading session settlements</a> page
+(back to 2000), discontinued by B3. For older dates, the
+<code>b3-bvbg-086</code> template has the settlement prices of every
+session.</p>
+<p>The example below uses 2021-2022 data downloaded before the former
+page was discontinued. We’ll use this historical pricing data to analyze
+trends, term structures, and other patterns in Brazilian futures
 markets.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rb3" class="external-link">rb3</a></span><span class="op">)</span> <span class="co"># B3 data access</span></span>

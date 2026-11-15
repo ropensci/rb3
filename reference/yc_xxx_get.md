@@ -60,7 +60,8 @@ de Mercado para Swaps" (`TS<yymmdd>.ex_`) published daily on B3's
 It replaced the former "Taxas Referenciais" page, discontinued by B3,
 and holds every curve (around 120) for the reference date, so
 `fetch_marketdata("b3-reference-rates", refdate = ...)` needs no
-`curve_name` argument. See the Curve Manual in this link
+`curve_name` argument. Files are available for every session since
+2000-01-14. See the Curve Manual in this link
 <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 for more details.
 

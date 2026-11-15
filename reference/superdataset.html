@@ -121,6 +121,9 @@ The resulting data highlights key vertices along the curve with their correspond
 providing insight into the term structure of interest rates.</p>
 <p>Each function requires a specific reference date to prevent excessive memory usage and
 ensure optimal performance.</p>
+<p>The futures data comes from <code>b3-futures-settlement-prices</code>, whose source keeps only the last
+21 sessions (see <code><a href="futures_get.html">futures_get()</a></code>). For dates without settlement prices in the cache, <code>symbol</code> is
+<code>NA</code> in every row.</p>
     </div>
 
     <div class="section level2">

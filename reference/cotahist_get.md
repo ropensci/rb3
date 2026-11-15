@@ -50,6 +50,14 @@ function and create the datasets with the
 [`read_marketdata`](https://ropensci.github.io/rb3/reference/read_marketdata.md)
 function.
 
+## Data availability
+
+- `b3-cotahist-yearly`: one file per year since 1986. The file of the
+  current year is updated by B3 every day, but rb3 downloads it only
+  once: use `fetch_marketdata(..., force_download = TRUE)` to update it.
+
+- `b3-cotahist-daily`: one file per session since 2014-01-02.
+
 ## Examples
 
 ``` r

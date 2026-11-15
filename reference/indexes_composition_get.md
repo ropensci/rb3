@@ -31,6 +31,13 @@ allowing efficient manipulation of large datasets without immediate
 memory usage. To trigger evaluation and return the results as an R
 `tibble`, use `collect()`.
 
+## Data availability
+
+B3 publishes only the current composition. Each
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+call stores a snapshot with `refdate` equal to the day it was fetched,
+so history only builds up if you fetch it regularly.
+
 ## Examples
 
 ``` r

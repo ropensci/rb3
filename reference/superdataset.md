@@ -94,6 +94,12 @@ term structure of interest rates.
 Each function requires a specific reference date to prevent excessive
 memory usage and ensure optimal performance.
 
+The futures data comes from `b3-futures-settlement-prices`, whose source
+keeps only the last 21 sessions (see
+[`futures_get()`](https://ropensci.github.io/rb3/reference/futures_get.md)).
+For dates without settlement prices in the cache, `symbol` is `NA` in
+every row.
+
 ## Examples
 
 ``` r

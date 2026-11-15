@@ -67,6 +67,13 @@ collected until explicitly requested, allowing efficient manipulation of large d
 memory usage.
 To trigger evaluation and return the results as an R <code>tibble</code>, use <code>collect()</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="data-availability">Data availability<a class="anchor" aria-label="anchor" href="#data-availability"></a></h2>
+
+
+<p>B3 publishes only the current composition. Each <code><a href="fetch_marketdata.html">fetch_marketdata()</a></code> call stores a snapshot with
+<code>refdate</code> equal to the day it was fetched, so history only builds up if you fetch it regularly.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

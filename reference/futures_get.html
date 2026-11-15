@@ -56,8 +56,12 @@ adding a <code>symbol</code> column that combines <code>commodity</code> and <co
     <div class="section level2">
     <h2 id="source">Source<a class="anchor" aria-label="anchor" href="#source"></a></h2>
     <p><a href="https://arquivos.b3.com.br/bdi/" class="external-link">B3 Daily Market Bulletin</a>, table "Consolidated trades of the
-session" (Derivatives). B3 discontinued the former "Ajustes do pregão" page in December 2025.
-The bulletin keeps roughly the last 21 sessions; use the <code>b3-bvbg-086</code> template for older data.</p>
+session" (Derivatives). B3 discontinued the former "Ajustes do pregão" page in December 2025.</p>
+<p>The bulletin is a rolling window of the <strong>last 21 sessions</strong>: each day the oldest session is
+dropped and can't be downloaded again. To keep a complete history, run
+<code>fetch_marketdata("b3-futures-settlement-prices", ...)</code> at least every 4 weeks.
+Raw files of the former page already in the cache (back to 2000) are still read.
+For older dates, the <code>b3-bvbg-086</code> template has the settlement prices of every session.</p>
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

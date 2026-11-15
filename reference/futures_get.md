@@ -14,9 +14,15 @@ futures_get()
 
 [B3 Daily Market Bulletin](https://arquivos.b3.com.br/bdi/), table
 "Consolidated trades of the session" (Derivatives). B3 discontinued the
-former "Ajustes do pregão" page in December 2025. The bulletin keeps
-roughly the last 21 sessions; use the `b3-bvbg-086` template for older
-data.
+former "Ajustes do pregão" page in December 2025.
+
+The bulletin is a rolling window of the **last 21 sessions**: each day
+the oldest session is dropped and can't be downloaded again. To keep a
+complete history, run
+`fetch_marketdata("b3-futures-settlement-prices", ...)` at least every 4
+weeks. Raw files of the former page already in the cache (back to 2000)
+are still read. For older dates, the `b3-bvbg-086` template has the
+settlement prices of every session.
 
 ## Value
 

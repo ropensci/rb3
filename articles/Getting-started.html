@@ -94,24 +94,96 @@ structured database format.</p>
 </h3>
 <p>Templates are predefined configurations that specify the type of data
 to download and how to process it. Each template corresponds to a
-specific dataset or file type available from B3. For example:</p>
-<ul>
-<li>
-<code>"b3-cotahist-yearly"</code>: Downloads and reads COTAHIST file
-that are available by year.</li>
-<li>
-<code>"b3-futures-settlement-prices"</code>: Downloads and reads
-settlement prices web page.</li>
-<li>
-<code>"b3-bdi-derivatives-trades"</code>: Downloads and reads all
-trades data of derivatives from the Daily Market Bulletin.</li>
-<li>
-<code>"b3-reference-rates"</code>: Downloads and reades the web page
-of reference interest rates.</li>
-<li>
-<code>"b3-bvbg-086"</code>: Downloads and reads the BVBG-086 file
-with trading instruments information.</li>
-</ul>
+specific dataset or file type available from B3. The table below shows
+what each template contains, how far back B3 keeps its data (checked in
+November 2026) and how to keep your cache complete.</p>
+<table class="table">
+<colgroup>
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+</colgroup>
+<thead><tr class="header">
+<th>Template</th>
+<th>Data</th>
+<th>Available</th>
+<th>How to use it</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>b3-cotahist-yearly</code></td>
+<td>Quotes of stocks, options, ETFs, FIIs, BDRs, … (COTAHIST), one file
+per year</td>
+<td>since 1986</td>
+<td>The current year’s file is updated every day: use
+<code>force_download = TRUE</code> to update it</td>
+</tr>
+<tr class="even">
+<td><code>b3-cotahist-daily</code></td>
+<td>Same as above, one file per session</td>
+<td>since 2014-01-02</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>b3-bvbg-086</code></td>
+<td>Market prices of every instrument (BVBG-086), including settlement
+prices, volume and open interest of derivatives</td>
+<td>since 2018-01-02</td>
+<td>Large files (about 11 MB zipped per day)</td>
+</tr>
+<tr class="even">
+<td><code>b3-reference-rates</code></td>
+<td>Reference interest rate curves (swap rates file
+<code>TS&lt;yymmdd&gt;.ex_</code>)</td>
+<td>since 2000-01-14</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>b3-futures-settlement-prices</code></td>
+<td>Futures settlement prices (Daily Market Bulletin)</td>
+<td><strong>last 21 sessions only</strong></td>
+<td>Fetch at least every 4 weeks: older sessions can’t be downloaded
+again. For older dates use <code>b3-bvbg-086</code>
+</td>
+</tr>
+<tr class="even">
+<td><code>b3-bdi-derivatives-trades</code></td>
+<td>Trades of every derivative, all columns (Daily Market Bulletin)</td>
+<td><strong>last 21 sessions only</strong></td>
+<td>Same as above</td>
+</tr>
+<tr class="odd">
+<td><code>b3-indexes-historical-data</code></td>
+<td>Daily values of B3 indexes, one file per index and year</td>
+<td>from the first year of each index (IBOV since 1968)</td>
+<td>The current year’s file is updated every day: use
+<code>force_download = TRUE</code> to update it</td>
+</tr>
+<tr class="even">
+<td><code>b3-indexes-composition</code></td>
+<td>Indexes each stock belongs to</td>
+<td><strong>current only</strong></td>
+<td>Each fetch stores a snapshot dated the day you fetch it; fetch
+regularly to build a history</td>
+</tr>
+<tr class="odd">
+<td><code>b3-indexes-current-portfolio</code></td>
+<td>Current portfolio of each index</td>
+<td><strong>current only</strong></td>
+<td>Same as above</td>
+</tr>
+<tr class="even">
+<td><code>b3-indexes-theoretical-portfolio</code></td>
+<td>Theoretical portfolio of each index for the next period</td>
+<td><strong>current only</strong></td>
+<td>Same as above</td>
+</tr>
+</tbody>
+</table>
+<p>Data that B3 no longer publishes can’t be downloaded again, so fetch
+the templates with limited availability regularly to keep a complete
+history in your cache.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List available templates</span></span>
 <span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span>

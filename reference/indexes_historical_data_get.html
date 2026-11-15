@@ -54,6 +54,14 @@ collected until explicitly requested, allowing efficient manipulation of large d
 memory usage.
 To trigger evaluation and return the results as an R <code>tibble</code>, use <code>collect()</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="data-availability">Data availability<a class="anchor" aria-label="anchor" href="#data-availability"></a></h2>
+
+
+<p>One file per index and year, from the first year of each index (IBOV since 1968). The file of the
+current year is updated by B3 every day, but rb3 downloads it only once: use
+<code>fetch_marketdata(..., force_download = TRUE)</code> to update it.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

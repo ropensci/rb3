@@ -25,18 +25,26 @@ combinations, then processes the data into a structured database format.
 
 Templates are predefined configurations that specify the type of data to
 download and how to process it. Each template corresponds to a specific
-dataset or file type available from B3. For example:
+dataset or file type available from B3. The table below shows what each
+template contains, how far back B3 keeps its data (checked in November
+2026) and how to keep your cache complete.
 
-- `"b3-cotahist-yearly"`: Downloads and reads COTAHIST file that are
-  available by year.
-- `"b3-futures-settlement-prices"`: Downloads and reads settlement
-  prices web page.
-- `"b3-bdi-derivatives-trades"`: Downloads and reads all trades data of
-  derivatives from the Daily Market Bulletin.
-- `"b3-reference-rates"`: Downloads and reades the web page of reference
-  interest rates.
-- `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading
-  instruments information.
+| Template | Data | Available | How to use it |
+|----|----|----|----|
+| `b3-cotahist-yearly` | Quotes of stocks, options, ETFs, FIIs, BDRs, … (COTAHIST), one file per year | since 1986 | The current year’s file is updated every day: use `force_download = TRUE` to update it |
+| `b3-cotahist-daily` | Same as above, one file per session | since 2014-01-02 |  |
+| `b3-bvbg-086` | Market prices of every instrument (BVBG-086), including settlement prices, volume and open interest of derivatives | since 2018-01-02 | Large files (about 11 MB zipped per day) |
+| `b3-reference-rates` | Reference interest rate curves (swap rates file `TS<yymmdd>.ex_`) | since 2000-01-14 |  |
+| `b3-futures-settlement-prices` | Futures settlement prices (Daily Market Bulletin) | **last 21 sessions only** | Fetch at least every 4 weeks: older sessions can’t be downloaded again. For older dates use `b3-bvbg-086` |
+| `b3-bdi-derivatives-trades` | Trades of every derivative, all columns (Daily Market Bulletin) | **last 21 sessions only** | Same as above |
+| `b3-indexes-historical-data` | Daily values of B3 indexes, one file per index and year | from the first year of each index (IBOV since 1968) | The current year’s file is updated every day: use `force_download = TRUE` to update it |
+| `b3-indexes-composition` | Indexes each stock belongs to | **current only** | Each fetch stores a snapshot dated the day you fetch it; fetch regularly to build a history |
+| `b3-indexes-current-portfolio` | Current portfolio of each index | **current only** | Same as above |
+| `b3-indexes-theoretical-portfolio` | Theoretical portfolio of each index for the next period | **current only** | Same as above |
+
+Data that B3 no longer publishes can’t be downloaded again, so fetch the
+templates with limited availability regularly to keep a complete history
+in your cache.
 
 ``` r
 
