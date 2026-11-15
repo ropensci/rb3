@@ -127,6 +127,19 @@ meta_dest_file <- function(meta, checksum, ext = "gz") {
   file.path(reg[["raw_folder"]], str_glue("{checksum}.{ext}"))
 }
 
+# Raw files are named by content md5, so several metas can share one file:
+# delete it only when no other meta points to it.
+meta_unlink_raw <- function(file, checksum) {
+  con <- meta_db_connection()
+  others <- DBI::dbGetQuery(
+    con,
+    "SELECT COUNT(*) AS n FROM meta WHERE download_checksum != ? AND instr(downloaded, ?) > 0",
+    params = list(checksum, file)
+  )$n
+  if (others == 0) unlink(file)
+  invisible(others == 0)
+}
+
 .meta_serialize_obj <- function(obj) {
   x <- paste(utils::capture.output(dput(obj)), collapse = "\n")
   stopifnot(length(x) > 0)
@@ -233,7 +246,7 @@ meta_clean <- function(meta) {
   if (length(meta$downloaded) > 0) {
     for (file in meta$downloaded) {
       cli::cli_alert_info("Removing raw file {.file {file}}")
-      unlink(file)
+      meta_unlink_raw(file, meta$download_checksum)
     }
   }
   

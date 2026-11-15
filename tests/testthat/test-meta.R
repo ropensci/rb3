@@ -165,3 +165,18 @@ test_that("JSON args are correctly stored and retrieved", {
   # Clean up
   meta_clean(meta)
 })
+
+test_that("meta_clean keeps a raw file still used by another meta", {
+  shared <- tempfile(fileext = ".gz")
+  writeLines("x", shared)
+  meta1 <- meta_new("template-test", var1 = "shared-1")
+  meta2 <- meta_new("template-test", var1 = "shared-2")
+  meta_add_download(meta1) <- shared
+  meta_add_download(meta2) <- shared
+
+  meta_clean(meta1)
+  expect_true(file.exists(shared))
+
+  meta_clean(meta2)
+  expect_false(file.exists(shared))
+})
