@@ -103,6 +103,9 @@ that are available by year.</li>
 <code>"b3-futures-settlement-prices"</code>: Downloads and reads
 settlement prices web page.</li>
 <li>
+<code>"b3-bdi-derivatives-trades"</code>: Downloads and reads all
+trades data of derivatives from the Daily Market Bulletin.</li>
+<li>
 <code>"b3-reference-rates"</code>: Downloads and reades the web page
 of reference interest rates.</li>
 <li>
@@ -112,18 +115,19 @@ with trading instruments information.</li>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List available templates</span></span>
 <span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 2</span></span></span>
-<span><span class="co">#&gt;   Template                         Description                                  </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Arq…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Arq…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futur…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> b3-indexes-composition           Composição dos índices da B3                 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3 …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> b3-indexes-historical-data       Dados históricos e estatísticas dos índices …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com pesos…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> b3-reference-rates               Taxas referenciais (Mercado de Derivativos -…</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 2</span></span></span>
+<span><span class="co">#&gt;    Template                         Description                                 </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> b3-bdi-derivatives-trades        Negócios consolidados do pregão - Derivativ…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Ar…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Ar…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futu…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> b3-indexes-composition           Composição dos índices da B3                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> b3-indexes-historical-data       Dados históricos e estatísticas dos índices…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com peso…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> b3-reference-rates               Taxas referenciais (Mercado de Derivativos …</span></span></code></pre></div>
 <p>Additional information about templates can be obtained by calling the
 <code><a href="../reference/template_retrieve.html">template_retrieve()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
