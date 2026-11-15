@@ -33,7 +33,8 @@ fwf_read_file <- function(., filename, ...) {
   df
 }
 
-settlement_prices_read <- function(., filename, ...) {
+# BDI "Negócios consolidados do pregão - Derivativos" CSV export: every row and column
+bdi_derivatives_read <- function(., filename, ...) {
   args <- list(...)
   lines <- readr::read_lines(filename)
   header <- which(str_starts(lines, "Ticker symbol"))
@@ -44,18 +45,41 @@ settlement_prices_read <- function(., filename, ...) {
     delim = ";", skip = header - 1, na = c("", "-"),
     col_types = readr::cols(.default = readr::col_character()), show_col_types = FALSE
   ))
-  # only futures carry a settlement price ("Adjusted quote")
-  df <- df[!is.na(df[["Adjusted quote"]]), ]
-  symbol <- df[["Ticker symbol"]]
-  dplyr::tibble(
-    commodity = str_sub(symbol, 1, -4),
-    maturity_code = str_sub(symbol, -3),
+  cols <- c(
+    symbol = "Ticker symbol", isin = "ISIN code", segment = "Segment",
+    open = "Opening price", low = "Minimum price", high = "Maximum price",
+    average = "Trade average price", close = "Last price", oscillation = "Oscillation",
+    adjusted_quote = "Adjusted quote", adjusted_tax = "Adjusted quote tax",
     # mislabeled in the english export: it holds the previous settlement price
-    previous_price = readr::parse_number(df[["Previous adjusted quote tax"]]),
-    price = readr::parse_number(df[["Adjusted quote"]]),
-    price_change = readr::parse_number(df[["Variation"]]),
-    settlement_value = readr::parse_number(df[["Settlement value per contract (R$)"]]),
-    refdate = as.Date(args$refdate)
+    previous_adjusted_quote = "Previous adjusted quote tax",
+    reference_price = "Reference price", variation_points = "Variation",
+    adjusted_value_contract = "Settlement value per contract (R$)",
+    best_bid_price = "Last buy order", best_ask_price = "Last sell order",
+    transactions_quantity = "Trade quantity", traded_contracts = "Financial instrument quantity",
+    volume = "National financial volume"
+  )
+  df <- dplyr::select(df, dplyr::all_of(cols))
+  num <- setdiff(names(cols), c("symbol", "isin", "segment"))
+  df[num] <- lapply(df[num], readr::parse_number)
+  df$refdate <- as.Date(args$refdate)
+  df
+}
+
+settlement_prices_read <- function(., filename, ...) {
+  df <- bdi_derivatives_read(., filename, ...)
+  if (is.null(df)) {
+    return(NULL)
+  }
+  # only futures carry a settlement price ("Adjusted quote")
+  df <- df[!is.na(df$adjusted_quote), ]
+  dplyr::tibble(
+    commodity = str_sub(df$symbol, 1, -4),
+    maturity_code = str_sub(df$symbol, -3),
+    previous_price = df$previous_adjusted_quote,
+    price = df$adjusted_quote,
+    price_change = df$variation_points,
+    settlement_value = df$adjusted_value_contract,
+    refdate = df$refdate
   )
 }
 

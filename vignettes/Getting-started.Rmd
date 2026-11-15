@@ -42,6 +42,7 @@ For example:
 
 - `"b3-cotahist-yearly"`: Downloads and reads COTAHIST file that are available by year.
 - `"b3-futures-settlement-prices"`: Downloads and reads settlement prices web page.
+- `"b3-bdi-derivatives-trades"`: Downloads and reads all trades data of derivatives from the Daily Market Bulletin.
 - `"b3-reference-rates"`: Downloads and reades the web page of reference interest rates.
 - `"b3-bvbg-086"`: Downloads and reads the BVBG-086 file with trading instruments information.
 

@@ -1,0 +1,80 @@
+id: b3-bdi-derivatives-trades
+filename: ~
+filetype: CUSTOM
+description: Negócios consolidados do pregão - Derivativos (Boletim Diário do Mercado), todas as colunas e instrumentos
+downloader:
+  function: settlement_prices_download
+  url: https://arquivos.b3.com.br/bdi/table/export/csv?lang=en-us
+  verifyssl: true
+  format: csv
+  args:
+    refdate: Data de referência
+reader:
+  function: bdi_derivatives_read
+writers:
+  input:
+    partition: refdate
+fields:
+- name: symbol
+  description: Código de negociação do instrumento
+  type: character
+- name: isin
+  description: Código ISIN
+  type: character
+- name: segment
+  description: Segmento
+  type: character
+- name: open
+  description: Preço de abertura
+  type: number
+- name: low
+  description: Preço mínimo
+  type: number
+- name: high
+  description: Preço máximo
+  type: number
+- name: average
+  description: Preço médio
+  type: number
+- name: close
+  description: Último preço
+  type: number
+- name: oscillation
+  description: Oscilação (%)
+  type: number
+- name: adjusted_quote
+  description: Preço de ajuste atual
+  type: number
+- name: adjusted_tax
+  description: Taxa de ajuste atual
+  type: number
+- name: previous_adjusted_quote
+  description: Preço de ajuste do dia anterior
+  type: number
+- name: reference_price
+  description: Preço de referência
+  type: number
+- name: variation_points
+  description: Variação do preço de ajuste
+  type: number
+- name: adjusted_value_contract
+  description: Valor do ajuste por contrato (R$)
+  type: number
+- name: best_bid_price
+  description: Última oferta de compra
+  type: number
+- name: best_ask_price
+  description: Última oferta de venda
+  type: number
+- name: transactions_quantity
+  description: Quantidade de negócios
+  type: number
+- name: traded_contracts
+  description: Quantidade de contratos negociados
+  type: number
+- name: volume
+  description: Volume financeiro (R$)
+  type: number
+- name: refdate
+  description: Data de referência
+  type: date
