@@ -154,26 +154,36 @@ again. For older dates use <code>b3-bvbg-086</code>
 <td>Same as above</td>
 </tr>
 <tr class="odd">
+<td><code>b3-trade-information-consolidated</code></td>
+<td>Trades of every instrument of every segment (stocks, options,
+futures, forwards, …), including settlement prices of futures
+(TradeInformationConsolidated)</td>
+<td>
+<strong>last ~360 sessions only</strong> (about 17 months)</td>
+<td>Fetch at least every year. Dates out of the range are failed
+downloads</td>
+</tr>
+<tr class="even">
 <td><code>b3-indexes-historical-data</code></td>
 <td>Daily values of B3 indexes, one file per index and year</td>
 <td>from the first year of each index (IBOV since 1968)</td>
 <td>The current year’s file is updated every day: use
 <code>force_download = TRUE</code> to update it</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>b3-indexes-composition</code></td>
 <td>Indexes each stock belongs to</td>
 <td><strong>current only</strong></td>
 <td>Each fetch stores a snapshot dated the day you fetch it; fetch
 regularly to build a history</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>b3-indexes-current-portfolio</code></td>
 <td>Current portfolio of each index</td>
 <td><strong>current only</strong></td>
 <td>Same as above</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>b3-indexes-theoretical-portfolio</code></td>
 <td>Theoretical portfolio of each index for the next period</td>
 <td><strong>current only</strong></td>
@@ -187,19 +197,20 @@ history in your cache.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List available templates</span></span>
 <span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 2</span></span></span>
-<span><span class="co">#&gt;    Template                         Description                                 </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> b3-bdi-derivatives-trades        Negócios consolidados do pregão - Derivativ…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Ar…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Ar…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futu…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> b3-indexes-composition           Composição dos índices da B3                </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> b3-indexes-historical-data       Dados históricos e estatísticas dos índices…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com peso…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> b3-reference-rates               Taxas referenciais (Mercado de Derivativos …</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 2</span></span></span>
+<span><span class="co">#&gt;    Template                          Description                                </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> b3-bdi-derivatives-trades         Negócios consolidados do pregão - Derivati…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> b3-bvbg-086                       Arquivo de Preços de Mercado - BVBG-086    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> b3-cotahist-daily                 Cotações Históricas do Pregão de Ações - A…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> b3-cotahist-yearly                Cotações Históricas do Pregão de Ações - A…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> b3-futures-settlement-prices      Preços de Ajustes Diários de Contratos Fut…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> b3-indexes-composition            Composição dos índices da B3               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> b3-indexes-current-portfolio      Carteira teórica corrente dos índices da B…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> b3-indexes-historical-data        Dados históricos e estatísticas dos índice…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> b3-indexes-theoretical-portfolio  Carteira Teórica dos índices da B3 com pes…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> b3-reference-rates                Taxas referenciais (Mercado de Derivativos…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> b3-trade-information-consolidated Negócios consolidados do pregão (TradeInfo…</span></span></code></pre></div>
 <p>Additional information about templates can be obtained by calling the
 <code><a href="../reference/template_retrieve.html">template_retrieve()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">

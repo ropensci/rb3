@@ -1,6 +1,24 @@
 # Changelog
 
+## rb3 (development version)
+
+- New template `b3-trade-information-consolidated`
+  ([\#126](https://github.com/ropensci/rb3/issues/126)): B3’s
+  TradeInformationConsolidated file, with every instrument of every
+  segment (stocks, options, futures, forwards, …) and every column of
+  the file (low, high, average and last price, oscillation, settlement
+  price and rate, reference price, number of trades, contracts,
+  financial volume). B3 keeps only the last ~360 sessions (about 17
+  months): older dates get an empty file and are reported as failed
+  downloads.
+- An empty HTTP response (no `Content-Type` header) no longer stops
+  [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+  with “Unknown error”; it is saved as an empty file and reported as a
+  failed download.
+
 ## rb3 0.1.1
+
+CRAN release: 2026-11-15
 
 - `b3-reference-rates` now downloads B3’s “Taxas de Mercado para Swaps”
   file (`TS<yymmdd>.ex_` on the “Pesquisa por pregão” page) because the
