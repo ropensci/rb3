@@ -62,3 +62,15 @@ test_that("Test of yc_with_futures function", {
   expect_true(nrow(df) > 0)
   expect_true(anyNA(df$symbol))
 })
+
+test_that("yc_brl_curve_get returns a SpotRateCurve with 1-day and DI1 vertices", {
+  skip_if_not_installed("fixedincome")
+  df <- yc_brl_with_futures_get(.refdate)
+  curve <- yc_brl_curve_get(.refdate)
+  expect_s4_class(curve, "SpotRateCurve")
+  expect_equal(curve@refdate, .refdate)
+  terms <- as.numeric(curve@terms)
+  expect_equal(terms[1], 1)
+  expect_false(anyDuplicated(terms) > 0)
+  expect_equal(length(curve), length(unique(c(1, df$biz_days[!is.na(df$symbol)]))))
+})

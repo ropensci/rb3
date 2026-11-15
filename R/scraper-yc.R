@@ -217,3 +217,39 @@ yc_usd_with_futures_get <- function(refdate) {
 yc_ipca_with_futures_get <- function(refdate) {
   .yc_with_futures(yc_ipca_get(), refdate, "DAP", "15th day")
 }
+
+#' Get the BRL Yield Curve as a `SpotRateCurve`
+#'
+#' Builds a [fixedincome::spotratecurve()] from the BRL nominal curve of
+#' [yc_brl_with_futures_get()], keeping only the 1-day vertex and the vertices
+#' that match a DI1 futures contract. Rates use discrete compounding,
+#' `business/252` day count and the `Brazil/ANBIMA` calendar.
+#'
+#' Requires the `fixedincome` package.
+#'
+#' @param refdate A Date object specifying the reference date for which to retrieve data
+#'
+#' @return A `SpotRateCurve` object.
+#'
+#' @examples
+#' \dontrun{
+#' date <- preceding(Sys.Date() - 1, "Brazil/ANBIMA")
+#' fetch_marketdata("b3-reference-rates", refdate = date)
+#' fetch_marketdata("b3-futures-settlement-prices", refdate = date)
+#' curve <- yc_brl_curve_get(date)
+#' }
+#'
+#' @export
+yc_brl_curve_get <- function(refdate) {
+  rlang::check_installed("fixedincome", "to build a SpotRateCurve.")
+  df <- yc_brl_with_futures_get(refdate) |>
+    filter(.data$biz_days == 1 | !is.na(.data$symbol)) |>
+    dplyr::distinct(.data$biz_days, .keep_all = TRUE)
+  if (nrow(df) == 0) {
+    cli::cli_abort("No BRL yield curve data for {.val {refdate}}. Run {.fn fetch_marketdata} first.")
+  }
+  fixedincome::spotratecurve(
+    df$r_252, df$biz_days, "discrete", "business/252", "Brazil/ANBIMA",
+    refdate = refdate
+  )
+}
