@@ -1,8 +1,7 @@
 save_resource <- function(res, encoding, dest) {
-  if (
-    httr::headers(res)[["content-type"]] == "application/octet-stream" ||
-      httr::headers(res)[["content-type"]] == "application/x-zip-compressed"
-  ) {
+  ct <- httr::headers(res)[["content-type"]]
+  # an empty body comes without content-type
+  if (is.null(ct) || ct %in% c("application/octet-stream", "application/x-zip-compressed")) {
     bin <- httr::content(res, as = "raw")
     writeBin(bin, dest)
   } else {
@@ -59,6 +58,28 @@ download_file_via_post <- function(url, encoding, dest, verifyssl, ..., encode =
   req <- prepare_request(verifyssl, encoding)
   res <- perform_post_request(url, req$verifyssl, ..., encode = encode)
   handle_response(res, req$encoding, dest)
+}
+
+# arquivos.b3.com.br: ask for a token, then download the file with it.
+# No token (not a session), an empty file (out of the available range) or a file that is not
+# "Final" (session still running) are failed downloads, so a later fetch tries again.
+trade_information_download <- function(., dest, ...) {
+  args <- list(...)
+  req <- prepare_request(.$downloader$verifyssl, .$downloader$encoding)
+  url <- paste0(.$downloader$url, "&date=", format(as.Date(args$refdate), "%Y-%m-%d"))
+  res <- perform_get_request(url, req$verifyssl)
+  if (httr::status_code(res) != 200) {
+    return(FALSE)
+  }
+  token <- jsonlite::fromJSON(httr::content(res, as = "text", encoding = "UTF-8"))$token
+  if (is.null(token)) {
+    return(FALSE)
+  }
+  file_url <- httr::modify_url(sub("requestname.*$", "", .$downloader$url), query = list(token = token))
+  if (!download_file_via_get(file_url, req$encoding, dest, req$verifyssl) || file.size(dest) == 0) {
+    return(FALSE)
+  }
+  identical(readLines(dest, n = 1, warn = FALSE), "Status do Arquivo: Final")
 }
 
 simple_download <- function(., dest, ...) {

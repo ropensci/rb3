@@ -64,3 +64,26 @@ test_that("settlement_prices_read also reads the old Ajustes do pregao HTML page
   expect_equal(df$settlement_value[3], 76.68)
   expect_equal(df$refdate, rep(as.Date("2025-11-13"), 3))
 })
+
+test_that("trade_information_read keeps every row and column of TradeInformationConsolidated", {
+  tpl <- template_retrieve("b3-trade-information-consolidated")
+  df <- trade_information_read(tpl, test_path("testdata", "trade-information-consolidated-sample.csv"),
+    refdate = as.Date("2026-11-13")
+  )
+  expect_equal(names(df), tpl$colnames)
+  expect_equal(nrow(df), 5)
+  expect_equal(df$symbol[1:4], c("03BK11", "PETR4", "DI1F27", "DI1F28"))
+  expect_equal(df$segment[1:4], c("FORWARD", "CASH", "FINANCIAL", "FINANCIAL"))
+  expect_equal(df$refdate, rep(as.Date("2026-11-13"), 5))
+  petr <- df[2, ]
+  expect_equal(petr$low, 44.62)
+  expect_equal(petr$close, 45.3)
+  expect_true(is.na(petr$adjusted_quote))
+  expect_equal(petr$transactions_quantity, 38937)
+  expect_equal(petr$volume, 1056495127)
+  di1 <- df[3, ]
+  expect_equal(di1$adjusted_quote, 98336.11)
+  expect_equal(di1$adjusted_tax, 13.67)
+  expect_equal(di1$traded_contracts, 111770)
+  expect_equal(di1$volume, 10991078014.94)
+})
