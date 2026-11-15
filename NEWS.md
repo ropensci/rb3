@@ -14,6 +14,9 @@
   number of trades, contracts, financial volume, best bid/ask, ...) and every instrument, options included.
   Like its source, it covers only about the last 21 sessions; use `b3-bvbg-086` for older dates.
   `b3-futures-settlement-prices` is unchanged.
+* A download that returns an HTML page (B3 sends maintenance/error pages with status 200) is now a failed
+  download when the template does not expect HTML, so the next `fetch_marketdata()` tries that date again.
+  Before, the page was saved, the meta was marked invalid and the date was never downloaded again.
 * Zip archives are detected by content, so nested self-extracting archives such as B3's `.ex_` files are unpacked;
   an empty archive is now reported as a failed download instead of stopping `fetch_marketdata()`.
 
