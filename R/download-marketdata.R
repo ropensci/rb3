@@ -102,6 +102,12 @@ process_downloaded_file <- function(dest, template, meta) {
     )
   }
   filename <- select_file_if_multiple(filename, template$downloader[["if-has-multiple-files-use"]])
+  # B3 answers some requests with an HTML error/maintenance page and status 200
+  if (!identical(template$downloader$format, "html") && is_html_file(filename)) {
+    cli::cli_abort("Downloaded an HTML page instead of {template$downloader$format} for meta {.strong {meta$download_checksum}}",
+      class = "error_download_fail"
+    )
+  }
 
   md5 <- tools::md5sum(filename)
   ext <- "gz"
@@ -142,6 +148,12 @@ handle_download_error <- function(e, meta) {
   } else {
     cli::cli_abort("Unknown error", class = "error_download_unknown", parent = e)
   }
+}
+
+is_html_file <- function(fname) {
+  x <- readBin(fname, "raw", 512)
+  x <- rawToChar(x[x != as.raw(0)])
+  grepl("^(\xef\xbb\xbf)?\\s*<(!doctype\\s+html|html)", x, ignore.case = TRUE, useBytes = TRUE)
 }
 
 is_zip_file <- function(fname) {
