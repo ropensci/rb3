@@ -31,3 +31,7 @@ Makefile
 ^\.claude$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^PROJECT_OVERVIEW\.md$
+^ARCHITECTURE_DIAGRAMS\.md$
+^QUICK_REFERENCE\.md$
+^DOCUMENTATION_INDEX\.md$
