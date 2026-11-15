@@ -51,13 +51,10 @@ library(bizdays)
 
 # download COTAHIST data from 2000 to 2025
 fetch_marketdata("b3-cotahist-yearly", year = 2000:2025)
-# download futures settlement prices from 2000 to 2025
-fetch_marketdata("b3-futures-settlement-prices", refdate = bizseq("2000-01-01", Sys.Date(), "Brazil/B3"))
-# download yield curves from 2018 to 2025
-fetch_marketdata("b3-reference-rates",
-  refdate = bizseq("2018-01-01", Sys.Date(), "Brazil/B3"),
-  curve_name = c("DIC", "DOC", "PRE")
-)
+# download futures settlement prices - B3 keeps only the last 21 sessions
+fetch_marketdata("b3-futures-settlement-prices", refdate = bizseq(Sys.Date() - 35, Sys.Date() - 1, "Brazil/BMF"))
+# download yield curves from 2018 - files available since 2000-01-14
+fetch_marketdata("b3-reference-rates", refdate = bizseq("2018-01-01", Sys.Date() - 1, "Brazil/BMF"))
 # download indexes composition data - it is necessary to execute `indexes_get()`
 fetch_marketdata("b3-indexes-composition")
 # download current portfolio for all indexes
@@ -81,18 +78,19 @@ library(rb3)
 
 # List available templates
 list_templates()
-#> # A tibble: 9 × 2
-#>   Template                         Description                                  
-#>   <chr>                            <chr>                                        
-#> 1 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086      
-#> 2 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Arq…
-#> 3 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Arq…
-#> 4 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futur…
-#> 5 b3-indexes-composition           Composição dos índices da B3                 
-#> 6 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3 …
-#> 7 b3-indexes-historical-data       Dados históricos e estatísticas dos índices …
-#> 8 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com pesos…
-#> 9 b3-reference-rates               Taxas referenciais
+#> # A tibble: 10 × 2
+#>    Template                         Description                                 
+#>    <chr>                            <chr>                                       
+#>  1 b3-bdi-derivatives-trades        Negócios consolidados do pregão - Derivativ…
+#>  2 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086     
+#>  3 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Ar…
+#>  4 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Ar…
+#>  5 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futu…
+#>  6 b3-indexes-composition           Composição dos índices da B3                
+#>  7 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3…
+#>  8 b3-indexes-historical-data       Dados históricos e estatísticas dos índices…
+#>  9 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com peso…
+#> 10 b3-reference-rates               Taxas referenciais (Mercado de Derivativos …
 ```
 
 ### Downloading Market Data
@@ -104,14 +102,11 @@ which downloads data based on a template and parameters:
 ``` r
 
 # Download yield curve data for specific dates
-fetch_marketdata("b3-reference-rates",
-  refdate = as.Date("2024-01-31"),
-  curve_name = "PRE"
-)
+fetch_marketdata("b3-reference-rates", refdate = as.Date("2024-01-31"))
 
-# Download futures settlement prices
+# Download futures settlement prices (only the last 21 sessions are available)
 fetch_marketdata("b3-futures-settlement-prices",
-  refdate = as.Date("2024-01-31")
+  refdate = preceding(Sys.Date() - 1, "Brazil/BMF")
 )
 
 # Download yearly COTAHIST files
@@ -258,7 +253,7 @@ To cite rb3 in publications use:
   useful formats and data structures common to data analysis
   practitioners.
 
-A BibTeX entry for LaTeX users is
+Uma entrada BibTeX para usuários(as) de LaTeX é
 
   @Manual{rb3-package,
     title = {Download and Parse Public Data Released by B3 Exchange},

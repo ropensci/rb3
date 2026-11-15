@@ -11,9 +11,11 @@ The yield curve is a key tool in financial markets, offering insights
 into interest rate expectations, inflation outlook, and economic
 sentiment. In Brazil, the local exchange (B3) publishes a set of
 reference yield curves built from the pricing of interest rate futures
-contracts. B3 provides historical yield curves on its
-[website](https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp).
-These curves are built using interest rate futures contracts.
+contracts. B3 publishes them every session in the swap rates file
+(`TS<yymmdd>.ex_`) on its [Pesquisa por
+pregão](https://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/historico/boletins-diarios/pesquisa-por-pregao/pesquisa-por-pregao/)
+page, with history since 2000-01-14. These curves are built using
+interest rate futures contracts.
 
 This vignette demonstrates how to retrieve and analyze historical yield
 curves from B3 using the [`rb3`](https://github.com/ropensci/rb3) R

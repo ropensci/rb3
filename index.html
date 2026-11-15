@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="index.html">rb3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,13 +114,10 @@
 <span></span>
 <span><span class="co"># download COTAHIST data from 2000 to 2025</span></span>
 <span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-cotahist-yearly"</span>, year <span class="op">=</span> <span class="fl">2000</span><span class="op">:</span><span class="fl">2025</span><span class="op">)</span></span>
-<span><span class="co"># download futures settlement prices from 2000 to 2025</span></span>
-<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span>, refdate <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="st">"2000-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># download yield curves from 2018 to 2025</span></span>
-<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>,</span>
-<span>  refdate <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="st">"2018-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span>,</span>
-<span>  curve_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DIC"</span>, <span class="st">"DOC"</span>, <span class="st">"PRE"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># download futures settlement prices - B3 keeps only the last 21 sessions</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span>, refdate <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">35</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="st">"Brazil/BMF"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># download yield curves from 2018 - files available since 2000-01-14</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="st">"2018-01-01"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="st">"Brazil/BMF"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># download indexes composition data - it is necessary to execute `indexes_get()`</span></span>
 <span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-indexes-composition"</span><span class="op">)</span></span>
 <span><span class="co"># download current portfolio for all indexes</span></span>
@@ -141,18 +138,19 @@
 <span></span>
 <span><span class="co"># List available templates</span></span>
 <span><span class="fu"><a href="reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 9 × 2</span></span>
-<span><span class="co">#&gt;   Template                         Description                                  </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt;                                        </span></span>
-<span><span class="co">#&gt; 1 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086      </span></span>
-<span><span class="co">#&gt; 2 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Arq…</span></span>
-<span><span class="co">#&gt; 3 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Arq…</span></span>
-<span><span class="co">#&gt; 4 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futur…</span></span>
-<span><span class="co">#&gt; 5 b3-indexes-composition           Composição dos índices da B3                 </span></span>
-<span><span class="co">#&gt; 6 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3 …</span></span>
-<span><span class="co">#&gt; 7 b3-indexes-historical-data       Dados históricos e estatísticas dos índices …</span></span>
-<span><span class="co">#&gt; 8 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com pesos…</span></span>
-<span><span class="co">#&gt; 9 b3-reference-rates               Taxas referenciais</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span><span class="co">#&gt;    Template                         Description                                 </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                            &lt;chr&gt;                                       </span></span>
+<span><span class="co">#&gt;  1 b3-bdi-derivatives-trades        Negócios consolidados do pregão - Derivativ…</span></span>
+<span><span class="co">#&gt;  2 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086     </span></span>
+<span><span class="co">#&gt;  3 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Ar…</span></span>
+<span><span class="co">#&gt;  4 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Ar…</span></span>
+<span><span class="co">#&gt;  5 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futu…</span></span>
+<span><span class="co">#&gt;  6 b3-indexes-composition           Composição dos índices da B3                </span></span>
+<span><span class="co">#&gt;  7 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3…</span></span>
+<span><span class="co">#&gt;  8 b3-indexes-historical-data       Dados históricos e estatísticas dos índices…</span></span>
+<span><span class="co">#&gt;  9 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com peso…</span></span>
+<span><span class="co">#&gt; 10 b3-reference-rates               Taxas referenciais (Mercado de Derivativos …</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="downloading-market-data">Downloading Market Data<a class="anchor" aria-label="anchor" href="#downloading-market-data"></a>
@@ -160,14 +158,11 @@
 <p>The main function for fetching data is <code><a href="reference/fetch_marketdata.html">fetch_marketdata()</a></code>, which downloads data based on a template and parameters:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Download yield curve data for specific dates</span></span>
-<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>,</span>
-<span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-31"</span><span class="op">)</span>,</span>
-<span>  curve_name <span class="op">=</span> <span class="st">"PRE"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-31"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Download futures settlement prices</span></span>
+<span><span class="co"># Download futures settlement prices (only the last 21 sessions are available)</span></span>
 <span><span class="fu"><a href="reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span>,</span>
-<span>  refdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-31"</span><span class="op">)</span></span>
+<span>  refdate <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/adjust.date.html" class="external-link">preceding</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="st">"Brazil/BMF"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Download yearly COTAHIST files</span></span>
@@ -295,7 +290,7 @@
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  useful formats and data structures common to data analysis</span>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  practitioners.</span>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>Uma entrada BibTeX para usuários(as) de LaTeX é</span>
 <span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
 <span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="sc">@</span>Manual{rb3<span class="sc">-</span>package,</span>
 <span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>    title <span class="ot">=</span> {Download and Parse Public Data Released by B3 Exchange},</span>

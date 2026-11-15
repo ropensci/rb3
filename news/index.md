@@ -1,6 +1,6 @@
 # Changelog
 
-## rb3 (development version)
+## rb3 0.1.1
 
 - `b3-reference-rates` now downloads B3’s “Taxas de Mercado para Swaps”
   file (`TS<yymmdd>.ex_` on the “Pesquisa por pregão” page) because the
@@ -38,6 +38,24 @@
   archives such as B3’s `.ex_` files are unpacked; an empty archive is
   now reported as a failed download instead of stopping
   [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md).
+- New function
+  [`rb3_clear_cache()`](https://ropensci.github.io/rb3/reference/rb3_clear_cache.md)
+  deletes all downloaded files, datasets and metadata in the cache
+  folder, keeping the folders and the empty metadata table
+  ([\#129](https://github.com/ropensci/rb3/issues/129)).
+- [`rb3_bootstrap()`](https://ropensci.github.io/rb3/reference/rb3_bootstrap.md)
+  closes the open metadata connection, so changing `rb3.cachedir` and
+  calling it again uses the database of the new cache folder
+  ([\#103](https://github.com/ropensci/rb3/issues/103)).
+- Raw files are named by the md5 of their content, so several downloads
+  can share one file. Cleaning a meta or downloading a file again no
+  longer deletes a raw file that another meta still uses
+  ([\#134](https://github.com/ropensci/rb3/issues/134),
+  [\#140](https://github.com/ropensci/rb3/issues/140)).
+- The documentation now says how far back each template’s source goes
+  and how to keep the cache complete (table in the “Getting started”
+  vignette and a “Data availability” section in each `*_get()` help
+  page).
 
 ## rb3 0.1.0
 

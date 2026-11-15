@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rb3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="rb3-development-version">rb3 (development version)<a class="anchor" aria-label="anchor" href="#rb3-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.1" id="rb3-011">rb3 0.1.1<a class="anchor" aria-label="anchor" href="#rb3-011"></a></h2>
 <ul><li>
 <code>b3-reference-rates</code> now downloads B3’s “Taxas de Mercado para Swaps” file (<code>TS&lt;yymmdd&gt;.ex_</code> on the “Pesquisa por pregão” page) because the “Taxas Referenciais” page was discontinued (<a href="https://github.com/ropensci/rb3/issues/125" class="external-link">#125</a>). The <code>curve_name</code> argument is gone: one file holds every curve (about 120). The input layer schema changed (<code>refdate</code>, <code>curve_name</code>, <code>cur_days</code>, <code>biz_days</code>, <code>rate</code>, partitioned by <code>refdate</code>), so delete <code>&lt;cachedir&gt;/db/input/b3-reference-rates</code> and <code>&lt;cachedir&gt;/db/staging/b3-reference-rates</code> before fetching again. <code><a href="../reference/yc_xxx_get.html">yc_brl_get()</a></code> now returns <code>NA</code> for <code>r_360</code>.</li>
 <li>
@@ -46,6 +46,11 @@
 <li>New template <code>b3-bdi-derivatives-trades</code>: the same Daily Market Bulletin table used by <code>b3-futures-settlement-prices</code>, with every column (open, high, low, close, average and settlement prices, number of trades, contracts, financial volume, best bid/ask, …) and every instrument, options included. Like its source, it covers only about the last 21 sessions; use <code>b3-bvbg-086</code> for older dates. <code>b3-futures-settlement-prices</code> is unchanged.</li>
 <li>A download that returns an HTML page (B3 sends maintenance/error pages with status 200) is now a failed download when the template does not expect HTML, so the next <code><a href="../reference/fetch_marketdata.html">fetch_marketdata()</a></code> tries that date again. Before, the page was saved, the meta was marked invalid and the date was never downloaded again.</li>
 <li>Zip archives are detected by content, so nested self-extracting archives such as B3’s <code>.ex_</code> files are unpacked; an empty archive is now reported as a failed download instead of stopping <code><a href="../reference/fetch_marketdata.html">fetch_marketdata()</a></code>.</li>
+<li>New function <code><a href="../reference/rb3_clear_cache.html">rb3_clear_cache()</a></code> deletes all downloaded files, datasets and metadata in the cache folder, keeping the folders and the empty metadata table (<a href="https://github.com/ropensci/rb3/issues/129" class="external-link">#129</a>).</li>
+<li>
+<code><a href="../reference/rb3_bootstrap.html">rb3_bootstrap()</a></code> closes the open metadata connection, so changing <code>rb3.cachedir</code> and calling it again uses the database of the new cache folder (<a href="https://github.com/ropensci/rb3/issues/103" class="external-link">#103</a>).</li>
+<li>Raw files are named by the md5 of their content, so several downloads can share one file. Cleaning a meta or downloading a file again no longer deletes a raw file that another meta still uses (<a href="https://github.com/ropensci/rb3/issues/134" class="external-link">#134</a>, <a href="https://github.com/ropensci/rb3/issues/140" class="external-link">#140</a>).</li>
+<li>The documentation now says how far back each template’s source goes and how to keep the cache complete (table in the “Getting started” vignette and a “Data availability” section in each <code>*_get()</code> help page).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="rb3-010">rb3 0.1.0<a class="anchor" aria-label="anchor" href="#rb3-010"></a></h2><p class="text-muted">CRAN release: 2025-07-07</p>
