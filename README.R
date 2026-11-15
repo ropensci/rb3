@@ -5,15 +5,12 @@ library(tidyverse)
 library(bizdays)
 
 # Download yield curve data for specific dates
-fetch_marketdata("b3-reference-rates",
-  refdate = preceding("2024-01-31", "Brazil/B3"),
-  curve_name = "PRE"
-)
+fetch_marketdata("b3-reference-rates", refdate = preceding("2024-01-31", "Brazil/B3"))
 # Download yearly COTAHIST files
 fetch_marketdata("b3-cotahist-yearly", year = 2023)
 
-# Download futures data
-fetch_marketdata("b3-futures-settlement-prices", refdate = preceding("2024-01-31", "Brazil/B3"))
+# Download futures data - B3 keeps only the last 21 sessions, so use the last one
+fetch_marketdata("b3-futures-settlement-prices", refdate = preceding(Sys.Date() - 1, "Brazil/BMF"))
 
 ch <- cotahist_get("yearly")
 # Filter for stocks
