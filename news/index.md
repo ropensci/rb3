@@ -18,7 +18,9 @@
   (<https://arquivos.b3.com.br/bdi/>) because the “Ajustes do pregão”
   page was discontinued
   ([\#125](https://github.com/ropensci/rb3/issues/125)). The bulletin
-  keeps only about the last 21 sessions.
+  keeps only about the last 21 sessions. Raw files of the old “Ajustes
+  do pregão” HTML page already in the cache are still read, so
+  `reprocess = TRUE` keeps the history back to 2000.
 - New template `b3-bdi-derivatives-trades`: the same Daily Market
   Bulletin table used by `b3-futures-settlement-prices`, with every
   column (open, high, low, close, average and settlement prices, number
