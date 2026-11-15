@@ -48,3 +48,19 @@ test_that("bdi_derivatives_read keeps every row and column of the BDI export", {
   expect_equal(df$volume[3], 51191776839.8)
   expect_equal(df$refdate, rep(as.Date("2026-09-11"), 3))
 })
+
+test_that("settlement_prices_read also reads the old Ajustes do pregao HTML page", {
+  tpl <- template_retrieve("b3-futures-settlement-prices")
+  df <- settlement_prices_read(tpl, test_path("testdata", "ajustes-pregao-sample.html"),
+    refdate = as.Date("2025-11-13")
+  )
+  expect_equal(names(df), tpl$colnames)
+  expect_equal(nrow(df), 3)
+  expect_equal(df$commodity, c("ABEVO", "ABEVO", "AFS"))
+  expect_equal(df$maturity_code, c("X25", "Z25", "X25"))
+  expect_equal(df$previous_price[3], 17086.6)
+  expect_equal(df$price[3], 17061.9)
+  expect_equal(df$price_change[3], -24.7)
+  expect_equal(df$settlement_value[3], 76.68)
+  expect_equal(df$refdate, rep(as.Date("2025-11-13"), 3))
+})
