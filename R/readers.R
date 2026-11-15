@@ -33,6 +33,30 @@ fwf_read_file <- function(., filename, ...) {
   df
 }
 
+# TradeInformationConsolidated CSV (arquivos.b3.com.br): every row and column
+trade_information_read <- function(., filename, ...) {
+  df <- suppressWarnings(readr::read_delim(filename,
+    delim = ";", skip = 1, na = "",
+    col_types = readr::cols(.default = readr::col_character()), show_col_types = FALSE
+  ))
+  if (nrow(df) == 0) {
+    return(NULL)
+  }
+  cols <- c(
+    refdate = "RptDt", symbol = "TckrSymb", isin = "ISIN", segment = "SgmtNm",
+    low = "MinPric", high = "MaxPric", average = "TradAvrgPric", close = "LastPric",
+    oscillation = "OscnPctg", adjusted_quote = "AdjstdQt", adjusted_tax = "AdjstdQtTax",
+    reference_price = "RefPric", transactions_quantity = "TradQty",
+    traded_contracts = "FinInstrmQty", volume = "NtlFinVol"
+  )
+  df <- dplyr::select(df, dplyr::all_of(cols))
+  num <- setdiff(names(cols), c("refdate", "symbol", "isin", "segment"))
+  loc <- readr::locale(decimal_mark = ",", grouping_mark = ".")
+  df[num] <- lapply(df[num], readr::parse_number, locale = loc)
+  df$refdate <- as.Date(df$refdate)
+  df
+}
+
 # BDI "Negócios consolidados do pregão - Derivativos" CSV export: every row and column
 bdi_derivatives_read <- function(., filename, ...) {
   args <- list(...)

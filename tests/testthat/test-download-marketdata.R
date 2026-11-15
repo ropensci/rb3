@@ -156,6 +156,26 @@ test_that("it should download and read b3-bdi-derivatives-trades", {
   expect_true(file.exists(meta$downloaded[[1]]))
 })
 
+test_that("it should download and read b3-trade-information-consolidated", {
+  meta <- template_meta_create_or_load("b3-trade-information-consolidated", refdate = bizdays::offset(Sys.Date(), -10, "Brazil/ANBIMA"))
+  meta <- download_marketdata(meta)
+  meta <- read_marketdata(meta)
+
+  expect_true(meta$is_downloaded)
+  expect_true(meta$is_valid)
+  expect_true(file.exists(meta$downloaded[[1]]))
+})
+
+test_that("b3-trade-information-consolidated fails for dates without data", {
+  # out of the available range (empty file) and a Saturday (no token)
+  for (d in c("2024-01-02", "2026-11-14")) {
+    meta <- template_meta_create_or_load("b3-trade-information-consolidated", refdate = as.Date(d))
+    meta <- download_marketdata(meta)
+    expect_false(meta$is_downloaded)
+    meta_clean(meta)
+  }
+})
+
 test_that("it should download and read b3-cotahist-daily", {
   meta <- template_meta_create_or_load("b3-cotahist-daily", refdate = as.Date("2018-01-02"))
   meta <- download_marketdata(meta)
