@@ -18,8 +18,8 @@ Fetches historical data from B3 indexes.
 \section{Data availability}{
 
 One file per index and year, from the first year of each index (IBOV since 1968). The file of the
-current year is updated by B3 every day, but rb3 downloads it only once: use
-\code{fetch_marketdata(..., force_download = TRUE)} to update it.
+current year is updated by B3 every day, so \code{fetch_marketdata()} downloads it again when the cached
+copy is from an earlier day. Files of past years are downloaded only once.
 }
 
 \examples{

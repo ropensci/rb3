@@ -4,6 +4,7 @@ description: Dados históricos e estatísticas dos índices da Bolsa
 downloader:
   function: stock_indexes_statistics_download
   verifyssl: false
+  refresh-current-year: true
   url: https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetPortfolioDay
   format: json
   encoding: utf8

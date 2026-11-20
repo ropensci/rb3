@@ -114,6 +114,8 @@ process_downloaded_file <- function(dest, template, meta) {
   dest_fname <- meta_dest_file(meta, md5, ext)
 
   if (file.exists(dest_fname) && length(meta$downloaded) > 0) {
+    # same content as before: mark the cached file as fresh, see meta_is_outdated()
+    Sys.setFileTime(dest_fname, Sys.time())
     cli::cli_abort("File already exists for meta {.strong {meta$download_checksum}}: {.file {dest_fname}}",
       class = "error_download_file_exists"
     )
