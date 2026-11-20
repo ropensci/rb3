@@ -29,6 +29,11 @@
 #' that the requests are sent at a reasonable rate. If set to `TRUE`, a 1-second
 #' delay is introduced between each download request.
 #'
+#' Files already in the cache are skipped, with two exceptions that are downloaded again:
+#' the current year's file of yearly templates (`b3-cotahist-yearly`, `b3-indexes-historical-data`)
+#' when it is from an earlier day, and files without usable data (reported as invalid) that were
+#' downloaded less than 7 days after their `refdate`, because B3 may publish the data later.
+#'
 #' The `force_download` parameter allows you to re-download files even if they already exist
 #' in the cache. This can be useful if you want to ensure that you have the latest version
 #' of the data or if the files have been modified on the server.
@@ -142,23 +147,36 @@ download_single_file <- function(metadata, pb = NULL, force_download = FALSE, th
   return(metadata)
 }
 
-#' Is the downloaded file of the current year older than today?
+#' Should a downloaded file be downloaded again?
 #'
-#' Templates with `downloader.refresh-current-year: true` have one file per year that B3 updates
-#' every session, so the current year's file is downloaded again once per day.
 #' The raw file's modification time is the download date: it is touched when a new download
-#' has the same content.
+#' has the same content (see `process_downloaded_file()`).
+#'
+#' - Templates with `downloader.refresh-current-year: true` have one file per year that B3 updates
+#'   every session, so the current year's file is downloaded again once per day (#143).
+#' - A file that was read but had no usable data (`is_valid = FALSE`) is downloaded again while it
+#'   was downloaded less than `RETRY_INVALID_DAYS` days after its `refdate`: B3 may not have
+#'   published the data yet. Later downloads are final, so old dates are not retried forever (#142).
 #'
 #' @noRd
 meta_is_outdated <- function(meta) {
+  if (!isTRUE(meta$is_downloaded) || length(meta$downloaded) == 0) {
+    return(FALSE)
+  }
+  downloaded_on <- as.Date(file.mtime(meta$downloaded[[1]]))
   template <- template_retrieve(meta$template)
-  isTRUE(template$downloader[["refresh-current-year"]]) && isTRUE(
-    meta$is_downloaded &&
-      length(meta$downloaded) > 0 &&
-      identical(as.integer(meta$download_args$year), as.integer(format(Sys.Date(), "%Y"))) &&
-      as.Date(file.mtime(meta$downloaded[[1]])) < Sys.Date()
+  refresh_year <- isTRUE(template$downloader[["refresh-current-year"]]) && isTRUE(
+    identical(as.integer(meta$download_args$year), as.integer(format(Sys.Date(), "%Y"))) &&
+      downloaded_on < Sys.Date()
   )
+  retry_invalid <- isTRUE(
+    meta$is_processed && !meta$is_valid && !is.null(meta$download_args$refdate) &&
+      downloaded_on - as.Date(meta$download_args$refdate) < RETRY_INVALID_DAYS
+  )
+  refresh_year || retry_invalid
 }
+
+RETRY_INVALID_DAYS <- 7
 
 #' Process staging layer if configured
 #'

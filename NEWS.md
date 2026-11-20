@@ -5,6 +5,10 @@
   (low, high, average and last price, oscillation, settlement price and rate, reference price, number of
   trades, contracts, financial volume). B3 keeps only the last ~360 sessions (about 17 months): older dates
   get an empty file and are reported as failed downloads.
+* `fetch_marketdata()` now downloads again a file that had no usable data (reported as invalid) when it
+  was downloaded less than 7 days after its `refdate` (#142). For example, settlement prices downloaded
+  before B3 published them are fetched again by the next call, instead of being lost. Files downloaded
+  later are final and are not retried.
 * `fetch_marketdata()` now downloads again the current year's file of `b3-cotahist-yearly` and
   `b3-indexes-historical-data` when the cached copy is from an earlier day (#143). B3 updates these files
   every session, so before this change the data stopped at the day of the first download. Past years are
