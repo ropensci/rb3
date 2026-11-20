@@ -87,3 +87,15 @@ test_that("trade_information_read keeps every row and column of TradeInformation
   expect_equal(di1$traded_contracts, 111770)
   expect_equal(di1$volume, 10991078014.94)
 })
+
+test_that("fwf_read_file defaults to UTF-8 and applies negative numeric signs", {
+  fs <- fields(
+    field("code", "", width(3), type("character")),
+    field("value", "", width(5), type("numeric", dec = 2, sign = "-"))
+  )
+  tpl <- list(fields = fs, widths = fields_widths(fs), colnames = fields_names(fs)) # no reader: UTF-8
+  f <- withr::local_tempfile(lines = c("ABC01234", "XYZ00050"))
+  df <- fwf_read_file(tpl, f)
+  expect_equal(df$code, c("ABC", "XYZ"))
+  expect_equal(df$value, c(-12.34, -0.5))
+})

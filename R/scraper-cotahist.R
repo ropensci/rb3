@@ -25,8 +25,8 @@
 #'
 #' @section Data availability:
 #' - `b3-cotahist-yearly`: one file per year since 1986. The file of the current year is updated by B3
-#'   every day, but rb3 downloads it only once: use `fetch_marketdata(..., force_download = TRUE)` to
-#'   update it.
+#'   every day, so `fetch_marketdata()` downloads it again when the cached copy is from an earlier day.
+#'   Files of past years are downloaded only once.
 #' - `b3-cotahist-daily`: one file per session since 2014-01-02.
 #'
 #' @return

@@ -79,8 +79,8 @@ download_market_files <- function(metadata_list, force_download = FALSE, throttl
   pb <- cli::cli_progress_bar("Downloading data", total = length(metadata_list))
   on.exit(cli::cli_process_done(id = pb))
 
-  # Count files already downloaded
-  downloaded_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded))
+  # Count files already downloaded (an outdated current-year file is downloaded again)
+  downloaded_count_before <- sum(purrr::map_lgl(metadata_list, ~ .x$is_downloaded && !meta_is_outdated(.x)))
   # Report on files to download vs. skip
   if (force_download) {
     cli::cli_alert_info("Downloading {length(metadata_list)} file{?s}")
@@ -121,7 +121,7 @@ download_single_file <- function(metadata, pb = NULL, force_download = FALSE, th
   on.exit(cli::cli_progress_update(id = pb))
 
   # Download the file if it doesn't exist or if forced
-  if (!metadata$is_downloaded || force_download) {
+  if (!metadata$is_downloaded || force_download || meta_is_outdated(metadata)) {
     metadata <- withCallingHandlers(
       download_marketdata(metadata),
       message = function(m) {
@@ -140,6 +140,24 @@ download_single_file <- function(metadata, pb = NULL, force_download = FALSE, th
 
 
   return(metadata)
+}
+
+#' Is the downloaded file of the current year older than today?
+#'
+#' Templates with `downloader.refresh-current-year: true` have one file per year that B3 updates
+#' every session, so the current year's file is downloaded again once per day.
+#' The raw file's modification time is the download date: it is touched when a new download
+#' has the same content.
+#'
+#' @noRd
+meta_is_outdated <- function(meta) {
+  template <- template_retrieve(meta$template)
+  isTRUE(template$downloader[["refresh-current-year"]]) && isTRUE(
+    meta$is_downloaded &&
+      length(meta$downloaded) > 0 &&
+      identical(as.integer(meta$download_args$year), as.integer(format(Sys.Date(), "%Y"))) &&
+      as.Date(file.mtime(meta$downloaded[[1]])) < Sys.Date()
+  )
 }
 
 #' Process staging layer if configured
