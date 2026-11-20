@@ -49,6 +49,11 @@ The \code{throttle} parameter is useful for avoiding server overload and ensurin
 that the requests are sent at a reasonable rate. If set to \code{TRUE}, a 1-second
 delay is introduced between each download request.
 
+Files already in the cache are skipped, with two exceptions that are downloaded again:
+the current year's file of yearly templates (\code{b3-cotahist-yearly}, \code{b3-indexes-historical-data})
+when it is from an earlier day, and files without usable data (reported as invalid) that were
+downloaded less than 7 days after their \code{refdate}, because B3 may publish the data later.
+
 The \code{force_download} parameter allows you to re-download files even if they already exist
 in the cache. This can be useful if you want to ensure that you have the latest version
 of the data or if the files have been modified on the server.
