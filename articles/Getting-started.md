@@ -135,15 +135,16 @@ example on how to download and process data using the
 # Download daily historical data for a specific date range
 fetch_marketdata("b3-reference-rates", refdate = bizseq("2024-01-01", "2024-01-31", "Brazil/B3"))
 #> ✔ Downloading data [53s]
-#> ℹ 44 files downloaded
+#> ℹ 22 files downloaded
 #> ✔ Reading data into DB [6s]
 ```
 
 The total time taken to download and process the data is shown in the
 console output, and also the number of downloaded files is shown. This
-code downloads 44 files containing reference rates for the PRE and DIC
-curves for January 2024. The files are read and stored as parquet files
-forming a local database inside the `rb3.cachedir` folder.
+code downloads 22 files, one per business day of January 2024, each one
+with the reference rates of all curves (PRE, DIC, DOC and others). The
+files are read and stored as parquet files forming a local database
+inside the `rb3.cachedir` folder.
 
 ### `rb3.cachedir` folder
 
@@ -197,13 +198,13 @@ accessed using the function
 
 # Get the dataset for the template "b3-reference-rates"
 template_dataset("b3-reference-rates")
-#> FileSystemDataset with 47 Parquet files
+#> FileSystemDataset with 22 Parquet files
 #> 5 columns
 #> refdate: date32[day]
 #> curve_name: string
 #> cur_days: int64
-#> col1: double
-#> col2: double
+#> biz_days: int64
+#> rate: double
 ```
 
 This function defaults to the `input` layer, but you can specify the
@@ -211,9 +212,9 @@ This function defaults to the `input` layer, but you can specify the
 
 ``` r
 
-# Get the dataset for the template "b3-reference-rates" in the input layer
+# Get the dataset for the template "b3-reference-rates" in the staging layer
 template_dataset("b3-reference-rates", layer = "staging")
-#> FileSystemDataset with 47 Parquet files
+#> FileSystemDataset with 97 Parquet files
 #> 7 columns
 #> curve_name: string
 #> refdate: date32[day]
@@ -262,18 +263,18 @@ yc_brl_get() |>
   filter(refdate == "2024-01-31") |>
   collect()
 #> # A tibble: 257 × 7
-#>    curve_name refdate    forward_date cur_days biz_days r_252  r_360
-#>    <chr>      <date>     <date>          <int>    <int> <dbl>  <dbl>
-#>  1 PRE        2024-01-31 2024-02-01          1        1 0.116 0
-#>  2 PRE        2024-01-31 2024-02-07          7        5 0.112 0.115
-#>  3 PRE        2024-01-31 2024-02-14         14        8 0.112 0.0906
-#>  4 PRE        2024-01-31 2024-02-15         15        9 0.112 0.0953
-#>  5 PRE        2024-01-31 2024-02-16         16       10 0.112 0.0994
-#>  6 PRE        2024-01-31 2024-02-21         21       13 0.112 0.0983
-#>  7 PRE        2024-01-31 2024-02-28         28       18 0.112 0.102
-#>  8 PRE        2024-01-31 2024-02-29         29       19 0.112 0.104
-#>  9 PRE        2024-01-31 2024-03-01         30       20 0.112 0.106
-#> 10 PRE        2024-01-31 2024-03-04         33       21 0.112 0.101
+#>    curve_name refdate    forward_date cur_days biz_days r_252 r_360
+#>    <chr>      <date>     <date>          <int>    <int> <dbl> <dbl>
+#>  1 PRE        2024-01-31 2024-02-01          1        1 0.116    NA
+#>  2 PRE        2024-01-31 2024-02-07          7        5 0.112    NA
+#>  3 PRE        2024-01-31 2024-02-14         14        8 0.112    NA
+#>  4 PRE        2024-01-31 2024-02-15         15        9 0.112    NA
+#>  5 PRE        2024-01-31 2024-02-16         16       10 0.112    NA
+#>  6 PRE        2024-01-31 2024-02-21         21       13 0.112    NA
+#>  7 PRE        2024-01-31 2024-02-28         28       18 0.112    NA
+#>  8 PRE        2024-01-31 2024-02-29         29       19 0.112    NA
+#>  9 PRE        2024-01-31 2024-03-01         30       20 0.112    NA
+#> 10 PRE        2024-01-31 2024-03-04         33       21 0.112    NA
 #> # ℹ 247 more rows
 ```
 
@@ -284,7 +285,138 @@ three curves PRE, DIC, and DOC, but the columns `col1` and `col2` have
 different meanings for each curve. For this reason we strongly recommend
 using the custom functions to access the data instead of using the
 [`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
-function directly.
+function directly. The next section shows what these functions do, so
+you can write your own when no helper fits.
+
+### What the helpers do underneath
+
+The `_get()` functions are thin: each dataset is a folder of Parquet
+files, and a helper only opens it, filters it and renames some columns.
+When no helper fits your needs (for example,
+`b3-trade-information-consolidated` has none), you can do the same
+yourself. Here is the same result built in three ways.
+
+**1. With the helper**
+
+``` r
+
+yc_brl_get() |>
+  filter(refdate == "2024-01-31") |>
+  collect()
+#> # A tibble: 257 × 7
+#>    curve_name refdate    forward_date cur_days biz_days r_252 r_360
+#>    <chr>      <date>     <date>          <int>    <int> <dbl> <dbl>
+#>  1 PRE        2024-01-31 2024-02-01          1        1 0.116    NA
+#>  2 PRE        2024-01-31 2024-02-07          7        5 0.112    NA
+#>  3 PRE        2024-01-31 2024-02-14         14        8 0.112    NA
+#>  4 PRE        2024-01-31 2024-02-15         15        9 0.112    NA
+#>  5 PRE        2024-01-31 2024-02-16         16       10 0.112    NA
+#>  6 PRE        2024-01-31 2024-02-21         21       13 0.112    NA
+#>  7 PRE        2024-01-31 2024-02-28         28       18 0.112    NA
+#>  8 PRE        2024-01-31 2024-02-29         29       19 0.112    NA
+#>  9 PRE        2024-01-31 2024-03-01         30       20 0.112    NA
+#> 10 PRE        2024-01-31 2024-03-04         33       21 0.112    NA
+#> # ℹ 247 more rows
+```
+
+**2. With
+[`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)**
+
+[`yc_brl_get()`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+opens the `staging` layer of `b3-reference-rates`, keeps the PRE curve
+and renames `col1` and `col2`, whose meaning depends on the curve:
+
+``` r
+
+template_dataset("b3-reference-rates", layer = "staging") |>
+  filter(curve_name == "PRE", refdate == "2024-01-31") |>
+  rename(r_252 = col1, r_360 = col2) |>
+  select(curve_name, refdate, forward_date, cur_days, biz_days, r_252, r_360) |>
+  collect()
+#> # A tibble: 257 × 7
+#>    curve_name refdate    forward_date cur_days biz_days r_252 r_360
+#>    <chr>      <date>     <date>          <int>    <int> <dbl> <dbl>
+#>  1 PRE        2024-01-31 2024-02-01          1        1 0.116    NA
+#>  2 PRE        2024-01-31 2024-02-07          7        5 0.112    NA
+#>  3 PRE        2024-01-31 2024-02-14         14        8 0.112    NA
+#>  4 PRE        2024-01-31 2024-02-15         15        9 0.112    NA
+#>  5 PRE        2024-01-31 2024-02-16         16       10 0.112    NA
+#>  6 PRE        2024-01-31 2024-02-21         21       13 0.112    NA
+#>  7 PRE        2024-01-31 2024-02-28         28       18 0.112    NA
+#>  8 PRE        2024-01-31 2024-02-29         29       19 0.112    NA
+#>  9 PRE        2024-01-31 2024-03-01         30       20 0.112    NA
+#> 10 PRE        2024-01-31 2024-03-04         33       21 0.112    NA
+#> # ℹ 247 more rows
+```
+
+This returns the same table as the helper.
+
+**3. Without `rb3`**
+
+The datasets live in `<rb3.cachedir>/db/<layer>/<template-id>`, so any
+tool that reads Parquet can open them: `arrow`, DuckDB, Polars or
+pandas.
+
+``` r
+
+path <- file.path(getOption("rb3.cachedir"), "db", "input", "b3-reference-rates")
+arrow::open_dataset(path)
+#> FileSystemDataset with 22 Parquet files
+#> 5 columns
+#> curve_name: string
+#> cur_days: int64
+#> biz_days: int64
+#> rate: double
+#> refdate: string
+```
+
+Note that `refdate` is now a `string`. The files are partitioned by
+`refdate` (folders such as `refdate=2024-01-31/`), and the values of
+partition columns are stored in the folder names, not in the files, so
+`open_dataset()` has to guess their type.
+[`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
+does not have this problem because it passes the schema of the template.
+Without `rb3`, give the type of the partition column yourself:
+
+``` r
+
+arrow::open_dataset(path, partitioning = arrow::hive_partition(refdate = arrow::date32())) |>
+  filter(curve_name == "PRE", refdate == as.Date("2024-01-31")) |>
+  collect()
+#> # A tibble: 257 × 5
+#>    curve_name cur_days biz_days  rate refdate   
+#>    <chr>         <int>    <int> <dbl> <date>    
+#>  1 PRE               1        1  11.6 2024-01-31
+#>  2 PRE               7        5  11.2 2024-01-31
+#>  3 PRE              14        8  11.2 2024-01-31
+#>  4 PRE              15        9  11.2 2024-01-31
+#>  5 PRE              16       10  11.2 2024-01-31
+#>  6 PRE              21       13  11.2 2024-01-31
+#>  7 PRE              28       18  11.2 2024-01-31
+#>  8 PRE              29       19  11.2 2024-01-31
+#>  9 PRE              30       20  11.2 2024-01-31
+#> 10 PRE              33       21  11.2 2024-01-31
+#> # ℹ 247 more rows
+```
+
+**Which layer to open?**
+
+- The `input` layer has the data as it comes in the files from B3, one
+  partition per downloaded file.
+- The `staging` layer has the data ready to use: cleaned, with new
+  columns (such as `forward_date`) and with the partitions chosen for
+  querying. This is the layer used by the helpers. Values may also be
+  converted: the PRE rate on 2024-01-31 for 1 business day is `11.6`
+  (percent) in the `rate` column of the `input` layer and `0.116` in
+  `col1` of the `staging` layer.
+
+> #### Note
+>
+> The folder layout inside `rb3.cachedir` is internal and may change in
+> future versions. The `_get()` helpers and
+> [`template_dataset()`](https://ropensci.github.io/rb3/reference/template_dataset.md)
+> are the stable interface: prefer them in code that you want to keep
+> working after updating `rb3`.
 
 ## Conclusion
 

@@ -269,14 +269,14 @@ process data using the <code><a href="../reference/fetch_marketdata.html">fetch_
 <code class="sourceCode R"><span><span class="co"># Download daily historical data for a specific date range</span></span>
 <span><span class="fu"><a href="../reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="fu"><a href="http://wilsonfreitas.github.io/R-bizdays/reference/bizseq.html" class="external-link">bizseq</a></span><span class="op">(</span><span class="st">"2024-01-01"</span>, <span class="st">"2024-01-31"</span>, <span class="st">"Brazil/B3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ✔ Downloading data [53s]</span></span>
-<span><span class="co">#&gt; ℹ 44 files downloaded</span></span>
+<span><span class="co">#&gt; ℹ 22 files downloaded</span></span>
 <span><span class="co">#&gt; ✔ Reading data into DB [6s]</span></span></code></pre></div>
 <p>The total time taken to download and process the data is shown in the
 console output, and also the number of downloaded files is shown. This
-code downloads 44 files containing reference rates for the PRE and DIC
-curves for January 2024. The files are read and stored as parquet files
-forming a local database inside the <code>rb3.cachedir</code>
-folder.</p>
+code downloads 22 files, one per business day of January 2024, each one
+with the reference rates of all curves (PRE, DIC, DOC and others). The
+files are read and stored as parquet files forming a local database
+inside the <code>rb3.cachedir</code> folder.</p>
 </div>
 <div class="section level3">
 <h3 id="rb3-cachedir-folder">
@@ -321,20 +321,20 @@ is saved in the <code>staging</code> layer, also within the
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the dataset for the template "b3-reference-rates"</span></span>
 <span><span class="fu"><a href="../reference/template_dataset.html">template_dataset</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; FileSystemDataset with 47 Parquet files</span></span>
+<span><span class="co">#&gt; FileSystemDataset with 22 Parquet files</span></span>
 <span><span class="co">#&gt; 5 columns</span></span>
 <span><span class="co">#&gt; refdate: date32[day]</span></span>
 <span><span class="co">#&gt; curve_name: string</span></span>
 <span><span class="co">#&gt; cur_days: int64</span></span>
-<span><span class="co">#&gt; col1: double</span></span>
-<span><span class="co">#&gt; col2: double</span></span></code></pre></div>
+<span><span class="co">#&gt; biz_days: int64</span></span>
+<span><span class="co">#&gt; rate: double</span></span></code></pre></div>
 <p>This function defaults to the <code>input</code> layer, but you can
 specify the <code>layer</code> argument to access the
 <code>staging</code> layer if needed.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get the dataset for the template "b3-reference-rates" in the input layer</span></span>
+<code class="sourceCode R"><span><span class="co"># Get the dataset for the template "b3-reference-rates" in the staging layer</span></span>
 <span><span class="fu"><a href="../reference/template_dataset.html">template_dataset</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, layer <span class="op">=</span> <span class="st">"staging"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; FileSystemDataset with 47 Parquet files</span></span>
+<span><span class="co">#&gt; FileSystemDataset with 97 Parquet files</span></span>
 <span><span class="co">#&gt; 7 columns</span></span>
 <span><span class="co">#&gt; curve_name: string</span></span>
 <span><span class="co">#&gt; refdate: date32[day]</span></span>
@@ -383,18 +383,18 @@ rate curve (DIC).</li>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">refdate</span> <span class="op">==</span> <span class="st">"2024-01-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 257 × 7</span></span>
-<span><span class="co">#&gt;    curve_name refdate    forward_date cur_days biz_days r_252  r_360</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;      &lt;date&gt;     &lt;date&gt;          &lt;int&gt;    &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 PRE        2024-01-31 2024-02-01          1        1 0.116 0</span></span>
-<span><span class="co">#&gt;  2 PRE        2024-01-31 2024-02-07          7        5 0.112 0.115</span></span>
-<span><span class="co">#&gt;  3 PRE        2024-01-31 2024-02-14         14        8 0.112 0.0906</span></span>
-<span><span class="co">#&gt;  4 PRE        2024-01-31 2024-02-15         15        9 0.112 0.0953</span></span>
-<span><span class="co">#&gt;  5 PRE        2024-01-31 2024-02-16         16       10 0.112 0.0994</span></span>
-<span><span class="co">#&gt;  6 PRE        2024-01-31 2024-02-21         21       13 0.112 0.0983</span></span>
-<span><span class="co">#&gt;  7 PRE        2024-01-31 2024-02-28         28       18 0.112 0.102</span></span>
-<span><span class="co">#&gt;  8 PRE        2024-01-31 2024-02-29         29       19 0.112 0.104</span></span>
-<span><span class="co">#&gt;  9 PRE        2024-01-31 2024-03-01         30       20 0.112 0.106</span></span>
-<span><span class="co">#&gt; 10 PRE        2024-01-31 2024-03-04         33       21 0.112 0.101</span></span>
+<span><span class="co">#&gt;    curve_name refdate    forward_date cur_days biz_days r_252 r_360</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;      &lt;date&gt;     &lt;date&gt;          &lt;int&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 PRE        2024-01-31 2024-02-01          1        1 0.116    NA</span></span>
+<span><span class="co">#&gt;  2 PRE        2024-01-31 2024-02-07          7        5 0.112    NA</span></span>
+<span><span class="co">#&gt;  3 PRE        2024-01-31 2024-02-14         14        8 0.112    NA</span></span>
+<span><span class="co">#&gt;  4 PRE        2024-01-31 2024-02-15         15        9 0.112    NA</span></span>
+<span><span class="co">#&gt;  5 PRE        2024-01-31 2024-02-16         16       10 0.112    NA</span></span>
+<span><span class="co">#&gt;  6 PRE        2024-01-31 2024-02-21         21       13 0.112    NA</span></span>
+<span><span class="co">#&gt;  7 PRE        2024-01-31 2024-02-28         28       18 0.112    NA</span></span>
+<span><span class="co">#&gt;  8 PRE        2024-01-31 2024-02-29         29       19 0.112    NA</span></span>
+<span><span class="co">#&gt;  9 PRE        2024-01-31 2024-03-01         30       20 0.112    NA</span></span>
+<span><span class="co">#&gt; 10 PRE        2024-01-31 2024-03-04         33       21 0.112    NA</span></span>
 <span><span class="co">#&gt; # ℹ 247 more rows</span></span></code></pre></div>
 <p>The columns <code>r_252</code> and <code>r_360</code> have been
 renamed in the function <code><a href="../reference/yc_xxx_get.html">yc_brl_get()</a></code>. This happens because
@@ -403,7 +403,122 @@ PRE, DIC, and DOC, but the columns <code>col1</code> and
 <code>col2</code> have different meanings for each curve. For this
 reason we strongly recommend using the custom functions to access the
 data instead of using the <code><a href="../reference/template_dataset.html">template_dataset()</a></code> function
-directly.</p>
+directly. The next section shows what these functions do, so you can
+write your own when no helper fits.</p>
+<div class="section level3">
+<h3 id="what-the-helpers-do-underneath">What the helpers do underneath<a class="anchor" aria-label="anchor" href="#what-the-helpers-do-underneath"></a>
+</h3>
+<p>The <code>_get()</code> functions are thin: each dataset is a folder
+of Parquet files, and a helper only opens it, filters it and renames
+some columns. When no helper fits your needs (for example,
+<code>b3-trade-information-consolidated</code> has none), you can do the
+same yourself. Here is the same result built in three ways.</p>
+<p><strong>1. With the helper</strong></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/yc_xxx_get.html">yc_brl_get</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">refdate</span> <span class="op">==</span> <span class="st">"2024-01-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 257 × 7</span></span>
+<span><span class="co">#&gt;    curve_name refdate    forward_date cur_days biz_days r_252 r_360</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;      &lt;date&gt;     &lt;date&gt;          &lt;int&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 PRE        2024-01-31 2024-02-01          1        1 0.116    NA</span></span>
+<span><span class="co">#&gt;  2 PRE        2024-01-31 2024-02-07          7        5 0.112    NA</span></span>
+<span><span class="co">#&gt;  3 PRE        2024-01-31 2024-02-14         14        8 0.112    NA</span></span>
+<span><span class="co">#&gt;  4 PRE        2024-01-31 2024-02-15         15        9 0.112    NA</span></span>
+<span><span class="co">#&gt;  5 PRE        2024-01-31 2024-02-16         16       10 0.112    NA</span></span>
+<span><span class="co">#&gt;  6 PRE        2024-01-31 2024-02-21         21       13 0.112    NA</span></span>
+<span><span class="co">#&gt;  7 PRE        2024-01-31 2024-02-28         28       18 0.112    NA</span></span>
+<span><span class="co">#&gt;  8 PRE        2024-01-31 2024-02-29         29       19 0.112    NA</span></span>
+<span><span class="co">#&gt;  9 PRE        2024-01-31 2024-03-01         30       20 0.112    NA</span></span>
+<span><span class="co">#&gt; 10 PRE        2024-01-31 2024-03-04         33       21 0.112    NA</span></span>
+<span><span class="co">#&gt; # ℹ 247 more rows</span></span></code></pre></div>
+<p><strong>2. With <code><a href="../reference/template_dataset.html">template_dataset()</a></code></strong></p>
+<p><code><a href="../reference/yc_xxx_get.html">yc_brl_get()</a></code> opens the <code>staging</code> layer of
+<code>b3-reference-rates</code>, keeps the PRE curve and renames
+<code>col1</code> and <code>col2</code>, whose meaning depends on the
+curve:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/template_dataset.html">template_dataset</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, layer <span class="op">=</span> <span class="st">"staging"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">curve_name</span> <span class="op">==</span> <span class="st">"PRE"</span>, <span class="va">refdate</span> <span class="op">==</span> <span class="st">"2024-01-31"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>r_252 <span class="op">=</span> <span class="va">col1</span>, r_360 <span class="op">=</span> <span class="va">col2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">curve_name</span>, <span class="va">refdate</span>, <span class="va">forward_date</span>, <span class="va">cur_days</span>, <span class="va">biz_days</span>, <span class="va">r_252</span>, <span class="va">r_360</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 257 × 7</span></span>
+<span><span class="co">#&gt;    curve_name refdate    forward_date cur_days biz_days r_252 r_360</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;      &lt;date&gt;     &lt;date&gt;          &lt;int&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 PRE        2024-01-31 2024-02-01          1        1 0.116    NA</span></span>
+<span><span class="co">#&gt;  2 PRE        2024-01-31 2024-02-07          7        5 0.112    NA</span></span>
+<span><span class="co">#&gt;  3 PRE        2024-01-31 2024-02-14         14        8 0.112    NA</span></span>
+<span><span class="co">#&gt;  4 PRE        2024-01-31 2024-02-15         15        9 0.112    NA</span></span>
+<span><span class="co">#&gt;  5 PRE        2024-01-31 2024-02-16         16       10 0.112    NA</span></span>
+<span><span class="co">#&gt;  6 PRE        2024-01-31 2024-02-21         21       13 0.112    NA</span></span>
+<span><span class="co">#&gt;  7 PRE        2024-01-31 2024-02-28         28       18 0.112    NA</span></span>
+<span><span class="co">#&gt;  8 PRE        2024-01-31 2024-02-29         29       19 0.112    NA</span></span>
+<span><span class="co">#&gt;  9 PRE        2024-01-31 2024-03-01         30       20 0.112    NA</span></span>
+<span><span class="co">#&gt; 10 PRE        2024-01-31 2024-03-04         33       21 0.112    NA</span></span>
+<span><span class="co">#&gt; # ℹ 247 more rows</span></span></code></pre></div>
+<p>This returns the same table as the helper.</p>
+<p><strong>3. Without <code>rb3</code></strong></p>
+<p>The datasets live in
+<code>&lt;rb3.cachedir&gt;/db/&lt;layer&gt;/&lt;template-id&gt;</code>,
+so any tool that reads Parquet can open them: <code>arrow</code>,
+DuckDB, Polars or pandas.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"rb3.cachedir"</span><span class="op">)</span>, <span class="st">"db"</span>, <span class="st">"input"</span>, <span class="st">"b3-reference-rates"</span><span class="op">)</span></span>
+<span><span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/open_dataset.html" class="external-link">open_dataset</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; FileSystemDataset with 22 Parquet files</span></span>
+<span><span class="co">#&gt; 5 columns</span></span>
+<span><span class="co">#&gt; curve_name: string</span></span>
+<span><span class="co">#&gt; cur_days: int64</span></span>
+<span><span class="co">#&gt; biz_days: int64</span></span>
+<span><span class="co">#&gt; rate: double</span></span>
+<span><span class="co">#&gt; refdate: string</span></span></code></pre></div>
+<p>Note that <code>refdate</code> is now a <code>string</code>. The
+files are partitioned by <code>refdate</code> (folders such as
+<code>refdate=2024-01-31/</code>), and the values of partition columns
+are stored in the folder names, not in the files, so
+<code>open_dataset()</code> has to guess their type.
+<code><a href="../reference/template_dataset.html">template_dataset()</a></code> does not have this problem because it
+passes the schema of the template. Without <code>rb3</code>, give the
+type of the partition column yourself:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/open_dataset.html" class="external-link">open_dataset</a></span><span class="op">(</span><span class="va">path</span>, partitioning <span class="op">=</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/hive_partition.html" class="external-link">hive_partition</a></span><span class="op">(</span>refdate <span class="op">=</span> <span class="fu">arrow</span><span class="fu">::</span><span class="fu"><a href="https://arrow.apache.org/docs/r/reference/data-type.html" class="external-link">date32</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">curve_name</span> <span class="op">==</span> <span class="st">"PRE"</span>, <span class="va">refdate</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-31"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 257 × 5</span></span>
+<span><span class="co">#&gt;    curve_name cur_days biz_days  rate refdate   </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;         &lt;int&gt;    &lt;int&gt; &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt;  1 PRE               1        1  11.6 2024-01-31</span></span>
+<span><span class="co">#&gt;  2 PRE               7        5  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  3 PRE              14        8  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  4 PRE              15        9  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  5 PRE              16       10  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  6 PRE              21       13  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  7 PRE              28       18  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  8 PRE              29       19  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt;  9 PRE              30       20  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt; 10 PRE              33       21  11.2 2024-01-31</span></span>
+<span><span class="co">#&gt; # ℹ 247 more rows</span></span></code></pre></div>
+<p><strong>Which layer to open?</strong></p>
+<ul>
+<li>The <code>input</code> layer has the data as it comes in the files
+from B3, one partition per downloaded file.</li>
+<li>The <code>staging</code> layer has the data ready to use: cleaned,
+with new columns (such as <code>forward_date</code>) and with the
+partitions chosen for querying. This is the layer used by the helpers.
+Values may also be converted: the PRE rate on 2024-01-31 for 1 business
+day is <code>11.6</code> (percent) in the <code>rate</code> column of
+the <code>input</code> layer and <code>0.116</code> in <code>col1</code>
+of the <code>staging</code> layer.</li>
+</ul>
+<blockquote>
+<h4 id="note-1">Note</h4>
+<p>The folder layout inside <code>rb3.cachedir</code> is internal and
+may change in future versions. The <code>_get()</code> helpers and
+<code><a href="../reference/template_dataset.html">template_dataset()</a></code> are the stable interface: prefer them in
+code that you want to keep working after updating <code>rb3</code>.</p>
+</blockquote>
+</div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
