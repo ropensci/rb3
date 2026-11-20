@@ -66,6 +66,13 @@ The `throttle` parameter is useful for avoiding server overload and
 ensuring that the requests are sent at a reasonable rate. If set to
 `TRUE`, a 1-second delay is introduced between each download request.
 
+Files already in the cache are skipped, with two exceptions that are
+downloaded again: the current year's file of yearly templates
+(`b3-cotahist-yearly`, `b3-indexes-historical-data`) when it is from an
+earlier day, and files without usable data (reported as invalid) that
+were downloaded less than 7 days after their `refdate`, because B3 may
+publish the data later.
+
 The `force_download` parameter allows you to re-download files even if
 they already exist in the cache. This can be useful if you want to
 ensure that you have the latest version of the data or if the files have

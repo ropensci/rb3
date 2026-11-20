@@ -12,6 +12,13 @@
   months): older dates get an empty file and are reported as failed
   downloads.
 - [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+  now downloads again a file that had no usable data (reported as
+  invalid) when it was downloaded less than 7 days after its `refdate`
+  ([\#142](https://github.com/ropensci/rb3/issues/142)). For example,
+  settlement prices downloaded before B3 published them are fetched
+  again by the next call, instead of being lost. Files downloaded later
+  are final and are not retried.
+- [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
   now downloads again the current year’s file of `b3-cotahist-yearly`
   and `b3-indexes-historical-data` when the cached copy is from an
   earlier day ([\#143](https://github.com/ropensci/rb3/issues/143)). B3
