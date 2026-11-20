@@ -59,8 +59,8 @@ To trigger evaluation and return the results as an R <code>tibble</code>, use <c
 
 
 <p>One file per index and year, from the first year of each index (IBOV since 1968). The file of the
-current year is updated by B3 every day, but rb3 downloads it only once: use
-<code>fetch_marketdata(..., force_download = TRUE)</code> to update it.</p>
+current year is updated by B3 every day, so <code><a href="fetch_marketdata.html">fetch_marketdata()</a></code> downloads it again when the cached
+copy is from an earlier day. Files of past years are downloaded only once.</p>
     </div>
 
     <div class="section level2">

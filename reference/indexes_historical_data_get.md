@@ -19,9 +19,10 @@ memory usage. To trigger evaluation and return the results as an R
 ## Data availability
 
 One file per index and year, from the first year of each index (IBOV
-since 1968). The file of the current year is updated by B3 every day,
-but rb3 downloads it only once: use
-`fetch_marketdata(..., force_download = TRUE)` to update it.
+since 1968). The file of the current year is updated by B3 every day, so
+[`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+downloads it again when the cached copy is from an earlier day. Files of
+past years are downloaded only once.
 
 ## Examples
 

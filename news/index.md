@@ -11,6 +11,14 @@
   financial volume). B3 keeps only the last ~360 sessions (about 17
   months): older dates get an empty file and are reported as failed
   downloads.
+- [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+  now downloads again the current year’s file of `b3-cotahist-yearly`
+  and `b3-indexes-historical-data` when the cached copy is from an
+  earlier day ([\#143](https://github.com/ropensci/rb3/issues/143)). B3
+  updates these files every session, so before this change the data
+  stopped at the day of the first download. Past years are still
+  downloaded only once. Templates opt in with
+  `downloader.refresh-current-year: true`.
 - An empty HTTP response (no `Content-Type` header) no longer stops
   [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
   with “Unknown error”; it is saved as an empty file and reported as a

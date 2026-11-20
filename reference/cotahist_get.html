@@ -92,8 +92,8 @@ with the <code><a href="read_marketdata.html">read_marketdata</a></code> functio
 
 
 <ul><li><p><code>b3-cotahist-yearly</code>: one file per year since 1986. The file of the current year is updated by B3
-every day, but rb3 downloads it only once: use <code>fetch_marketdata(..., force_download = TRUE)</code> to
-update it.</p></li>
+every day, so <code><a href="fetch_marketdata.html">fetch_marketdata()</a></code> downloads it again when the cached copy is from an earlier day.
+Files of past years are downloaded only once.</p></li>
 <li><p><code>b3-cotahist-daily</code>: one file per session since 2014-01-02.</p></li>
 </ul></div>
 

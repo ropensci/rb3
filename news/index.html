@@ -40,6 +40,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="rb3-development-version">rb3 (development version)<a class="anchor" aria-label="anchor" href="#rb3-development-version"></a></h2>
 <ul><li>New template <code>b3-trade-information-consolidated</code> (<a href="https://github.com/ropensci/rb3/issues/126" class="external-link">#126</a>): B3’s TradeInformationConsolidated file, with every instrument of every segment (stocks, options, futures, forwards, …) and every column of the file (low, high, average and last price, oscillation, settlement price and rate, reference price, number of trades, contracts, financial volume). B3 keeps only the last ~360 sessions (about 17 months): older dates get an empty file and are reported as failed downloads.</li>
+<li>
+<code><a href="../reference/fetch_marketdata.html">fetch_marketdata()</a></code> now downloads again the current year’s file of <code>b3-cotahist-yearly</code> and <code>b3-indexes-historical-data</code> when the cached copy is from an earlier day (<a href="https://github.com/ropensci/rb3/issues/143" class="external-link">#143</a>). B3 updates these files every session, so before this change the data stopped at the day of the first download. Past years are still downloaded only once. Templates opt in with <code>downloader.refresh-current-year: true</code>.</li>
 <li>An empty HTTP response (no <code>Content-Type</code> header) no longer stops <code><a href="../reference/fetch_marketdata.html">fetch_marketdata()</a></code> with “Unknown error”; it is saved as an empty file and reported as a failed download.</li>
 </ul></div>
     <div class="section level2">
