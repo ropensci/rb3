@@ -205,6 +205,19 @@ ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
   scale_y_continuous(labels = scales::percent)
 ```
 
+## Checking the cache
+
+`rb3_doctor()` checks the health of the local cache. With a template, it lists the business days
+with no data in a dataset layer, and why each one is missing, so you can fetch them again.
+It only reports and never changes the cache.
+
+```{r doctor, eval=FALSE}
+rb3_doctor("b3-reference-rates")
+```
+
+See the vignette [Checking the Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.html)
+for every check and option.
+
 ## Documentation
 
 For comprehensive documentation and examples, visit:
@@ -216,6 +229,7 @@ For comprehensive documentation and examples, visit:
   - [Analyzing B3 Index Data](https://ropensci.github.io/rb3/articles/Fetching-historical-index-data.html)
   - [How to Compute Historical Rates from B3 Future Prices](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html)
   - [Fetching B3 Yield Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html)
+  - [Checking the Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.html)
 
 ## Citation
 

@@ -21,6 +21,8 @@ navbar:
         href: articles/Fetching-historical-future-rates.html
       - text: Fetching B3 Yield Curves
         href: articles/Fetching-historical-yield-curve.html
+      - text: Checking the Cache
+        href: articles/Checking-the-cache.html
 
 reference:
   - title: rb3 Package

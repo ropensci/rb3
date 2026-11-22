@@ -208,7 +208,7 @@ doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calen
 #' @export
 rb3_doctor <- function(template = NULL, layer = "input", from = NULL, to = NULL, calendar = NULL) {
   title <- if (is.null(template)) "Cache doctor" else paste0("Cache doctor: ", template, " (", layer, ")")
-  cli::cli_inform("━━ {.strong {title}}")
+  cli::cli_inform("\u2501\u2501 {.strong {title}}")
   gaps <- doctor_findings()
   if (!is.null(template)) {
     gaps <- doctor_gaps(template, layer, from, to, calendar)
