@@ -41,6 +41,13 @@
 #' The `reprocess` parameter allows you to reprocess files even if they have already been processed.
 #' This can be useful if you want to ensure that the data is up-to-date.
 #'
+#' At the end, a summary shows how many files have data and lists every file that failed:
+#' `download failed`, `not read`, or `no data` (read, but without usable data, e.g. a non-trading day).
+#'
+#' @return A tibble (invisibly) with one row per combination of arguments and the columns
+#'   `template`, `download_args` (a list column) and `status` (`"ok"`, `"download_failed"`,
+#'   `"not_read"` or `"invalid"`). Use it to find the combinations to fetch again.
+#'
 #' @examples
 #' \dontrun{
 #' fetch_marketdata("b3-cotahist-yearly", year = 2020:2024)
@@ -63,11 +70,49 @@ fetch_marketdata <- function(template, force_download = FALSE, reprocess = FALSE
 
   # Process phase
   ## Process input layer
-  input_layer_changed <- process_input_layer(metadata_list, reprocess)
+  input <- process_input_layer(metadata_list, reprocess)
   ## Process staging layer
-  process_staging_layer(template, input_layer_changed, reprocess)
+  process_staging_layer(template, input$changed, reprocess)
 
-  invisible(NULL)
+  fetch_report(input$metadata_list)
+}
+
+#' Summarise the final state of each meta and list the failures
+#'
+#' @return A tibble with one row per meta (invisibly)
+#'
+#' @noRd
+fetch_report <- function(metadata_list) {
+  status <- purrr::map_chr(metadata_list, function(m) {
+    if (!isTRUE(m$is_downloaded)) {
+      "download_failed"
+    } else if (!isTRUE(m$is_processed)) {
+      "not_read"
+    } else if (!isTRUE(m$is_valid)) {
+      "invalid"
+    } else {
+      "ok"
+    }
+  })
+  cli::cli_text("\u2501\u2501 {.strong Summary}")
+  cli::cli_inform(c(v = "{sum(status == 'ok')} of {length(status)} file{?s} with data"))
+  failed <- which(status != "ok")
+  if (length(failed) > 0) {
+    labels <- c(download_failed = "download failed", not_read = "not read", invalid = "no data")
+    msgs <- purrr::map_chr(failed, ~ paste0(labels[[status[.x]]], ": ", meta_args_str(metadata_list[[.x]])))
+    msgs <- gsub("([{}])", "\\1\\1", msgs) # cli would interpolate braces in the args
+    cli::cli_inform(c("!" = "{length(failed)} file{?s} without data:", rlang::set_names(msgs, rep("x", length(msgs)))))
+  }
+  invisible(dplyr::tibble(
+    template = purrr::map_chr(metadata_list, "template"),
+    download_args = purrr::map(metadata_list, "download_args"),
+    status = status
+  ))
+}
+
+meta_args_str <- function(meta) {
+  args <- meta$download_args
+  paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
 }
 
 #' Download market data files based on template and parameters
@@ -137,8 +182,7 @@ download_single_file <- function(metadata, pb = NULL, force_download = FALSE, th
       Sys.sleep(1)
     }
     if (!metadata$is_downloaded) {
-      args <- metadata$download_args
-      arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
+      arg_str <- meta_args_str(metadata)
       cli::cli_progress_output("Failed to download file for args: {.val {arg_str}}", id = pb)
     }
   }
@@ -202,7 +246,7 @@ process_staging_layer <- function(template, input_layer_changed, reprocess) {
 #' @param metadata_list List of metadata for downloaded files
 #' @param reprocess Whether to reprocess files even if they are already processed
 #'
-#' @return NULL (invisibly)
+#' @return A list with the updated `metadata_list` and `changed`, whether the input layer changed
 #'
 #' @noRd
 process_input_layer <- function(metadata_list, reprocess) {
@@ -234,7 +278,7 @@ process_input_layer <- function(metadata_list, reprocess) {
     cli::cli_inform(c(v = "{.strong input} layer not updated - no new files detected [{round(elapsed, 2)}s]"))
   }
 
-  return(input_layer_changed)
+  list(metadata_list = metadata_list, changed = input_layer_changed)
 }
 
 #' Create staging layer from input layer
@@ -293,9 +337,8 @@ process_file <- function(metadata, pb, reprocess = FALSE) {
         invokeRestart("muffleMessage")
       }
     )
-    if (!metadata$is_valid) {
-      args <- metadata$download_args
-      arg_str <- paste(names(args), purrr::map(args, format), sep = " = ", collapse = ", ")
+    if (metadata$is_downloaded && !metadata$is_valid) {
+      arg_str <- meta_args_str(metadata)
       cli::cli_progress_output("Invalid file for args: {.val {arg_str}}", id = pb)
     }
   }
