@@ -1,5 +1,12 @@
 # rb3 (development version)
 
+* New function `rb3_doctor()` checks the health of the cache (#77). With a template, it finds the gaps in
+  the time series of a dataset layer (`input` or `staging`): the business days with no data, each with a
+  reason (never fetched, download failed, not read, no data, or read but not in the layer), so missing
+  dates can be fetched with `fetch_marketdata()`. It also reports stale download records (such as the old
+  `b3-reference-rates` records with `curve_name`), records whose raw file is missing, and raw files that
+  no record uses. It only reports and never changes the cache. See the new vignette "Checking the Cache".
+* Reading the download records is much faster (`dget()` on a text connection replaced by `parse()`).
 * `?yc_get` explains what to do with caches created before rb3 0.1.1, which still hold the old
   "Taxas Referenciais" HTML files of `b3-reference-rates`: they are no longer read, and the dates can be
   fetched again from the swap rates file (#144).

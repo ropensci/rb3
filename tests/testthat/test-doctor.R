@@ -160,3 +160,45 @@ test_that("bad layers are errors", {
     class = "error_doctor_layer"
   )
 })
+
+# --- rb3_doctor ---
+
+test_that("rb3_doctor without template runs only the health checks", {
+  expect_invisible(res <- suppressMessages(rb3_doctor()))
+  expect_false(any(res$check == "gap"))
+})
+
+test_that("rb3_doctor prints the period, gap runs and health lines", {
+  write_layer("template-test-doctor-daily", c("2024-01-08", "2024-01-12", "2024-01-16"))
+  record("template-test-doctor-daily", "no_data", refdate = as.Date("2024-01-15"))
+  msgs <- capture_messages(res <- rb3_doctor("template-test-doctor-daily"))
+  out <- paste(msgs, collapse = "\n")
+  expect_match(out, "Cache doctor: template-test-doctor-daily \\(input\\)")
+  expect_match(out, "2024-01-08 to 2024-01-16, 7 business days, 3 with data")
+  expect_match(out, "2024-01-09 to 2024-01-11 \\(3 days\\): never fetched")
+  expect_match(out, "2024-01-15 \\(1 day\\): no data")
+  expect_match(out, "No stale records")
+  expect_equal(res$refdate[res$check == "gap"], as.Date(c("2024-01-09", "2024-01-10", "2024-01-11", "2024-01-15")))
+})
+
+test_that("rb3_doctor reports health problems with counts", {
+  stale <- meta_new("template-test-doctor-daily", refdate = as.Date("2024-01-08"), foo = 1)
+  withr::defer(meta_clean(stale))
+  write_layer("template-test-doctor-daily", "2024-01-08")
+  msgs <- capture_messages(res <- rb3_doctor("template-test-doctor-daily"))
+  expect_match(paste(msgs, collapse = "\n"), "1 stale record")
+  expect_equal(sum(res$check == "stale_meta"), 1)
+})
+
+test_that("empty layer without from/to is an error", {
+  write_layer("template-test-doctor-daily", character())
+  expect_error(suppressMessages(rb3_doctor("template-test-doctor-daily")), class = "error_doctor_layer")
+})
+
+test_that("rb3_doctor does not create a missing layer folder", {
+  tpl <- template_retrieve("template-test-doctor-daily")
+  folder <- file.path(rb3_registry$get_instance()$db_folder, tpl$writers$input$layer, tpl$id)
+  unlink(folder, recursive = TRUE)
+  expect_error(suppressMessages(rb3_doctor("template-test-doctor-daily")), class = "error_doctor_layer")
+  expect_false(dir.exists(folder))
+})

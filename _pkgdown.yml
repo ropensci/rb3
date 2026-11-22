@@ -32,6 +32,7 @@ reference:
       - rb3.cachedir
       - meta_db_connection
       - rb3_clear_cache
+      - rb3_doctor
 
   - title: Marketdata Access
     desc: >
