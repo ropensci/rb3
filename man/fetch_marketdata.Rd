@@ -30,6 +30,11 @@ to avoid overwhelming the server.}
 \item{...}{Named arguments that will be expanded into a grid of all combinations
 to fetch data for}
 }
+\value{
+A tibble (invisibly) with one row per combination of arguments and the columns
+\code{template}, \code{download_args} (a list column) and \code{status} (\code{"ok"}, \code{"download_failed"},
+\code{"not_read"} or \code{"invalid"}). Use it to find the combinations to fetch again.
+}
 \description{
 Downloads market data based on a template and parameter combinations, then reads
 the data into a database.
@@ -60,6 +65,9 @@ of the data or if the files have been modified on the server.
 
 The \code{reprocess} parameter allows you to reprocess files even if they have already been processed.
 This can be useful if you want to ensure that the data is up-to-date.
+
+At the end, a summary shows how many files have data and lists every file that failed:
+\verb{download failed}, \verb{not read}, or \verb{no data} (read, but without usable data, e.g. a non-trading day).
 }
 \examples{
 \dontrun{

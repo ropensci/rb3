@@ -1,5 +1,8 @@
 # rb3 (development version)
 
+* `fetch_marketdata()` ends with a summary: how many files have data, and the arguments of every file
+  whose download failed, that was not read, or that had no data (#86). It now returns (invisibly) a tibble
+  with `template`, `download_args` and `status` for each combination of arguments, instead of `NULL`.
 * New template `b3-trade-information-consolidated` (#126): B3's TradeInformationConsolidated file, with every
   instrument of every segment (stocks, options, futures, forwards, ...) and every column of the file
   (low, high, average and last price, oscillation, settlement price and rate, reference price, number of
