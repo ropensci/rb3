@@ -138,11 +138,11 @@ test_that("calendar comes from the template, the argument overrides it, and is r
 })
 
 test_that("a period past the calendar's end is a clear error", {
-  skip_if(bizdays::calendars()[["Brazil/B3"]]$end.date >= as.Date("2026-06-01"))
+  end <- bizdays::calendars()[["Brazil/B3"]]$end.date
   write_layer("template-test-doctor-daily", "2024-01-08")
   expect_error(
-    doctor_gaps("template-test-doctor-daily", to = "2026-06-01", calendar = "Brazil/B3"),
-    "2025-12-31",
+    doctor_gaps("template-test-doctor-daily", to = end + 30, calendar = "Brazil/B3"),
+    format(end),
     class = "error_doctor_calendar"
   )
 })
