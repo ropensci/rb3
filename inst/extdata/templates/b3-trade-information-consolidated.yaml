@@ -2,6 +2,7 @@ id: b3-trade-information-consolidated
 filename: ~
 filetype: CUSTOM
 description: Negócios consolidados do pregão (TradeInformationConsolidated), todos os segmentos, últimos ~360 pregões
+calendar: Brazil/B3
 downloader:
   function: trade_information_download
   url: https://arquivos.b3.com.br/api/download/requestname?fileName=TradeInformationConsolidated

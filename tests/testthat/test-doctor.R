@@ -232,3 +232,14 @@ test_that("long gap lists are cut in the printed summary", {
   expect_match(out, "and [0-9]+ more")
   expect_lt(lengths(regmatches(out, gregexpr("never fetched", out))), 25)
 })
+
+test_that("every built-in time-series template defines a calendar", {
+  files <- list.files(system.file("extdata/templates", package = "rb3"), full.names = TRUE)
+  ids <- vapply(files, function(f) yaml::read_yaml(f)$id, "")
+  for (id in ids) {
+    tpl <- template_retrieve(id)
+    if (any(c("refdate", "year") %in% names(tpl$downloader$args))) {
+      expect_true(!is.null(tpl$calendar), label = paste(id, "has a calendar"))
+    }
+  }
+})

@@ -2,6 +2,7 @@ id: b3-futures-settlement-prices
 filename: ~
 filetype: CUSTOM
 description: Preços de Ajustes Diários de Contratos Futuros (Boletim Diário do Mercado)
+calendar: Brazil/B3
 downloader:
   function: settlement_prices_download
   url: https://arquivos.b3.com.br/bdi/table/export/csv?lang=en-us
