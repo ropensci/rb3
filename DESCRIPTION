@@ -63,6 +63,7 @@ Collate:
     'readers.R'
     'downloaders.R'
     'rb3-package.R'
+    'doctor.R'
     'zzz.R'
 BugReports: https://github.com/ropensci/rb3/issues
 URL: https://github.com/ropensci/rb3,
