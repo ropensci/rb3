@@ -46,6 +46,14 @@ process_yc <- function(ds) {
 #' <https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf>
 #' for more details.
 #'
+#' @section Caches created before rb3 0.1.1:
+#' Older versions downloaded the "Taxas Referenciais" HTML page, one file per date and curve
+#' (with a `curve_name` argument). Those raw files and their metadata stay in the cache, but they are
+#' not read anymore, because the swap rates file covers the same dates. To rebuild the data, delete
+#' `<cachedir>/db/input/b3-reference-rates` and `<cachedir>/db/staging/b3-reference-rates` and run
+#' `fetch_marketdata("b3-reference-rates", refdate = ...)` again for the dates you need.
+#' The old raw files only take disk space; `rb3_clear_cache()` removes them with the rest of the cache.
+#'
 #' @return
 #' An `arrow_dplyr_query` or `ArrowObject`, representing a lazily evaluated query. The underlying data is not
 #' collected until explicitly requested, allowing efficient manipulation of large datasets without immediate

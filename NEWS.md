@@ -1,5 +1,9 @@
 # rb3 (development version)
 
+* `?yc_get` explains what to do with caches created before rb3 0.1.1, which still hold the old
+  "Taxas Referenciais" HTML files of `b3-reference-rates`: they are no longer read, and the dates can be
+  fetched again from the swap rates file (#144).
+
 * `fetch_marketdata()` ends with a summary: how many files have data, and the arguments of every file
   whose download failed, that was not read, or that had no data (#86). It now returns (invisibly) a tibble
   with `template`, `download_args` and `status` for each combination of arguments, instead of `NULL`.
