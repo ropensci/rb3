@@ -63,3 +63,100 @@ test_that("doctor_health finds raw files without records, and shared files are n
   expect_false(any(res$check == "orphan_raw" & res$detail == basename(shared)))
   expect_false(any(doctor_health("template-test-small-file")$check == "orphan_raw"))
 })
+
+# --- gap check ---
+
+write_layer <- function(tpl_id, dates) {
+  tpl <- template_retrieve(tpl_id)
+  folder <- template_db_folder(tpl, "input")
+  unlink(list.files(folder, full.names = TRUE), recursive = TRUE)
+  if (length(dates) > 0) {
+    arrow::write_dataset(data.frame(refdate = as.Date(dates), value = 1), folder, partitioning = "refdate")
+  }
+  withr::defer(unlink(list.files(folder, full.names = TRUE), recursive = TRUE), envir = parent.frame())
+}
+
+# status: "ok", "download_failed", "not_read", "no_data"
+record <- function(tpl_id, status, ...) {
+  m <- template_meta_create_or_load(tpl_id, ...)
+  if (status != "download_failed") meta_set_downloaded(m) <- TRUE
+  if (status %in% c("ok", "no_data")) meta_set_processed(m) <- TRUE
+  if (status == "ok") meta_set_valid(m) <- TRUE
+  withr::defer(meta_clean(m), envir = parent.frame())
+  m
+}
+
+test_that("each missing date gets its reason", {
+  write_layer("template-test-doctor-daily", "2024-01-08")
+  record("template-test-doctor-daily", "ok", refdate = as.Date("2024-01-08"))
+  record("template-test-doctor-daily", "download_failed", refdate = as.Date("2024-01-09"))
+  record("template-test-doctor-daily", "not_read", refdate = as.Date("2024-01-10"))
+  record("template-test-doctor-daily", "no_data", refdate = as.Date("2024-01-11"))
+  record("template-test-doctor-daily", "ok", refdate = as.Date("2024-01-12"))
+
+  res <- doctor_gaps("template-test-doctor-daily", from = "2024-01-08", to = "2024-01-15")
+  expect_equal(res$refdate, as.Date(c("2024-01-09", "2024-01-10", "2024-01-11", "2024-01-12", "2024-01-15")))
+  expect_equal(res$reason, c("download_failed", "not_read", "no_data", "not_in_layer", "never_fetched"))
+  expect_true(all(res$check == "gap" & res$layer == "input" & res$template == "template-test-doctor-daily"))
+})
+
+test_that("refdate args stored as strings still match", {
+  write_layer("template-test-doctor-daily", "2024-01-08")
+  record("template-test-doctor-daily", "no_data", refdate = "2024-01-09")
+  res <- doctor_gaps("template-test-doctor-daily", from = "2024-01-08", to = "2024-01-09")
+  expect_equal(res$reason, "no_data")
+})
+
+test_that("yearly templates map dates to the year record and take the best status over other args", {
+  write_layer("template-test-doctor-yearly", "2024-01-08")
+  record("template-test-doctor-yearly", "no_data", year = 2024, index = "A")
+  res <- doctor_gaps("template-test-doctor-yearly", from = "2024-01-08", to = "2024-01-09", calendar = "Brazil/BMF")
+  expect_equal(res$reason, "no_data")
+
+  record("template-test-doctor-yearly", "ok", year = 2024, index = "B")
+  res <- doctor_gaps("template-test-doctor-yearly", from = "2024-01-08", to = "2024-01-09", calendar = "Brazil/BMF")
+  expect_equal(res$refdate, as.Date("2024-01-09"))
+  expect_equal(res$reason, "not_in_layer")
+})
+
+test_that("from and to default to the first and last date in the layer", {
+  write_layer("template-test-doctor-daily", c("2024-01-08", "2024-01-10"))
+  res <- doctor_gaps("template-test-doctor-daily")
+  expect_equal(res$refdate, as.Date("2024-01-09"))
+  expect_equal(res$reason, "never_fetched")
+  expect_equal(attr(res, "period")$n_days, 3)
+  expect_equal(attr(res, "period")$n_with_data, 2)
+})
+
+test_that("calendar comes from the template, the argument overrides it, and is required otherwise", {
+  write_layer("template-test-doctor-yearly", "2024-01-08")
+  expect_error(doctor_gaps("template-test-doctor-yearly"), class = "error_doctor_calendar_missing")
+
+  write_layer("template-test-doctor-daily", c("2024-12-23", "2024-12-26"))
+  expect_equal(doctor_gaps("template-test-doctor-daily")$refdate, as.Date("2024-12-24")) # Brazil/BMF
+  expect_equal(nrow(doctor_gaps("template-test-doctor-daily", calendar = "Brazil/B3")), 0)
+})
+
+test_that("a period past the calendar's end is a clear error", {
+  skip_if(bizdays::calendars()[["Brazil/B3"]]$end.date >= as.Date("2026-06-01"))
+  write_layer("template-test-doctor-daily", "2024-01-08")
+  expect_error(
+    doctor_gaps("template-test-doctor-daily", to = "2026-06-01", calendar = "Brazil/B3"),
+    "2025-12-31",
+    class = "error_doctor_calendar"
+  )
+})
+
+test_that("snapshot templates skip the gap check", {
+  res <- doctor_gaps("b3-indexes-composition")
+  expect_equal(nrow(res), 0)
+})
+
+test_that("bad layers are errors", {
+  expect_error(doctor_gaps("template-test-doctor-daily", layer = "staging"), class = "error_doctor_layer")
+  expect_error(
+    doctor_gaps("b3-indexes-historical-data", calendar = "Brazil/B3"),
+    "staging",
+    class = "error_doctor_layer"
+  )
+})

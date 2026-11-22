@@ -56,3 +56,83 @@ doctor_health <- function(template = NULL) {
   }
   dplyr::bind_rows(out)
 }
+
+DOCTOR_STATUS <- c("download_failed", "not_read", "no_data", "ok") # worst to best
+
+#' Status of a download record, as in fetch_report()
+#' @noRd
+doctor_record_status <- function(recs) {
+  ifelse(!recs$is_downloaded, "download_failed",
+    ifelse(!recs$is_processed, "not_read", ifelse(!recs$is_valid, "no_data", "ok"))
+  )
+}
+
+#' Business days of the period without rows in a layer, with the reason for each
+#' @noRd
+doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calendar = NULL) {
+  tpl <- template_retrieve(template)
+  if (is.null(tpl$writers[[layer]])) {
+    cli::cli_abort("Template {.strong {template}} has no {.val {layer}} layer", class = "error_doctor_layer")
+  }
+  args <- names(tpl$downloader$args)
+  by_year <- !"refdate" %in% args
+  if (by_year && !"year" %in% args) {
+    cli::cli_alert_info("Template {.strong {template}} has no time series (no {.arg refdate} or {.arg year} argument): gaps not checked")
+    return(doctor_findings())
+  }
+  if (!"refdate" %in% template_schema(tpl, layer)$names) {
+    cli::cli_abort(
+      "The {.val {layer}} layer of {.strong {template}} has no {.field refdate} column, try {.code layer = \"staging\"}",
+      class = "error_doctor_layer"
+    )
+  }
+  present <- template_dataset(tpl, layer) |>
+    dplyr::distinct(.data$refdate) |>
+    dplyr::collect() |>
+    dplyr::pull("refdate")
+  if (length(present) == 0 && (is.null(from) || is.null(to))) {
+    cli::cli_abort(
+      "No data in the {.val {layer}} layer of {.strong {template}}: pass {.arg from} and {.arg to}",
+      class = "error_doctor_layer"
+    )
+  }
+  from <- as.Date(from %||% min(present))
+  to <- as.Date(to %||% max(present))
+
+  calendar <- calendar %||% tpl$calendar
+  if (is.null(calendar)) {
+    cli::cli_abort(
+      "Template {.strong {template}} defines no calendar: pass one in {.arg calendar}, e.g. {.code calendar = \"Brazil/B3\"}",
+      class = "error_doctor_calendar_missing"
+    )
+  }
+  expected <- tryCatch(bizdays::bizseq(from, to, calendar), error = function(e) {
+    cal <- bizdays::calendars()[[calendar]]
+    cli::cli_abort(
+      c("Period {from} to {to} is outside the {.val {calendar}} calendar",
+        i = "The calendar covers {cal$start.date} to {cal$end.date}"),
+      class = "error_doctor_calendar", parent = e
+    )
+  })
+  missing <- expected[!expected %in% present]
+
+  recs <- doctor_records(template)
+  recs <- recs[!purrr::map2_lgl(recs$template, recs$download_args, doctor_is_stale), ]
+  rank <- match(doctor_record_status(recs), DOCTOR_STATUS)
+  rec_key <- if (by_year) {
+    as.integer(purrr::map_chr(recs$download_args, ~ as.character(.x$year)))
+  } else {
+    as.Date(purrr::map_chr(recs$download_args, ~ as.character(.x$refdate)))
+  }
+  miss_key <- if (by_year) as.integer(format(missing, "%Y")) else missing
+  best <- purrr::map_int(seq_along(missing), function(i) {
+    r <- rank[rec_key == miss_key[i]]
+    if (length(r) == 0) NA_integer_ else max(r)
+  })
+  reason <- ifelse(is.na(best), "never_fetched", DOCTOR_STATUS[best])
+  reason[reason == "ok"] <- "not_in_layer"
+
+  res <- doctor_findings(template, layer, "gap", missing, reason, NA)
+  attr(res, "period") <- list(from = from, to = to, n_days = length(expected), n_with_data = sum(expected %in% present))
+  res
+}
