@@ -50,10 +50,15 @@ created before rb3 0.1.1 still have a \code{curve_name} argument. They are never
 layer. Each missing date gets a \code{reason}, taken from the download records:
 \itemize{
 \item \code{never_fetched}: no record for this date (or year). Fetch it with \code{fetch_marketdata()}.
-\item \code{download_failed}: the download failed. Fetch it again; B3 may not have the file.
+\item \code{download_failed}: the download failed, or B3 sent an empty file. Fetch it again; B3 may
+not have the file.
 \item \code{not_read}: the file was downloaded but not read. Use \code{fetch_marketdata(..., reprocess = TRUE)}.
-\item \code{no_data}: the file had no usable data, usually a day the exchange was closed although
-the calendar says it was open.
+\item \code{no_data}: the file was read but had no usable data.
+}
+
+A day the exchange was closed, although the calendar says it was open, shows as \code{no_data} or
+as \code{download_failed}, depending on what B3 sends for that template on a closed day.
+\itemize{
 \item \code{not_in_layer}: the record says the file was read, but the layer has no rows for that date.
 Either the layer and the records disagree (a deleted dataset folder, a staging layer not
 rebuilt: use \code{reprocess = TRUE}), or the file held another date than the one requested.

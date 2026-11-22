@@ -109,8 +109,15 @@ Each missing date gets one reason, taken from the download records:
 | `never_fetched`   | no record for this date (or for its year)                       | `fetch_marketdata()` for that date |
 | `download_failed` | the download failed, or B3 sent an empty file                   | try again; B3 may not have the file (holiday, or too old) |
 | `not_read`        | the file was downloaded but never read                          | `fetch_marketdata(..., reprocess = TRUE)` |
-| `no_data`         | the file was read but had no usable data                        | usually a day the exchange was closed; nothing to do |
+| `no_data`         | the file was read but had no usable data                        | often a day the exchange was closed; nothing to do |
 | `not_in_layer`    | the record says the file was read, but the layer has no rows for that date | see below |
+
+A day the exchange was closed, although the calendar says it was open, shows as `no_data` or as
+`download_failed`, depending on what B3 sends for that template on a closed day (an empty file,
+or a file without data). See the Christmas example in [Calendars](#calendars).
+
+The `detail` column shows the download arguments of the record behind each reason (empty for
+`never_fetched`), for example which `index` and `year` a yearly record was for.
 
 `not_in_layer` has two causes:
 

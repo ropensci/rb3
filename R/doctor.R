@@ -96,6 +96,7 @@ doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calen
   } else {
     as.Date(character())
   }
+  present <- present[!is.na(present)] # e.g. header/trailer rows of COTAHIST files
   if (length(present) == 0 && (is.null(from) || is.null(to))) {
     cli::cli_abort(
       "No data in the {.val {layer}} layer of {.strong {template}}: pass {.arg from} and {.arg to}",
@@ -111,6 +112,12 @@ doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calen
       "Template {.strong {template}} defines no calendar: pass one in {.arg calendar}, e.g. {.code calendar = \"Brazil/B3\"}",
       class = "error_doctor_calendar_missing"
     )
+  }
+  if (!calendar %in% names(bizdays::calendars())) {
+    cli::cli_abort("Unknown calendar {.val {calendar}}, see {.code bizdays::calendars()}", class = "error_doctor_calendar")
+  }
+  if (from > to) {
+    cli::cli_abort("{.arg from} ({from}) is after {.arg to} ({to})", class = "error_doctor_period")
   }
   expected <- tryCatch(bizdays::bizseq(from, to, calendar), error = function(e) {
     cal <- bizdays::calendars()[[calendar]]
@@ -131,14 +138,18 @@ doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calen
     as.Date(purrr::map_chr(recs$download_args, ~ as.character(.x$refdate)))
   }
   miss_key <- if (by_year) as.integer(format(missing, "%Y")) else missing
+  # index of the record with the best status for each missing date
   best <- purrr::map_int(seq_along(missing), function(i) {
-    r <- rank[rec_key == miss_key[i]]
-    if (length(r) == 0) NA_integer_ else max(r)
+    idx <- which(rec_key == miss_key[i])
+    if (length(idx) == 0) NA_integer_ else idx[which.max(rank[idx])]
   })
-  reason <- ifelse(is.na(best), "never_fetched", DOCTOR_STATUS[best])
+  reason <- ifelse(is.na(best), "never_fetched", DOCTOR_STATUS[rank[best]])
   reason[reason == "ok"] <- "not_in_layer"
+  detail <- ifelse(is.na(best), NA_character_, purrr::map_chr(best, function(b) {
+    if (is.na(b)) NA_character_ else meta_args_str(list(download_args = recs$download_args[[b]]))
+  }))
 
-  res <- doctor_findings(template, layer, "gap", missing, reason, NA)
+  res <- doctor_findings(template, layer, "gap", missing, reason, detail)
   attr(res, "period") <- list(from = from, to = to, calendar = calendar, n_days = length(expected), n_with_data = sum(expected %in% present))
   res
 }
@@ -169,10 +180,13 @@ doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calen
 #' **Gap check** (only with `template`): the business days of the period with no rows in the
 #' layer. Each missing date gets a `reason`, taken from the download records:
 #' - `never_fetched`: no record for this date (or year). Fetch it with `fetch_marketdata()`.
-#' - `download_failed`: the download failed. Fetch it again; B3 may not have the file.
+#' - `download_failed`: the download failed, or B3 sent an empty file. Fetch it again; B3 may
+#'   not have the file.
 #' - `not_read`: the file was downloaded but not read. Use `fetch_marketdata(..., reprocess = TRUE)`.
-#' - `no_data`: the file had no usable data, usually a day the exchange was closed although
-#'   the calendar says it was open.
+#' - `no_data`: the file was read but had no usable data.
+#'
+#' A day the exchange was closed, although the calendar says it was open, shows as `no_data` or
+#' as `download_failed`, depending on what B3 sends for that template on a closed day.
 #' - `not_in_layer`: the record says the file was read, but the layer has no rows for that date.
 #'   Either the layer and the records disagree (a deleted dataset folder, a staging layer not
 #'   rebuilt: use `reprocess = TRUE`), or the file held another date than the one requested.
@@ -248,7 +262,11 @@ doctor_print_gaps <- function(gaps) {
   new_run <- c(TRUE, gaps$reason[-1] != gaps$reason[-nrow(gaps)] |
     bizdays::bizdays(d[-length(d)], d[-1], p$calendar) != 1)
   run <- cumsum(new_run)
-  for (r in unique(run)) {
+  max_runs <- 20
+  if (max(run) > max_runs) {
+    on.exit(cli::cli_inform(c(i = "... and {max(run) - max_runs} more run{?s} of missing days, see the returned tibble")))
+  }
+  for (r in utils::head(unique(run), max_runs)) {
     i <- which(run == r)
     n <- length(i)
     span <- if (n == 1) format(d[i]) else paste(format(d[i[1]]), "to", format(d[i[n]]))

@@ -202,3 +202,33 @@ test_that("rb3_doctor does not create a missing layer folder", {
   expect_error(suppressMessages(rb3_doctor("template-test-doctor-daily")), class = "error_doctor_layer")
   expect_false(dir.exists(folder))
 })
+
+# --- final review fixes ---
+
+test_that("NA refdates in the layer do not break the default period", {
+  write_layer("template-test-doctor-daily", c("2024-01-08", NA, "2024-01-10"))
+  res <- doctor_gaps("template-test-doctor-daily")
+  expect_equal(res$refdate, as.Date("2024-01-09"))
+})
+
+test_that("an unknown calendar and from after to get their own errors", {
+  write_layer("template-test-doctor-daily", "2024-01-08")
+  expect_error(doctor_gaps("template-test-doctor-daily", calendar = "Brazil/XXX"), "Unknown calendar", class = "error_doctor_calendar")
+  expect_error(doctor_gaps("template-test-doctor-daily", from = "2024-02-01", to = "2024-01-10"), "after", class = "error_doctor_period")
+})
+
+test_that("gap rows show the arguments of the record behind the reason", {
+  write_layer("template-test-doctor-yearly", "2024-01-08")
+  record("template-test-doctor-yearly", "no_data", year = 2024, index = "A")
+  res <- doctor_gaps("template-test-doctor-yearly", from = "2024-01-08", to = "2024-01-09", calendar = "Brazil/BMF")
+  expect_match(res$detail, "index = A")
+  write_layer("template-test-doctor-daily", c("2024-01-08", "2024-01-10"))
+  expect_true(is.na(doctor_gaps("template-test-doctor-daily")$detail))
+})
+
+test_that("long gap lists are cut in the printed summary", {
+  write_layer("template-test-doctor-daily", bizdays::bizseq("2024-01-02", "2024-03-29", "Brazil/BMF")[c(TRUE, FALSE)])
+  out <- paste(capture_messages(rb3_doctor("template-test-doctor-daily")), collapse = "\n")
+  expect_match(out, "and [0-9]+ more")
+  expect_lt(lengths(regmatches(out, gregexpr("never fetched", out))), 25)
+})
