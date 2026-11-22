@@ -105,3 +105,26 @@ test_that("it should handle error conditions", {
   expect_true(is_valid_type("date"))
   expect_false(is_valid_type("invalid_type"))
 })
+test_that("time, datetime and logical types have collectors, arrow types and handlers", {
+  expect_s3_class(type_collector(type("time")), "collector_time")
+  expect_s3_class(type_collector(type("datetime")), "collector_datetime")
+  expect_s3_class(type_collector(type("logical")), "collector_logical")
+  expect_equal(type_arrow_scalar(type("time"))$ToString(), arrow::time64()$ToString())
+  expect_equal(type_arrow_scalar(type("datetime"))$ToString(), arrow::timestamp()$ToString())
+  expect_equal(type_arrow_scalar(type("logical"))$ToString(), "bool")
+  for (t in c("time", "datetime", "logical")) {
+    expect_equal(type_post_parse_handler(type(t))("x"), "x")
+  }
+})
+
+test_that("an unsupported type is an error in every converter", {
+  bogus <- structure("bogus", class = c("type", "bogus"))
+  expect_error(type_collector(bogus), "Unsupported type")
+  expect_error(type_arrow_scalar(bogus), "Unsupported type")
+  expect_error(type_post_parse_handler(bogus), "Unsupported type")
+})
+
+test_that("empty parameters in a type string are ignored", {
+  t <- type_parse("date(format = \"%d/%m/%Y\", )")
+  expect_equal(attr(t, "format"), "%d/%m/%Y")
+})

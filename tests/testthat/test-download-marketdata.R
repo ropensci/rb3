@@ -361,3 +361,13 @@ test_that("it should download and read b3-indexes-theoretical-portfolio for an i
   expect_true(length(meta$downloaded) == 1)
   expect_true(file.exists(meta$downloaded[[1]]))
 })
+
+test_that("read_marketdata returns the meta unchanged when there is no file to read", {
+  m <- template_meta_create_or_load("template-test-small-file", size = 51)
+  withr::defer(meta_clean(m))
+  expect_false(read_marketdata(m)$is_processed) # not downloaded
+  meta_set_downloaded(m) <- TRUE
+  expect_false(read_marketdata(m)$is_processed) # no file recorded
+  meta_add_download(m) <- file.path(tempdir(), "no-such-file.gz")
+  expect_false(read_marketdata(m)$is_processed) # file is gone
+})

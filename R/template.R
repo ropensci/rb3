@@ -9,8 +9,6 @@ load_template_from_file <- function(fname) {
   for (n in names(tpl)) {
     if (n == "fields") {
       obj[["fields"]] <- do.call(fields, lapply(tpl$fields, new_field))
-    } else if (n == "parts") {
-      obj[["parts"]] <- lapply(tpl$parts, new_part)
     } else if (n == "reader") {
       obj[["reader"]] <- tpl$reader
       func_name <- tpl$reader[["function"]]
@@ -47,17 +45,9 @@ load_template_from_file <- function(fname) {
     obj[["has_reader"]] <- TRUE
   }
 
-  if (obj$filetype %in% c("MCSV", "MFWF", "MCUSTOM")) {
-    for (idx in seq_along(obj$parts)) {
-      obj$parts[[idx]]$colnames <- fields_names(obj$parts[[idx]]$fields)
-      obj$parts[[idx]]$handlers <- fields_handlers(obj$parts[[idx]]$fields)
-      obj$parts[[idx]]$widths <- fields_widths(obj$parts[[idx]]$fields)
-    }
-  } else {
-    obj$colnames <- fields_names(obj$fields)
-    obj$widths <- fields_widths(obj$fields)
-    obj$handlers <- fields_handlers(obj$fields)
-  }
+  obj$colnames <- fields_names(obj$fields)
+  obj$widths <- fields_widths(obj$fields)
+  obj$handlers <- fields_handlers(obj$fields)
 
   template_register(obj)
   obj
@@ -86,21 +76,8 @@ print.template <- function(x, ...) {
     }
     cli::cli_end(ulid)
   }
-  # cat("Template:", x$id, "\n")
-  if (inherits(x$fields, "fields")) {
-    cli::cli_text("{.strong Fields}: ")
-    print.fields(x$fields)
-  } else {
-    parts_names <- names(x$parts)
-    ix <- 0
-    for (nx in parts_names) {
-      ix <- ix + 1
-      cat("\n")
-      cat(sprintf("Part %d: %s\n", ix, nx))
-      cat("Fields: ")
-      print.fields(x$parts[[nx]]$fields)
-    }
-  }
+  cli::cli_text("{.strong Fields}: ")
+  print.fields(x$fields)
   invisible(NULL)
 }
 
@@ -217,18 +194,6 @@ template_dataset.template <- function(template, layer = NULL) {
   schema <- template_schema(template, layer)
   dir <- template_db_folder(template, layer)
   arrow::open_dataset(dir, schema, hive_style = TRUE, unify_schemas = FALSE)
-}
-
-new_part <- function(x) {
-  part <- list()
-  for (np in names(x)) {
-    if (np == "fields") {
-      part[["fields"]] <- do.call(fields, lapply(x[["fields"]], new_field))
-    } else {
-      part[[np]] <- x[[np]]
-    }
-  }
-  part
 }
 
 #' @details
