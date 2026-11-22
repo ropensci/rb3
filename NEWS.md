@@ -5,7 +5,7 @@
   reason (never fetched, download failed, not read, no data, or read but not in the layer), so missing
   dates can be fetched with `fetch_marketdata()`. It also reports stale download records (such as the old
   `b3-reference-rates` records with `curve_name`), records whose raw file is missing, and raw files that
-  no record uses. It only reports and never changes the cache. See the new vignette "Checking the Cache".
+  no record uses. It only reports and never changes the cache. See the new vignette "Using the rb3 Doctor".
 * The time-series templates `b3-cotahist-daily`, `b3-cotahist-yearly`, `b3-futures-settlement-prices`,
   `b3-bdi-derivatives-trades`, `b3-indexes-historical-data` and `b3-trade-information-consolidated` now
   define the `Brazil/B3` calendar, so `rb3_doctor()` no longer needs the `calendar` argument for them.

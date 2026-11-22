@@ -1,8 +1,8 @@
 ---
-title: "Checking the Cache"
+title: "Using the rb3 Doctor"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Checking the Cache}
+  %\VignetteIndexEntry{Using the rb3 Doctor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
