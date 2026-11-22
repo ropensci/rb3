@@ -2,6 +2,12 @@
 
 ## rb3 (development version)
 
+- [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
+  ends with a summary: how many files have data, and the arguments of
+  every file whose download failed, that was not read, or that had no
+  data ([\#86](https://github.com/ropensci/rb3/issues/86)). It now
+  returns (invisibly) a tibble with `template`, `download_args` and
+  `status` for each combination of arguments, instead of `NULL`.
 - New template `b3-trade-information-consolidated`
   ([\#126](https://github.com/ropensci/rb3/issues/126)): B3’s
   TradeInformationConsolidated file, with every instrument of every

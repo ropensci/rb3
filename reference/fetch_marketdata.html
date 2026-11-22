@@ -88,6 +88,12 @@ to fetch data for</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A tibble (invisibly) with one row per combination of arguments and the columns
+<code>template</code>, <code>download_args</code> (a list column) and <code>status</code> (<code>"ok"</code>, <code>"download_failed"</code>,
+<code>"not_read"</code> or <code>"invalid"</code>). Use it to find the combinations to fetch again.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function performs three main steps:</p><ol><li><p>Downloads market data files by creating all combinations of the provided parameters.</p></li>
 <li><p>Processes the downloaded files by reading them into the input layer of the database.</p></li>
@@ -106,6 +112,8 @@ in the cache. This can be useful if you want to ensure that you have the latest 
 of the data or if the files have been modified on the server.</p>
 <p>The <code>reprocess</code> parameter allows you to reprocess files even if they have already been processed.
 This can be useful if you want to ensure that the data is up-to-date.</p>
+<p>At the end, a summary shows how many files have data and lists every file that failed:
+<code>download failed</code>, <code>not read</code>, or <code>no data</code> (read, but without usable data, e.g. a non-trading day).</p>
     </div>
 
     <div class="section level2">

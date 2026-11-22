@@ -46,6 +46,13 @@ fetch_marketdata(
   Named arguments that will be expanded into a grid of all combinations
   to fetch data for
 
+## Value
+
+A tibble (invisibly) with one row per combination of arguments and the
+columns `template`, `download_args` (a list column) and `status`
+(`"ok"`, `"download_failed"`, `"not_read"` or `"invalid"`). Use it to
+find the combinations to fetch again.
+
 ## Details
 
 This function performs three main steps:
@@ -81,6 +88,10 @@ been modified on the server.
 The `reprocess` parameter allows you to reprocess files even if they
 have already been processed. This can be useful if you want to ensure
 that the data is up-to-date.
+
+At the end, a summary shows how many files have data and lists every
+file that failed: `download failed`, `not read`, or `no data` (read, but
+without usable data, e.g. a non-trading day).
 
 ## Examples
 
