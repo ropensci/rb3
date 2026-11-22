@@ -2,12 +2,19 @@
 
 ## rb3 (development version)
 
+- [`?yc_get`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
+  explains what to do with caches created before rb3 0.1.1, which still
+  hold the old “Taxas Referenciais” HTML files of `b3-reference-rates`:
+  they are no longer read, and the dates can be fetched again from the
+  swap rates file ([\#144](https://github.com/ropensci/rb3/issues/144)).
+
 - [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
   ends with a summary: how many files have data, and the arguments of
   every file whose download failed, that was not read, or that had no
   data ([\#86](https://github.com/ropensci/rb3/issues/86)). It now
   returns (invisibly) a tibble with `template`, `download_args` and
   `status` for each combination of arguments, instead of `NULL`.
+
 - New template `b3-trade-information-consolidated`
   ([\#126](https://github.com/ropensci/rb3/issues/126)): B3’s
   TradeInformationConsolidated file, with every instrument of every
@@ -17,6 +24,7 @@
   financial volume). B3 keeps only the last ~360 sessions (about 17
   months): older dates get an empty file and are reported as failed
   downloads.
+
 - [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
   now downloads again a file that had no usable data (reported as
   invalid) when it was downloaded less than 7 days after its `refdate`
@@ -24,6 +32,7 @@
   settlement prices downloaded before B3 published them are fetched
   again by the next call, instead of being lost. Files downloaded later
   are final and are not retried.
+
 - [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
   now downloads again the current year’s file of `b3-cotahist-yearly`
   and `b3-indexes-historical-data` when the cached copy is from an
@@ -32,6 +41,7 @@
   stopped at the day of the first download. Past years are still
   downloaded only once. Templates opt in with
   `downloader.refresh-current-year: true`.
+
 - An empty HTTP response (no `Content-Type` header) no longer stops
   [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md)
   with “Unknown error”; it is saved as an empty file and reported as a

@@ -95,6 +95,17 @@ See the Curve Manual in this link
 <a href="https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf" class="external-link">https://www.b3.com.br/data/files/8B/F5/11/68/5391F61043E561F6AC094EA8/Manual_de_Curvas.pdf</a>
 for more details.</p>
     </div>
+    <div class="section level2">
+    <h2 id="caches-created-before-rb-">Caches created before rb3 0.1.1<a class="anchor" aria-label="anchor" href="#caches-created-before-rb-"></a></h2>
+
+
+<p>Older versions downloaded the "Taxas Referenciais" HTML page, one file per date and curve
+(with a <code>curve_name</code> argument). Those raw files and their metadata stay in the cache, but they are
+not read anymore, because the swap rates file covers the same dates. To rebuild the data, delete
+<code>&lt;cachedir&gt;/db/input/b3-reference-rates</code> and <code>&lt;cachedir&gt;/db/staging/b3-reference-rates</code> and run
+<code>fetch_marketdata("b3-reference-rates", refdate = ...)</code> again for the dates you need.
+The old raw files only take disk space; <code><a href="rb3_clear_cache.html">rb3_clear_cache()</a></code> removes them with the rest of the cache.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

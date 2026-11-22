@@ -126,6 +126,23 @@ attach time, so users must set `options(rb3.cachedir = ...)` **before**
 [`library(rb3)`](https://docs.ropensci.org/rb3). Registries are S3
 objects that support `$` / `[[` get and set (`R/registry.R`).
 
+## Git and PR workflow
+
+- Remotes: `origin` is the fork `wilsonfreitas/rb3`, `upstream` is
+  `ropensci/rb3`. Issues and PRs live on `ropensci/rb3`.
+- Work on a branch named after the issue (`feat/86-fetch-report`,
+  `fix/142-...`, `docs/147-...`), push it to `origin`, and open the PR
+  against `ropensci/rb3` `main`:
+  `https://github.com/ropensci/rb3/compare/main...wilsonfreitas:rb3:<branch>?expand=1`.
+  Reference the issue (`Closes #n`) and add a NEWS.md entry for
+  user-visible changes.
+- `gh` may not be able to write to `ropensci/rb3`; read issues with
+  `curl -s https://api.github.com/repos/ropensci/rb3/issues/<n>` and let
+  the maintainer open the PR from the compare link.
+- After the merge:
+  `git checkout main && git fetch upstream && git merge --ff-only upstream/main && git push origin main`,
+  then delete the branch locally and on `origin`.
+
 ## Conventions
 
 - `DESCRIPTION` has an explicit `Collate:` list. A new `R/*.R` file must
