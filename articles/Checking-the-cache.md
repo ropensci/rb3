@@ -196,7 +196,7 @@ For yearly templates, fetch the years of the missing dates:
 
 ``` r
 
-res <- rb3_doctor("b3-cotahist-yearly", calendar = "Brazil/B3")
+res <- rb3_doctor("b3-cotahist-yearly")
 years <- res |>
   filter(check == "gap", reason == "never_fetched") |>
   pull(refdate) |>
@@ -210,17 +210,19 @@ fetch_marketdata("b3-cotahist-yearly", year = years)
 
 The expected dates come from a `bizdays` calendar. By default the doctor
 uses the calendar of the template (the `calendar` field of its YAML
-file). Templates without one need the `calendar` argument:
+file). All built-in templates with a time series use `Brazil/B3`, the
+days B3 is open, except `b3-reference-rates`, which uses
+`Brazil/ANBIMA`. A value passed in `calendar` overrides the template’s
+calendar. A template without a calendar, such as one you wrote yourself,
+needs the `calendar` argument:
 
 ``` r
 
-rb3_doctor("b3-futures-settlement-prices")
-#> Error: Template b3-futures-settlement-prices defines no calendar: pass one in `calendar`,
+rb3_doctor("my-template")
+#> Error: Template my-template defines no calendar: pass one in `calendar`,
 #> e.g. `calendar = "Brazil/B3"`
-rb3_doctor("b3-futures-settlement-prices", calendar = "Brazil/B3")
+rb3_doctor("my-template", calendar = "Brazil/B3")
 ```
-
-A value passed in `calendar` also overrides the template’s calendar.
 
 The calendar matters: a day that the calendar says is open but the
 exchange was closed shows up as a gap. `b3-reference-rates` uses

@@ -291,7 +291,7 @@ you have not fetched yet:</p>
 <span><span class="fu"><a href="../reference/fetch_marketdata.html">fetch_marketdata</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span>, refdate <span class="op">=</span> <span class="va">dates</span><span class="op">)</span></span></code></pre></div>
 <p>For yearly templates, fetch the years of the missing dates:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"b3-cotahist-yearly"</span>, calendar <span class="op">=</span> <span class="st">"Brazil/B3"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"b3-cotahist-yearly"</span><span class="op">)</span></span>
 <span><span class="va">years</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">check</span> <span class="op">==</span> <span class="st">"gap"</span>, <span class="va">reason</span> <span class="op">==</span> <span class="st">"never_fetched"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">refdate</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -305,15 +305,17 @@ you have not fetched yet:</p>
 </h2>
 <p>The expected dates come from a <code>bizdays</code> calendar. By
 default the doctor uses the calendar of the template (the
-<code>calendar</code> field of its YAML file). Templates without one
-need the <code>calendar</code> argument:</p>
+<code>calendar</code> field of its YAML file). All built-in templates
+with a time series use <code>Brazil/B3</code>, the days B3 is open,
+except <code>b3-reference-rates</code>, which uses
+<code>Brazil/ANBIMA</code>. A value passed in <code>calendar</code>
+overrides the template’s calendar. A template without a calendar, such
+as one you wrote yourself, needs the <code>calendar</code> argument:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: Template b3-futures-settlement-prices defines no calendar: pass one in `calendar`,</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"my-template"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: Template my-template defines no calendar: pass one in `calendar`,</span></span>
 <span><span class="co">#&gt; e.g. `calendar = "Brazil/B3"`</span></span>
-<span><span class="fu"><a href="../reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"b3-futures-settlement-prices"</span>, calendar <span class="op">=</span> <span class="st">"Brazil/B3"</span><span class="op">)</span></span></code></pre></div>
-<p>A value passed in <code>calendar</code> also overrides the template’s
-calendar.</p>
+<span><span class="fu"><a href="../reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"my-template"</span>, calendar <span class="op">=</span> <span class="st">"Brazil/B3"</span><span class="op">)</span></span></code></pre></div>
 <p>The calendar matters: a day that the calendar says is open but the
 exchange was closed shows up as a gap. <code>b3-reference-rates</code>
 uses <code>Brazil/ANBIMA</code>, which is open on December 24, when B3

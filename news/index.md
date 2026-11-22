@@ -17,6 +17,13 @@
   and never changes the cache. See the new vignette “Checking the
   Cache”.
 
+- The time-series templates `b3-cotahist-daily`, `b3-cotahist-yearly`,
+  `b3-futures-settlement-prices`, `b3-bdi-derivatives-trades`,
+  `b3-indexes-historical-data` and `b3-trade-information-consolidated`
+  now define the `Brazil/B3` calendar, so
+  [`rb3_doctor()`](https://ropensci.github.io/rb3/reference/rb3_doctor.md)
+  no longer needs the `calendar` argument for them.
+
 - Reading the download records is much faster
   ([`dget()`](https://rdrr.io/r/base/dput.html) on a text connection
   replaced by [`parse()`](https://rdrr.io/r/base/parse.html)).
