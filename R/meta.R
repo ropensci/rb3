@@ -152,7 +152,8 @@ meta_unlink_raw <- function(file, checksum) {
   if (is.null(x) || length(x) == 0 || is.na(x)) {
     return(NULL)
   }
-  dget(textConnection(x))
+  # same as dget(textConnection(x)), without the slow connection (rb3_doctor() reads every record)
+  eval(parse(text = x, keep.source = FALSE), envir = baseenv())
 }
 
 meta_save <- function(meta) {

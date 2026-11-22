@@ -1,0 +1,23 @@
+id: template-test-doctor-yearly
+filename: ~
+filetype: CUSTOM
+description: Test template for the cache doctor (yearly)
+downloader:
+  function: datetime_download
+  url: https://example.com/%Y%m%d
+  format: csv
+  args:
+    year: Ano
+    index: Índice
+reader:
+  function: csv_read_file
+writers:
+  input:
+    partition: refdate
+fields:
+- name: refdate
+  description: Data de referência
+  type: date
+- name: value
+  description: Valor
+  type: number
