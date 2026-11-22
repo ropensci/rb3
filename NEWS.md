@@ -6,6 +6,9 @@
   dates can be fetched with `fetch_marketdata()`. It also reports stale download records (such as the old
   `b3-reference-rates` records with `curve_name`), records whose raw file is missing, and raw files that
   no record uses. It only reports and never changes the cache. See the new vignette "Checking the Cache".
+* The time-series templates `b3-cotahist-daily`, `b3-cotahist-yearly`, `b3-futures-settlement-prices`,
+  `b3-bdi-derivatives-trades`, `b3-indexes-historical-data` and `b3-trade-information-consolidated` now
+  define the `Brazil/B3` calendar, so `rb3_doctor()` no longer needs the `calendar` argument for them.
 * Reading the download records is much faster (`dget()` on a text connection replaced by `parse()`).
 * `?yc_get` explains what to do with caches created before rb3 0.1.1, which still hold the old
   "Taxas Referenciais" HTML files of `b3-reference-rates`: they are no longer read, and the dates can be

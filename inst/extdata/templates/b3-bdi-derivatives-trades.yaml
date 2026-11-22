@@ -2,6 +2,7 @@ id: b3-bdi-derivatives-trades
 filename: ~
 filetype: CUSTOM
 description: Negócios consolidados do pregão - Derivativos (Boletim Diário do Mercado), todas as colunas e instrumentos
+calendar: Brazil/B3
 downloader:
   function: settlement_prices_download
   url: https://arquivos.b3.com.br/bdi/table/export/csv?lang=en-us

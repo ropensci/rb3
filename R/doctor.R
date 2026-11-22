@@ -213,8 +213,8 @@ doctor_gaps <- function(template, layer = "input", from = NULL, to = NULL, calen
 #' rb3_doctor()
 #' # gaps in the input layer of the yield curves
 #' res <- rb3_doctor("b3-reference-rates")
-#' # templates without a calendar need one; check up to today
-#' rb3_doctor("b3-futures-settlement-prices", calendar = "Brazil/B3", to = Sys.Date())
+#' # check up to today, to see the recent dates not fetched yet
+#' rb3_doctor("b3-futures-settlement-prices", to = Sys.Date())
 #' # fetch the dates that were never fetched
 #' dates <- res |> dplyr::filter(reason == "never_fetched") |> dplyr::pull(refdate)
 #' fetch_marketdata("b3-reference-rates", refdate = dates)
