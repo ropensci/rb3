@@ -239,8 +239,8 @@ the cache.
 rb3_doctor("b3-reference-rates")
 ```
 
-See the vignette [Checking the
-Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.html)
+See the vignette [Using the rb3
+Doctor](https://ropensci.github.io/rb3/articles/Using-rb3-doctor.html)
 for every check and option.
 
 ## Documentation
@@ -259,8 +259,8 @@ For comprehensive documentation and examples, visit:
     Prices](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html)
   - [Fetching B3 Yield
     Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html)
-  - [Checking the
-    Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.html)
+  - [Using the rb3
+    Doctor](https://ropensci.github.io/rb3/articles/Using-rb3-doctor.html)
 
 ## Citation
 

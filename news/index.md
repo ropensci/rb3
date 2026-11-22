@@ -14,8 +14,8 @@
   It also reports stale download records (such as the old
   `b3-reference-rates` records with `curve_name`), records whose raw
   file is missing, and raw files that no record uses. It only reports
-  and never changes the cache. See the new vignette “Checking the
-  Cache”.
+  and never changes the cache. See the new vignette “Using the rb3
+  Doctor”.
 
 - The time-series templates `b3-cotahist-daily`, `b3-cotahist-yearly`,
   `b3-futures-settlement-prices`, `b3-bdi-derivatives-trades`,

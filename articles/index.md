@@ -2,8 +2,6 @@
 
 ### All vignettes
 
-- [Checking the
-  Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.md):
 - [Fetching Historical Equity
   Data](https://ropensci.github.io/rb3/articles/Fetching-historical-equity-data.md):
 - [How to Compute Historical Rates from B3 Future
@@ -14,3 +12,5 @@
   Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.md):
 - [Getting
   Started](https://ropensci.github.io/rb3/articles/Getting-started.md):
+- [Using the rb3
+  Doctor](https://ropensci.github.io/rb3/articles/Using-rb3-doctor.md):
