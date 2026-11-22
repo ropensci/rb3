@@ -45,6 +45,7 @@
     <li><a class="dropdown-item" href="articles/Fetching-historical-index-data.html">Analyzing B3 Index Data</a></li>
     <li><a class="dropdown-item" href="articles/Fetching-historical-future-rates.html">How to Compute Historical Rates from B3 Future Prices</a></li>
     <li><a class="dropdown-item" href="articles/Fetching-historical-yield-curve.html">Fetching B3 Yield Curves</a></li>
+    <li><a class="dropdown-item" href="articles/Checking-the-cache.html">Checking the Cache</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -138,19 +139,20 @@
 <span></span>
 <span><span class="co"># List available templates</span></span>
 <span><span class="fu"><a href="reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 × 2</span></span>
-<span><span class="co">#&gt;    Template                         Description                                 </span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;                            &lt;chr&gt;                                       </span></span>
-<span><span class="co">#&gt;  1 b3-bdi-derivatives-trades        Negócios consolidados do pregão - Derivativ…</span></span>
-<span><span class="co">#&gt;  2 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086     </span></span>
-<span><span class="co">#&gt;  3 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Ar…</span></span>
-<span><span class="co">#&gt;  4 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Ar…</span></span>
-<span><span class="co">#&gt;  5 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futu…</span></span>
-<span><span class="co">#&gt;  6 b3-indexes-composition           Composição dos índices da B3                </span></span>
-<span><span class="co">#&gt;  7 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3…</span></span>
-<span><span class="co">#&gt;  8 b3-indexes-historical-data       Dados históricos e estatísticas dos índices…</span></span>
-<span><span class="co">#&gt;  9 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com peso…</span></span>
-<span><span class="co">#&gt; 10 b3-reference-rates               Taxas referenciais (Mercado de Derivativos …</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 11 × 2</span></span>
+<span><span class="co">#&gt;    Template                          Description                                </span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                             &lt;chr&gt;                                      </span></span>
+<span><span class="co">#&gt;  1 b3-bdi-derivatives-trades         Negócios consolidados do pregão - Derivati…</span></span>
+<span><span class="co">#&gt;  2 b3-bvbg-086                       Arquivo de Preços de Mercado - BVBG-086    </span></span>
+<span><span class="co">#&gt;  3 b3-cotahist-daily                 Cotações Históricas do Pregão de Ações - A…</span></span>
+<span><span class="co">#&gt;  4 b3-cotahist-yearly                Cotações Históricas do Pregão de Ações - A…</span></span>
+<span><span class="co">#&gt;  5 b3-futures-settlement-prices      Preços de Ajustes Diários de Contratos Fut…</span></span>
+<span><span class="co">#&gt;  6 b3-indexes-composition            Composição dos índices da B3               </span></span>
+<span><span class="co">#&gt;  7 b3-indexes-current-portfolio      Carteira teórica corrente dos índices da B…</span></span>
+<span><span class="co">#&gt;  8 b3-indexes-historical-data        Dados históricos e estatísticas dos índice…</span></span>
+<span><span class="co">#&gt;  9 b3-indexes-theoretical-portfolio  Carteira Teórica dos índices da B3 com pes…</span></span>
+<span><span class="co">#&gt; 10 b3-reference-rates                Taxas referenciais (Mercado de Derivativos…</span></span>
+<span><span class="co">#&gt; 11 b3-trade-information-consolidated Negócios consolidados do pregão (TradeInfo…</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="downloading-market-data">Downloading Market Data<a class="anchor" aria-label="anchor" href="#downloading-market-data"></a>
@@ -264,6 +266,14 @@
 </div>
 </div>
 <div class="section level2">
+<h2 id="checking-the-cache">Checking the cache<a class="anchor" aria-label="anchor" href="#checking-the-cache"></a>
+</h2>
+<p><code><a href="reference/rb3_doctor.html">rb3_doctor()</a></code> checks the health of the local cache. With a template, it lists the business days with no data in a dataset layer, and why each one is missing, so you can fetch them again. It only reports and never changes the cache.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/rb3_doctor.html">rb3_doctor</a></span><span class="op">(</span><span class="st">"b3-reference-rates"</span><span class="op">)</span></span></code></pre></div>
+<p>See the vignette <a href="https://ropensci.github.io/rb3/articles/Checking-the-cache.html">Checking the Cache</a> for every check and option.</p>
+</div>
+<div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <p>For comprehensive documentation and examples, visit:</p>
@@ -276,6 +286,7 @@
 <li><a href="https://ropensci.github.io/rb3/articles/Fetching-historical-index-data.html">Analyzing B3 Index Data</a></li>
 <li><a href="https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html">How to Compute Historical Rates from B3 Future Prices</a></li>
 <li><a href="https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html">Fetching B3 Yield Curves</a></li>
+<li><a href="https://ropensci.github.io/rb3/articles/Checking-the-cache.html">Checking the Cache</a></li>
 </ul>
 </li>
 </ul>
@@ -284,21 +295,21 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use <code>rb3</code> in your research, please cite it:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>To cite rb3 <span class="cf">in</span> publications use<span class="sc">:</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  Download and parse public files released by B3 and convert them into</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  useful formats and data structures common to data analysis</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  practitioners.</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>Uma entrada BibTeX para usuários(as) de LaTeX é</span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="sc">@</span>Manual{rb3<span class="sc">-</span>package,</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>    title <span class="ot">=</span> {Download and Parse Public Data Released by B3 Exchange},</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>    author <span class="ot">=</span> {Wilson Freitas and Marcelo Perlin},</span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>    note <span class="ot">=</span> {R package version <span class="dv">0</span>.<span class="fl">0.8</span>},</span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>ropensci<span class="sc">/</span>rb3},</span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>To cite rb3 <span class="cf">in</span> publications use<span class="sc">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  Download and parse public files released by B3 and convert them into</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  useful formats and data structures common to data analysis</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  practitioners.</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>Uma entrada BibTeX para usuários(as) de LaTeX é</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="sc">@</span>Manual{rb3<span class="sc">-</span>package,</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>    title <span class="ot">=</span> {Download and Parse Public Data Released by B3 Exchange},</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>    author <span class="ot">=</span> {Wilson Freitas and Marcelo Perlin},</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>    note <span class="ot">=</span> {R package version <span class="dv">0</span>.<span class="fl">0.8</span>},</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>ropensci<span class="sc">/</span>rb3},</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

@@ -2,6 +2,25 @@
 
 ## rb3 (development version)
 
+- New function
+  [`rb3_doctor()`](https://ropensci.github.io/rb3/reference/rb3_doctor.md)
+  checks the health of the cache
+  ([\#77](https://github.com/ropensci/rb3/issues/77)). With a template,
+  it finds the gaps in the time series of a dataset layer (`input` or
+  `staging`): the business days with no data, each with a reason (never
+  fetched, download failed, not read, no data, or read but not in the
+  layer), so missing dates can be fetched with
+  [`fetch_marketdata()`](https://ropensci.github.io/rb3/reference/fetch_marketdata.md).
+  It also reports stale download records (such as the old
+  `b3-reference-rates` records with `curve_name`), records whose raw
+  file is missing, and raw files that no record uses. It only reports
+  and never changes the cache. See the new vignette “Checking the
+  Cache”.
+
+- Reading the download records is much faster
+  ([`dget()`](https://rdrr.io/r/base/dput.html) on a text connection
+  replaced by [`parse()`](https://rdrr.io/r/base/parse.html)).
+
 - [`?yc_get`](https://ropensci.github.io/rb3/reference/yc_xxx_get.md)
   explains what to do with caches created before rb3 0.1.1, which still
   hold the old “Taxas Referenciais” HTML files of `b3-reference-rates`:

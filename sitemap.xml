@@ -4,6 +4,7 @@
 <url><loc>https://ropensci.github.io/rb3/Contributing.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/LICENSE-text.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/LICENSE.html</loc></url>
+<url><loc>https://ropensci.github.io/rb3/articles/Checking-the-cache.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/articles/Fetching-historical-equity-data.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/articles/Fetching-historical-index-data.html</loc></url>
@@ -31,6 +32,7 @@
 <url><loc>https://ropensci.github.io/rb3/reference/rb3.cachedir.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/rb3_bootstrap.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/rb3_clear_cache.html</loc></url>
+<url><loc>https://ropensci.github.io/rb3/reference/rb3_doctor.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/read_marketdata.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/superdataset.html</loc></url>
 <url><loc>https://ropensci.github.io/rb3/reference/template_dataset.html</loc></url>

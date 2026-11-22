@@ -78,19 +78,20 @@ library(rb3)
 
 # List available templates
 list_templates()
-#> # A tibble: 10 × 2
-#>    Template                         Description                                 
-#>    <chr>                            <chr>                                       
-#>  1 b3-bdi-derivatives-trades        Negócios consolidados do pregão - Derivativ…
-#>  2 b3-bvbg-086                      Arquivo de Preços de Mercado - BVBG-086     
-#>  3 b3-cotahist-daily                Cotações Históricas do Pregão de Ações - Ar…
-#>  4 b3-cotahist-yearly               Cotações Históricas do Pregão de Ações - Ar…
-#>  5 b3-futures-settlement-prices     Preços de Ajustes Diários de Contratos Futu…
-#>  6 b3-indexes-composition           Composição dos índices da B3                
-#>  7 b3-indexes-current-portfolio     Carteira teórica corrente dos índices da B3…
-#>  8 b3-indexes-historical-data       Dados históricos e estatísticas dos índices…
-#>  9 b3-indexes-theoretical-portfolio Carteira Teórica dos índices da B3 com peso…
-#> 10 b3-reference-rates               Taxas referenciais (Mercado de Derivativos …
+#> # A tibble: 11 × 2
+#>    Template                          Description                                
+#>    <chr>                             <chr>                                      
+#>  1 b3-bdi-derivatives-trades         Negócios consolidados do pregão - Derivati…
+#>  2 b3-bvbg-086                       Arquivo de Preços de Mercado - BVBG-086    
+#>  3 b3-cotahist-daily                 Cotações Históricas do Pregão de Ações - A…
+#>  4 b3-cotahist-yearly                Cotações Históricas do Pregão de Ações - A…
+#>  5 b3-futures-settlement-prices      Preços de Ajustes Diários de Contratos Fut…
+#>  6 b3-indexes-composition            Composição dos índices da B3               
+#>  7 b3-indexes-current-portfolio      Carteira teórica corrente dos índices da B…
+#>  8 b3-indexes-historical-data        Dados históricos e estatísticas dos índice…
+#>  9 b3-indexes-theoretical-portfolio  Carteira Teórica dos índices da B3 com pes…
+#> 10 b3-reference-rates                Taxas referenciais (Mercado de Derivativos…
+#> 11 b3-trade-information-consolidated Negócios consolidados do pregão (TradeInfo…
 ```
 
 ### Downloading Market Data
@@ -225,6 +226,23 @@ ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
 
 ![](reference/figures/README-plot-futures-1.png)
 
+## Checking the cache
+
+[`rb3_doctor()`](https://ropensci.github.io/rb3/reference/rb3_doctor.md)
+checks the health of the local cache. With a template, it lists the
+business days with no data in a dataset layer, and why each one is
+missing, so you can fetch them again. It only reports and never changes
+the cache.
+
+``` r
+
+rb3_doctor("b3-reference-rates")
+```
+
+See the vignette [Checking the
+Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.html)
+for every check and option.
+
 ## Documentation
 
 For comprehensive documentation and examples, visit:
@@ -241,6 +259,8 @@ For comprehensive documentation and examples, visit:
     Prices](https://ropensci.github.io/rb3/articles/Fetching-historical-future-rates.html)
   - [Fetching B3 Yield
     Curves](https://ropensci.github.io/rb3/articles/Fetching-historical-yield-curve.html)
+  - [Checking the
+    Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.html)
 
 ## Citation
 
@@ -287,6 +307,9 @@ Package overview and core functionality
 
 - [`rb3_clear_cache()`](https://ropensci.github.io/rb3/reference/rb3_clear_cache.md)
   : Clear the rb3 Cache
+
+- [`rb3_doctor()`](https://ropensci.github.io/rb3/reference/rb3_doctor.md)
+  : Check the health of the rb3 cache
 
 ## Marketdata Access
 
@@ -389,6 +412,8 @@ Helper functions for working with rb3 data
 
 ### All vignettes
 
+- [Checking the
+  Cache](https://ropensci.github.io/rb3/articles/Checking-the-cache.md):
 - [Fetching Historical Equity
   Data](https://ropensci.github.io/rb3/articles/Fetching-historical-equity-data.md):
 - [How to Compute Historical Rates from B3 Future

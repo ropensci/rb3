@@ -22,6 +22,9 @@ Package overview and core functionality
 - [`rb3_clear_cache()`](https://ropensci.github.io/rb3/reference/rb3_clear_cache.md)
   : Clear the rb3 Cache
 
+- [`rb3_doctor()`](https://ropensci.github.io/rb3/reference/rb3_doctor.md)
+  : Check the health of the rb3 cache
+
 ## Marketdata Access
 
 Functions for downloading and reading market data from B3

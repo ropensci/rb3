@@ -23,6 +23,7 @@
     <li><a class="dropdown-item" href="articles/Fetching-historical-index-data.html">Analyzing B3 Index Data</a></li>
     <li><a class="dropdown-item" href="articles/Fetching-historical-future-rates.html">How to Compute Historical Rates from B3 Future Prices</a></li>
     <li><a class="dropdown-item" href="articles/Fetching-historical-yield-curve.html">Fetching B3 Yield Curves</a></li>
+    <li><a class="dropdown-item" href="articles/Checking-the-cache.html">Checking the Cache</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/ropensci/rb3/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -102,7 +103,7 @@
 <div class="section level2">
 <h2 id="git-and-pr-workflow">Git and PR workflow<a class="anchor" aria-label="anchor" href="#git-and-pr-workflow"></a></h2>
 <ul><li>Remotes: <code>origin</code> is the fork <code>wilsonfreitas/rb3</code>, <code>upstream</code> is <code>ropensci/rb3</code>. Issues and PRs live on <code>ropensci/rb3</code>.</li>
-<li>Work on a branch named after the issue (<code>feat/86-fetch-report</code>, <code>fix/142-...</code>, <code>docs/147-...</code>), push it to <code>origin</code>, and open the PR against <code>ropensci/rb3</code> <code>main</code>: <code>https://github.com/ropensci/rb3/compare/main...wilsonfreitas:rb3:&lt;branch&gt;?expand=1</code>. Reference the issue (<code>Closes #n</code>) and add a NEWS.md entry for user-visible changes.</li>
+<li>Work on a branch named after the issue (<code>feat/86-fetch-report</code>, <code>fix/142-...</code>, <code>docs/147-...</code>), push it to <code>origin</code>, and open the PR against <code>ropensci/rb3</code> <code>main</code>: <code>https://github.com/ropensci/rb3/compare/main...wilsonfreitas:rb3:&lt;branch&gt;?expand=1</code>. Put <code>Closes #n</code> in the commit message body (GitHub copies a single commit’s message into the PR description; a bare <code>(#n)</code> does not close the issue), prefill the compare link with <code>&amp;title=...&amp;body=...</code>, and add a NEWS.md entry for user-visible changes.</li>
 <li>
 <code>gh</code> may not be able to write to <code>ropensci/rb3</code>; read issues with <code>curl -s https://api.github.com/repos/ropensci/rb3/issues/&lt;n&gt;</code> and let the maintainer open the PR from the compare link.</li>
 <li>After the merge: <code>git checkout main &amp;&amp; git fetch upstream &amp;&amp; git merge --ff-only upstream/main &amp;&amp; git push origin main</code>, then delete the branch locally and on <code>origin</code>.</li>
