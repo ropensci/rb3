@@ -198,3 +198,22 @@ test_that("meta_clean keeps a shared raw file whose path has backslashes", {
   meta_clean(meta2)
   expect_false(file.exists(shared))
 })
+
+test_that("meta_load fails with the arguments it looked for", {
+  expect_error(meta_load("template-test", var1 = 999), "var1 = 999", class = "error_meta_not_found")
+})
+
+test_that("meta_save fills a missing download_args_json", {
+  m <- meta_new("template-test", var1 = 77)
+  withr::defer(meta_clean(m))
+  m$download_args_json <- NULL
+  meta_save(m)
+  expect_equal(jsonlite::fromJSON(meta_get(m$download_checksum)$download_args_json), list(var1 = 77))
+})
+
+test_that("print.meta shows the checksum and NA deserializes to NULL", {
+  m <- meta_new("template-test", var1 = 78)
+  withr::defer(meta_clean(m))
+  expect_message(print(m), m$download_checksum, fixed = TRUE)
+  expect_null(.meta_deserialize_obj(NA))
+})

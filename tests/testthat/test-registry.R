@@ -65,3 +65,8 @@ test_that("it should try to retrieve an element that does not exist", {
   reg <- registry$get_instance()
   expect_error(reg$a, "a not found in registry")
 })
+
+test_that("registries print their creation time and size", {
+  expect_output(print(template_registry), "# elements [0-9]+")
+  expect_output(print(rb3_registry$get_instance()), "registry instance created at")
+})

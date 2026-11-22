@@ -25,3 +25,12 @@ test_that("rb3_clear_cache removes raw files, datasets and meta rows", {
   con <- meta_db_connection()
   expect_equal(DBI::dbGetQuery(con, "SELECT COUNT(*) AS n FROM meta")$n, 0)
 })
+
+test_that("rb3_clear_cache keeps the cache when the user says no", {
+  local_mocked_bindings(askYesNo = function(...) FALSE, .package = "utils")
+  f <- file.path(rb3_registry$get_instance()$raw_folder, "keep.gz")
+  writeLines("x", f)
+  withr::defer(unlink(f))
+  expect_false(rb3_clear_cache(ask = TRUE))
+  expect_true(file.exists(f))
+})

@@ -99,3 +99,14 @@ test_that("fwf_read_file defaults to UTF-8 and applies negative numeric signs", 
   expect_equal(df$code, c("ABC", "XYZ"))
   expect_equal(df$value, c(-12.34, -0.5))
 })
+
+test_that("readers return NULL for files without data", {
+  empty <- withr::local_tempfile(lines = "nothing here")
+  expect_null(bdi_derivatives_read(template_retrieve("b3-bdi-derivatives-trades"), empty))
+  expect_null(settlement_prices_read(template_retrieve("b3-futures-settlement-prices"), empty))
+  expect_null(stock_indexes_json_reader(template_retrieve("b3-indexes-composition"), empty))
+  header_only <- withr::local_tempfile(lines = c("title", "a;b"))
+  expect_null(trade_information_read(template_retrieve("b3-trade-information-consolidated"), header_only))
+  html <- withr::local_tempfile(lines = "<html><body><p>no table</p></body></html>")
+  expect_null(settlement_prices_read(template_retrieve("b3-futures-settlement-prices"), html))
+})

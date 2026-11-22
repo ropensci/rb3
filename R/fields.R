@@ -233,15 +233,3 @@ print.fields <- function(x, ...) {
   cli::cli_end(ulid)
   invisible(x)
 }
-
-#' @exportS3Method base::print
-print.parts <- function(x, ...) {
-  nx <- names(x)
-  for (ix in seq_along(nx)) {
-    dx <- dim(x[[ix]])
-    cat(sprintf(
-      "Part %2d: %s [%d obs. of %d variables]", ix, nx[ix], dx[1],
-      dx[2]
-    ), "\n")
-  }
-}
