@@ -80,14 +80,18 @@ code2month_oldcode <- function(x) {
 #' maturitycode2date(c("AGO2", "SET2"), "first day")
 #' @export
 maturitycode2date <- function(x, expr = "first day", refdate = NULL) {
-  res <- character(length(x))
+  if (!is.null(refdate) && length(refdate) != 1 && length(refdate) != length(x)) {
+    cli::cli_abort("{.arg refdate} must have length 1 or the same length as {.arg x}.")
+  }
+  res <- rep(NA_character_, length(x))
   ix <- which(str_length(x) == 3)
   if (length(ix)) {
     res[ix] <- maturitycode2date_newcode(x[ix], expr)
   }
   ix <- which(str_length(x) == 4)
   if (length(ix)) {
-    res[ix] <- maturitycode2date_oldcode(x[ix], expr, refdate)
+    refdate_ix <- if (length(refdate) > 1) refdate[ix] else refdate
+    res[ix] <- maturitycode2date_oldcode(x[ix], expr, refdate_ix)
   }
   as.Date(res)
 }
@@ -100,9 +104,10 @@ maturitycode2date_newcode <- function(x, expr = "first day") {
 }
 
 maturitycode2date_oldcode <- function(x, expr = "first day", refdate = NULL) {
-  base_year <- 2000
-  if (!is.null(refdate) && refdate >= as.Date("2001-01-01")) {
-    base_year <- 2010
+  base_year <- if (is.null(refdate)) {
+    2000L
+  } else {
+    ifelse(!is.na(refdate) & as.Date(refdate) >= as.Date("2001-01-01"), 2010L, 2000L)
   }
   year <- as.integer(str_sub(x, 4)) + base_year
   month <- code2month_oldcode(str_sub(x, 1, 3))

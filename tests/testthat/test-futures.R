@@ -58,4 +58,16 @@ test_that("it should test maturitycode2date", {
     maturitycode2date(c("F22", "AGO2")),
     c(as.Date("2022-01-01"), as.Date("2002-08-01"))
   )
+  expect_equal(
+    maturitycode2date(c("AGO2", "JAN0"), refdate = as.Date(c("2000-06-01", "2002-01-01"))),
+    as.Date(c("2002-08-01", "2010-01-01"))
+  )
+  expect_equal(
+    maturitycode2date(
+      c("F22", "JAN0", "AGO2"),
+      refdate = as.Date(c("2022-01-01", "2002-01-01", "2000-06-01"))
+    ),
+    as.Date(c("2022-01-01", "2010-01-01", "2002-08-01"))
+  )
+  expect_equal(maturitycode2date("INVALID"), as.Date(NA))
 })
