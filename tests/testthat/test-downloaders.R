@@ -17,16 +17,21 @@ test_that("it should download a file directly by its URL", {
 test_that("it should download a file with a datetime downloader", {
   tpl <- template_retrieve("b3-cotahist-daily")
   dest <- tempfile()
-  date <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
-  x <- template_download_marketdata(tpl, dest, refdate = date)
+  vcr::use_cassette("COTAHIST_D02012018", preserve_exact_body_bytes = TRUE, {
+    x <- template_download_marketdata(tpl, dest, refdate = as.Date("2018-01-02"))
+  })
   expect_true(x)
-  expect_true(file.exists(dest))
+  expect_gt(file.size(dest), 0)
 })
 
 test_that("it should download the reference rates (TS) file", {
   tpl <- template_retrieve("b3-reference-rates")
-  f <- template_download_marketdata(tpl, tempfile(), refdate = as.Date("2022-05-10"))
+  dest <- tempfile()
+  vcr::use_cassette("TaxaSwap-2022-05-10", preserve_exact_body_bytes = TRUE, {
+    f <- template_download_marketdata(tpl, dest, refdate = as.Date("2022-05-10"))
+  })
   expect_true(f)
+  expect_gt(file.size(dest), 0)
 })
 
 # test_that("it should fail to datetime_download", {
