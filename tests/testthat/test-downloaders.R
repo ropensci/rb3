@@ -25,8 +25,12 @@ test_that("it should download a file with a datetime downloader", {
 
 test_that("it should download the reference rates (TS) file", {
   tpl <- template_retrieve("b3-reference-rates")
-  f <- template_download_marketdata(tpl, tempfile(), refdate = as.Date("2022-05-10"))
+  dest <- tempfile()
+  vcr::use_cassette("TaxaSwap-2022-05-10", preserve_exact_body_bytes = TRUE, {
+    f <- template_download_marketdata(tpl, dest, refdate = as.Date("2022-05-10"))
+  })
   expect_true(f)
+  expect_gt(file.size(dest), 0)
 })
 
 # test_that("it should fail to datetime_download", {

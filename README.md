@@ -234,7 +234,7 @@ ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
 
 <img src="man/figures/README-plot-futures-1.png" width="100%" />
 
-## Checking the cache
+## Using the rb3 doctor
 
 `rb3_doctor()` checks the health of the local cache. With a template, it
 lists the business days with no data in a dataset layer, and why each

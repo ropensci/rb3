@@ -205,7 +205,7 @@ ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
   scale_y_continuous(labels = scales::percent)
 ```
 
-## Checking the cache
+## Using the rb3 doctor
 
 `rb3_doctor()` checks the health of the local cache. With a template, it lists the business days
 with no data in a dataset layer, and why each one is missing, so you can fetch them again.
