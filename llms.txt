@@ -226,7 +226,7 @@ ggplot(di1_futures, aes(x = maturity_date, y = implied_rate)) +
 
 ![](reference/figures/README-plot-futures-1.png)
 
-## Checking the cache
+## Using the rb3 doctor
 
 [`rb3_doctor()`](https://ropensci.github.io/rb3/reference/rb3_doctor.md)
 checks the health of the local cache. With a template, it lists the
