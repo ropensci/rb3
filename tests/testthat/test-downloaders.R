@@ -17,10 +17,11 @@ test_that("it should download a file directly by its URL", {
 test_that("it should download a file with a datetime downloader", {
   tpl <- template_retrieve("b3-cotahist-daily")
   dest <- tempfile()
-  date <- getdate("last bizday", Sys.Date(), "Brazil/ANBIMA")
-  x <- template_download_marketdata(tpl, dest, refdate = date)
+  vcr::use_cassette("COTAHIST_D02012018", preserve_exact_body_bytes = TRUE, {
+    x <- template_download_marketdata(tpl, dest, refdate = as.Date("2018-01-02"))
+  })
   expect_true(x)
-  expect_true(file.exists(dest))
+  expect_gt(file.size(dest), 0)
 })
 
 test_that("it should download the reference rates (TS) file", {
